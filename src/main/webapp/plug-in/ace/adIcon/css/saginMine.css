@@ -1,0 +1,322 @@
+body {
+	background: #02344b;
+}
+
+
+/**
+ * 鍏叡
+ */
+
+body {
+	font: 14px Helvetica Neue, Helvetica, PingFang SC, \5FAE\8F6F\96C5\9ED1, Tahoma, Arial, sans-serif;
+}
+
+.noPadding {
+	padding: 0;
+}
+
+.noMargin {
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+}
+
+.big-icon-fr {
+	float: right;
+	line-height: 42px;
+	cursor: pointer;
+}
+
+
+/**
+ * 椤堕儴
+ */
+
+.big-header {
+	height: 50px;
+	color: #fff;
+	line-height: 50px;
+	background-color: #204c5f;
+	margin: 10px 15px 15px 15px;
+}
+
+.big-header-logo {
+	float: left;
+	margin-left: 2%;
+	font-size: 22px;
+}
+
+.big-header-logo img {
+	width: 60px;
+	margin-right: 15px;
+	vertical-align: middle;
+}
+
+.big-header-logo span {
+	font-size: 16px;
+	margin-left: 10px;
+}
+
+.big-header-nav {
+	color: #fff;
+	float: right;
+	margin-right: 2%;
+}
+
+.big-header-nav a {
+	color: #fff;
+	margin: 0 5px;
+	padding: 5px;
+	font-size: 16px;
+}
+
+@media only screen and (max-width:1600px) {
+	.big-header {
+		height: 80px;
+		line-height: 80px;
+	}
+	.big-header-logo {
+		float: left;
+		margin-left: 2%;
+		font-size: 20px;
+	}
+	.big-header-logo img {
+		width: 50px;
+	}
+	.big-header-nav a {
+		font-size: 13px;
+	}
+	.big-header-logo span {
+		font-size: 14px;
+	}
+}
+
+
+/**
+ * 宸﹀彸瀛愰」
+ */
+
+.jbxx {
+	height: 240px;
+}
+
+.layui-card-body p {
+	line-height: 28px;
+	font-size: 14px;
+	border-bottom: 1px dashed #126b8a;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.layui-card-body p span+span {
+	margin-left: 10px;
+}
+
+.btxx {
+	height: 130px;
+}
+
+.hpxx {
+	height: 130px;
+}
+
+.tdphxx {
+	height: 150px;
+}
+
+.ygyx {
+	height: 441px;
+}
+
+.ygyx .layui-tab-item {
+	border: 2px solid #204c5f;
+}
+
+.zhsl {
+	height: 170px;
+}
+
+.kssp {
+	border-bottom: 1px solid #204c5f;
+	border-left: 1px solid #204c5f;
+	border-right: 1px solid #204c5f;
+	height: 200px;
+	overflow: hidden;
+}
+
+.nslxx,
+.dmbtxx,
+.hscxx,
+.fsfyxx {
+	height: 161px;
+}
+
+
+/**
+ * 娌荤悊鍥剧墖
+ */
+
+.big-img-title {
+	font-size: 20px;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	transform: translateX(-50%);
+	padding: 5px 15px;
+	background: rgba(0, 0, 0, .4);
+	color: #fff;
+	font-size: 14px;
+}
+
+footer {
+	height: 30px;
+	margin-top: 30px;
+	font-size: 12px;
+	color: #759aa9;
+	text-align: center;
+}
+
+
+/**
+ * layui鏍峰紡瑕嗙洊
+ */
+
+.layui-card-header {
+	color: #fff;
+	background-color: #204c5f;
+	border: none;
+}
+
+.layui-card-body {
+	color: #d7e9e8;
+	background-color: #193a4d;
+}
+
+.layui-carousel {
+	background-color: #02344b;
+}
+
+.layui-carousel>[carousel-item]>* {
+	background-color: #02344b;
+}
+
+.test1>[carousel-item]>div>img {
+	width: 100%;
+	height: 100%;
+	cursor: zoom-in;
+}
+
+.test2>[carousel-item]>div>img {
+	width: 49.6%;
+	height: 100%;
+	cursor: zoom-in;
+}
+
+.test2>[carousel-item]>div>img:nth-child(1) {
+	margin-right: 0.8%;
+}
+
+.big-col-xs20 {
+	width: 19%;
+}
+
+.big-col-xs60 {
+	width: 62%;
+}
+
+.layui-tab-card {
+	border-width: 0;
+}
+
+.layui-tab-card>.layui-tab-title {
+	background-color: #204c5f;
+	color: #fff;
+	border-bottom-width: 0;
+}
+
+.layui-tab-card>.layui-tab-title .layui-this {
+	color: #fff;
+	background-color: #f6f6f626;
+}
+
+.layui-tab-card>.layui-tab-title .layui-this:after {
+	border-width: 0
+}
+
+.layui-tab-card>.layui-tab-title,
+.layui-tab-card>.layui-tab-title .layui-this {
+	background: none;
+}
+
+.layui-tab.layui-tab-card {
+	position: relative;
+}
+
+.layui-tab-title {
+	position: absolute;
+}
+
+.layui-tab-card>.layui-tab-title {
+	z-index: 101;
+	width: 100%;
+}
+
+.layui-tab-card>.layui-tab-title .layui-this {
+	color: #04c9f1;
+}
+
+.float li {
+	float: right;
+}
+
+.layui-tab-card>.layui-tab-title .layui-tab-bar {
+	display: none;
+}
+.layui-col-space15>*{
+	padding-top: 0;
+}
+body .demo-class .layui-layer-title {
+	background: #386b82;
+	color: #fff;
+	border: 1px solid #4c89a2;
+}
+
+body .demo-class .layui-layer-setwin .layui-layer-ico {
+	background-image: url(../../../ace/layui/2/css/modules/layer/default/iconG.png)
+}
+.test3 .layui-carousel-ind{
+	display: none;
+}
+.vjs-poster{
+    background-color: #02344b;
+}
+
+/*滚动条 start*/  
+::-webkit-scrollbar {  
+  width: 10px;  
+  height: 4px;  
+  background-color: #F5F5F5;  
+}  
+/*定义滚动条轨道 内阴影+圆角*/  
+::-webkit-scrollbar-track {  
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
+  background: #204c5f ;
+}  
+/*定义滑块 内阴影+圆角*/  
+::-webkit-scrollbar-thumb {  
+  border-radius: 3px;  
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
+  background-color:rgba(255,255,255,.2);  
+}  
+::-webkit-scrollbar-thumb:hover {  
+  border-radius: 3px;  
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
+  background-color:rgba(255,255,255,.3); 
+}  
+
+
+
+

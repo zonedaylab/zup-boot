@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+/*
+
+@作者  谢炎
+@时间 2016-7-30 14:22:22
+@让弹窗匡中的文本和输入框自动对齐
+
+*/
+.bootbox-form span {
+    float: left;
+    width:100px;
+    height: 30px;
+    line-height: 30px;
+    text-align:left;
+    display:block;
+}
+.ants{
+	float:left; 
+	height: 30px; 
+	width: 200px; 
+	margin-bottom:5px;
+}

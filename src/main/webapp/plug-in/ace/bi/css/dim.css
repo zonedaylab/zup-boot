@@ -1,0 +1,74 @@
+@CHARSET "UTF-8";
+/**
+   说明：维表设置的样式
+  作者： 谢炎
+  时间：2016-10-9 14:00:59
+*/
+.title{
+    font-family: 微软雅黑;
+    font-size: 16px;
+    color: #000000;
+}
+.star{
+    font-size: 16px;
+    color: red;
+    font-family: 黑体;
+}
+.text{
+    font-size: 14px;
+    font-family: 微软雅黑;
+    line-height: 34px;
+    text-align: center;
+}
+.text-indent-4{
+    margin-left: 30px;
+    line-height: 34px;
+    text-align: center;
+}
+.lineSpacing{
+    margin-top: 8px;
+}
+.inputWidth{
+    width: 200px;
+}
+.float-left{
+    float: left;
+    margin-right: 5px;
+}
+.row-5{
+    margin-left: 5px;
+    margin-top: 5px;
+}
+thead td{
+    font-family: 黑体;
+    font-size: 14px;
+    border-bottom: 2px solid #CCCCCC;
+    width: 180px;
+    text-align: center;
+}
+tbody td{
+    font-family: 微软雅黑;
+    font-size: 14px;
+    width: 230px;
+}
+tr{
+    border-bottom: 1px solid #CCCCCC;
+}
+.tableInput{
+    width:150px;
+    height: 30px;
+}
+.tableValueInput{
+    width:200px;
+    height: 30px;
+}
+.radioText{
+    line-height: 15px;
+    text-align: center;
+    float: left;
+    margin-top: 3px;
+    margin-right: 10px;
+}
+.add:hover{
+    background-color: #cccccc;
+}

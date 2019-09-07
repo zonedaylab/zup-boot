@@ -1,0 +1,422 @@
+@charset "utf-8";
+
+/***公共样式  开始***/
+html{font-family:Microsoft Yahei; font-size:14px;}
+html,body,ul,li,div,h2,dl,dt,dd{margin:0; padding:0;}
+body{background-color:#f7f7f7;}
+li,dd{list-style:none;}
+a{text-decoration:none;}
+.fl{float:left; margin-right: 2%;}
+.fr{float:right;}
+.block{ display:block; overflow:hidden;}
+.pt16{padding-top:16px;}
+.width390{width:32%}
+.width490{width:49%}
+
+.color00{ background-color:#22becb;}
+.color01{ background-color:#c069e9;}
+.color02{ background-color:#59bfa7;}
+.color03{ background-color:#f79441;}
+.color04{ background-color:#ef6149;}
+.color05{ background-color:#74D357;}
+.color06{ background-color:#3961C0;}
+.color07{ background-color:#3c3c3c;}
+
+.img01{ background:url(../img/map/mmg.png) no-repeat left center; width:25px; height:25px;}
+.img02{ background:url(../img/map/mmb.png) no-repeat left center; width:25px; height:25px;}
+.img03{ background:url(../img/map/mmy.png) no-repeat left center; width:25px; height:25px;}
+.img04{ background:url(../img/map/mmr.png) no-repeat left center; width:25px; height:25px;}
+/***头部样式  结束***/
+
+
+/***头部样式  开始***/
+#head{width:100%; margin:0 auto; height:60px; background-color:#0070b6; overflow:hidden;}
+/*.head_wrap{ width:1180px; margin:0 auto; overflow:hidden;}*/
+.head_wrap_title{width:50%; padding-left:1.5%; font-size:24px; line-height:60px; color:#fff; font-weight:700; letter-spacing:2px; }
+.head_wrap_other{width:45%; float:right; overflow:hidden;}
+.head_wrap_other ul{width:100%; overflow:hidden;}
+.head_wrap_other ul li{float:right; font-size:14px; color:#fff; margin-right:4.5%; line-height:60px; padding-left:4%;}
+.head_wrap_other ul li a{color:#fff;}
+.head_wrap_other ul li.head_ico01{background:url(../imgv2/contrl.png) no-repeat left center; background-size:16px;}
+.head_wrap_other ul li.head_ico02{background:url(../imgv2/system.png) no-repeat left center; background-size:16px;}
+.head_wrap_other ul li.head_ico03{background:url(../imgv2/admin.png) no-repeat left center; background-size:16px;}
+/***头部样式  结束***/
+
+#content{width:97%; margin:0 auto; overflow:hidden;}
+.cont_block_two{margin-top:0px;}
+.cont_left{width:100%; overflow:hidden;}
+.cont_right{width:31%; overflow:hidden;}
+
+/***lab样式  开始***/
+.block_style{border:1px solid #e1e1e1; overflow:hidden; margin-bottom:20px;}
+.block_style div{background-color:#fff;}
+.block_style .lab_style{ height:38px; line-height:38px; font-size:16px; color:#000; background-color:#b9e6ff;}
+.lab_style h2{width:45%; padding-left:2%; float:left; font-size:16px; font-weight:normal; line-height:38px; font-family:Microsoft Yahei;}
+.lab_style ul{width:60%; float:right;}
+.lab_style ul li{float:right; margin-right:15px; line-height:38px; font-size:12px;}
+.lab_style ul li span{padding:4px; width:4px; height:4px; display:block; float:left; margin-top:13px;margin-right:5px;}
+.lab_style span.order{float:right;padding:20px 20px; background:url(../imgv2/order.png) no-repeat left center;}
+.lab_style span.statistics{float:right;padding:20px 20px; background:url(../imgv2/statistics.png) no-repeat left center; }
+.lab_style span.power{float:right;padding:20px 20px; background:url(../imgv2/power.png) no-repeat left center;}
+.lab_style span.benefit{float:right;padding:20px 20px; background:url(../imgv2/benefit.png) no-repeat left center;}
+.pl4 h2{padding-left:4%;}
+/***lab样式  结束***/
+
+/***重要信息样式  开始***/
+.block_info{overflow:hidden;}
+.block_info ul{width:100%; height:40px; margin-bottom:20px;}
+.block_info ul li{float:left; height:40px; color:#fff; line-height:40px;}
+.block_info ul li.block_info_left{width:120px; text-align:right;}
+.block_info ul li.block_info_right{width:200px; padding-left:15px; font-weight:700;}
+/***重要信息样式  结束***/
+
+/***环保效益样式  开始***/
+dl{width:80%; margin:0 auto; overflow:hidden; border-bottom:1px solid #e6e6e6;}
+dl dt,dl dd{float:left; height:70px; line-height:70px; color:#333;}
+dl dt{width:60%;padding-left:30%;}
+.list01, .list02, .list03, .list04{
+    height: 70px;
+}
+dl.list01 dt{background:url(../imgv2/coal.png) no-repeat 15% center;}
+dl.list02 dt{background:url(../imgv2/so2.png) no-repeat 15% center;}
+dl.list03 dt{background:url(../imgv2/co2.png) no-repeat 15% center;}
+dl.list04 dt{background:url(../imgv2/dust.png) no-repeat 15% center;}
+dl dd{width:35%; font-size:18px; font-weight:700;}
+dl.list01 dd{color:#000;}
+dl.list02 dd{color:#ef6149;}
+dl.list03 dd{color:#22becb;}
+dl.list04 dd{color:#c8c55c;}
+/***环保效益样式  结束***/
+/*底部版权*/
+.footer{
+    float:left;
+    width: 100%;
+    height: 20px;
+    background-color: #0070b6;
+}
+.footer>div{
+    margin: 0 auto;
+    width: 510px;
+    height: 20px;
+}
+/*搜索*/
+.soInput{
+    float:left;
+    width: 380px;
+    margin-left:1%;
+    height: 30px;
+    font-size: 18px;
+    font-family: '宋体';
+}
+.so{
+    position: absolute;
+    left: 360px;
+    top: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+.so:hover{
+    color:#44A8D4;
+}
+/*区县对应颜色表示*/
+.flagTxt{
+    width: 80px;
+    height: 20px;
+    float: left;
+    padding-left: 20px;
+    cursor: pointer;
+    color:#00a8db;
+}
+.flagColor{
+    width: 20px;
+    height: 20px;
+    float: left;
+    cursor: pointer;
+}
+.flagTxt:hover{
+    color:#ef6149;
+}
+
+.aTxt{
+    float: left;
+    cursor: pointer;
+    color:#00a8db;
+}
+.aTxt:hover{
+    color:#ef6149;
+}
+
+/*发电量统计*/
+.fdBox {
+    width: 35%;
+    height: 300px;
+    float: left;
+    padding-top: 35px;
+}
+.fdcBox {
+    height: 65px;
+    width: 100%;
+    line-height: 30px;
+    padding-left: 10px;
+    text-align: center;
+}
+.dlDiv {
+    width: 65%;
+    line-height: 30px;
+    margin-left: 10px;
+    padding: 0 5px;
+    text-align: center;
+    border-radius: 6px;
+    height: 30px;
+    float: left;
+}
+.dl{
+    width: 80%;
+    line-height: 30px;
+    padding-left:10px;
+    text-align: center;
+    height: 30px;
+    float: left;
+    color: #ffffff;
+}
+
+/**顶部四个方块*/
+.line2{overflow:hidden; width: 97%; margin: 0 auto;}
+.line2 ul{width:15%; height:40px; margin-top: 10px; margin-bottom: 10px; float: left;}
+.line2 ul li{float:left; height:40px; color:#fff; line-height:40px;}
+.line2 ul li.block_info_left{width:50%; text-align:right;}
+.line2 ul li.block_info_right{width:50%; padding-left:5px; font-weight:700;}
+
+.list_style{
+     height:340px;
+ }
+.btnSs{
+    height: 24px;
+    margin-left:5px;
+    line-height: 20px;
+    text-align: center;
+    background: transparent;
+    color: #3892BF;
+    border: 1px solid #3892BF;
+    margin-top:1px;
+}
+.btnSs:hover{
+    background-color: #3892BF;
+    color: #ffffff;
+}
+.link{
+	text-align:left;
+	list-style:none;
+	margin-left:10px;
+}
+/*电量排名前10样式*/
+.nxq10{
+    width: 40%;
+    background-color: #D2D2D2!important;
+    height: 30px;
+    border-radius: 15px;
+    float: left;
+    line-height: 30px;
+    text-align: center;
+    font-family: '黑体';
+    cursor: pointer;
+    margin-left: 5%;
+}
+.nxq10:hover{
+    background-color: #77CE3F;
+    color: #FFFFFF;
+}
+.uos{
+	list-style:none;
+	font-family:'黑体';
+	font-size:18px;
+	margin-left:20px;
+}
+.uos > a{
+	margin-left:5px;
+	color:#000000;
+}
+sup{
+	color:red;
+	font-size:16px;
+	font-family:'黑体';
+}
+.greenColor{
+	background-color:#77CE3F!important;
+	color:#ffffff
+}
+.greColor{
+	background-color:#D2D2D2!important;
+	color:#000000;
+}
+.lab{ height:38px; line-height:38px; font-size:16px; color:#000; background-color:#b9e6ff;}
+.lab h2{width:30%; padding-left:2%; float:left; font-size:16px; font-weight:normal; line-height:38px; font-family:Microsoft Yahei;}
+.lab ul{width:70%; float:right; height:38px;}
+.lab ul li{float:right; margin-right:15px; line-height:38px; font-size:12px;}
+.lab ul li span{padding:4px; width:4px; height:4px; display:block; float:left; margin-top:13px;margin-right:5px;}
+/*.BMap_cpyCtrl{  去出百度地图左下角文字*/
+   	/*display:none;
+   }*/
+   body{
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+}
+#sospan:hover{
+	color:ff0;
+}
+.cd-select{
+    width: 100px;
+    height: 30px;
+    border: 1px solid #ffffff;
+    background: transparent;
+    color: #ffffff;
+    font-size:13px;
+}
+.cd-select > option{
+    background-color: #0070b6;
+    color: #ffffff;
+    height: 26px;
+}
+.cd-select > option:hover{
+    background-color: #00A8FF;
+}
+
+
+table{
+    position: relative;
+    border: 1px solid #d7dde4;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    color: #657180;
+    font-size: 12px;
+    background-color: #fff;
+    box-sizing: border-box;
+    table-layout:fixed;
+}
+table thead{
+	display: block;  
+    width: 100%;
+    background-color: #f5f7f9!important;
+}
+table thead tr{
+	width:100%;
+}
+table thead tr th{
+    height: 40px;
+    width: 26.9%;
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: #f5f7f9!important;
+    padding-left: 18px;
+    padding-right: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-all;
+    box-sizing: border-box;
+    text-align: center;
+}
+table tbody{
+	display: block; 
+    overflow: auto;  
+    width: 100%; 
+}
+table tbody tr{
+	width:100%;
+}
+table tbody tr td{
+    height: 40px;
+    width: 30.6%;/*28.5%;*/
+    background-color: #fff;
+    transition: background-color .2s ease-in-out;
+    padding-left: 18px;
+    padding-right: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-all;
+    box-sizing: border-box;
+    text-align: center;
+}
+.ultxt{
+    list-style: none;
+    padding: 0px;
+    width: 78%;
+    margin: 5px 1% 5px 22%;
+    text-align: center;
+}
+.ultxt li{
+	cursor: pointer;
+    width:20%;
+    height: 30px;
+    background-color: #00A8FF;
+    padding: 2px;
+    float: left;
+    margin-left: 10px;
+}
+.ultxt li span{
+    color: #ffffff;
+    line-height: 25px;
+    text-align: center;
+}
+.ultxt li:active{
+    background-color: #358ebb;
+}
+
+.liClick{
+	cursor: pointer;
+    width:20%;
+    height: 30px;
+    background-color: #00A8FF;
+    padding: 2px;
+    float: left;
+    margin-left: 10px;
+}
+/*实时曲线按钮*/
+.ul{
+    list-style: none;
+    padding: 5px 10px 5px 10px;
+}
+.ul li{
+    cursor: pointer;
+    padding: 4px;
+    text-align: center;
+    font-size:14px!important;
+    magin:8px;
+    height:32px;
+    line-height: 32px;
+    width: 100%;
+}
+.lf{
+	margin-top: 20px;
+    text-align: right;
+    display: inline-block;
+    width:35%;
+    float: left;
+    line-height: 32px;
+}
+.rf{
+	margin-top: 20px;
+    text-align: left;
+    vertical-align: middle;
+    display: inline-block;
+    width: 60%;
+    background-color: #44A8D4;
+    height: 32px;
+    float: left;
+    border-radius: 6px;
+    color:#ffffff;
+    font-size: 14px;
+    padding-left: 10px;
+}
+
+
+
+
+
+
+

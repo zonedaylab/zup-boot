@@ -1,0 +1,106 @@
+@charset "utf-8";
+/* 
+说明：用于登录页面的样式布局
+作者：谢炎
+时间：2016-8-13 09:32:29
+
+ */
+.main_box {
+    position: absolute; top:50%; left:50%; margin-top:-360px; margin-left: -400px; padding: 30px; width:800px; height:460px;
+	background:url(plug-in/login/sunStyle/images/1.png);
+    border-radius: 10px;
+}
+.main_box .setting {
+	position: absolute; 
+	top: 5px; 
+	right: 10px; 
+	width: 10px; 
+	height: 10px;
+}
+.main_box .setting a {
+	color: #FF6600;
+	}
+.main_box .setting a:hover {
+	color: #555;
+	}
+.opaa{
+	position: absolute;
+	top:50%;
+	left:50%;
+	margin-top:-360px;
+	margin-left: -400px;
+	padding: 30px;
+	width:800px;
+	height:600px;
+	background-color:#FFFFFF;
+	filter:alpha(opacity=70);
+    -moz-opacity:0.7;
+    -khtml-opacity: 0.7;
+    opacity: 0.7;
+	margin-bottom:50px;
+	border: 2px solid #FFFFFF;
+ 	border-radius: 20px;
+}
+.login_box  {
+	width:750px; 
+	height:500px;
+	}
+.login_logo {
+	margin-left: 20%;
+	margin-bottom: 60px;
+	text-align: center;  
+	height:50px;
+	width:200px;
+	}
+.login_logo img {
+	height: 200px;
+	width:400px;
+	}
+.login_msg {
+	text-align: center; 
+	font-size: 16px;
+	}
+.login_form {
+	padding-top: 50px; 
+	font-size: 16px; 
+	height:300px; 
+	width:600px; 
+	margin-left:150px;
+	}
+.login_box .form-control {
+	display: inline-block; 
+	*display: inline; 
+	zoom: 1; 
+	width: auto; 
+	font-size: 18px;
+	}
+.login_box .form-control.x319 {
+	width: 419px;
+	}
+.login_box .form-control.x164 {
+	width: 164px;
+	}
+.login_box .form-group {
+	margin-bottom: 20px;
+	}
+.login_box .form-group label.t {
+	width: 120px; 
+	text-align: right; 
+	cursor: pointer;
+	}
+.login_box .form-group.space {
+	padding-top: 15px; 
+	border-top: 1px #FFF dotted;
+	}
+.login_box .form-group img {
+	margin-top: 1px; 
+	height: 32px; 
+	vertical-align: top;
+	}
+.login_box .m {
+	cursor: pointer;
+	}
+.bottom {
+	text-align: center; 
+	font-size: 12px;
+	}

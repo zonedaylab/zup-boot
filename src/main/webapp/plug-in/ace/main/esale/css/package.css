@@ -1,0 +1,139 @@
+@charset "utf-8";
+html{font-family:Microsoft Yahei; font-size:14px;}
+html,body,ul,li,div,h2,dl,dt,dd,p,img,h2,h3,label,form,select,option,table,tr,td{margin:0; padding:0; box-sizing:border-box;-moz-box-sizing:border-box; /* Firefox */-webkit-box-sizing:border-box; /* Safari */}
+body{background-color:#fff;	font-family: 'Microsoft Yahei'; font-weight:normal;}
+div{display:block;}
+li,dd{list-style:none;}
+a{text-decoration:none; color:#333;}
+
+/** =======================
+ * package
+ ===========================*/
+.esale-fa-num-green{display:inline-block; width:30px; height:15px; font-size:12px; background:#6fc700; color:#fff;text-align:center; line-height:15px; -moz-border-radius:20px;-webkit-border-radius:20px; border-radius:20px;}
+.esale-fa-num-red{display:inline-block; width:30px; height:15px; font-size:12px; background:#e86b6b; color:#fff;text-align:center; line-height:15px; -moz-border-radius:20px;-webkit-border-radius:20px; border-radius:20px;}
+.esale-fa-num-blue{display:inline-block; width:30px; height:15px; font-size:12px; background:#005ea8; color:#fff;text-align:center; line-height:15px; -moz-border-radius:20px;-webkit-border-radius:20px; border-radius:20px;}
+.esale-fa-num-lightBlue{display:inline-block; width:30px; height:15px; font-size:12px; background:#00c6ac; color:#fff;text-align:center; line-height:15px; -moz-border-radius:20px;-webkit-border-radius:20px; border-radius:20px;}
+.esale-fa-num-orange{display:inline-block; width:30px; height:15px; font-size:12px;  background:#fd8b47;color:#fff;text-align:center; line-height:15px; -moz-border-radius:20px;-webkit-border-radius:20px; border-radius:20px;}
+a.esale-fa-num-green:hover{background:#5ca401;}
+a.esale-fa-num-lightBlue:hover{background:#01a690;}
+a.esale-fa-num-blue:hover{background:#004e8b;}
+a.esale-fa-num-orange:hover{background:#de6c18;}
+a.esale-fa-num-red:hover{background:#e64747;}
+
+
+/** =======================
+ * text-box
+ ===========================*/
+.esale-red{color:#e97172}
+.esale-text-box{margin:20px 0}
+.esale-text-box input{width:170px; height:17px; border:1px solid #c6c9d1; background-color:#efefef; color:#acabab;padding:5px;font-family:Microsoft Yahei;}
+
+/** =======================
+ * select-box
+ ===========================*/
+select {
+  /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+  width:170px; height:28px;
+  border: solid 1px #c6c9d1;
+  background-color:#f6fafe;
+  font-family:Microsoft Yahei;
+  color:#353b4b;
+  padding-left: 10px;
+  
+  /*很关键：将默认的select选择框样式清除*/
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+
+  /*在选择框的最右侧中间显示小箭头图片*/
+  background: url("arrow.png") no-repeat scroll right center transparent;
+  /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+  padding-right: 14px;
+  
+  text-indent: 0.01px;          /* Removes default arrow from firefox*/
+  text-overflow: "";               /*Removes default arrow from firefox*/
+  border-radius:0;
+  -webkit-border-radius:0;
+  -moz-border-radius:0;
+}
+
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand { display: none; }
+select option{
+	padding: 0;
+  margin:0;
+  float:left;
+  height: 26px;
+  padding: 10px 0;/*当时解决输入框光标顶满input框的问题是这么解决的 如果设置了行高就会顶满没有行高的话光标高度=文字的font-size */
+  border: none;
+  outline: none;
+  padding-left: 20px;
+  color:#6d6d6d;
+  -webkit-appearance:none; /*去除系统默认的样式*/
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);   /* 点击去除高亮的颜色*/
+  background-color: #fff;/*当input框禁止输入的时候会有一个灰色的底色 项目需要我设置了 白色底 跟页面背景一个颜色。*/
+	font-family:Microsoft Yahei;
+	color:#353b4b;
+
+}
+
+select.esale-page{width:60px; padding-left:10px; height:24px; border:1px solid #7e7f80;background: url("arrow-page.png") no-repeat scroll right center transparent;-moz-border-radius:2px;-webkit-border-radius:2px; border-radius:2px;}
+
+#dropdown{width:186px; position:relative;display:inline-block;} 
+#dropdown p{width:186px; height:28px; line-height:24px; padding-left:4px; padding-right:30px; border: solid 1px #c6c9d1; background:url("arrow.png") no-repeat scroll right center transparent; color:#353b4b; cursor:pointer} 
+#dropdown ul{width:186px;border: solid 1px #c6c9d1; background-color:#f6fafe;position:absolute; display:none} 
+#dropdown ul li{ height:28px; line-height:24px; text-indent:10px} 
+#dropdown ul li a{display:block; height:28px; color:#807a62; text-decoration:none; color:#353b4b;} 
+#dropdown ul li a:hover{background:#c6dbfc; color:#369} 
+
+/** =======================
+ * btn-box
+ ===========================*/
+input[type="button"]{cursor:pointer; font-weight:700; font-family:Microsoft Yahei;}
+.esale-btn-small{padding:6px 15px;border:0; background-color:#0198ee;}
+.esale-btn-blue{ background-color:#0198ee; color:#fff;}
+.esale-btn-blue-act{background-color:#005ea8;}
+.esale-btn-green{ background-color:#00c6ac; color:#fff;}
+.esale-btn-green-act{ background-color:#01a690; color:#fff;}
+.esale-btn-ico{padding-right:30px; background:url("btn-ico.png") no-repeat scroll right center transparent;border:1px solid #049d89; }
+.esale-btn-radius{-moz-border-radius:2px;-webkit-border-radius:2px; border-radius:2px;}
+.esale-btn-square{padding:15px 15px;border:0; background-color:#0198ee;}
+
+/** =======================
+ * paging-box
+ ===========================*/
+.esale-text-box, .select-box, .btn-box,.esale-paging-box,.table-box{width:900px; margin:0 auto; padding:20px;}
+.esale-paging-box a{-moz-border-radius:2px;-webkit-border-radius:2px; border-radius:2px;padding:3px 8px;}
+.esale-paging-disabled{border:1px solid #c6c9d1;background-color:#efefef; color:#acabab;}
+.esale-paging-usable{border:1px solid #c6c9d1;background-color:#fafafa; color:#3c3c3c;}
+.esale-paging-num{border:1px solid #c6c9d1; background-color:#fff; color:#353b4a;}
+.esale-paging-act{border:1px solid #0174b5; background-color:#0198ee;color:#fff;}
+
+/** =======================
+ * table-box
+ ===========================*/
+.esale-table{border-spacing: 0;border-collapse: collapse;width:100%; border-top:1px solid #c9ced4; border-bottom:1px solid #e5e5e5;border-left:1px solid #e5e5e5}
+.esale-table tr{border-bottom:1px solid #e5e5e5; padding:8px;}
+.esale-table > thead > tr > th,
+.esale-table > tbody > tr > th,
+.esale-table > tfoot > tr > th,
+.esale-table > thead > tr > td,
+.esale-table > tbody > tr > td,
+.esale-table > tfoot > tr > td {
+  padding: 8px 0;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-bottom:1px solid #e5e5e5;
+  color:#35362e;
+  font-size:12px;
+}
+
+.esale-table td,.table th{border-right:1px solid #e5e5e5;text-align:left;}
+.esale-table tr:nth-child(even){background-color:#f7fbff;} 
+.esale-table tr:nth-child(odd){background-color:#fdfdfd;}
+.esale-table thead tr th{ background-color:#eaeef1;border-right:1px solid #c9ced4; padding:10px 0; color:#2f342e; font-size:14px;}
+.esale-table thead tr th:nth-child(1){border-left:1px solid #c9ced4}
+.esale-table thead tr th.esale-th-checkbox{text-align: left; padding-left:8px;}
+.esale-table tbody tr td{text-align: center;}
+.esale-table tbody tr td.esale-td-checkbox{padding-left:8px; text-align: left;}
+

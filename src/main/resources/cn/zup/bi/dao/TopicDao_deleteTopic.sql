@@ -1,0 +1,1 @@
+delete from bi_topic where TOPIC_ID = ${ topicId}

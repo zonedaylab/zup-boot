@@ -1,0 +1,1 @@
+Select * from Account where 1=1

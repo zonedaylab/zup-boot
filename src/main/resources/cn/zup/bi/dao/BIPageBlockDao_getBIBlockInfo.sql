@@ -1,0 +1,1 @@
+SELECT * FROM bi_block WHERE BLOCK_ID = ${bi_Block_Id}

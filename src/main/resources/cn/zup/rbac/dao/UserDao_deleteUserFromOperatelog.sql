@@ -1,0 +1,1 @@
+delete from operatelog where userid = ${userId}

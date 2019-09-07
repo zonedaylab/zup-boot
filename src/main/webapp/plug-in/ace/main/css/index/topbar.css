@@ -1,0 +1,21 @@
+.t{
+    background-color:#FFFFFF;
+    height: 60px;
+}
+.t1{
+    background-color: #367CC9;
+    height: 60px;
+}
+.topTitle{
+    padding-top: 0px;
+    background-color: #284c70;
+    height: 60px;
+    cursor: pointer;
+    position: relative;
+}
+.titleTxt{
+    letter-spacing: 3px;
+    font-size: 30px;
+    font-family: "ºÚÌå", sans-serif;
+    color: #ffffff;
+}

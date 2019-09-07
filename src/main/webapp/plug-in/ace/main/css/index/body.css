@@ -1,0 +1,103 @@
+.mp{
+    margin: 0;
+    padding: 0;
+}
+.bodys{
+    padding: 5px;
+    margin-left: 3px;
+}
+.title{
+    padding: 5px;
+    background-color: #119AE1;
+    height: 30px;
+}
+.body{
+    background-color: #f5f3f0;
+    height: auto;
+}
+.body2{
+    background-color: #f5f3f0;
+    height: 246px;
+}
+.titleTxtBody{
+    margin-left: 10px;
+    letter-spacing: 1px;
+    font-size: 14px;
+    font-family: "黑体";
+    color: #ffffff;
+}
+.bodyOne{
+    background-color: #ffffff;
+    height: 380px;
+}
+.map{
+    margin: 1px;
+    border: 1px solid #119AE1;
+    padding-left:15px;
+}
+.mapMake{
+    background-image: url(../../img/index/map/mapTopbar.png);
+    background-repeat: no-repeat;
+    padding:1px;
+    height: 30px;
+    width: 238px;
+    margin: 0 auto;
+}
+.content{
+    border: 1px solid #119AE1;
+}
+.contents{
+    border: 1px solid #119AE1;
+    height: 230px;
+}
+.content3{
+    border: 1px solid #119AE1;
+    height: 170px;
+}
+.conts{
+    border: 1px solid #119AE1;
+    height: 156px;
+}
+.operL{
+    width:70%;
+    border-top: 40px solid #119AE1;
+    border-left:0px;
+    border-right: 15px solid transparent;
+    transform:rotate(180deg);
+    float: right;
+    position: absolute;
+    z-index: 4;
+    margin-right: 2%;
+    right:0;
+}
+.operS{
+    width:96%;
+    margin:0 auto;
+    border-top: 40px solid #248ed3;
+    border-left:0px;
+    float: left;
+    position: absolute;
+    z-index: 3;
+}
+.operName{
+    margin-top:10px;
+    left: 5%;
+    font-family: 'Microsoft YaHei';
+    position: absolute;
+    z-index: 5;
+    color: #ffffff;
+}
+.operValue{
+    margin-top:10px;
+    position: absolute;
+    z-index: 5;
+    right: 0;
+    margin-right: 20%;
+    color: #ffffff;
+}
+.bgFY{
+    border-radius: 5%;
+    background-color: #44AFBF;
+    height: 100px;
+    width: 100px;
+}

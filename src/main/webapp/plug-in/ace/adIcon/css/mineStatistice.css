@@ -1,0 +1,228 @@
+/**
+	author:andot
+	date:  2017Äê11ÔÂ15ÈÕ11:45:51
+*/
+body{
+	margin:0;
+	padding:0;
+	background-image: url("plug-in/ace/img/bg.jpg");
+	background-size: 100% 100%;
+}
+.topbar{
+	width: 100%; 
+	height: 50px; 
+	background-color: #444546;
+	padding-left:20px;
+	position: absolute;
+	top: 0px;
+	left:0px;
+	z-index:1000000000;
+}
+.topbar>span{
+	color:#FFFFFF;
+	line-height:50px;
+	font-size:18px;
+}
+.bg{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,.3);
+	z-index: 99891018;
+	display:block;
+}
+.bg-no{
+	display:none;
+}
+.loading{
+	line-height:35px; 
+	text-align:center; 
+	font-family:Microsoft YaHei; 
+	color: #495060; 
+	width:150px; 
+	height:35px; 
+	background-color: #FFFFFF; 
+	box-shadow: 0 1px 6px rgba(0,0,0,.6); 
+	position: absolute; 
+	z-index: 99999999; 
+	top:-40px; 
+	left:50%; 
+	margin-left:-75px; 
+	border-radius:5px;
+}
+.btn-text{
+	color: #ffffff;
+}
+.btn-text-tr{
+	color: #000000;
+}
+
+.opt_station_hover{
+	font-size: 12px;
+	width: auto;
+	height: 30px;
+	border-radius: 10px;
+}
+.opt_station_hover_ul{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	line-height: 23px;
+	text-indent: 4px;
+	color: white;
+	position: relative;
+}
+.opt_station_hover_ul li{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	height: 23px;
+}
+.layui-form-label{
+	width:100px!important;
+}
+
+.opt_station_hover{
+	background: rgb(0,0,0,0.4);
+	font-size: 12px;
+	width: auto;
+	height: 24px;
+	border-radius: 5px;
+	padding: 2px;
+}
+.opt_station_hover_ul{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	line-height: 23px;
+	text-indent: 4px;
+	color: white;
+	position: relative;
+}
+.opt_station_hover_ul li{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	height: auto;
+}
+.opt_li_left{
+	width: auto;
+	display: bolck;
+	float: left;
+	text-align: left;
+}
+.button-raised{
+	margin-right: 5px;
+}
+.layui-layer-min{
+	/*display: inline-block !important;*/
+}
+.layui-layer{
+	background:rgba(0,0,0,.5) !important;
+}
+body .demo-class .layui-layer-title{background:rgba(0,0,0,.6) !important; color:#fff !important; border: none;}
+.layui-layer-setwin .layui-layer-min cite{
+	background-color: #ffffff !important;
+}
+.layui-layer-setwin a{
+	color:#ffffff !important;
+}
+.layui-layer-ico {
+    background: url(plug-in/ace/layui/css/modules/layer/default/iconW.png) no-repeat !important;
+    
+}
+.layui-layer-setwin .layui-layer-max {
+    background-position: -32px -40px !important;
+    display:none !important;
+}
+.layui-layer-setwin .layui-layer-close1 {
+    background-position: 1px -40px !important;
+    cursor: pointer !important;
+    display:none !important;
+}
+.fa-window-close:hover, .fa-window-maximize:hover, .fa-window-minimize:hover{
+	color:#f00;
+	cursor: pointer;
+}
+
+.an-box-left{
+	z-index: 19891018; 
+	width: 340px; 
+	height: 210px; 
+	position:absolute; 
+	top: 130px; 
+	left: 5px; 
+	background-color: rgba(0,0,0,.5);
+}
+.an-box-right{
+	z-index: 19891018; 
+	width: 340px; 
+	height: 210px; 
+	position:absolute; 
+	top: 130px; 
+	right: 5px; 
+	background-color: rgba(0,0,0,.5);
+}
+.an-btn-close{
+	width:20px; 
+	height:20px; 
+	margin:0px; 
+	padding:0px; 
+	float:left;
+    background: none;
+    color: #fff;
+    border: none;
+}
+.an-btn-maxmin{
+	width:30px; 
+	height:30px; 
+	padding-left:5px; 
+	float:left;
+    background: none;
+    color: #fff;
+    border: none;
+}
+.an-btn{
+	height:30px; 
+	padding:0px; 
+	line-height:30px; 
+	color:#fff; 
+	float:right;
+}
+.an-title-text{
+	height:30px; 
+	padding-left:10px; 
+	line-height:30px; 
+	color:#fff; 
+	float:left;
+}
+.an-box-title{
+	height:30px; 
+	background-color: rgba(0,0,0,.5);
+}
+.an-msg-btn{
+    border: none;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    width: 100px;
+    height: 30px;
+    float:right;
+    margin-right:10px;
+    border-radius: 3px;
+}
+
+.an-msg-btn-close:hover{
+	background-color:#CC0033
+}
+.an-msg-btn-save:hover{
+	background-color:#00CC66
+}
+.an-msg-label{
+	margin-top: -5px;
+}
+.an-msg-check-box{
+	width:100%; 
+	height:24px; 
+}

@@ -1,0 +1,1 @@
+DELETE FROM bi_report_field WHERE REPORT_FIELD_ID = ${ report_Field_Id}

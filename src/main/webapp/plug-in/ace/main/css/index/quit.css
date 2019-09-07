@@ -1,0 +1,58 @@
+@CHARSET "UTF-8";
+/*
+    閫�嚭鐩掑瓙css鏍峰紡琛�
+    author锛�璋㈢値
+    date锛�2016-9-1 15:37:56
+
+*/
+
+.atp{
+    color: #ffffff;
+    text-decoration: none;
+    line-height: 30px;
+    text-align: center;
+    font-family: '榛戜綋';
+    font-size:16px;
+}
+.atpMobile{
+    color: #ffffff;
+    text-decoration: none;
+    line-height: 30px;
+    text-align: center;
+    font-family: '榛戜綋';
+    font-size:10px;
+}
+.atp:hover{
+   text-decoration: none;
+    color: #ffffff;
+}
+.lis:hover{
+    background-color: #00a0b1;
+}
+.lis{
+    list-style: none;
+    width: 95px;
+    height: 23px;
+    padding: 0px;
+    margin: 0px;
+}
+.uls{
+    padding: 0px;
+}
+.quitBox{
+    display: none;
+    position: absolute;
+    margin-left: -5%;
+    width: 120px;
+    height: 60px;
+    background-color: #5C95D5;
+    padding: 0px;
+}
+.quitBoxMobile{
+    display: none;
+    position: absolute;
+    width: 90px;
+    height: 60px;
+    background-color: #5C95D5;
+    padding: 0px;
+}

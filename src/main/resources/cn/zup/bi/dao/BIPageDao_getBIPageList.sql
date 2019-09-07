@@ -1,0 +1,1 @@
+SELECT * FROM bi_page

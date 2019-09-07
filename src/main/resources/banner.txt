@@ -1,0 +1,11 @@
+${AnsiColor.BRIGHT_GREEN}
+ ________      __  __      ____
+/\_____  \    /\ \/\ \    /\  _`\
+\/____//'/'   \ \ \ \ \   \ \ \L\ \
+     //'/'     \ \ \ \ \   \ \ ,__/
+    //'/'___    \ \ \_\ \   \ \ \/
+    /\_______\   \ \_____\   \ \_\
+    \/_______/    \/_____/    \/_/
+
+${AnsiColor.BRIGHT_BLUE}
+::: Project (version:${application.version}) :::    ＼(^O^)／    Spring-Boot ${spring-boot.version}

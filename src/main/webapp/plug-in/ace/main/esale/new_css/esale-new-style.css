@@ -1,0 +1,100 @@
+/*2017-7*/
+*{font-family: "微软雅黑", "microsoft yahei";outline-style: none;	}
+/** =======================
+ * 改变按钮
+ ===========================*/
+.btn-primary:hover, .open .btn-primary.dropdown-toggle{background-color: #005ea8!important; border-color: #005ea8!important;}
+.btn-primary, .btn-primary:focus{background-color: #397bc5!important; border-color: #397bc5!important; border-radius:2px ;}
+.btn:hover, .btn-default:hover, .open .btn.dropdown-toggle, .open .btn-default.dropdown-toggle{border-color: #8b9aa3;}
+.btn-info, .btn-info:focus{background-color: #abbac3 !important; border-color:#abbac3 !important;}
+.btn-info:hover, .open .btn-info.dropdown-toggle{background-color: #8B9AA3 !important;border-color:#8B9AA3 !important;}
+
+.pagination>li.disabled>a, .pagination>li.disabled>a:hover, .pagination>li.disabled>a:focus, .pager>li.disabled>a, .pager>li.disabled>a:hover, .pager>li.disabled>a:focus{background-color: #efefef; margin:0 3px;border: 1px solid #c6c9d1; border-radius: 4px !important;}
+.pagination>li>a, .pager>li>a{margin: 0 3px; border-radius: 4px !important;    border: 1px solid #c6c9d1;}
+.pagination>.disabled>span, .pagination>.disabled>a, .pagination>.disabled>a:hover, .pagination>.disabled>a:focus{color: #acabab;}
+/** =======================
+ * 表格
+ ===========================*/
+.widget-body{/*border-top: 1px solid #CCC !important;*/}
+.table thead:first-child tr{background-color: #eaeef1 !important; background-image: linear-gradient(to bottom,#eaeef1 0,#eaeef1 100%);}
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th{background-color: #fff !important;}
+.table-striped>tbody>tr:nth-child(odd):hover>td, .table-striped>tbody>tr:nth-child(odd):hover>th{    background-color: #e0f1fe !important;}
+.table-hover>tbody>tr, .table-hover>tbody>tr{background-color: #f2f6fb !important;}
+.widget-body .table{border-top: 1px solid #ddd;}
+.table-bordered>thead>tr>th{color: #2f342e;;font-size: 13px;}
+
+.caodanguanli_border{margin-left:25px; padding-bottom:10px; padding-top:10px; border-right: 1px solid #ccc;}
+.page-content{padding: 8px 0 1px; border-bottom: 1px solid #ccc;}
+.tree .tree-selected{background-color: #eff7fb;}
+.nav-tabs{margin-left: 24px;}
+.dataTables_paginate .pagination{margin:0 ;}
+
+/*.form-group{margin-bottom: 15px;}*/
+/*height: 25px;width: 25px;line-height: 25px;cursor: pointer; + -*/
+.table-header,.header-color-blue2{background-color:#eaeef1 !important;border: 1px solid #ccc !important;color:#333 !important; font-weight: bold; font-size: 14px;}
+.header-color-blue2 h4.smaller{color:#333 !important; font-weight: bold; font-size: 14px;}
+.container>div{background:none;}
+
+.dataTable th[class*=sorting_]{color: #2f342e;}
+.dataTable th[class*=sort]:hover{color: #2f342e;}
+.esale-btn-pd{padding: 10px 0 10px 15px !important;}
+/** =======================
+ * 套餐方案设计\制作
+ ===========================*/
+.program-b{border: 1px solid #E0E0E0;padding-bottom: 20px;}
+.program-b strong{font-size: 16px; font-family: "微软雅黑","microsoft yahei"; font-weight: 500 !important;text-align: left !important;}
+.program-b-b{height:40px;border-bottom:1px solid #E0E0E0 ; background-color: #f0f0f0; margin-bottom:20px ;}
+
+.table th,table{text-align: center !important;}
+.escel-xxdz{width: 936px;}
+@media (max-width:1200px){
+	.escel-xxdz{width: 770px;}
+}
+@media (max-width:992px){
+	#subnameQuery,.xsmt15{
+		margin-top:15px;
+	}
+	#POSITIONDEPRESS{
+		margin-top:15px;
+	}
+	.escel-xxdz{width: 100%;}
+	.xs992 button{margin-top: 5px;}			
+}
+select.form-control{height: 34px;}
+.selectindex{margin-left: -12px; margin-right: -12px; margin-bottom: 15px;}
+.buttonGroup{margin-top: 12px; margin-bottom: 12px;}
+input[readonly="readonly"]:focus, input[readonly="readonly"]:hover{
+	border-color: #d5d5d5;
+	color: #939192;
+}
+
+table td input{ height: 26px;}
+table td textarea{ height: 26px;margin-top: 4px;}
+table td[name="memo"]{
+	word-break: break-all;
+}
+.table thead>tr>td, .table tbody>tr>td, .table tfoot>tr>td{
+	padding: 0 10px;
+	height: 34px;
+    line-height: 34px;
+}
+.table thead>tr>th, .table tbody>tr>th, .table tfoot>tr>th {
+	height:50px
+}
+.clearfix .text-right label{
+	padding-top:5px ;
+}
+.ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year{
+	float: right;
+	border: none;
+}
+.ui-datepicker select.ui-datepicker-month:focus,.ui-datepicker select.ui-datepicker-year:focus{
+	outline-style:none ;
+}
+
+.ui-dialog .ui-dialog-buttonpane, .ui-jqdialog .ui-dialog-buttonpane, .ui-dialog .ui-jqdialog-buttonpane, .ui-jqdialog .ui-jqdialog-buttonpane {
+    background:none;
+}
+.modal-dialog{
+	z-index:9999!important;
+}

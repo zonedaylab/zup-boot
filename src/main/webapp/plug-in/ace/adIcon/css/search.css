@@ -1,0 +1,68 @@
+@CHARSET "UTF-8";
+
+/*
+ =================
+ 	矿山搜索
+ =================
+ * */
+
+.pop-row {
+	margin: 15px auto;
+}
+
+.pop-row label {
+	color: #333;
+	font-size: 14px;
+	display: inline-block;
+	width: 80px;
+	text-align: right;
+}
+
+.pop-row input,
+.pop-row select {
+	color: #858585;
+	height: 34px;
+	line-height: 1.2;
+	font-size: 14px;
+	background-color: #fff;
+	border: 1px solid #d5d5d5;
+	padding: 5px 4px;
+	outline-style: none;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	vertical-align: middle;
+	transition: border-color ease-in-out .15s;
+	margin-left: 10px;
+	width: 190px;
+	border-radius: 2px;
+}
+
+.pop-row input:hover,
+.input:active {
+	border: 1px solid #b5b5b5;
+}
+
+.mine-search-btn {
+	padding: 7px 14px;
+	color: #fff;
+	font-size: 13px;
+	cursor: pointer;
+	border: none;
+	border-radius: 2px;
+	-webkit-transition: background ease .15s;
+	transition: background ease .15s;
+	outline-style: none;
+	margin-left: 230px;
+}
+
+.mine-btn-search-blue {
+	background-color: #31a3f6;
+}
+
+.mine-btn-search-blue:hover {
+	background-color: #47adf7;
+}
+
+.mine-btn-search-blue:active {
+	background-color: #1a99f6;
+}

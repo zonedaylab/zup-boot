@@ -1,0 +1,1 @@
+DELETE FROM bi_page WHERE BI_PAGE_ID = ${bi_Page_Id}

@@ -1,0 +1,1 @@
+select * from wechat_server

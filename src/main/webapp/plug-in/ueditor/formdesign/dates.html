@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>文本框</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/ie.css">
+    <![endif]-->
+    <link rel="stylesheet" href="leipi.style.css">
+    <script type="text/javascript" src="../dialogs/internal.js"></script>
+    <script type="text/javascript">
+/* Thank you by  
+http://www.alt-tag.com/blog/2006/02/ie-dom-bugs/ */
+function createElement(type, name)
+{     
+    var element = null;     
+    try {        
+        element = document.createElement('<'+type+' name="'+name+'">');     
+    } catch (e) {}   
+    if(element==null) {     
+        element = document.createElement(type);     
+        element.name = name;     
+    } 
+    return element;     
+}
+    </script>
+</head>
+<body>
+<div class="content">
+    <table class="table table-bordered table-striped table-hover">
+     <tr>
+        <th><span>字段名称</span><span class="label label-important">*</span></th>
+       <th><span>字段标题</span><span class="label label-important">*</span> </th>
+    </tr>
+    <tr>
+        <td><input type="text" id="fieldname" placeholder="必填项"></td>
+        <td><input type="text" id="title" placeholder="必填项"></td>
+    </tr>
+     <tr>
+        <th><span>默认值</span> </th>
+        <th><span>对齐方式</span> </th>
+    </tr>
+    <tr>
+        <td><input type="date" id="orgvalue" placeholder="无则不填"></td>
+        <td>
+			<select id="align">
+                <option value="left" >左对齐</option>
+                <option value="center">居中对齐</option>
+                <option value="right">右对齐</option>
+            </select>
+		</td>
+    </tr>
+    <tr>
+        <th><span>&nbsp;&nbsp;&nbsp;&nbsp;宽&nbsp;&nbsp;X&nbsp;&nbsp;高&nbsp;&nbsp;&nbsp;&&nbsp;&nbsp;&nbsp;字体大小</span> </th>
+        <th><span>可见性</span> </th>
+    </tr>
+    <tr>
+        <td>
+            <input id="width" type="text" value="200" class="input-small span1" placeholder="auto"/>
+            X
+            <input id="height" type="text" value="30" class="input-small span1" placeholder="auto"/>
+            &
+            <input id="fontsize" type="text"  value="" class="input-small span1" placeholder="auto"/> px
+
+        </td>
+        <td>
+            <label class="checkbox inline"><input id="orghide" type="checkbox"/> 隐藏 </label>
+        </td>
+    </tr>
+
+    </table>
+</div>
+<script type="text/javascript">
+var oNode = null,thePlugins = 'dates';
+window.onload = function() {
+    if( UE.plugins[thePlugins].editdom ){
+        oNode = UE.plugins[thePlugins].editdom;
+		var gValue =oNode.getAttribute('value'), gName=oNode.getAttribute('fieldname'),gHidden=oNode.getAttribute('orghide'),gFontSize=oNode.getAttribute('fontsize'),gAlign=oNode.getAttribute('align'),gWidth=oNode.getAttribute('width'),gHeight=oNode.getAttribute('height'),gTitle=oNode.getAttribute('title');
+		gValue = gValue==null ? '' : gValue;
+        gName = gName==null ? '' : gName;
+		$G('orgvalue').value = gValue;
+        $G('fieldname').value = gName;
+        $G('title').value = gTitle;
+        if (gHidden == '1')
+        {
+            $G('orghide').checked = true;
+        }
+        $G('fontsize').value = gFontSize;
+        $G('width').value = gWidth;
+        $G('height').value = gHeight;
+        $G('align').value = gAlign;
+    }
+}
+dialog.oncancel = function () {
+    if( UE.plugins[thePlugins].editdom ) {
+        delete UE.plugins[thePlugins].editdom;
+    }
+};
+dialog.onok = function (){
+    if($G('fieldname').value==''){
+        alert('请输入字段名称');
+        return false;
+    }
+    if($G('title').value==''){
+        alert('请输入字段标题');
+        return false;
+    }
+    var gValue =$G('orgvalue').value, gName=$G('fieldname').value,gHidden=$G('orghide').value,gFontSize=$G('fontsize').value,gAlign=$G('align').value,gWidth=$G('width').value,gHeight=$G('height').value,gTitle = $G('title').value;
+    
+    if( !oNode ) {
+        try {
+            oNode = createElement('input',gName);
+            oNode.setAttribute('type','date');
+            oNode.setAttribute('title', gTitle);
+            oNode.setAttribute('value',gValue);
+            oNode.setAttribute('fieldname',gName);
+            oNode.setAttribute('id','orgvalue');
+            oNode.setAttribute('plugins',thePlugins);
+            if ( $G('orghide').checked ) {
+                oNode.setAttribute('orghide',1);
+            } else {
+                oNode.setAttribute('orghide',0);
+            }
+            if( gFontSize != '' ) {
+                oNode.style.fontSize = gFontSize + 'px';
+                //style += 'font-size:' + gFontSize + 'px;';
+                oNode.setAttribute('fontsize',gFontSize );
+            }
+            if( gAlign != '' ) {
+                //style += 'text-align:' + gAlign + ';';
+                oNode.style.textAlign = gAlign;
+                oNode.setAttribute('align',gAlign );
+            }
+            if( gWidth != '' ) {
+                oNode.style.width = gWidth+ 'px';
+                //style += 'width:' + gWidth + 'px;';
+                oNode.setAttribute('width',gWidth );
+            }
+            if( gHeight != '' ) {
+                oNode.style.height = gHeight+ 'px';
+                //style += 'height:' + gHeight + 'px;';
+                oNode.setAttribute('height',gHeight );
+            }
+            editor.execCommand('insertHtml',oNode.outerHTML);
+        } catch (e) {
+            try {
+                editor.execCommand('error');
+            } catch ( e ) {
+                alert('控件异常，请联系技术支持');
+            }
+            return false;
+        }
+    } else {
+        oNode.setAttribute('title', gTitle);
+        oNode.setAttribute('value', $G('orgvalue').value);
+        oNode.setAttribute('fieldname',gName);
+        oNode.setAttribute('id','orgvalue');
+        oNode.setAttribute('name',gName);
+        if( $G('orghide').checked ) {
+            oNode.setAttribute('orghide', 1);
+        } else {
+            oNode.setAttribute('orghide', 0);
+        }
+        if( gFontSize != '' ) {
+            oNode.style.fontSize = gFontSize+ 'px';
+            oNode.setAttribute('fontsize',gFontSize );
+        }else{
+            oNode.style.fontSize = '';
+            oNode.setAttribute('fontsize', '');
+        }
+        if( gAlign != '' ) {
+            oNode.style.textAlign = gAlign;
+            oNode.setAttribute('align',gAlign );
+        }else{
+            oNode.setAttribute('align', '');
+        }
+        if( gWidth != '' ) {
+            oNode.style.width = gWidth+ 'px';
+            oNode.setAttribute('width',gWidth );
+        }else{
+            oNode.style.width = '';
+            oNode.setAttribute('width', '');
+        }
+        if( gHeight != '' ) {
+            oNode.style.height = gHeight+ 'px';
+            oNode.setAttribute('height',gHeight );
+        }else{
+            oNode.style.height = '';
+            oNode.setAttribute('height', '');
+        }
+        delete UE.plugins[thePlugins].editdom;
+    }
+};
+</script>
+</body>
+</html>

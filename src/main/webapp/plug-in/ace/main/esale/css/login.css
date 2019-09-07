@@ -1,0 +1,76 @@
+@charset "utf-8";
+html{font-family:Microsoft Yahei; font-size:14px;}
+html,body,ul,li,div,h2,dl,dt,dd,p,img,h2,label,form{margin:0; padding:0; box-sizing:border-box;-moz-box-sizing:border-box; /* Firefox */-webkit-box-sizing:border-box; /* Safari */}
+body{background-color:#fff;}
+li,dd{list-style:none;}
+a{text-decoration:none; color:#333;}
+.fl{float:left;}
+.fr{float:right;}
+#head{width:100%; height:auto; overflow:hidden; padding:40px 0 30px 5%;}
+#head img{display:block;}
+#content{width:100%; height:435px; background:url(bg.jpg) no-repeat center top; background-color:#005ea8; overflow:hidden;} 
+.content_wrap{ position:relative;width:900px; margin:0 auto;overflow:hidden;}
+
+/**  登陆框样式   开始  **/
+.login{
+	position:relative;
+	width:320px; 
+	height:400px;
+	z-index:4;
+	float:right;
+	background:#fff;
+	overflow:hidden;
+	top:40px;
+}
+h2{height:70px; line-height:70px;color:#047bf8; text-align:center;}
+.login-info{display:block;width:280px; margin:0 auto;}
+.login-info label{float:none;}
+.iteam-form{ height:40px; border:1px solid #c2c2c2;position:relative; margin-bottom:20px; z-index:6;}
+.login-label{position:absolute;z-index:3;top:0; left:0; width:38px; height:38px;border-right:1px solid #c2c2c2;}
+.name-label{background:url(login-name.png) no-repeat left top}
+.pwd-label{background:url(login-pwd.png) no-repeat left top}
+.itxt{width:228px; height:18px; line-height:18px; border:0; color:#6d6d6d; padding:10px 0 10px 50px; float:none; overflow:hidden;}
+.ctxt{position:absolute;z-index:3;top:0; left:0;width:175px; height:28px; border:1px solid #c2c2c2; background-color#fcfcfc;}
+.login-codeimg{position:absolute;width:73px; height:33px;top:0;right:0}
+.iteam-formc{position:relative; height:30px;margin-bottom:20px;}
+.login-btn{
+	width:280px; height:38px; 
+	display:block;
+	margin:0 auto;
+	margin-bottom:25px;
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:5px;
+	-moz-border-radius-bottomright:5px;
+	-moz-border-radius-bottomleft:5px;
+	-webkit-border-top-left-radius:5px;
+	-webkit-border-top-right-radius:5px;
+	-webkit-border-bottom-right-radius:5px;
+	-webkit-border-bottom-left-radius:5px;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+	border-bottom-left-radius:5px;
+	background-color:#1b7dd8;
+	border:0;
+	color:#fff;
+	font-size:16px;
+	font-weight:700;
+	text-align:center;
+	cursor:pointer;
+	overflow:hidden;	
+	}
+.login-other{font-size:12px;}
+.login-other a{color:#333; padding:0 5px;}
+.login-checkbox{ width:12px; height:12px;}
+.other-info{display:block; clear:both;}
+.login-checkinfo{width:90px; font-weight:normal; color:#333; cursor:default;}
+.underline{text-decoration:underline;}
+
+/**  登陆框样式   结束  **/
+
+#foot{width:100%; padding:40px 0;background:url(line.gif) repeat-x left center;}
+.foot-info{text-align:center;line-height:36px;}
+.foot-info span{background-color:#fff; padding:0 5px;}
+.foot-info a{margin-left:20px;}
+ a:hover{color:#005ea8;}
+

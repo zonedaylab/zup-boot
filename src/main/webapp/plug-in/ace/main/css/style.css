@@ -1,0 +1,99 @@
+/**
+
+首页样式表
+@author  谢炎
+@date 2016-9-27 17:38:52
+
+*/
+
+body, div{
+    padding: 0;
+    margin: 0;
+}
+.top{
+    width: 100%;
+    height: 50px;
+    background-color: #234a76;
+}
+.footer{
+    width: 100%;
+    height: 30px;
+    background-color: #234a76;
+}
+.stationInfo{
+    margin-top: 5px;
+    margin-left: 5px;
+    height: 300px;
+    width: 60%;
+}
+.stationInfoTitle{
+    height: 30px;
+    width: 100%;
+    background-color: #397BC5;
+}
+.stationInfoContent{
+    padding-top: 20px;
+    height: 270px;
+    width: 100%;
+    background-color: #DCE8F5;
+}
+.stationInfoTxt{
+    color: #397BC5;
+    font-family: '黑体';
+    font-size: 17px;
+}
+.stationState1{
+    margin: 0px;
+    padding-top: 20px;
+    width: 99%;
+    background-color:#398439;
+}
+.stationState2{
+    margin: 0px;
+    padding-top: 20px;
+    width: 99%;
+    background-color:#d9534f;
+}
+.stationState3{
+    margin: 0px;
+    padding-top: 20px;
+    width: 99%;
+    background-color:#fcf8e3;
+}
+.tdTxt{
+    text-align: right;
+}
+.trHei{
+    height: 40px;
+}
+.title1{
+    color: #FFFFFF;
+    font-family: '黑体';
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+
+}
+.input{
+    background-color: #397bc5;
+    border: 0px;
+    height: 20px;
+    color: #FFFFFF;
+}
+.span{
+    font-size: 17px;
+    color:#ffffff;
+    width:30%;
+}
+.ssH{
+    background-color: #7cabd9;
+}
+.row2-2-2{
+
+}
+.border1{
+    border: 1px solid #dce8f5;
+}
+.stationInfoContentH{
+    height:55px;
+}

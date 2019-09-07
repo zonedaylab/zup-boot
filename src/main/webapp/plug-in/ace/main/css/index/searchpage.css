@@ -1,0 +1,80 @@
+body,div,
+h1,h2,p,
+ol,ul,li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../../fonts/glyphicons-halflings-regular.eot');
+  src: url('../../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+  url('../../fonts/glyphicons-halflings-regular.woff') format('woff'),
+  url('../../fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+  url('../../fonts/glyphicons-halflings-regular.svg') format('svg');
+}
+@-webkit-viewport { width: device-width; }
+@-moz-viewport { width: device-width; }
+@-ms-viewport { width: device-width; }
+@-o-viewport { width: device-width; }
+@viewport { width: device-width; }
+
+html, body {
+  min-height: 100%;
+}
+
+body {
+  min-width: 200px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  color: #666;
+  font: normal 100%/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.adBtn{
+  height: 28px;
+  width: 80px;
+  background-color: #005fb9;
+  float: right;
+  position: absolute;
+  top:-3px;
+  right: 0px;
+}
+.adBtn:hover{
+  background-color: #60b0dc;
+  cursor: pointer;
+}
+.trHead{
+  background-color: #60b0dc;
+  color: #ffffff;
+  font-size: 15px;
+}
+.tr1{
+  background-color: #e0f1fe;
+  color: #000000;
+  font-size: 15px;
+}
+.tr1:hover{
+  background-color: #e0ffff;
+}
+.tr2{
+  background-color: #f4fbfe;
+  color: #000000;
+  font-size: 15px;
+}
+.tr2:hover{
+  background-color: #e0ffff;
+}
+.inputs{
+  border: 1px solid #b0e2ff;
+  background: #00000000;
+  width: 130px;
+}
+.btnStxt{
+  color: #ffffff;
+  font-size: 20px;
+  font-family: '黑体';
+  margin-left: 5px;
+}

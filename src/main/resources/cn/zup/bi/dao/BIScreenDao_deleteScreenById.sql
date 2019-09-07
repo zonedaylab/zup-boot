@@ -1,0 +1,1 @@
+DELETE FROM bi_screen WHERE SCREEN_ID = ${screen_Id}

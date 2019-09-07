@@ -1,0 +1,510 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font-family: "Microsoft YaHei";
+	vertical-align: baseline;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+html {
+	overflow-x: hidden;
+	overflow-y: visible;
+}
+
+body {
+	width: 1920px;
+	height: 1080px;
+	position: relative;
+	background: url(../img/body_bgr.png) 0% 0% / 100%;
+	-webkit-transform-origin: left top 0px;
+	-moz-transform-origin: left top 0px;
+	transform-origin: left top 0px;
+	overflow: hidden;
+}
+
+input {
+	font-size: 16px
+}
+
+@font-face {
+	font-family: LED;
+	src: url(../font/led.TTF);
+}
+
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+
+::-webkit-scrollbar {
+	width: 3px;
+	background-color: #F5F5F5;
+}
+
+
+/*定义滚动条轨道 内阴影+圆角*/
+
+::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+
+/*定义滑块 内阴影+圆角*/
+
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	background-color: #666;
+}
+
+
+/*顶部*/
+
+.ME-hender {
+	width: 1920px;
+	height: 132px;
+	background: url(../img/top_bg.png) no-repeat;
+	background-size: 100% 100%;
+}
+
+.ME-hender h1 {
+	font-size: 36px;
+	color: rgb(255, 255, 255);
+	line-height: 0.556;
+	text-align: center;
+	position: absolute;
+	left: 820px;
+	top: 30px;
+	letter-spacing: 6px;
+}
+
+.ME-hender p {
+	font-family: led;
+	font-size: 18px;
+	color: #eee;
+	line-height: 1.429;
+	text-align: center;
+	position: absolute;
+	left: 870px;
+	top: 74px;
+	letter-spacing: 2px;
+}
+
+.ME-hender a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.ME-hender .ME-index {
+	right: 180px
+}
+
+
+/*=======================
+通知
+==========================*/
+
+.Notice {
+	width: 500px;
+	height: 30px;
+	overflow: hidden;
+	position: absolute;
+	top: 10px;
+	left: 30px
+}
+
+.Notice a {
+	display: block;
+	text-decoration: none;
+	height: 30px;
+	line-height: 30px;
+	text-indent: 20px;
+	color: #7fa6c5;
+	font-size: 15px
+}
+
+.NoticeI {
+	font-size: 20px;
+	color: #fff;
+	position: absolute;
+	top: 0;
+	left: 20px;
+	height: 50px;
+	line-height: 50px
+}
+
+
+/*=======================
+天气
+==========================*/
+
+.weather {
+	position: absolute;
+	left: 76px;
+	top: 86px;
+	color: #fff;
+}
+
+.weather span {
+	font-family: led;
+	font-size: 40px;
+	margin-right: 4px
+}
+
+.weather small {
+	font-size: 22px;
+	margin-right: 10px
+}
+
+
+/*=======================
+今日发电量
+==========================*/
+
+.TodayElectricity {
+	font-size: 18px;
+	color: #eee;
+	position: absolute;
+	left: 1560px;
+	top: 80px;
+}
+
+.TodayElectricity .led {
+	color: rgb(81, 255, 255);
+	font-family: led;
+	font-size: 50px;
+	margin-left: 20px;
+	margin-right: 10px
+}
+
+.ME-main {
+	width: 1920px;
+	height: 910px;
+}
+
+.ME-footer {
+	background-image: url(../img/button_bg.png);
+	width: 1920px;
+	height: 38px;
+}
+
+.ME-footer p {
+	font-size: 14px;
+	color: rgb(255, 255, 255);
+	line-height: 38px;
+	text-align: center;
+}
+
+
+/*=======================
+子项
+=======================*/
+
+.child {
+	background-image: url(../img/child.png);
+	position: absolute;
+	width: 422px;
+	height: 348px;
+}
+
+.ME_title {
+	color: #5ac8fa;
+	font-size: 18px;
+	margin-top: -36px;
+	margin-bottom: 36px;
+	margin-left: 15px;
+}
+
+
+/*=======================
+发电量
+=======================*/
+
+.child_PowerGeneration {
+	left: 59px;
+	top: 194px;
+}
+
+.ME_inquire {
+	color: #5ac8fa;
+	margin: 0 20px;
+	font-size: 16px
+}
+
+.ME_inquire input {
+	color: #b3e7ff;
+	padding: 5px;
+	width: 100px;
+	text-align: center;
+	margin: 0 10px;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px #5ac8fa solid;
+	outline-style: none;
+}
+
+.ME_inquire button {
+	padding: 4px 10px;
+	background-color: transparent;
+	color: #5ac8fa;
+	border: 1px #5ac8fa solid;
+	cursor: pointer;
+	margin-left: 10px;
+	transition: all .2s;
+	-webkit-transition: all .2s;
+}
+
+.ME_inquire button:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.ME_inquire button:active {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+
+/*=======================
+用电量
+=======================*/
+
+.child_EnergyUsed {
+	left: 59px;
+	top: 637px;
+}
+
+
+/*=======================
+电量总览
+=======================*/
+
+.child_PowerOverview {
+	left: 1437px;
+	top: 202px;
+}
+.Electricity-title,
+.Electricity-kwh .spanKwh {
+	font-size: 16px;
+	color: #ccc;
+	font-weight: normal;
+}
+
+.Electricity-kwh {
+	margin-top: 20px;
+}
+.Electricity-kwh .fontLed{
+	font-family: led;
+	color: rgb(112, 255, 254);
+	font-weight: bold;
+	font-size: 50px;
+}
+
+
+.Split {
+	/*分割线*/
+	color: #434453;
+	position: absolute;
+	top: 150px;
+	left: 40px;
+}
+
+.TM-PowerGeneration {
+	/*本月发电量 */
+	color: rgb(187, 194, 206);
+	position: absolute;
+	top: 36px;
+	left: 22px;
+}
+
+.TM-EnergyUsed {
+	/*本月用电量 */
+	color: rgb(187, 194, 206);
+	position: absolute;
+	top: 36px;
+	left: 200px;
+}
+
+.total-PowerGeneration {
+	/*总发电量 */
+	color: rgb(187, 194, 206);
+	position: absolute;
+	top: 200px;
+	left: 22px;
+}
+
+.total-EnergyUsed {
+	/*总用电量 */
+	color: rgb(187, 194, 206);
+	position: absolute;
+	top: 200px;
+	left: 200px;
+}
+
+.ElectricityDetail,
+.total-ElectricityDetail,
+.Today-ElectricityDetail {
+	position: absolute;
+	top: 60px;
+	left: 100px;
+	width: 120px;
+	padding: 10px;
+	line-height: 26px;
+	border-radius: 4px;
+	background: rgba(50, 50, 50, .6);
+	box-shadow: 0 0 6px rgba(255, 255, 255, .1);
+	color: #fff;
+	z-index: 9;
+	display: none;
+}
+
+.Today-ElectricityDetail {
+	top: 130px;
+	left: 1760px;
+}
+
+.ElectricityDetail p span,
+.total-ElectricityDetail p span,
+.Today-ElectricityDetail p span {
+	margin-right: 4px;
+}
+
+.ME-orange {
+	background-color: #f2ca07;
+}
+
+.ME-green {
+	background-color: #50ab17;
+}
+
+.ME-blue {
+	background-color: #1182e1;
+}
+
+.TM-PowerGeneration:hover .ElectricityDetail,
+.total-PowerGeneration:hover .total-ElectricityDetail,
+.TodayElectricity:hover+.Today-ElectricityDetail {
+	display: block
+}
+
+
+/*=======================
+社会效益
+=======================*/
+
+.child_SocialContributions {
+	left: 1437px;
+	top: 645px;
+}
+
+.SC-child-box {
+	height: 50px;
+	line-height: 50px;
+	margin: 30px 22px 0 30px;
+}
+
+.SC-child-box img,
+.SC-child-box span {
+	float: left;
+}
+
+.SC-child-box span {
+	font-size: 16px;
+	color: rgb(78, 175, 223);
+	width: 180px;
+	text-align: center;
+}
+
+.SC-child-box small {
+	font-family: led;
+	float: left;
+	color: #eee;
+	font-size: 36px
+}
+
+
+/*=======================
+电站地图
+=======================*/
+
+.PowerStationMap {
+	background-image: url(../img/ditu_map.png);
+	position: absolute;
+	left: 552px;
+	top: 194px;
+	width: 817px;
+	height: 511px;
+}
+
+
+/*=======================
+功率检测
+=======================*/
+
+.PowerMonitoring {
+	background-image: url(../img/child_w.png);
+	position: absolute;
+	left: 551px;
+	top: 777px;
+	width: 817px;
+	height: 196px;
+}
+
+
+/*=======================
+	框架的一些修改
+=======================*/
+
+.amap-ui-control-theme-dark .amap-ui-control-zoom a,
+.amap-ui-control-theme-dark .amap-ui-control-zoom-num {
+	background-color: rgba(5, 12, 56, .5)!important;
+	border-bottom-color: #ccc!important;
+	color: #fff!important;
+}
+
+.layui-nav {
+	background: none;
+	font-size: 16px;
+	margin-right: 20px;
+}
+
+.layui-nav .layui-this:after,
+.layui-nav-bar,
+.layui-nav-tree .layui-nav-itemed:after,
+.layui-nav-bar {
+	display: none
+}
+
+.layui-nav i {
+	font-size: 20px;
+	margin-right: 5px;
+}
+
+.layui-nav .layui-nav-item {
+	line-height: 50px;
+}
+
+.layui-nav .layui-nav-item a {
+	opacity: 1
+}
+
+.layui-nav .layui-nav-more {
+	top: 25px
+}
+
+.layui-nav .layui-nav-mored,
+.layui-nav-itemed .layui-nav-more {
+	top: 18px
+}
+
+.layui-nav .layui-nav-child dd.layui-this a,
+.layui-nav-child dd.layui-this {
+	background: rgba(0, 0, 0, .1);
+	color: #000
+}
+
+.amap-pancontrol {
+	background: url(../img/map_view.png) 0 -140px !important;
+}

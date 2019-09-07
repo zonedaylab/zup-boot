@@ -1,0 +1,1 @@
+delete from bi_topic_field WHERE FIELD_ID = ${titleFieldId}

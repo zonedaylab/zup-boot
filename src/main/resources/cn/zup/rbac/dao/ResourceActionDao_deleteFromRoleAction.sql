@@ -1,0 +1,1 @@
+delete from action where actionid=${actionid}

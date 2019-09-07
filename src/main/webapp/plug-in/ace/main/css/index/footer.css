@@ -1,0 +1,16 @@
+/*
+    监控页面中间部分css样式表
+    author： 谢炎
+    date： 2016-8-24 10:30:33
+
+*/
+.bg{
+    background-color: #284c70;
+    height: 26px;
+    padding: 3px;
+}
+.txt{
+    font-family: "黑体";
+    font-size: 14px;
+    color: #ffffff;
+}

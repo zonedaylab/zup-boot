@@ -1,0 +1,1 @@
+ select t.biz_table_name from bi_report r join bi_topic t on r.topic_id = t.topic_id and r.report_id = ${ reportId}

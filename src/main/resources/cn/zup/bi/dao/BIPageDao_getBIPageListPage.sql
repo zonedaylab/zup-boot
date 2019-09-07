@@ -1,0 +1,11 @@
+SELECT BI_PAGE_ID,
+	PAGE_TYPE,
+	PAGE_TITLE,
+	PAGE_NAME,
+	PAGE_URL,
+	MENU_ID,
+	MENU_NAME,
+	con.SUBNAME AS pageTypeStr
+FROM bi_page 
+JOIN config con ON PAGE_TYPE = con.SUBID
+WHERE con.CONFIGID = ${biPage.pageTypeStr}

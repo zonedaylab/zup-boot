@@ -1,0 +1,1 @@
+delete from wechat_system where COMPANY_ID=${wsys.company_Id}

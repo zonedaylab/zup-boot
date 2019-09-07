@@ -1,0 +1,92 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body,
+html {
+	height: 100%;
+}
+
+body {
+	background: url(../img/login-bg.png) no-repeat;
+	background-size: cover;
+}
+
+.mine-login {
+	position: absolute;
+	left: 50%;
+	top: 44%;
+	transform: translateX(-50%) translateY(-50%);
+	height: 380px;
+	width: 360px;
+}
+.mine-login-logo{
+	text-align: center;
+	font-size: 50px;
+	color: #fff;
+	margin: 0 0 50px -50%;
+    white-space: nowrap;
+}
+
+.mine-login-main {
+	padding: 40px 20px 10px 20px;
+	background-color: rgba(255, 255, 255, .2);
+	border-radius: 6px;
+}
+
+.mine-login-main div span {
+	width: 80px;
+	display: inline-block;
+	color: #fff;
+}
+
+.mine-login-main div {
+	margin-bottom: 20px;
+}
+
+.mine-login-main .input {
+	width: 230px;
+	color: #858585;
+	height: 34px;
+	line-height: 1.2;
+	font-size: 14px;
+	background-color: #fff;
+	border: 1px solid #fff;
+	border-radius: 4px;
+	padding: 5px 4px;
+	outline-style: none;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	vertical-align: middle;
+	transition: border-color ease-in-out .15s;
+}
+
+.mine-login-main button {
+	padding: 8px 0;
+	margin-top: 20px;
+	margin-left: 45px;
+	width: 230px;
+	color: #fff;
+	font-size: 13px;
+	cursor: pointer;
+	border: none;
+	border-radius: 2px;
+	background-color: #f2b339;
+	-webkit-transition: background ease .15s;
+	transition: background ease .15s;
+	outline-style: none;
+}
+.mine-login-main button:hover{
+	background-color: #f2b339;
+	opacity: .9;
+}
+.login-footer{
+	position: absolute;
+	bottom: 50px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-size: 13px;
+	color: #9cadbc;
+}

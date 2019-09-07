@@ -1,0 +1,1 @@
+select * from codeserial where codetype='${codetypestr2}'

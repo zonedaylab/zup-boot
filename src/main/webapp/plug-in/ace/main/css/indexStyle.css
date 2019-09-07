@@ -1,0 +1,133 @@
+@CHARSET "UTF-8";
+.bgFY{
+    border-radius: 15%;
+    background-color: #44AFBF;
+    height: 50px;
+    width: 50px;
+    float: left;
+}
+.bgLine{
+	padding:0;
+    float: left;
+    height: 30px;
+    width:70px;
+    background-color: #44AFBF;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-family: '黑体';
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+ }
+.bgLineK{
+	padding:0;
+    margin-left: -15px;
+    float: left;
+    height: 30px;
+    width:30px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    border: 2px solid #44AFBF;
+    color: #44AFBF;
+    font-family: '黑体';
+    font-size: 14px;
+    line-height: 26px;
+    text-align: center;
+}
+.texts{
+    padding:0;
+    width: 80px;
+    height: 30px;
+    font-family: '黑体';
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+    color: #1199E3;
+}
+.boxleft{
+	margin-top:-10px;
+	padding:0;
+    float: left;
+    width:100px;
+}
+.co2bg{
+    width: 120px;
+    height: 120px;
+    border: 1px solid #70BFF3;
+    text-align: center;
+}
+.co2img{
+    width: 118px;
+    height: 70px;
+    text-align: center;
+}
+.linebg{
+    width: 110px;
+    background-color: #70BFF3;
+    border-radius: 5px;
+    height: 30px;
+    margin-left: 2.5px;
+    padding: 3px;
+}
+.b{
+    width: 70px;
+    height: 25px;
+    background-color: #FFFFFF;
+    float: left;
+    line-height: 25px;
+    text-align: center;
+    font-family: '黑体';
+}
+.l{
+    float: left;
+    width: 30px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    color: #FFFFFF;
+    padding: 0;
+    margin-top: -2px;
+}
+.topbg{
+    width: 100%;
+    height: 60px;
+    background:url("../img/topbar/topBg.jpg");
+    float: left;
+}
+.user{
+    float: right;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    color: #FFFFFF;
+    font-family: '黑体';
+    font-size: 14px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+.abtnBg{
+    float: right;
+    margin-left: 10px;
+    height: 60px;
+    line-height: 60px;
+    background-color: #2A6E92;
+    text-align: center;
+    color: #FFFFFF;
+    font-family: '黑体';
+    font-size: 18px;
+    color: #FFFFFF;
+    cursor: pointer;
+    width: 125px;
+}
+.abtnBg:hover{
+    background-color: #00516D;
+    color: #FFFFFF;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.habtn{
+    background-color: #00516D;
+    color: #ffffff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}

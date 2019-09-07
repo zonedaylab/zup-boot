@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       	http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/aop   
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+		http://cxf.apache.org/jaxws 
+   		http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<!-- 权限控制 by hans-->
+	
+	<!-- 拦截器 
+	
+	<mvc:interceptors>
+		<mvc:interceptor> 
+			<mvc:mapping path="/rest/**" />  
+			<bean class="cn.zup.rbac.interceptors.RoleAuthorizationAttribute">
+				<property name="excludeUrls">
+					<list>
+						<value>rest/rbac/loginController</value>
+						<value>rest/rbac/loginController/login</value>
+						<value>rest/rbac/loginController/logout</value>
+						<value>randCodeImage</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>-->
+	
+	 
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+	    <property name="maxUploadSize" value="102400000" />  
+	</bean>
+</beans>

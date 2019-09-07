@@ -1,0 +1,293 @@
+* {
+	padding: 0;
+	margin: 0;
+	font-family: "microsoft yahei";
+}
+
+.pop {
+	z-index: 9999;
+	top: 10%;
+	margin-left: -170px;
+	left: 50%;
+	box-shadow: 1px 1px 50px rgba(0, 0, 0, .2);
+	width: 340px;
+	border-radius: 4px;
+	background-color: #ffffff;
+}
+.pop-header {
+	height: 42px;
+	background-color: #f8f8f8;
+	border-bottom: 1px solid #eee;
+	font-size: 15px;
+	color: #333;
+	padding-left: 15px;
+}
+
+.pop-header p {
+	display: inline-block;
+	line-height: 42px;
+	float: left;
+}
+
+.pop-header a {
+	text-decoration: none;
+	color: #555555;
+	line-height: 42px;
+	margin-right: 15px;
+	float: right;
+	font-size: 14px;
+}
+
+.pop-close {
+	float: right;
+	margin-top: 11px;
+	margin-right: 15px;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+	color: #999;
+	font-size: 16px;
+	cursor: pointer;
+	transition: all .3s;
+	display: inline-block;
+    border-radius: 50%;
+    color: #000000;
+    font-size: 10px;
+    padding-top: -5px;
+    line-height: 16px;
+}
+
+.pop-close:hover{
+	float: right;
+	margin-top: 11px;
+	margin-right: 15px;
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+	font-size: 16px;
+	cursor: pointer;
+	transition: all .3s;
+	display: inline-block;
+    border-radius: 50%;
+    background-color: #f73d3d;
+    color: #ffffff;
+    font-size: 10px;
+    padding-top: -5px;
+    line-height: 16px;
+}
+
+/*pop 鍐呭鍖哄煙*/
+.pop-body {
+	font-size: 14px;
+	padding: 15px;
+}
+
+.pop-body-txt p{
+	color: #333333;
+	line-height: 1.5;
+	margin-bottom: 5px;
+	text-indent: 20px;
+	word-wrap: break-word;
+    word-break: normal;
+    width:310px;
+}
+
+.pop-img-contrast p,
+.pop-video p {
+	width: 100%;
+	text-align: center;
+	font-size: 16px;
+	height: 42px;
+	line-height: 42px;
+}
+
+.pop-body small {
+	color: #999999;
+	font-weight: normal;
+}
+.pop-video img {
+	width: 100%;
+	height: 100px;
+}
+
+.pop-body-txt a {
+	display: block;
+	text-align: right;
+	color: #3e73c1;
+	text-decoration: none;
+}
+
+.pop-body-txt a:hover {
+	text-decoration: underline;
+}
+
+.bg {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, .3);
+	z-index: 0;
+}
+.pop-carousel-img li b {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	line-height: 20px;
+	margin-top: -15px;
+	color: #fff;
+	font-size: 15px;
+	font-weight: normal;
+	background: rgba(0, 0, 0, .3);
+	padding: 4px 10px;
+}
+
+/*
+ 鐓х墖瀵规瘮杞挱
+ * */
+.pop-carousel {
+	width: 100%;
+	height: 100px;
+	overflow: hidden;
+	position: relative;
+}
+.pop-carousel ul,.pop-carousel li{
+	list-style: none;
+}
+.pop-carousel .pop-carousel-img {
+	position: absolute;
+}
+
+.pop-carousel .pop-carousel-img li {
+	width: 315px;
+	float: left;
+}
+
+.pop-img-contrast .pop-carousel .pop-carousel-img img {
+	width: 152.5px;
+	margin-rig ht: 5px;
+	height: 100px;
+
+}
+
+.pop-carousel .mine-btn {
+	position: absolute;
+	top: 50%;
+	text-decoration: none;
+	height: 30px;
+	width: 20px;
+	margin-top: -15px;
+	background: rgba(0, 0, 0, .6);
+	color: #fff;
+	text-align: center;
+	line-height: 30px;
+	display: none;
+}
+
+.pop-carousel:hover .mine-btn {
+	display: block;
+}
+
+.pop-carousel .mine-btn-per {
+	left: 0;
+}
+
+.pop-carousel .mine-btn-next {
+	right: 0;
+}
+.pop-carousel-img li{
+	position: relative;
+}
+.pop-carousel-img li span{
+	position: absolute;
+	top: 0;
+	color: #fff;
+	opacity: .8;
+	background: rgba(0,0,0,.3);
+	padding: 2px 10px;
+	
+}
+.pop-carousel-img li span:nth-child(1){
+left: 25%;
+}
+
+.pop-carousel-img li span:nth-child(2){
+left: 75%;
+}
+
+
+/*
+ ======================
+ 	弹出初始设置
+ ======================
+ * */
+#details,#collapse,#sousuo{
+	display: none;
+}
+table{
+	color: #333333;
+}
+td[colspan="4"]{
+	font-size: 15px;
+	padding: 15px;
+}
+.layui-layer-title{
+	background-color: #f2f2f2 !important;
+}
+.layui-layer-min{
+	display: none !important;
+}
+/*
+ ======================
+ 	查看详情
+ ======================
+ * */
+.xinxi tbody tr td:nth-child(odd){
+	font-weight: bold;
+}
+
+
+.layui-tab-content {
+	max-height: 60vh;
+}
+
+.details .layui-tab-card {
+	box-shadow: none;
+	border: none;
+	border-top: 1px solid #e2e2e2;
+	
+}
+
+.details .layui-tab-content {
+	padding: 0 10px;
+}
+
+/*.details .layui-table thead th {
+	text-align: center;
+}*/
+
+.details .layui-table {
+	margin: 10px 0 0 0;
+	/*text-align: center;*/
+}
+
+.details .layui-tab-card>.layui-tab-title,
+.details .layui-table thead tr {
+	background-color: #F8F8F8;
+}
+.details .layui-tab-content {
+	overflow: auto;
+}
+
+#sousuo{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.detailsTitle{
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 10px;
+}
+
