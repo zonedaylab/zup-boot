@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.zup.workflow.structure.FlowRequest;
-import cn.zup.workflowdemo.biz.DemoSampleReceiveRegisterService;
+import cn.zup.workflowdemo.biz.DemoSampleService;
 import cn.zup.workflowdemo.dal.DemoSample;
 import cn.zup.workflowdemo.model.DemoSampleReceiveRegister;
 
@@ -16,8 +16,8 @@ import cn.zup.workflowdemo.model.DemoSampleReceiveRegister;
  * @date 2016-8-17 16:11:49
  * 
  * */
-@Service("demoSampleReceiveRegisterService")
-public class DemoSampleReceiveRegisterServiceImpl implements DemoSampleReceiveRegisterService {
+@Service("demoSampleService")
+public class DemoSampleServiceImpl implements DemoSampleService {
 	
 	@Autowired
 	private DemoSample demoSampleDao;

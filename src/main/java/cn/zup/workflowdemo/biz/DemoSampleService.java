@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import cn.zup.workflow.structure.FlowRequest;
 import cn.zup.workflowdemo.model.DemoSampleReceiveRegister;
 
-public interface DemoSampleReceiveRegisterService {
+public interface DemoSampleService {
 	/**
 	 * 说明： 保存样本信息
 	 * @author 谢炎

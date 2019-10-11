@@ -47,8 +47,8 @@ import cn.zup.workflow.biz.impl.WorkFlowControl;
 import cn.zup.workflow.biz.impl.WorkFlowMonitor;
 import cn.zup.workflow.biz.impl.WorkflowDispathServiceImpl;
 import cn.zup.workflow.structure.QueryParameter;
-import cn.zup.workflowdemo.biz.DemoSampleReceiveRegisterService;
-import cn.zup.workflowdemo.biz.impl.DemoSampleReceiveRegisterServiceImpl;
+import cn.zup.workflowdemo.biz.DemoSampleService;
+import cn.zup.workflowdemo.biz.impl.DemoSampleServiceImpl;
 import cn.zup.workflowdemo.model.DemoSampleReceiveRegister;
 
 /**
@@ -78,7 +78,7 @@ public class workflowDemoController {
 	@Resource
 	ResourceService resourceServie;
 	@Resource
-	private DemoSampleReceiveRegisterService demoSampleReceiveRegisterService; 
+	private DemoSampleService demoSampleService; 
 
 	/**
 	 * 保存一个需求计划
@@ -184,9 +184,9 @@ public class workflowDemoController {
 		//业务主键写入工作流
 		int mainBizKey = 0;
 		if(demoSampleReceiveRegister.getMainBizkey().length() > 1 ){
-			mainBizKey = demoSampleReceiveRegisterService.UpdateSamleInfo(demoSampleReceiveRegister, demoSampleReceiveRegister.getMainBizkey());
+			mainBizKey = demoSampleService.UpdateSamleInfo(demoSampleReceiveRegister, demoSampleReceiveRegister.getMainBizkey());
 		}else{
-			mainBizKey = demoSampleReceiveRegisterService.SaveSamleInfo(demoSampleReceiveRegister);
+			mainBizKey = demoSampleService.SaveSamleInfo(demoSampleReceiveRegister);
 		}
 		/**
 		 * 返回参数
@@ -217,7 +217,7 @@ public class workflowDemoController {
 			
 		if(mainBizKey!=null && mainBizKey!=""){
 			//根据业务主键获取需求订单信息			
-			DemoSampleReceiveRegister demo = demoSampleReceiveRegisterService.getSamleInfo(mainBizKey);			
+			DemoSampleReceiveRegister demo = demoSampleService.getSamleInfo(mainBizKey);			
 			JSONArray jsonarr = JSONArray.fromObject(demo); 
 			json.put("demo", jsonarr);			
 			return json.toString();

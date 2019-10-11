@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import cn.zup.workflow.structure.FlowRequest;
 import cn.zup.workflow.model.SampleReceiveRegister;
-@Repository("demoSampleDao")
+@Repository("sampleDal")
 public class SampleDal{
 	
 	@Autowired
