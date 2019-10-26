@@ -37,8 +37,8 @@ public class SampleReceiveRegisterServiceImpl implements SampleReceiveRegisterSe
 
 
 	@Override
-	public FlowRequest getWorkItemActivety(String workId, String StateId)throws Exception {
-		return sampleDao.getWorkItemActivety(workId, StateId);
+	public FlowRequest getWorkItemActivety(String workItemID, String StateId)throws Exception {
+		return sampleDao.getWorkItemActivety(workItemID, StateId);
 	}
 
 

@@ -7,6 +7,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +24,10 @@ public class WF_WORK_ACTIVITY extends WF_WORK_ActivityBase{
 	private JdbcTemplate jdbcTemplate_workflow;
 	@Autowired
 	private cn.zup.workflow.dal.WF_ACTIVITY activityDal;
+	@Resource
+	private WF_WORK_ITEM item;
+	@Autowired
+	private WF_HANDLER handlerDal;
 
 	/** 
 	 根据工作ID、活动ID获取某节点所有经办人（实现默认经办人）
@@ -198,16 +204,20 @@ public class WF_WORK_ACTIVITY extends WF_WORK_ActivityBase{
 		strSql.append(" WORK_ACTIVITY_STATE="+cn.zup.workflow.config.WorkActivityState.Reject.getValue());
 		strSql.append(" where WORK_ID="+workID+" and ACTIVITY_ID in(");
 		strSql.append(activityIDs);
-		strSql.append(")");
-		strSql.append(" update WF_WORK_ITEM set");
-		strSql.append(" WORK_ITEM_STATE="+cn.zup.workflow.config.WorkActivityState.Reject.getValue());
-		strSql.append(" where WORK_ACTIVITY_ID in(select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where  WORK_ID="+workID+" and ACTIVITY_ID in (");
+		strSql.append(");");
 		jdbcTemplate_workflow.update(strSql.toString());
+		StringBuilder strSqlItem = new StringBuilder();
+		strSqlItem.append(" update WF_WORK_ITEM set");
+		strSqlItem.append(" WORK_ITEM_STATE="+cn.zup.workflow.config.WorkActivityState.Reject.getValue());
+		strSqlItem.append(" where WORK_ACTIVITY_ID in(select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where  WORK_ID="+workID+" and ACTIVITY_ID in (");
+		strSqlItem.append(activityIDs);
+		strSqlItem.append("))");
+		jdbcTemplate_workflow.update(strSqlItem.toString());
 	}
 			   
 	//#region 获取需要激活节点的经办人
 	public List<cn.zup.workflow.model.WF_HANDLER> WorkNewActivityHandlerList(int workID, int activityID) throws SQLException{
-		WF_HANDLER handlerDal = new WF_HANDLER();
+//		WF_HANDLER handlerDal = new WF_HANDLER();
 		String readyActivityCode;
 		String readyHandlerID = null;
 		int flowID;
@@ -277,19 +287,20 @@ public class WF_WORK_ACTIVITY extends WF_WORK_ActivityBase{
  * @throws SQLException 
    */
    public List<cn.zup.workflow.model.WF_HANDLER> WorkActivityHandlerList(int workID, int activityID) throws SQLException{
-	   List<cn.zup.workflow.model.WF_WORK_ITEM> workItemList = new WF_WORK_ITEM().GetListArray(workID, activityID);
-	   java.util.List<cn.zup.workflow.model.WF_HANDLER> handlerList = new WF_HANDLER().ActivityHandlerList(activityID);
+	   List<cn.zup.workflow.model.WF_WORK_ITEM> workItemList = item.GetListArray(workID, activityID);
+	   java.util.List<cn.zup.workflow.model.WF_HANDLER> handlerL = new ArrayList<cn.zup.workflow.model.WF_HANDLER>();
+	   java.util.List<cn.zup.workflow.model.WF_HANDLER> handlerList = handlerDal.ActivityHandlerList(activityID);
 	   //handlerList = (from handler in handlerList join workItem in workItemList on handler.HANDLER equals workItem.RECEIVER_ID where handler.HANDLER_TYPE==workItem.RECEIVER_TYPE select handler).ToList();
 	   for(cn.zup.workflow.model.WF_HANDLER handler:handlerList){
 		   for(cn.zup.workflow.model.WF_WORK_ITEM workitem:workItemList){
 			   if(handler.getHANDLER()==workitem.getRECEIVER_ID()){
 				   if(handler.getHANDLER_TYPE()==workitem.getRECEIVER_TYPE()){
-					   handlerList.add(handler);
+					   handlerL.add(handler);
 				   }
 			   }
 		   }
 	   }
-	   return handlerList;
+	   return handlerL;
    }
 		///#region 工作流引擎-获取AOV网
 

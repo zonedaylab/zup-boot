@@ -113,10 +113,10 @@ public class SampleDal{
 	 @param handlerList
 	 @return 
 	*/
-	public FlowRequest getWorkItemActivety(String workIds, String StateId) throws Exception{
-		int workId = 0;
-		if(!"".equals(workIds)){
-			workId = Integer.parseInt(workIds);
+	public FlowRequest getWorkItemActivety(String workItemID, String StateId) throws Exception{
+		int itemId = 0;
+		if(!"".equals(workItemID)){
+			itemId = Integer.parseInt(workItemID);
 		}
 		
 		FlowRequest flowRequest = new FlowRequest();
@@ -126,7 +126,7 @@ public class SampleDal{
 		strSql.append(" WF_WORK_ACTIVITY B on A.WORK_ACTIVITY_ID = B.WORK_ACTIVITY_ID  left join");
 		strSql.append(" WF_ACTIVITY C on B.ACTIVITY_ID = C.ACTIVITY_ID left join");
 		strSql.append(" WF_WORK E on B.WORK_ID = E.WORK_ID left join");
-		strSql.append(" WF_FLOW F on C.FLOW_ID = F.FLOW_ID where 1=1 and A.WORK_ITEM_STATE="+StateId+" and E.WORK_ID = "+workId);
+		strSql.append(" WF_FLOW F on C.FLOW_ID = F.FLOW_ID where 1=1 and A.WORK_ITEM_STATE="+StateId+" and A.WORK_ITEM_ID = "+itemId);
 		System.err.println(strSql.toString());
 		flowRequest = jdbcTemplate_workflow.query(strSql.toString(), new ResultSetExtractor<FlowRequest>(){
 

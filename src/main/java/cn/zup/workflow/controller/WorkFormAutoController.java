@@ -72,8 +72,8 @@ public class WorkFormAutoController {
 				flowRequest.setFlowID(menu.getFlowId().toString());
 			}
 		}
-		if(!"".equals(flowRequest.getWorkID()) && flowRequest.getWorkID() != null){
-			flowRequest = demoSampleReceiveRegisterService.getWorkItemActivety(flowRequest.getWorkID(), "1");
+		if(!"".equals(flowRequest.getWorkItemID()) && flowRequest.getWorkItemID() != null){
+			flowRequest = demoSampleReceiveRegisterService.getWorkItemActivety(flowRequest.getWorkItemID(), "1");
 		}
 		
 		String mainBizKey=workflowDispatchService.getMainBizKey(flowRequest);

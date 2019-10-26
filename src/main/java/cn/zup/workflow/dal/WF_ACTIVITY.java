@@ -36,13 +36,17 @@ public class WF_ACTIVITY extends WF_ActivityBase{
 	*/
 	public String NextActivityCode(int flowID, int activityCode) throws SQLException{
 		StringBuilder strSql = new StringBuilder();
-		strSql.append("select  NEXT_ACTIVITY_CODE FROM WF_ACTIVITY ");
-		strSql.append(MessageFormat.format(" where  FLOW_ID={0} ACTIVITY_CODE={1} ", flowID+"",activityCode+""));		
+		strSql.append("select NEXT_ACTIVITY_CODE FROM WF_ACTIVITY ");
+		strSql.append(MessageFormat.format(" where  FLOW_ID={0} and ACTIVITY_CODE={1} ", flowID+"",activityCode+""));		
 		String str = jdbcTemplate_workflow.query(strSql.toString(), new ResultSetExtractor<String>(){
+			String value;
 			@Override
 			public String extractData(ResultSet rs) throws SQLException,
 					DataAccessException {
-				return String.valueOf(rs.getInt("NEXT_ACTIVITY_CODE"));     
+				 if(rs.next()) {  
+					 value=rs.getString("NEXT_ACTIVITY_CODE");  
+				 }
+				return  value;   
 			}
 		});
 			
@@ -259,11 +263,10 @@ public class WF_ACTIVITY extends WF_ActivityBase{
 		}
 		else //如果没有设置就直接获取上一节点
 		{
-			//java.util.ArrayList<Zone.WorkFlow.Entities.WF_ACTIVITY> activityList = GetListArray("FLOW_ID=" + activityModel.FLOW_ID);
-			java.util.List<cn.zup.workflow.model.WF_ACTIVITY> activityList = GetListArray("FLOW_ID=" + activityModel.getFLOW_ID());
-//C# TO JAVA CONVERTER TODO TASK: There is no Java equivalent to LINQ queries:
-			//rejectList = (from activity in activityList where activity.NEXT_ACTIVITY_CODE.split("[,]", -1).Contains(activityModel.ACTIVITY_CODE.toString()) select activity).ToList();
-			
+			java.util.List<cn.zup.workflow.model.WF_ACTIVITY> activityList = GetListArray("FLOW_ID=" + activityModel.getFLOW_ID()+" AND CONCAT(',',NEXT_ACTIVITY_CODE,',') like '%," + activityModel.getACTIVITY_CODE()+",%'");
+			for (cn.zup.workflow.model.WF_ACTIVITY activity : activityList) {
+				rejectList.add(activity);
+			}
 		}
 
 		//获取实际工作中需要驳回到的节点
@@ -280,7 +283,7 @@ public class WF_ACTIVITY extends WF_ActivityBase{
 			String nextActCode=item.getNEXT_ACTIVITY_CODE();                		
     		for(String codeItem :nextActCode.split(","))
     		{
-    			if(codeItem.equals(rejectCode)) 
+    			if(codeItem.equals(String.valueOf(activityModel.getACTIVITY_CODE()))) 
     			{
     				realRejectList.add(item);
     				break;
@@ -321,7 +324,7 @@ public class WF_ACTIVITY extends WF_ActivityBase{
 	   nextActivityCodes = nextActivityCodes.substring(1);
 	   //2-获取所有需要驳回的活动ID
 	  // java.util.ArrayList<cn.zoneday.wf.model.WF_ACTIVITY> nextActivityList = GetListArray("FlOW_ID=" + flowID + "AND ACTIVITY_CODE IN (" + nextActivityCodes + ")");
-	   java.util.ArrayList<cn.zup.workflow.model.WF_ACTIVITY> nextActivityList = (ArrayList<cn.zup.workflow.model.WF_ACTIVITY>)  GetListArray("FlOW_ID=" + flowID + "AND ACTIVITY_CODE IN (" + nextActivityCodes + ")");
+	   java.util.ArrayList<cn.zup.workflow.model.WF_ACTIVITY> nextActivityList = (ArrayList<cn.zup.workflow.model.WF_ACTIVITY>)  GetListArray("FlOW_ID=" + flowID + " AND ACTIVITY_CODE IN (" + nextActivityCodes + ")");
 	   String nextActivities = "";
 //C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
 	   for (cn.zup.workflow.model.WF_ACTIVITY model : nextActivityList)

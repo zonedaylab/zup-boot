@@ -124,8 +124,8 @@ public class WorkPersonalController {
 	@RequestMapping("/WorkFinishDetail")
 	public ModelAndView WorkFinishDetail(FlowRequest flowRequest, String statId, HttpServletRequest request) throws SQLException, Exception
 	{
-		if(!"".equals(flowRequest.getWorkID()) && flowRequest.getWorkID() != null){
-			flowRequest = demoSampleReceiveRegisterService.getWorkItemActivety(flowRequest.getWorkID(), statId);
+		if(!"".equals(flowRequest.getWorkItemID()) && flowRequest.getWorkItemID() != null){
+			flowRequest = demoSampleReceiveRegisterService.getWorkItemActivety(flowRequest.getWorkItemID(), statId);
 		}
 		String mainBizKey=workflowDispatchService.getMainBizKey(flowRequest);
 		int formID = configService.listActivity(Integer.parseInt(flowRequest.getFlowID())).get(0).getFORM_ID();

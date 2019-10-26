@@ -42,5 +42,5 @@ public interface SampleReceiveRegisterService {
 	 * @date 
 	 * 
 	 * */
-	public FlowRequest getWorkItemActivety(String workId, String StateId) throws Exception;
+	public FlowRequest getWorkItemActivety(String workItemID, String StateId) throws Exception;
 }

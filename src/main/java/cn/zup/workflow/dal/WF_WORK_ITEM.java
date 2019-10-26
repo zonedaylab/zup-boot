@@ -57,7 +57,7 @@ public class WF_WORK_ITEM  extends WF_WORK_ItemBase{
    		StringBuilder strSql = new StringBuilder();
    		strSql.append("select WORK_ITEM_ID,WORK_ACTIVITY_ID,RECEIVER_TYPE,RECEIVER_ID,RECEIVER_NAME,CONTENT,WORK_ITEM_DATETIME,WORK_ITEM_STATE,RESPONSIBLE_ID,SIGN_NAME,SIGN_DATE,SIGN_OPINION");
    		strSql.append("  from WF_WORK_ITEM ");
-   		strSql.append(" where WORK_ACTIVITY_ID =(select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where WORK_ID="+workID+" and ACTIVITY_ID="+activityID+" ) ");
+   		strSql.append(" where WORK_ACTIVITY_ID in (select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where WORK_ID="+workID+" and ACTIVITY_ID="+activityID+" ) ");
    		System.err.println("GetListArray===="+strSql.toString());
    		List<cn.zup.workflow.model.WF_WORK_ITEM> list = jdbcTemplate_workflow.query(strSql.toString(), 
 				new ResultSetExtractor<List<cn.zup.workflow.model.WF_WORK_ITEM>>(){
