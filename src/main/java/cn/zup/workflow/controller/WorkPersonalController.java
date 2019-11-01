@@ -53,6 +53,7 @@ import cn.zup.workflow.model.WORK_INIT;
 import cn.zup.workflow.model.WORK_MONITOR;
 import cn.zup.workflow.model.WORK_SIGN;
 import cn.zup.workflow.model.WORK_TODO;
+import cn.zup.workflow.structure.ActivityHandler;
 import cn.zup.workflow.structure.FlowParameter;
 import cn.zup.workflow.structure.FlowRequest;
 import cn.zup.workflow.structure.PagingData;
@@ -748,8 +749,8 @@ public class WorkPersonalController {
 	 * @param BranchSelType
 	 * @return
 	 */
-	@RequestMapping("/NextActivitySelect")
-	public final ModelAndView NextActivitySelect(String FlowID, String WorkID,
+	@RequestMapping("/nextActivitySelect")
+	public ModelAndView NextActivitySelect(String FlowID, String WorkID,
 			String ActivityID, String MainBizKey, String WorkName,
 			String SignOpinion, String BranchSelType, HttpServletRequest request) {
 		FlowParameter flowParameter = new FlowParameter();
@@ -770,7 +771,7 @@ public class WorkPersonalController {
 				.getRealName());
 		flowParameter.setSignInfo(tempVar2);
 
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("workflow/nextActivitySelect");
 		mv.addObject("flowParameter", flowParameter);
 		mv.addObject("BranchSelType", BranchSelType);
 		mv.addObject("SignOpinion", SignOpinion);
@@ -791,9 +792,6 @@ public class WorkPersonalController {
 		String nextActivityCodes = "";
 		
 
-		// 存储所有的活动对象
-		List<java.util.ArrayList<WF_ACTIVITY>> tempList = new java.util.ArrayList<java.util.ArrayList<WF_ACTIVITY>>();
-
 		// 存储每一次查询的活动对象
 		List<WF_ACTIVITY> activityList = new java.util.ArrayList<WF_ACTIVITY>();
 
@@ -809,52 +807,28 @@ public class WorkPersonalController {
 		if (wfAcitivity != null
 				&& wfAcitivity.getNEXT_ACTIVITY_CODE().length() > 0) {
 			nextActivityCodes = wfAcitivity.getNEXT_ACTIVITY_CODE().substring(
-					0, wfAcitivity.getNEXT_ACTIVITY_CODE().length() - 1);
+					0, wfAcitivity.getNEXT_ACTIVITY_CODE().length());
 		}
-		// 判断是否有多个值
-		String[] codeArray = null;
-		if (nextActivityCodes.indexOf(',') >= 0) {
-			codeArray = nextActivityCodes.split("[,]", -1);
-		} else {
-			codeArray = new String[1];
-			codeArray[0] = nextActivityCodes;
-		}
-
-		// 根据流程id，code查询活动节点
-		for (String item : codeArray) {
-			activityList = configService.getActivityListByCodes(Integer.parseInt(FlowID), "'" + item + "'");
-			if (activityList.size() > 0)
-				tempList.add((ArrayList<WF_ACTIVITY>) activityList);
-		}
-		
-		// 根据活动节点id获取操作员		
-		for (List<WF_ACTIVITY> lists : tempList) {
-			handlerList = new java.util.ArrayList<WF_HANDLER>();
-			// 循环查询每个activity对象
-			for (int i = 0; i < lists.size(); i++) {
-				// 判断如果是同部门约束过滤操作者
-				handlerList = GetNextActivityHandlerOfSameOrgan(
-						String.valueOf(wfAcitivity.getHANDLER_SEL_TYPE()),
-						lists.get(i).getACTIVITY_ID(),request);
-				if (handlerList.size() > 0)// 将每次查询的操作人员集合存储到集合				
-				{
-					ResultList.add((ArrayList<WF_HANDLER>) handlerList);
-				}
+		List<ActivityHandler> activityHandlerList = new ArrayList<ActivityHandler>();
+		activityList = configService.getActivityListByCodes(Integer.parseInt(FlowID), nextActivityCodes );
+		for (WF_ACTIVITY activity : activityList) {
+			ActivityHandler activityHandler = new ActivityHandler();
+			// 判断如果是同部门约束过滤操作者
+			handlerList = GetNextActivityHandlerOfSameOrgan(
+					String.valueOf(wfAcitivity.getHANDLER_SEL_TYPE()),
+					activity.getACTIVITY_ID(),request);
+			if (handlerList.size() > 0)// 将每次查询的操作人员集合存储到集合				
+			{
+				ResultList.add((ArrayList<WF_HANDLER>) handlerList);
 			}
-		}		
-		// 清空list
-		if (ResultList.size() > 0) {
-			handlerList = new java.util.ArrayList<WF_HANDLER>();
-
-			for (ArrayList<WF_HANDLER>  rs : ResultList) {
-				for (int j = 0; j < rs.size(); j++) {
-					// 讲人员对象存入list
-					handlerList.add(rs.get(j));
-				}
-			}
-		}
+			activityHandler.setHanderList(handlerList);
+			activityHandler.setActivityID(activity.getACTIVITY_ID());
+			activityHandler.setActivityCode(activity.getACTIVITY_CODE());
+			activityHandler.setActivityName(activity.getACTIVITY_NAME());
+			activityHandlerList.add(activityHandler);
+		}	
 		JSONObject json = new JSONObject();
-		json.put("data", handlerList);			
+		json.put("data", activityHandlerList);			
 		return json.toString();		
 	
 	}

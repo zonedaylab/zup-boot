@@ -199,7 +199,6 @@ public class WorkFlowControl implements IWorkFlowControl{
 		if (workItemModel == null){
 			return;
 		}
-		Connection conn=null;
 		try{			
 			try{
 				//1-获取需要驳回到（激活）的活动节点
@@ -226,16 +225,13 @@ public class WorkFlowControl implements IWorkFlowControl{
 				workActivityDal.ActivityReject(workID, rejectActivityIDs);
 				//6-激活驳回目标节点（事务）
 				for (ActivityHandler actHandler : actHandlerList){
-					workActivityService.getWorkActivity(workID, actHandler.getActivityID(), actHandler.getHanderList(), 
-							null, new SignInfo(),new java.util.ArrayList<Integer>());					
-				}				
-				conn.commit();
+					workActivityService.getWorkActivity(workID, actHandler.getActivityID(), actHandler.getHanderList(),null, new SignInfo(),new java.util.ArrayList<Integer>());					
+				}
 			}catch (RuntimeException ex){
 				logDal.LogAdd(ex);
 				throw new RuntimeException(ex.getMessage());
 			}
 		}finally{
-			conn.close();
 		}
 	}
 

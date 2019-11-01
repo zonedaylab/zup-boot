@@ -180,7 +180,7 @@ public class WF_ACTIVITY extends WF_ActivityBase{
 	public  java.util.List<cn.zup.workflow.model.WF_ACTIVITY> GetListArray(int flowID, String activityCodes) throws SQLException
 	{
 		StringBuilder strSql = new StringBuilder();
-		strSql.append(" where FLOW_ID = "+flowID);
+		strSql.append(" FLOW_ID = "+flowID);
 		strSql.append(" and ACTIVITY_CODE in (" + activityCodes + ")");
 		List<cn.zup.workflow.model.WF_ACTIVITY> list= GetListArray(strSql.toString());
 		return list;

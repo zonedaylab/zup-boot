@@ -719,8 +719,10 @@ public  class WorkflowDispathServiceImpl implements WorkflowDispatchService
 	*/
 	//private 15
 	private String AppSettingInfo(String key){
-		if(key.equals("WorkListUrl"))
-			return "workFlowPage";//System.Configuration.ConfigurationManager.AppSettings[key].toString();
+		if(key.equals(PageUrlType.WorkListUrl.toString()))
+			return "rest/workflow/workPersonal/workList";
+		else if(key.equals(PageUrlType.ActivitySelUrl.toString()))
+			return "rest/workflow/workPersonal/nextActivitySelect";
 		return "";
 	}
 }
