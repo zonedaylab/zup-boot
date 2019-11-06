@@ -43,6 +43,11 @@ private String popedomType;
 */
 private UserSession currentHandler;
 
+/** 
+选择操作者列表字符串 用,隔开 
+*/
+private String activityHandlerStr;
+
 
 public void setFlowID(String flowID) {
 	this.flowID = flowID;
@@ -100,6 +105,18 @@ public void setCurrentHandler(UserSession currentHandler) {
 public UserSession getCurrentHandler() {
 	return currentHandler;
 }
+
+
+
+public String getActivityHandlerStr() {
+	return activityHandlerStr;
+}
+
+
+public void setActivityHandlerStr(String activityHandlerStr) {
+	this.activityHandlerStr = activityHandlerStr;
+}
+
 
 }
 

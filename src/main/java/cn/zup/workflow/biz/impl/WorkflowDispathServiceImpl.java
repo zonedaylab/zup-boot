@@ -450,7 +450,111 @@ public  class WorkflowDispathServiceImpl implements WorkflowDispatchService
 		
 		if(wfActivityModel==null)
 			throw new SQLException("workCommit时获取当前活动ID为空，ActivityID="+getActivityID(flowRequest));
-		
+		//判断是否有前端传的操作者列表
+		if(flowRequest.getActivityHandlerStr()==null || "".equals(flowRequest.getActivityHandlerStr()))
+		{
+			List<ActivityHandler> activityHandlerList = JudgeFlowRules(flowRequest);
+			//只处理下一活动为一个的情况,针对消息策略
+			if(activityHandlerList.size()==1){	
+				if(userList!=null&&operateFlag==-1)	{//针对告警任务，操作者去重		
+					for (int i = 0; i < userList.size(); i++) {
+						for(int j=0;j<activityHandlerList.size();j++){
+							if(activityHandlerList.get(0).getHanderList().get(j).getHANDLER()!=userList.get(i).getUserId()){//接收者去重
+								WF_HANDLER wfhandler = new WF_HANDLER();  //实体
+								wfhandler.setACTIVITY_ID(activityHandlerList.get(0).getActivityID());//下一个节点的activityID
+								wfhandler.setHANDLER(userList.get(i).getUserId());
+								wfhandler.setHANDLER_TYPE(HandlerAndMonitorType.User.getValue()); 
+								wfhandler.setHANDLER_NAME(userList.get(i).getRealName());
+								activityHandlerList.get(0).getHanderList().add(wfhandler);
+							}
+						}
+					}
+				}else if(userList!=null&&operateFlag==1){//针对售电不同公司审核流程，操作者求交集
+					List<WF_HANDLER> handlerList=new ArrayList<WF_HANDLER>();
+					Map<Integer,Integer> mapUser=new HashMap<Integer, Integer>();
+					for (int i = 0; i < userList.size(); i++) {
+						mapUser.put(userList.get(i).getUserId(), userList.get(i).getUserId());
+					}
+					for(int j=0;j<activityHandlerList.get(0).getHanderList().size();j++){
+						if(mapUser.containsKey(activityHandlerList.get(0).getHanderList().get(j).getHANDLER())){
+							handlerList.add(activityHandlerList.get(0).getHanderList().get(j));
+						}
+					}
+					activityHandlerList.get(0).setHanderList(handlerList);
+				}				
+			}
+			flowParam.setActivityHandlerList (activityHandlerList);	
+		}
+		else
+		{
+			List<ActivityHandler> activityHandlerList = new ArrayList<ActivityHandler>();
+			String[] handlerList = flowRequest.getActivityHandlerStr().split(",");
+			ActivityHandler activityHandler =  null;
+			List<WF_HANDLER> wfHandlerList = null;
+			String activityLastId="";//记录最近的节点ID，判断是否是新的节点
+			boolean flag = false;
+			
+			for (String handlerStr : handlerList) {
+				String[] handler = handlerStr.split("-");
+				if(handler.length==5){
+					
+					if(!activityLastId.equals(handler[0]))//节点不相等则初始化
+					{
+						activityHandler =  new ActivityHandler();
+						wfHandlerList = new ArrayList<WF_HANDLER>();
+						activityHandler.setActivityID(Integer.parseInt(handler[0]));
+						activityHandler.setActivityCode(Integer.parseInt(handler[1]));
+						activityLastId = handler[0];
+						activityHandlerList.add(activityHandler);
+					}
+
+					WF_HANDLER handlerEntity = new WF_HANDLER();
+					handlerEntity.setHANDLER_ID(Integer.parseInt(handler[2]));
+					handlerEntity.setACTIVITY_ID(Integer.parseInt(handler[0]));
+					handlerEntity.setHANDLER(Integer.parseInt(handler[3]));
+					handlerEntity.setHANDLER_TYPE((Integer.parseInt(handler[4])));
+					wfHandlerList.add(handlerEntity);
+					activityHandler.setHanderList(wfHandlerList);
+				}	
+			}
+			
+			flowParam.setActivityHandlerList(activityHandlerList);	
+		}
+		if (flowParam.getActivityHandlerList() == null ){
+			throw new RuntimeException("流程节点没有配置好，没有下步骤活动信息！");
+		}
+		else if(flowParam.getActivityHandlerList().size()>0){//存在下一个活动节点
+			if(flowParam.getActivityHandlerList().get(0).getHanderList().size()==0){
+				JSONObject json = new JSONObject();
+				json.put("result", "noHandler");//提示下一个活动节点，没有配置本公司的接收人，请先配置该公司的任务审核人
+				return json.toString();
+			}
+		}
+		CommitFlag flag = controler.saveWorkCommit(flowParam.getFlowID(), flowParam.getWorkID(),
+				flowParam.getActivityID(), flowParam.getMainBizKey(), flowParam.getWorkName(), 
+				flowParam.getCurrentHandler(), flowParam.getSignInfo(), flowParam.getAttachList(), flowParam.getActivityHandlerList());
+		if (flag != CommitFlag.Success){ //工作保存失败，回滚业务	
+			if (flag == CommitFlag.Fail){
+				bizRollback(flowParam.getMainBizKey());				
+			}				
+			throw new RuntimeException("工作保存失败,已经回滚业务");
+		}
+		ActivityProperty actPro=ActivityProperty.forValue(configService.getAcitivity(flowParam.getActivityID()).getACTIVITY_PROPERTY());
+		if (getActivityType(flowRequest) ==ActivityType.IntialStage.getValue()&&actPro== ActivityProperty.BatchHandle){ //需要做批量处理的开始节点不跳转到代办				    
+			String url = configService.getForm(monitorService.getFirstActivity(flowParam.getFlowID()).getFORM_ID()).getURL();					
+			JSONObject json = new JSONObject();
+			json.put("result", "SuccessAndRedo");
+			json.put("url", url);	
+			json.put("FLOW_ID",  getFlowID(flowRequest));
+			return json.toString();
+		}
+		else{					
+			JSONObject json = new JSONObject();
+			json.put("result", "Success");
+			json.put("url", PageUrlSetting(PageUrlType.WorkListUrl));	
+			return json.toString();
+		}	
+		/*
 		BranchSelType branchSelType=BranchSelType.forValue(wfActivityModel.getBRANCH_SEL_TYPE());
 		switch (branchSelType){
 			case Default:				
@@ -526,6 +630,7 @@ public  class WorkflowDispathServiceImpl implements WorkflowDispatchService
              default:
                  return ActivitySel(flowParam, BranchSelType.Multiple);
 		}
+		*/
 	}
 
     /**

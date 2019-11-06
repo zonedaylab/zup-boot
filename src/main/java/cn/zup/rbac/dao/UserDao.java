@@ -23,7 +23,7 @@ public interface UserDao extends MiniDaoSupportHiber<UserInfo>{
 	public List<UserInfo> getUserSonTable(Integer userId);
 	
 	@Arguments({"organId","postId","realName","validFlag"})
-	public List<UserInfo> getUserListByCondition(int organId, int postId,String realName, int validFlag);
+	public List<UserInfo> getUserListByCondition(Integer organId, Integer postId,String realName, Integer validFlag);
 	@Arguments({"organId"})
 	public List<UserInfo> getUserFromOrgan(int organId);
 	@Arguments({"postId"})

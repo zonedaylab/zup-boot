@@ -801,8 +801,11 @@ public class WorkPersonalController {
 		// 存储最终查询所有操作员排序
 		List<ArrayList<WF_HANDLER>> ResultList = new ArrayList<ArrayList<WF_HANDLER>>();
 
-		WF_ACTIVITY wfAcitivity = configService.getAcitivity(Integer
-				.parseInt(ActivityID));
+		WF_ACTIVITY wfAcitivity = new WF_ACTIVITY();
+		if(ActivityID!=null && !"".equals(ActivityID))
+			wfAcitivity=	configService.getAcitivity(Integer.parseInt(ActivityID));
+		else
+			wfAcitivity=	configService.getFirstActivitys(Integer.parseInt(FlowID));
 
 		if (wfAcitivity != null
 				&& wfAcitivity.getNEXT_ACTIVITY_CODE().length() > 0) {
@@ -810,25 +813,30 @@ public class WorkPersonalController {
 					0, wfAcitivity.getNEXT_ACTIVITY_CODE().length());
 		}
 		List<ActivityHandler> activityHandlerList = new ArrayList<ActivityHandler>();
-		activityList = configService.getActivityListByCodes(Integer.parseInt(FlowID), nextActivityCodes );
-		for (WF_ACTIVITY activity : activityList) {
-			ActivityHandler activityHandler = new ActivityHandler();
-			// 判断如果是同部门约束过滤操作者
-			handlerList = GetNextActivityHandlerOfSameOrgan(
-					String.valueOf(wfAcitivity.getHANDLER_SEL_TYPE()),
-					activity.getACTIVITY_ID(),request);
-			if (handlerList.size() > 0)// 将每次查询的操作人员集合存储到集合				
-			{
-				ResultList.add((ArrayList<WF_HANDLER>) handlerList);
+		if(!"".equals(nextActivityCodes))
+		{
+			activityList = configService.getActivityListByCodes(Integer.parseInt(FlowID), nextActivityCodes );
+			for (WF_ACTIVITY activity : activityList) {
+				ActivityHandler activityHandler = new ActivityHandler();
+				// 判断如果是同部门约束过滤操作者
+				handlerList = GetNextActivityHandlerOfSameOrgan(
+						String.valueOf(wfAcitivity.getHANDLER_SEL_TYPE()),
+						activity.getACTIVITY_ID(),request);
+				if (handlerList.size() > 0)// 将每次查询的操作人员集合存储到集合				
+				{
+					ResultList.add((ArrayList<WF_HANDLER>) handlerList);
+				}
+				activityHandler.setHanderList(handlerList);
+				activityHandler.setActivityID(activity.getACTIVITY_ID());
+				activityHandler.setActivityCode(activity.getACTIVITY_CODE());
+				activityHandler.setActivityName(activity.getACTIVITY_NAME());
+				activityHandlerList.add(activityHandler);
 			}
-			activityHandler.setHanderList(handlerList);
-			activityHandler.setActivityID(activity.getACTIVITY_ID());
-			activityHandler.setActivityCode(activity.getACTIVITY_CODE());
-			activityHandler.setActivityName(activity.getACTIVITY_NAME());
-			activityHandlerList.add(activityHandler);
-		}	
+		}
 		JSONObject json = new JSONObject();
-		json.put("data", activityHandlerList);			
+		json.put("data", activityHandlerList);	
+		json.put("batchType", wfAcitivity.getBRANCH_SEL_TYPE());	
+		json.put("activityType", wfAcitivity.getACTIVITY_TYPE());		
 		return json.toString();		
 	
 	}
@@ -841,9 +849,8 @@ public class WorkPersonalController {
 		if (Integer.parseInt(handlerSetType) == 2) //同部门选择
 		{			
 			//获取本部门所有用户
-			UserSession userSession=userService.getCurrentHandler(request);			
-			Integer organID=userSession.getOrganId();
-			List<UserInfo> listUser = userService.getUserList(organID, null, null, null);
+			UserSession userSession=userService.getCurrentHandler(request);
+			List<UserInfo> listUser = userService.getOrganUserList(userSession.getOrganId());
 
 			java.util.ArrayList<WF_HANDLER> listHandler = new java.util.ArrayList<WF_HANDLER>();
 			for (WF_HANDLER item : handlerList)
