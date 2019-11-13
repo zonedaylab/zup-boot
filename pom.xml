@@ -16,6 +16,7 @@
     <springboot.version>1.5.9.RELEASE</springboot.version>
     <springframework.version>4.3.13.RELEASE</springframework.version>
     <hibernate.version>4.2.0.Final</hibernate.version>
+    <swagger2.version>2.9.2</swagger2.version>
   </properties>
   
   <dependencies>
@@ -457,6 +458,18 @@
 	    <scope>test</scope>
 	</dependency>
 	
+	<!-- Swagger2 Api在线文档 -->
+	<dependency>
+	    <groupId>io.springfox</groupId>
+	    <artifactId>springfox-swagger2</artifactId>
+	    <version>${swagger2.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>io.springfox</groupId>
+	    <artifactId>springfox-swagger-ui</artifactId>
+	    <version>${swagger2.version}</version>
+	</dependency>
+	
 	<!-- private maven nexus file -->
 	<dependency>
 		<groupId>org.jeecgframework</groupId>
@@ -473,6 +486,7 @@
 		<artifactId>zup-spring-jdbc</artifactId>
 		<version>1.0</version>
 	</dependency>
+	
   </dependencies>
   
   <!-- 
@@ -565,4 +579,5 @@
         </resources>-->
     </build>
 
+    <packaging>war</packaging>
 </project>
