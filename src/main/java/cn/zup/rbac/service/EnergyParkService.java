@@ -100,4 +100,10 @@ public interface EnergyParkService {
 	 * @return
 	 */
 	boolean getEnergyParkSonTable(int parkId);
+	/**
+	 * 获取园区的信息
+	 * @param energyPark
+	 * @return
+	 */
+	public List<EnergyPark> getEnergyParkList(EnergyPark energyPark);
 }
