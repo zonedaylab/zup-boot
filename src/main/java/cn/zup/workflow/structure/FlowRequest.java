@@ -44,6 +44,11 @@ private String popedomType;
 private UserSession currentHandler;
 
 /** 
+  页面传递的参数信息 跳转临时变量
+*/
+private String paramUrlStr;
+
+/** 
 选择操作者列表字符串 用,隔开 
 */
 private String activityHandlerStr;
@@ -116,6 +121,17 @@ public String getActivityHandlerStr() {
 public void setActivityHandlerStr(String activityHandlerStr) {
 	this.activityHandlerStr = activityHandlerStr;
 }
+
+
+public String getParamUrlStr() {
+	return paramUrlStr;
+}
+
+
+public void setParamUrlStr(String paramUrlStr) {
+	this.paramUrlStr = paramUrlStr;
+}
+
 
 
 }
