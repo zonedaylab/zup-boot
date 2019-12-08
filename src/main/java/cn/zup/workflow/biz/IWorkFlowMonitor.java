@@ -1,5 +1,9 @@
 package cn.zup.workflow.biz;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 import cn.zup.rbac.entity.UserSession;
 import cn.zup.workflow.config.*;
@@ -260,4 +264,15 @@ public interface IWorkFlowMonitor{
 	*/
 	//28
 	java.util.List<WF_MONITOR> listWorkFlowMonitor(int flowId) throws Exception;
+	
+	//29  
+	/** 
+	获取当前工作项的工作流程信息  
+	 
+	 @param handlerList
+	 @return 	 
+	 liuxf 2019.12.8
+	*/
+	public FlowRequest getCurrentWorkFlow(String workItemID, String StateId) throws Exception;
+
 }

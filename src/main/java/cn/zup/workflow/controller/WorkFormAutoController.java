@@ -27,6 +27,7 @@ import cn.zup.rbac.entity.UserSession;
 import cn.zup.rbac.service.ResourceService;
 import cn.zup.workflow.biz.IWorkFlowConfig;
 import cn.zup.workflow.biz.IWorkFlowFormAuto;
+import cn.zup.workflow.biz.IWorkFlowMonitor;
 import cn.zup.workflow.biz.WorkflowDispatchService;
 import cn.zup.workflow.biz.impl.WorkParameter;
 import cn.zup.workflow.model.ACTIVITY_POPEDOM;
@@ -60,6 +61,10 @@ public class WorkFormAutoController {
 	private IWorkFlowConfig configService;
 	@Resource
 	private WorkflowDispatchService workflowDispatchService;	
+	
+	@Resource
+	private IWorkFlowMonitor monitorService;	
+	
 	@Autowired
 	private BusLog busLog;
 	
@@ -73,7 +78,7 @@ public class WorkFormAutoController {
 			}
 		}
 		if(!"".equals(flowRequest.getWorkItemID()) && flowRequest.getWorkItemID() != null){
-			flowRequest = demoSampleReceiveRegisterService.getWorkItemActivety(flowRequest.getWorkItemID(), "1");
+			flowRequest = monitorService.getCurrentWorkFlow(flowRequest.getWorkItemID(), "1");
 		}
 		
 		String mainBizKey=workflowDispatchService.getMainBizKey(flowRequest);

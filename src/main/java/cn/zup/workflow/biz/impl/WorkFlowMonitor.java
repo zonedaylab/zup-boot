@@ -31,7 +31,7 @@ public class WorkFlowMonitor implements IWorkFlowMonitor{
 	@Autowired
 	private  cn.zup.workflow.dal.WF_WORK workDal;
 	@Autowired
-	private  cn.zup.workflow.dal.WF_WORK_ITEM item;
+	private  cn.zup.workflow.dal.WF_WORK_ITEM workItemDal;
 	@Autowired
 	private  cn.zup.workflow.dal.WF_LOG logDal;
 	@Autowired
@@ -290,7 +290,7 @@ public class WorkFlowMonitor implements IWorkFlowMonitor{
 	*/
 	//16
 	public  String getActivitySign(int workItemID) throws SQLException{
-		WF_WORK_ITEM workItemModel = item.GetModel(workItemID);
+		WF_WORK_ITEM workItemModel = workItemDal.GetModel(workItemID);
 		if (workItemModel != null){
 			return workItemModel.getSIGN_OPINION();
 		}else{
@@ -482,5 +482,19 @@ public class WorkFlowMonitor implements IWorkFlowMonitor{
 
 	public List<cn.zup.workflow.model.WF_MONITOR> listWorkFlowMonitor(int flowId) throws SQLException{
 		return monitorDal.GetWorkFlowMonitor(flowId);
+	}
+	
+	
+	//29  
+	/** 
+	获取当前工作项的工作流程信息  
+	 
+	 @param handlerList
+	 @return 	 
+	 liuxf 2019.12.8
+	*/
+	public FlowRequest getCurrentWorkFlow(String workItemID, String StateId) throws Exception{
+		
+		return  workItemDal.getCurrentWorkFlow( workItemID,  StateId) ;
 	}
 }
