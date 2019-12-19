@@ -21,12 +21,12 @@ spring:
   aop:
     auto: true
   dataSource: #数据源
-    zuprbac:  
+    zup:  
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://172.18.36.239:3306/zuprbac?useUnicode=true&characterEncoding=UTF-8
+      url: jdbc:mysql://127.0.0.1:3306/zup?useUnicode=true&characterEncoding=UTF-8
       username: root
-      password: iesapp
+      password: 123456
       initialSize: 50 
       maxActive: 200 
       maxIdle: 10 
@@ -41,9 +41,9 @@ spring:
     zupwf:  
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://172.18.36.239:3306/zupwf?useUnicode=true&characterEncoding=UTF-8
+      url: jdbc:mysql://127.0.0.1:3306/zupwf?useUnicode=true&characterEncoding=UTF-8
       username: root
-      password: iesapp
+      password: 123456
       initialSize: 50 
       maxActive: 200 
       maxIdle: 10 
@@ -58,9 +58,9 @@ spring:
     mysql1: 
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://172.18.36.239:3306/pms?useUnicode=true&characterEncoding=UTF-8
+      url: jdbc:mysql://127.0.0.1:3306/pms?useUnicode=true&characterEncoding=UTF-8
       username: root
-      password: iesapp
+      password: 123456
       initialSize: 50 
       maxActive: 200 
       maxIdle: 10 
