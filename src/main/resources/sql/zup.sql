@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50724
 File Encoding         : 65001
 
-Date: 2019-12-19 11:30:47
+Date: 2019-12-19 14:47:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -622,13 +622,14 @@ CREATE TABLE `loginlog` (
   `SYSTEMID` int(38) DEFAULT NULL,
   `USERNAME` varchar(255) DEFAULT '',
   PRIMARY KEY (`LOGINLOGID`)
-) ENGINE=InnoDB AUTO_INCREMENT=37568 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37569 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of loginlog
 -- ----------------------------
 INSERT INTO `loginlog` VALUES ('37566', '1', '1', '2019-12-19 11:12:08', '1', '1', '0:0:0:0:0:0:0:1', null, null, '管理员');
 INSERT INTO `loginlog` VALUES ('37567', '1', '1', '2019-12-19 11:25:49', '1', '1', '0:0:0:0:0:0:0:1', null, null, '管理员');
+INSERT INTO `loginlog` VALUES ('37568', '1', '1', '2019-12-19 14:46:17', '1', '1', '0:0:0:0:0:0:0:1', null, null, '管理员');
 
 -- ----------------------------
 -- Table structure for menu
@@ -649,7 +650,7 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`MENUID`),
   KEY `sysidwww` (`SYSTEMID`) USING BTREE,
   CONSTRAINT `menu_ibfk_1` FOREIGN KEY (`SYSTEMID`) REFERENCES `system` (`SYSTEMID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of menu
@@ -658,6 +659,11 @@ INSERT INTO `menu` VALUES ('1', '1', '0', '首页', '1', null, null, 'rest/rbac/
 INSERT INTO `menu` VALUES ('2', '1', '0', '系统管理', '9', null, null, null, null, null, '2');
 INSERT INTO `menu` VALUES ('3', '1', '2', '菜单管理', '1', null, null, 'rest/rbac/menuController', null, null, '2');
 INSERT INTO `menu` VALUES ('4', '1', '2', '操作项管理', '2', null, null, 'rest/rbac/menuActionController', null, null, '2');
+INSERT INTO `menu` VALUES ('5', '1', '0', '商务智能', '5', null, null, null, null, null, '2');
+INSERT INTO `menu` VALUES ('6', '1', '5', '维度配置', '1', null, null, 'rest/bi/BIDimController', null, null, '2');
+INSERT INTO `menu` VALUES ('7', '1', '5', '主题配置', '2', null, null, 'rest/bi/BITopicController', null, null, '2');
+INSERT INTO `menu` VALUES ('8', '1', '5', '表单管理', '3', null, null, 'rest/bi/biPageController', null, null, '2');
+INSERT INTO `menu` VALUES ('9', '1', '5', '报表管理', '4', null, null, 'rest/bi/biReportController', null, null, '2');
 
 -- ----------------------------
 -- Table structure for mine_evaluation
@@ -725,7 +731,7 @@ CREATE TABLE `operatelog` (
   KEY `userinfo` (`USERID`) USING BTREE,
   CONSTRAINT `operatelog_ibfk_1` FOREIGN KEY (`USERID`) REFERENCES `userinfo` (`USERID`),
   CONSTRAINT `operatelog_ibfk_2` FOREIGN KEY (`SYSTEMID`) REFERENCES `system` (`SYSTEMID`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of operatelog
@@ -824,6 +830,21 @@ INSERT INTO `operatelog` VALUES ('124', '1', '1', '', ' 操作层级: Service �
 INSERT INTO `operatelog` VALUES ('125', '1', '1', '', ' 操作层级: Service 层;  操作方法: MiniDaoPage cn.zup.rbac.service.impl.ResourceServiceImpl.getActionPagingList(Action,int,int); 操作参数: cn.zup.rbac.entity.Action@c90761c ,1 ,10 ,', '2019-12-19 11:30:04', '1', '', '', '');
 INSERT INTO `operatelog` VALUES ('126', '1', '1', '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getMenuList(int); 操作参数: 1 ,', '2019-12-19 11:30:04', '1', '', '', '');
 INSERT INTO `operatelog` VALUES ('127', '1', '1', '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getMenuList(int); 操作参数: 2 ,', '2019-12-19 11:30:04', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('128', null, null, '', ' 操作层级: Service 层;  操作方法: UserSession cn.zup.rbac.service.impl.UserServiceImpl.getUserSessionInfo(String,String); 操作参数: admin ,e10adc3949ba59abbe56e057f20f883e ,', '2019-12-19 14:46:16', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('129', null, null, '', ' 操作层级: Service 层;  操作方法: UserSession cn.zup.rbac.service.impl.UserServiceImpl.getUserSessionInfo(String,String); 操作参数: admin ,null ,', '2019-12-19 14:46:16', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('130', null, null, '', ' 操作层级: Service 层;  操作方法: DomainSystem cn.zup.rbac.service.impl.ResourceServiceImpl.getDomainSystemByDomain(String); 操作参数: homeController ,', '2019-12-19 14:46:16', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('131', '1', '1', '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.LoginLogServiceImpl.addLoginLog(LoginLog); 操作参数: cn.zup.rbac.entity.LoginLog@50ee89ed ,', '2019-12-19 14:46:16', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('132', '1', '1', '', ' 操作层级: Service 层;  操作方法: DomainSystem cn.zup.rbac.service.impl.ResourceServiceImpl.getDomainSystemByDomain(String); 操作参数: homeController ,', '2019-12-19 14:46:16', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('133', '1', '1', '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getAccountPermitMenu(Integer,Integer,boolean,Integer); 操作参数: 1 ,1 ,true ,2 ,', '2019-12-19 14:46:16', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('134', '1', '1', '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getAccountPermitSubMenu(int,int,int); 操作参数: 1 ,5 ,2 ,', '2019-12-19 14:46:18', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('135', '1', '1', '', ' 操作层级: Service 层;  操作方法: MiniDaoPage cn.zup.bi.service.impl.TopicServiceImpl.getTopicPagingList(BI_TOPIC,int,int); 操作参数: cn.zup.bi.entity.BI_TOPIC@1a89663d ,1 ,10 ,', '2019-12-19 14:46:20', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('136', '1', '1', '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getMenuList(int); 操作参数: 1156 ,', '2019-12-19 14:46:22', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('137', '1', '1', '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ConfigurationServiceImpl.getConfigInfo(Config); 操作参数: cn.zup.rbac.entity.Config@305c803b ,', '2019-12-19 14:46:22', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('138', '1', '1', '', ' 操作层级: Service 层;  操作方法: MiniDaoPage cn.zup.bi.service.impl.BIPageServiceImpl.getBIPageListPage(BI_Page,int,int); 操作参数: cn.zup.bi.entity.BI_Page@1a020c9b ,1 ,10 ,', '2019-12-19 14:46:22', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('139', '1', '1', '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ConfigurationServiceImpl.getConfigInfo(Config); 操作参数: cn.zup.rbac.entity.Config@7188f713 ,', '2019-12-19 14:46:22', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('140', '1', '1', '', ' 操作层级: Service 层;  操作方法: MiniDaoPage cn.zup.bi.service.impl.TopicServiceImpl.getTopicPagingList(BI_TOPIC,int,int); 操作参数: cn.zup.bi.entity.BI_TOPIC@53b13e35 ,1 ,9999 ,', '2019-12-19 14:46:22', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('141', '1', '1', '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageServiceImpl.getBiPageList(BI_Page); 操作参数: cn.zup.bi.entity.BI_Page@4a9f4193 ,', '2019-12-19 14:46:23', '1', '', '', '');
+INSERT INTO `operatelog` VALUES ('142', '1', '1', '', ' 操作层级: Service 层;  操作方法: MiniDaoPage cn.zup.bi.service.impl.ReportServiceImpl.getReportPagingList(BI_REPORT,int,int); 操作参数: cn.zup.bi.entity.BI_REPORT@7927c677 ,1 ,10 ,', '2019-12-19 14:46:23', '1', '', '', '');
 
 -- ----------------------------
 -- Table structure for organ
@@ -980,6 +1001,11 @@ INSERT INTO `rolemenu` VALUES ('1', '1', '1');
 INSERT INTO `rolemenu` VALUES ('2', '1', '1');
 INSERT INTO `rolemenu` VALUES ('3', '1', '1');
 INSERT INTO `rolemenu` VALUES ('4', '1', '1');
+INSERT INTO `rolemenu` VALUES ('5', '1', '1');
+INSERT INTO `rolemenu` VALUES ('6', '1', '1');
+INSERT INTO `rolemenu` VALUES ('7', '1', '1');
+INSERT INTO `rolemenu` VALUES ('8', '1', '1');
+INSERT INTO `rolemenu` VALUES ('9', '1', '1');
 
 -- ----------------------------
 -- Table structure for system
