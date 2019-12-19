@@ -32,5 +32,3 @@
 zup-boot\src\main\resources\application.yml
 zup-boot\src\main\resources\dbconfig.properties
 
-
-
