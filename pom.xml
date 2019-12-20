@@ -14,11 +14,11 @@
     <maven.compiler.source>1.8</maven.compiler.source>  
     <maven.compiler.target>1.8</maven.compiler.target> 
     <springboot.version>1.5.9.RELEASE</springboot.version>
-    <springframework.version>5.2.1.RELEASE</springframework.version>
+    <springframework.version>4.3.13.RELEASE</springframework.version>
     <hibernate.version>4.2.0.Final</hibernate.version>
     <swagger2.version>2.9.2</swagger2.version>
   </properties>
-  
+
   <dependencies>
   	<!-- Spring Boot  -->
     <dependency>
@@ -54,7 +54,7 @@
 	    <artifactId>spring-boot-starter-logging</artifactId>
 	    <version>${springboot.version}</version>
 	</dependency>
-	<!-- spring boot test -->  	
+	<!-- spring boot test -->
     <dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-test</artifactId>
@@ -79,7 +79,7 @@
 	    <artifactId>spring-boot-starter-freemarker</artifactId>
         <version>${springboot.version}</version>
 	</dependency>
-	<!-- add springboot dev tools warn: optional is true , this is the available! 
+	<!-- add springboot dev tools warn: optional is true , this is the available!
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-devtools</artifactId>
@@ -88,19 +88,19 @@
     </dependency>
     -->
 	<!-- add jsp support explin :添加jsp显示支持 springboot tomcat -->
-	<dependency>  
-      <groupId>org.springframework.boot</groupId>  
-      <artifactId>spring-boot-starter-tomcat</artifactId>  
+	<dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
       <version>${springboot.version}</version>
       <scope>provided</scope>
-    </dependency> 
+    </dependency>
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
       <version>${springboot.version}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- Spring Framework  -->
     <!-- spring-web  -->
     <dependency>
@@ -119,13 +119,13 @@
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-aop</artifactId>
 	    <version>${springframework.version}</version>
-	</dependency>	
+	</dependency>
 	<!-- Spring Beans -->
 	<dependency>
 	    <groupId>org.springframework</groupId>
 	    <artifactId>spring-beans</artifactId>
 	    <version>${springframework.version}</version>
-	</dependency>	
+	</dependency>
 	<!-- Spring JDBC -->
 	<dependency>
 	    <groupId>org.springframework</groupId>
@@ -168,27 +168,27 @@
 	    <artifactId>spring-orm</artifactId>
 	    <version>${springframework.version}</version>
 	</dependency>
-	<dependency> 
-        <groupId>org.springframework</groupId>  
-        <artifactId>spring-test</artifactId>  
-        <version>${springframework.version}</version>  
+	<dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${springframework.version}</version>
         <scope>test</scope>
     </dependency>
-    
-    <!-- Tomcat --> 
+
+    <!-- Tomcat -->
     <dependency>
 	    <groupId>org.apache.tomcat.embed</groupId>
 	    <artifactId>tomcat-embed-jasper</artifactId>
 	    <version>8.5.23</version>
 	</dependency>
-	
+
 	<!-- add Enterprise Job Scheduler -->
 	<dependency>
 	    <groupId>org.quartz-scheduler</groupId>
 	    <artifactId>quartz</artifactId>
 	    <version>2.2.0</version>
 	</dependency>
-	
+
     <!-- add spring boot mybatis -->
     <dependency>
         <groupId>org.mybatis.spring.boot</groupId>
@@ -211,30 +211,30 @@
 	<dependency>
 	    <groupId>com.alibaba</groupId>
 	    <artifactId>fastjson</artifactId>
-	    <version>1.2.25</version>
+	    <version>1.2.6</version>
 	</dependency>
 	<!-- add json -->
-	<dependency>  
-        <groupId>net.sf.json-lib</groupId>  
-        <artifactId>json-lib</artifactId>  
-        <version>2.1</version> 
-        <classifier>jdk15</classifier> 
-    </dependency>  
-    <!-- add beanutils, 
+	<dependency>
+        <groupId>net.sf.json-lib</groupId>
+        <artifactId>json-lib</artifactId>
+        <version>2.1</version>
+        <classifier>jdk15</classifier>
+    </dependency>
+    <!-- add beanutils,
       		explain: a package of Java utility classes for the classes that are in java.lang's hierarchy, or are considered to be so standard as to justify existence in java.lang.
 			Java中类的Java实用程序类的包。lang的层次结构，或被认为是标准的，以证明存在于java.lang中。-->
-    <dependency>  
-        <groupId>org.apache.commons</groupId>  
-        <artifactId>commons-lang3</artifactId>  
-        <version>3.1</version>  
-    </dependency>  
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>3.1</version>
+    </dependency>
     <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>2.6</version>
     </dependency>
-    <!-- add beanutils, 
-    	explain: provides an easy-to-use but flexible wrapper around reflection and introspection. 
+    <!-- add beanutils,
+    	explain: provides an easy-to-use but flexible wrapper around reflection and introspection.
     	提供了一种易于使用但灵活的包装器，可以反射和内省。-->
     <dependency>
 	    <groupId>commons-beanutils</groupId>
@@ -242,41 +242,41 @@
 	    <version>1.7.0</version>
 	</dependency>
     <!-- add commons-logging, explain: log4j. -->
-    <dependency>  
-        <groupId>commons-logging</groupId>  
-        <artifactId>commons-logging</artifactId>  
-        <version>1.1.3</version>  
-    </dependency>  
+    <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1.3</version>
+    </dependency>
     <!-- Apache Commons FileUpload组件提供了一个简单的方法。
 			灵活的方式，增加对多部分文件上载功能的支持，以servlet和web应用。 -->
     <dependency>
 	    <groupId>commons-fileupload</groupId>
 	    <artifactId>commons-fileupload</artifactId>
-	    <version>1.3.3</version>
+	    <version>1.2.1</version>
 	</dependency>
-	
+
     <dependency>
 	    <groupId>log4j</groupId>
 	    <artifactId>log4j</artifactId>
 	    <version>1.2.16</version>
 	</dependency>
-    <!-- add commons-collections, 
-    	explain: contains types that extend and augment the Java Collections Framework. 
+    <!-- add commons-collections,
+    	explain: contains types that extend and augment the Java Collections Framework.
     	包含扩展和扩充Java集合框架的类型。 -->
-    <dependency>  
-        <groupId>commons-collections</groupId>  
-        <artifactId>commons-collections</artifactId>  
-        <version>3.2.1</version>  
-    </dependency>  
-	<!-- add ezmorph, 
-		explain:Simple java library for transforming an Object to another Object. 
+    <dependency>
+        <groupId>commons-collections</groupId>
+        <artifactId>commons-collections</artifactId>
+        <version>3.2.1</version>
+    </dependency>
+	<!-- add ezmorph,
+		explain:Simple java library for transforming an Object to another Object.
 		将对象转换为另一个对象的简单java库。 -->
-    <dependency>  
-        <groupId>net.sf.ezmorph</groupId>  
-        <artifactId>ezmorph</artifactId>  
-        <version>1.0.3</version>  
-    </dependency>  
-    <!-- add aspectj, 
+    <dependency>
+        <groupId>net.sf.ezmorph</groupId>
+        <artifactId>ezmorph</artifactId>
+        <version>1.0.3</version>
+    </dependency>
+    <!-- add aspectj,
     	explain:The AspectJ weaver introduces advices to java classes
     	AspectJ weaver引入了对java类的建议 -->
     <dependency>
@@ -290,21 +290,21 @@
 	    <artifactId>javax.persistence</artifactId>
 	    <version>2.1.0</version>
 	</dependency>
-	
+
 	<!-- add Support Chinese character to most popular Pinyin systems -->
 	<dependency>
 	    <groupId>com.belerweb</groupId>
 	    <artifactId>pinyin4j</artifactId>
 	    <version>2.5.1</version>
 	</dependency>
-	
+
 	<!-- add Apache freemarker -->
 	<dependency>
 	    <groupId>org.freemarker</groupId>
 	    <artifactId>freemarker</artifactId>
 	    <version>2.3.23</version>
 	</dependency>
-	
+
 	<!-- add hibernate family -->
 	<dependency>
 	    <groupId>org.hibernate</groupId>
@@ -331,7 +331,7 @@
 	    <artifactId>hibernate-ehcache</artifactId>
 	    <version>${hibernate.version}</version>
 	</dependency>
-	
+
 	<dependency>
 	    <groupId>org.hibernate.common</groupId>
 	    <artifactId>hibernate-commons-annotations</artifactId>
@@ -342,14 +342,14 @@
 	    <artifactId>hibernate-jpa-2.0-api</artifactId>
 	    <version>1.0.1.Final</version>
 	</dependency>
-	
+
 	<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
 	<dependency>
 	    <groupId>org.apache.httpcomponents</groupId>
 	    <artifactId>httpclient</artifactId>
-	    <version>4.3.6</version>
+	    <version>4.1.3</version>
 	</dependency>
-	
+
 	<!-- https://mvnrepository.com/artifact/javax.faces/jsf-api -->
 	<dependency>
 	    <groupId>javax.faces</groupId>
@@ -357,7 +357,7 @@
 	    <version>2.1</version>
 	    <scope>provided</scope>
 	</dependency>
-	
+
 	<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 	<dependency>
 	    <groupId>javax.servlet</groupId>
@@ -372,14 +372,14 @@
 	    <version>3.0.1</version>
 	    <scope>provided</scope>
 	</dependency>
-	
+
 	<!-- add minidao import ognl/ognl -->
 	<dependency>
 	    <groupId>ognl</groupId>
 	    <artifactId>ognl</artifactId>
 	    <version>2.7.3</version>
 	</dependency>
-		
+
 	<!-- add spring mvc json support -->
 	<dependency>
 	    <groupId>org.codehaus.jackson</groupId>
@@ -396,7 +396,7 @@
 	    <artifactId>jackson-mapper-asl</artifactId>
 	    <version>1.8.4</version>
 	</dependency>
-			
+
 	<!-- add poi jar support -->
 	<dependency>
 	    <groupId>org.apache.poi</groupId>
@@ -418,7 +418,7 @@
 	    <artifactId>poi-scratchpad</artifactId>
 	    <version>3.9</version>
 	</dependency>
-	
+
 	<!-- add word converter html -->
 	<dependency>
 	    <groupId>fr.opensagres.xdocreport</groupId>
@@ -430,7 +430,7 @@
 	    <artifactId>org.apache.poi.xwpf.converter.xhtml</artifactId>
 	    <version>1.0.0</version>
 	</dependency>
-	
+
 	<!-- add input output commons-io -->
 	<dependency>
 	    <groupId>commons-io</groupId>
@@ -447,7 +447,7 @@
 	<dependency>
 	    <groupId>com.thoughtworks.xstream</groupId>
 	    <artifactId>xstream</artifactId>
-	    <version>1.4.10-java7</version>
+	    <version>1.4.10</version>
 	</dependency>
 		
 	<!-- add junit4 -->
