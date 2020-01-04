@@ -20,61 +20,6 @@ spring:
        exclude: WEB-INF/**
   aop:
     auto: true
-  dataSource: #数据源
-    zup:  
-      type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/zup?useUnicode=true&characterEncoding=UTF-8
-      username: root
-      password: 123456
-      initialSize: 50 
-      maxActive: 200 
-      maxIdle: 10 
-      maxWait: 80 
-      validationQuery: SELECT 1
-      timeBetweenEvictionRunsMillis: 60000
-      minEvictableIdleTimeMillis: 25200000
-      removeAbandoned: true
-      removeAbandonedTimeout: 1800
-      defaultAutoCommit: true
-      logAbandoned: true
-    zupwf:  
-      type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/zupwf?useUnicode=true&characterEncoding=UTF-8
-      username: root
-      password: 123456
-      initialSize: 50 
-      maxActive: 200 
-      maxIdle: 10 
-      maxWait: 80 
-      validationQuery: SELECT 1
-      timeBetweenEvictionRunsMillis: 60000
-      minEvictableIdleTimeMillis: 25200000
-      removeAbandoned: true
-      removeAbandonedTimeout: 1800
-      defaultAutoCommit: true
-      logAbandoned: true
-    mysql1: 
-      type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/pms?useUnicode=true&characterEncoding=UTF-8
-      username: root
-      password: 123456
-      initialSize: 50 
-      maxActive: 200 
-      maxIdle: 10 
-      maxWait: 80 
-      validationQuery: SELECT 1
-      timeBetweenEvictionRunsMillis: 60000
-      minEvictableIdleTimeMillis: 25200000
-      removeAbandoned: true
-      removeAbandonedTimeout: 1800
-      defaultAutoCommit: true
-      logAbandoned: true
-#mybatis:
-  #mapper-locations: classpath:zup-mybatis.xml
-  #type-aliases-package: cn.zoneday.mgeids.entity
 application:
   message: Hello BJ 
   

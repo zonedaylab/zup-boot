@@ -530,8 +530,6 @@
                 <version>${springboot.version}</version>
                 <configuration>
                     <mainClass>cn.zup.ZupApplication</mainClass>
-                    <source>1.8</source>  
-	                <target>1.8</target>
                 </configuration>
 	            <executions>  
 	                <execution>  
