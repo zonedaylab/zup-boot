@@ -39,32 +39,39 @@ public class CharacterFilter  implements Filter {
 		System.out.println("进入过滤器>>>>>>>>>>>");
         HttpServletRequest req=(HttpServletRequest)args0;
         HttpServletResponse res=(HttpServletResponse)args1;
-         //获得所有请求参数名
-        Enumeration params = req.getParameterNames();
-        String sql = "";
-        while (params.hasMoreElements()) {
-            //得到参数名
-            String name = params.nextElement().toString();
-            //System.out.println("name===========================" + name + "--");
-            //得到参数对应值
-            String[] value = req.getParameterValues(name);
-            for (int i = 0; i < value.length; i++) {
-                sql = sql + value[i];
+        System.err.println(req.getRequestURL());
+        // 去掉RBAC系统管理界面的SQL过滤，因为rbac只有管理员本人才会使用，所以不会出现问题，也是添加菜单什么的也得需要特殊字符
+        if(req.getRequestURL().indexOf("rest/rbac/") == -1){
+            //获得所有请求参数名
+            Enumeration params = req.getParameterNames();
+            String sql = "";
+            while (params.hasMoreElements()) {
+                //得到参数名
+                String name = params.nextElement().toString();
+                //System.out.println("name===========================" + name + "--");
+                //得到参数对应值
+                String[] value = req.getParameterValues(name);
+                for (int i = 0; i < value.length; i++) {
+                    sql = sql + value[i];
+                }
             }
-        }
-        System.out.println("============================SQL"+sql);
-        //有sql关键字，跳转到error.html
-        if (sqlValidate(sql)) {
-            throw new IOException("您发送请求中的参数中含有非法字符");
-            //String ip = req.getRemoteAddr();
-        } else {
+            System.out.println("============================SQL"+sql);
+            //有sql关键字，跳转到error.html
+            if (sqlValidate(sql)) {
+                throw new IOException("您发送请求中的参数中含有非法字符");
+                //String ip = req.getRemoteAddr();
+            } else {
+                chain.doFilter(args0,args1);
+            }
+        }else{
             chain.doFilter(args0,args1);
         }
     }
      
     //效验
     protected static boolean sqlValidate(String str) {
-        str = str.toLowerCase();//统一转为小写
+        //统一转为小写
+        str = str.toLowerCase();
         String badStr = "'|and|exec|execute|insert|select|delete|update|count|drop|*|%|chr|mid|master|truncate|" +
                 "char|declare|sitename|net user|xp_cmdshell|;|or|like'|and|exec|execute|insert|create|drop|sleep|" +
                 "table|from|grant|use|group_concat|column_name|" +
