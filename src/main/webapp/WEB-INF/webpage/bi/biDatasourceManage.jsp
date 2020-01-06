@@ -44,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							数据源名称
 						</th>
 						<th>
-							数据源地址
+							IP地址
 						</th>
 						<th>
 							用户名
@@ -71,31 +71,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="col-md-12 column">
 					<form class="form-horizontal" role="form">
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >数据源名称：</strong>
-							 <input class="form-control" id="ds_name" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
-						</div> 
-						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >IP地址：</strong>
-							 <input class="form-control" id="ds_ip" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+							<strong class="control-label" style="text-align: left; float:left; width:98px;" >IP地址：</strong>
+							<input class="form-control" id="ds_ip" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
 							<strong class="control-label" style="text-align: left; float:left; width:98px;" >端口号：</strong>
 							<input class="form-control" id="ds_port" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:98px;" >用户名：</strong>
+							<input class="form-control" id="ds_username" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+
+						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:98px;" >密码：</strong>
+							<input class="form-control" id="ds_password" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+
+						<div class="form-group row">
 							<strong class="control-label" style="text-align: left; float:left; width:98px;" >连接配置：</strong>
 							<input class="form-control" id="ds_attr" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
+
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">选择主题：</strong>
-							 <select class="form-control" id="topic_Id" style="width:180px; float:left;"></select>
-							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >数据源名称：</strong>
+							 <input class="form-control" id="ds_name" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
+
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">选择页面：</strong>
-							 <select class="form-control" id="bi_Page" style="width:180px; float:left;"></select>
-							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+							<strong class="control-label" style="text-align: left; float:left; width:98px;" >数据源地址：</strong>
+							<input class="form-control" id="ds_dir" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
+
+
+
         			</form>
 				</div> 
 			</div>
@@ -160,7 +169,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                //ajax请求数据
 		                $.ajax({
 		                    type: "POST",
-		                    url: "rest/bi/biReportController/getReportList",
+		                    url: "rest/bi/BIDatasourceController/getDatasourceList",
 		                    cache: false,  //禁用缓存
 		                    data: param,  //传入组装的参数
 		                    dataType: "json",
@@ -180,37 +189,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            	columnDefs: [
 	                	{
 					    	"targets": [0], // 目标列位置，下标从0开始
-					        "data": "report_Id", // 数据列名
+					        "data": "id", // 数据列名
 					        "orderable":false,
 					        "sWidth":"15px",
 					        "render": function(data, type, full) { // 返回自定义内容
-					       		return "<label><input type='checkbox' class='ace' id='report_Id' value = '" + data + "' /><span class='lbl' id='report_Id' value = '" + data + "'></span></label>";
+					       		return "<label><input type='checkbox' class='ace' id='id' value = '" + data + "' /><span class='lbl' id='id' value = '" + data + "'></span></label>";
 					         }
 	                    },
 	                    {
 						  	"targets": [1], // 目标列位置，下标从0开始
 						  	"sWidth":"20%",
-						   	"data": "report_Name"
+						   	"data": "ds_name"
 	                    },
 	                    {
 						  	"targets": [2], // 目标列位置，下标从0开始
 						  	"sWidth":"20%",
-						   	"data": "report_Title"
+						   	"data": "ds_ip"
 	                    },
 	                    {
 						   	"targets": [3], // 目标列位置，下标从0开始
 						   	"sWidth":"20%",
-						   	"data": "topic_Name" // 数据列名
+						   	"data": "ds_username" // 数据列名
 	                    },
 	                    {
 						   	"targets": [4], // 目标列位置，下标从0开始
 						   	"sWidth":"20%",
-						   	"data": "page_Name" // 数据列名
+						   	"data": "ds_password" // 数据列名
 	                    },
 	                    {
 						   	"targets": [5], // 目标列位置，下标从0开始
 						   	"sWidth":"20%",
-						   	"data": "create_Date" // 数据列名
+						   	"data": "ds_create_time" // 数据列名
 	                    }
 		            ]
 		        }).api();
@@ -235,32 +244,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 			$("#btnEdit").on("click", function(e){
 				par.thisid = this.id;
-				if($("#report_Id:checked").length != 1) {
+				if($("#id:checked").length != 1) {
 					parent.parent.bootbox.alert("只能选择一个报表进行编辑", function(){});
 		        	return;
 				}else{
-					par.report_Id = $("#report_Id:checked").val();
+					par.id = $("#id:checked").val();
 					getReportData(e);
 				}
 			});
 			
 			$("#btnDelete").on("click", function(e){
-				if($("#report_Id:checked").length <= 0){
+				if($("#id:checked").length <= 0){
 					parent.parent.bootbox.alert("请先选择要删除的报表", function(){});
 					return;
 				}else{
-					par.report_Ids = [];
+					par.ids = [];
 					parent.parent.bootbox.confirm("你确定要删除报表吗？", function(result) {
 						if(result){
-							for(var i=0; i<$("#report_Id:checked").length;i++){
-								par.report_Ids[i] = $("#report_Id:checked")[i].defaultValue;
-								if(par.report_Ids.length < 1){
+							for(var i=0; i<$("#id:checked").length;i++){
+								par.ids[i] = $("#id:checked")[i].defaultValue;
+								if(par.ids.length < 1){
 									parent.parent.bootbox.alert("请先选择要删除的报表", function(){});
 									return;
 								}
 				   	        }
 				   	        $.ajax({
-			    	            url: 'rest/bi/biReportController/deleteReport',
+			    	            url: 'rest/bi/BIDatasourceController/deleteDatasource',
 			    	            async: false,
 			    	            data: par,
 			    	            type: 'POST',
@@ -324,15 +333,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				//ajax请求数据
                 $.ajax({
                     type: "POST",
-                    url: "rest/bi/biReportController/getReportInfo",
+                    url: "rest/bi/BIDatasourceController/getDatasourceInfo",
                     cache: false,  //禁用缓存
                     data: par,  //传入组装的参数
                     dataType: "json",
                     success: function (result) {
-                    	$("#report_Name").val(result.data.report_Name);
-						$("#report_Title").val(result.data.report_Title);
-						$("#topic_Id").val(result.data.topic_Id);
-						$("#bi_Page").val(result.data.page_Id);
+                    	$("#ds_ip").val(result.data.ds_ip);
+						$("#ds_port").val(result.data.ds_port);
+						$("#ds_username").val(result.data.ds_username);
+						$("#ds_password").val(result.data.ds_password);
+						$("#ds_attr").val(result.data.ds_attr);
+						$("#ds_name").val(result.data.ds_name);
+						$("#ds_dir").val(result.data.ds_dir);
                     	msgDialog(e);
                     },
                     error: function(){
@@ -346,7 +358,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				//ajax请求数据
                 $.ajax({
                     type: "POST",
-                    url: "rest/bi/biReportController/saveReport",
+					url: "rest/bi/BIDatasourceController/saveDatasource",
                     cache: false,  //禁用缓存
                     data: par,  //传入组装的参数
                     dataType: "json",
@@ -370,7 +382,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				//ajax请求数据
                 $.ajax({
                     type: "POST",
-                    url: "rest/bi/biReportController/updateReport",
+                    url: "rest/bi/BIDatasourceController/updateDatasource",
                     cache: false,  //禁用缓存
                     data: par,  //传入组装的参数
                     dataType: "json",
@@ -398,7 +410,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					else title.text($title);
 				}
 			}));
-			
+
 			function msgDialog(e){
 				e.preventDefault();
 				var dialog = $( "#fromEdit" ).removeClass('hide').dialog({
@@ -418,10 +430,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							text: "保存",
 							"class" : "btn btn-primary btn-xs",
 							click: function() {
-								par.report_Name = $("#report_Name").val();
-								par.report_Title = $("#report_Title").val();
-								par.topic_Id = $("#topic_Id").val();
-								par.page_Id = $("#bi_Page").val();
+								par.ds_name = $("#ds_name").val();
+								par.ds_ip = $("#ds_ip").val();
+								par.ds_port = $("#ds_port").val();
+								par.ds_attr = $("#ds_attr").val();
+								par.ds_username = $("#ds_username").val();
+								par.ds_password = $("#ds_password").val();
+								par.ds_dir = $("#ds_dir").val();
+
 								if(par.thisid == "btnAdd"){
 									addReportData();	
 								}else if(par.thisid == "btnEdit"){
@@ -436,13 +452,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 			//报表字段管理按钮
 			$("#btnValSetting").on("click", function(){
-				var report_Id = 0;
-				if($("#report_Id:checked").length != 1) {
+				var id = 0;
+				if($("#id:checked").length != 1) {
 					parent.parent.bootbox.alert("只能选择一个报表进行编辑", function(){});
 		        	return;
 				}else{
-					report_Id = $("#report_Id:checked").val();
-					window.open("rest/bi/biReportFieldController?reportId="+report_Id, '报表字段设置', 'height=650,width=1200,top=200,left=50,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+					id = $("#id:checked").val();
+					window.open("rest/bi/biReportFieldController?reportId="+id, '报表字段设置', 'height=650,width=1200,top=200,left=50,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 				}
 			});
 			
