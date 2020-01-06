@@ -34,3 +34,13 @@
 zup-boot\src\main\resources\application.yml
 zup-boot\src\main\resources\dbconfig.properties
 
+### 演示图片
+#### 点击进入查看大屏展示页面
+![](img/dianjijinru.png)
+#### 查看大屏展示页面
+![](img/tubiaozhanshi.png)
+#### 表单管理
+![](img/biaodan.png)
+#### 菜单点进去的
+![](img/caidanyanshi2.png)
+

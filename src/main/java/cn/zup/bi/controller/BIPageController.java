@@ -160,7 +160,7 @@ public class BIPageController {
 	@RequestMapping("/getMenu")
 	@ResponseBody
 	public String getMenu(){
-		List<Menu> list = resourceServie.getMenuList(1156);
+		List<Menu> list = resourceServie.getMenuList(5);
 		JSONObject json = new JSONObject();
 		json.put("data", list);
 		return json.toString();

@@ -208,9 +208,8 @@ public class ResourceServiceImpl implements ResourceService{
 	 */
 	public List<Menu> getMenuList(int parentMenuId) {
 		Menu menu=new Menu();
-		menu.setParentMenuId(parentMenuId);
-		//resourceMenuDao.listByHiber(menu);
-		return resourceMenuDao.getMenuList(menu);
+		menu.setUrlAddress("Bi/MenuShow");
+		return resourceMenuDao.listByHiber(menu);
 	}
 
 	/**获取系统角色有权限的菜单列表
