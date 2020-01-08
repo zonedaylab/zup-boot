@@ -1,6 +1,8 @@
 package cn.zup.bi.service;
 
 import cn.zup.bi.entity.BI_Datasource;
+import cn.zup.bi.entity.BI_REPORT;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
 import java.util.List;
 
@@ -9,32 +11,27 @@ import java.util.List;
  */
 public interface BIDatasourceService {
     /***
-     * 添加数据源
+     * 添加数据源and更新数据源
      * @param biDatasource
      * @return
      */
     int addDatasource(BI_Datasource biDatasource);
 
-    /***
-     * 更新数据源
-     * @param biDatasource
-     * @return
-     */
-    boolean updateDatasource(BI_Datasource biDatasource);
+
 
     /***
      * 删除数据源
      * @param id
      * @return
      */
-    boolean delDatasource(Integer id);
+    int deleteDatasource(int id);
 
     /***
      * 获取数据源详情
      * @param id
      * @return
      */
-    BI_Datasource getDatasource(Integer id);
+    BI_Datasource getDatasourceInfo(int id);
 
     /***
      * 获取数据源列表
@@ -42,4 +39,12 @@ public interface BIDatasourceService {
      * @return
      */
     List<BI_Datasource> getDatasourceList(BI_Datasource biDatasource);
+
+
+    /***
+     *
+     * @author 王朔
+     */
+    MiniDaoPage<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource, int page, int rows);
+
 }
