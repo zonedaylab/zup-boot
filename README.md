@@ -28,7 +28,19 @@
 
 > 5. Chrome 游览器打开localhost:8083
 
+> 6. 如果想要体验BI，请再倒入一个数据库zup-boot/src/main/resources/sql/bi-demo.sql，导入之后进入菜 单商务智能>页面管理>点击地址查看
+
 数据库配置文件：
 zup-boot\src\main\resources\application.yml
 zup-boot\src\main\resources\dbconfig.properties
+
+### 演示图片
+#### 点击进入查看大屏展示页面
+![](img/dianjijinru.png)
+#### 查看大屏展示页面
+![](img/tubiaozhanshi.png)
+#### 表单管理
+![](img/biaodan.png)
+#### 菜单点进去的
+![](img/caidanyanshi2.png)
 
