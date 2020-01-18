@@ -1,16 +1,15 @@
 package cn.zup.bi.entity;
 
-import java.io.Serializable;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "BI_DIM")
+@Table(name = "bi_dim")
 public class BI_DIM  implements Serializable{
 	private Integer dim_Id;   // 维表ID
 	private String dim_Name;  // 维名称

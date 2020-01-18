@@ -1,14 +1,9 @@
 package cn.zup.bi.entity;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table (name = "BI_REPORT_FIELD")
@@ -18,7 +13,7 @@ public class BI_REPORT_FIELD implements Serializable {
 	private Integer field_Id;
 	private Integer field_Location;
 	private Integer dim_Order;
-	
+	private Integer display; //字段是否显示
 	private String field_Name;
 	
 	@Id
@@ -54,6 +49,15 @@ public class BI_REPORT_FIELD implements Serializable {
 	public void setDim_Order(Integer dim_Order) {
 		this.dim_Order = dim_Order;
 	}
+
+	public Integer getDisplay() {
+		return display;
+	}
+
+	public void setDisplay(Integer display) {
+		this.display = display;
+	}
+
 	@Transient
 	public String getField_Name() {
 		return field_Name;

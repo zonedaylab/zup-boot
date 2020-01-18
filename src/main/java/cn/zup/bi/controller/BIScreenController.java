@@ -1,8 +1,8 @@
 package cn.zup.bi.controller;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import cn.zup.bi.entity.BI_Screen;
+import cn.zup.bi.service.BIScreenService;
+import net.sf.json.JSONObject;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.zup.bi.entity.BI_Screen;
-import cn.zup.bi.service.BIScreenService;
-import net.sf.json.JSONObject;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/rest/bi/biScreenController")
@@ -27,7 +26,13 @@ public class BIScreenController {
 	 * */
 	@RequestMapping("")
 	public ModelAndView index(HttpServletRequest request){
-		return new ModelAndView("bi/biScreenManage");
+		
+		//需要优化pageId为空
+		String pageId = request.getParameter("pageId");
+		ModelAndView mv = new ModelAndView("bi/biScreenManage");
+		mv.addObject("pageId", pageId);
+		return mv;
+		//return new ModelAndView("bi/biScreenManage");
 	}
 	
 	/**

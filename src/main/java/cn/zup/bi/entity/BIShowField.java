@@ -14,6 +14,7 @@ public class BIShowField {
 	private String Field_Name;   //字段名称
 	private String topic_Table;  //主题数据表
 	private String topic_Name;   //主题名称
+	private Integer field_Id;  //字段id
 	
 	private String field_Caption; //字段别名
 	private String aggregate_Type;  //聚合类型
@@ -137,5 +138,12 @@ public class BIShowField {
 	public void setDim_Order(Integer dim_Order) {
 		this.dim_Order = dim_Order;
 	}
-	
+
+	public Integer getField_Id() {
+		return field_Id;
+	}
+
+	public void setField_Id(Integer field_Id) {
+		this.field_Id = field_Id;
+	}
 }

@@ -1,11 +1,5 @@
 package cn.zup.bi.service.impl;
 
-import java.util.List;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import cn.zup.bi.dao.BIShowEngineDao;
 import cn.zup.bi.dao.DimDao;
 import cn.zup.bi.dao.ReportFieldDao;
@@ -14,6 +8,11 @@ import cn.zup.bi.entity.BIShowField;
 import cn.zup.bi.entity.BI_REPORT_FIELD;
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import cn.zup.bi.service.TopicFieldService;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("topicFieldService")
 public class TopicFieldServiceImpl implements TopicFieldService {
@@ -30,10 +29,7 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	
 	/**
 	 * 主题字段分页列表
-	 * 
-	 * @param Topic 主题实体
-	 * @param pageSize：分页行数
-	 * @param pageination：页码
+	 *
 	 * @return 
 	 */
 	public MiniDaoPage<BI_TOPIC_FIELD> getTopicFieldPagingList(BI_TOPIC_FIELD topicField, int page, int rows){
@@ -44,7 +40,6 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	/**
 	 * 
 	 * 主题字段数据获取
-	 * @param Topic 主题实体
 	 * @date 2016-10-6 09:32:51
 	 * 
 	 * */
@@ -55,7 +50,6 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	/**
 	 * 
 	 * 主题字段数据删除
-	 * @param Topic 主题实体
 	 * @date 2016-10-6 09:32:51
 	 * 
 	 * */
@@ -68,7 +62,6 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	/**
 	 * 
 	 * 主题字段数据添加
-	 * @param Topic 主题实体
 	 * @date 2016-10-6 09:32:51
 	 * 
 	 * */
@@ -84,7 +77,6 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	/**
 	 * 
 	 * 主题字段数据编辑
-	 * @param Topic 主题实体
 	 * @date 2016-10-6 09:32:51
 	 * 
 	 * */
@@ -108,7 +100,17 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 		topicField.setTopic_Id(topicId);
 		return topicFieldDao.listByHiber(topicField);
 	}
-	
+
+	/**
+	 *
+	 * 主题字段数据获取
+	 * @date 2016-10-11 11:09:01
+	 *
+	 * */
+	public List<BI_TOPIC_FIELD> getTopicFieldList(BI_TOPIC_FIELD topicField){
+
+		return topicFieldDao.listByHiber(topicField);
+	}
 	/**
 	 * 获取配置的维表的字段名称
 	 * 

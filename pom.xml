@@ -449,6 +449,14 @@
 	    <artifactId>xstream</artifactId>
 	    <version>1.4.10</version>
 	</dependency>
+
+	  <!-- 通过注解自动生成Geter Seter -->
+	  <dependency>
+		  <groupId>org.projectlombok</groupId>
+		  <artifactId>lombok</artifactId>
+		  <version>1.18.2</version>
+		  <scope>provided</scope>
+	  </dependency>
 		
 	<!-- add junit4 -->
 	<dependency>
@@ -486,6 +494,7 @@
 		<artifactId>zup-spring-jdbc</artifactId>
 		<version>1.0</version>
 	</dependency>
+
 	
   </dependencies>
   

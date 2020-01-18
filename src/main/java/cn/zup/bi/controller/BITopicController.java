@@ -1,11 +1,9 @@
 package cn.zup.bi.controller;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import cn.zup.bi.entity.BI_TOPIC;
+import cn.zup.bi.service.TopicService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.zup.bi.entity.BI_TOPIC;
-import cn.zup.bi.service.TopicService;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/rest/bi/BITopicController")
@@ -62,7 +60,7 @@ public class BITopicController {
 	@ResponseBody
 	public String getTopicData(BI_TOPIC topic, HttpServletRequest request) {
 		JSONObject json = new JSONObject(); 
-		int flag = topicService.editTopicData(topic);
+		int flag = topicService.updateTopicData(topic);
 		if(flag != 0){
 			json.put("data", "success");
 		}else{

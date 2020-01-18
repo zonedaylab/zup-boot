@@ -1,382 +1,276 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=utf-8"%>
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
   <head>
     <base href="<%=basePath%>">
-    
-    <title>维表管理 - BI商务智能  - 积成能源</title>
-    
+    <title>BI维度管理</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		
-    <!--        引入外部样式库css        -->
-    <jsp:include page="../include/mainHead.jsp"></jsp:include>
-	<link rel="stylesheet" type="text/css" href="plug-in/ace/bi/css/dim.css?v=1.0">
+	<!--  import style	-->
+	<jsp:include page="../include/mainHead.jsp"></jsp:include>
   </head>
-  
-  <body style="background:#fafafa; overflow: hidden; overflow-y: auto;">
-  	<div>
-	  	<form id="iform">
-		    <!--维表设置-->
-		    <div class="row row-5">
-		        <div class="col-lg-12 col-md-12 col-xs-12">
-		            <span class="glyphicon glyphicon-chevron-down"></span>
-		            <span class="title">维表设置</span>
-		        </div>
-		        <div class="col-lg-12 col-md-12 col-xs-12 lineSpacing">
-		            <div class="row">
-		                <div class="col-lg-4 col-md-5 col-xs-5">
-		                    <span class="star text-indent-4 float-left">*</span>
-		                    <span class="text float-left">数据库表名称</span>
-		                    <select class="form-control inputWidth float-left" id="dbName" name="dbName">
-		
-		                    </select>
-		                </div>
-		                <div class="col-lg-4 col-md-5 col-xs-5">
-		                    <span class="star text-indent-4 float-left">*</span>
-		                    <span class="text float-left">维名称</span>
-		                    <input type="text" class="form-control inputWidth" id="dimName" name="dimName" />
-		                    <input type="text" class="form-control inputWidth" id="dimId" name="dimId" style="display:none;"/>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-		    <!--字段设置-->
-		    <div class="row row-5">
-		        <div class="col-lg-12 col-md-12 col-xs-12">
-		            <span class="glyphicon glyphicon-chevron-down"></span>
-		            <span class="title">字段显示</span>
-		        </div>
-		        <div class="col-lg-12 col-md-12 col-xs-12 lineSpacing">
-		            <div class="row">
-		                <table cellpadding="0" cellspacing="0" border="0" class="text-indent-4" width="95%">
-		                    <thead>
-		                        <td>字段</td>
-		                        <td>字段名称</td>
-		                        <td>字段描述</td>
-		                        <td>字段字段长度</td>
-		                        <td>字段小数位数</td>
-		                        <td>字段字段类型</td>
-		                    </thead>
-		                    <tbody id="fieldTbody">
-		                    </tbody>
-		                </table>
-		            </div>
-		        </div>
-		    </div>
-		    
-		    <!--字段ID设置-->
-		    <div class="row row-5" id="radio">
-		        <div class="col-lg-12 col-md-12 col-xs-12">
-		            <span class="glyphicon glyphicon-chevron-down"></span>
-		            <span class="title">维表ID、文字字段设置</span>
-		        </div>
-		        <div class="col-lg-12 col-md-12 col-xs-12 lineSpacing text-indent-4">
-		            <div class="row">
-			      	    <div class="col-lg-6 col-md-6 col-xs-6">
-			            	<span class="radioText">ID字段</span>
-			                <select class="form-control tableInput tableValueInput" name="idField"> </select>
-			      	    </div>
-			      	    <div class="col-lg-6 col-md-6 col-xs-6">
-			            	<span class="radioText">文字字段</span>
-			                <select class="form-control tableInput tableValueInput" name="nameField"> </select>
-			      	    </div>
-		      	    </div>
-		        </div>
-		    </div>
-		
-		    <!--属性设置-->
-		    <div class="row row-5">
-		        <div class="col-lg-12 col-md-12 col-xs-12">
-		            <span class="glyphicon glyphicon-chevron-down"></span>
-		            <span class="title">属性设置</span>
-		        </div>
-		        <div class="col-lg-12 col-md-12 col-xs-12 lineSpacing">
-		            <div class="row">
-		                <table cellpadding="0" cellspacing="0" border="0" class="text-indent-4" width="95%">
-		                    <thead>
-		                    <td>属性</td>
-		                    <td>属性名称</td>
-		                    <td>属性列名</td>
-		                    <td>文字列名</td>
-<!-- 		                    <td>是否需要分割</td> -->
-		                    <td><span class="glyphicon glyphicon-plus add" id="addValue"></span></td>
-		                    </thead>
-		                    <tbody id="valTbody">
-			                    <tr>
-			                    	<td colspan='5' id='tip'>请点击加号进行添加属性</td>
-			                        <!--<td><span class="text" id="value">属性1</span></td>
-			                        <td><input type="text" class="form-control tableValueInput" id="valueName" name="valueName" /></td>
-			                        <td><select class="form-control tableInput tableValueInput" name="valueColName"></select></td>
-			                        <td><select class="form-control tableInput tableValueInput" name="textColName"></select></td>
- 			                        <td><input class="form-control tableInput tableValueInput" name="split" value="0"/></td> 
-			                        <td class="glyphicon glyphicon-minus add" onclick="delValue(this)" style="height: 35px; line-height: 35px;"></td>-->
-			                    </tr>
-		                    </tbody>
-		                </table>
-		            </div>
-		        </div>
-		    </div>
-		    
-		    <!--树形设置-->
-		    <div class="row row-5" id="radio">
-		        <div class="col-lg-12 col-md-12 col-xs-12">
-		            <span class="glyphicon glyphicon-chevron-down"></span>
-		            <span class="title">树形设置</span>
-		        </div>
-		        <div class="col-lg-12 col-md-12 col-xs-12 lineSpacing text-indent-4">
-		            <div class="row row-5">
-		                <input type="radio" name="tree" class="form-control" style="width: 15px; height: 15px; float: left;" value="1"/>
-		                <span class="radioText">无层次结构</span>
-		            </div>
-		            <div class="row row-5">
-		                <input type="radio" name="tree" class="form-control" style="width: 15px; height: 15px; float: left; margin-top: 5px;" value="2"/>
-		                <span class="radioText">分段信息</span>
-		                <input type="text" class="form-control tableValueInput float-left" id="piecewiseInfo" name="piecewiseInfo" />
-		                <span class="text float-left" style="margin-top: -5px;">（如：1-2-3 未做）</span>
-		            </div>
-		            <div class="row row-5">
-		                <input type="radio" name="tree" class="form-control" style="width: 15px; height: 15px; float: left;" id="openRadioPath" value="3" />
-		                <span class="radioText">钻取路径</span>
-		                <input type="text" class="form-control tableValueInput float-left" id="openPath" name="openPath" />
-		            </div>
-		        </div>
-		    </div>
-		    
-		    
-		    <!-- 保存按钮 -->
-		    <div class="row row-5">
-		    	<input type="button" id="save" class="btn btn-sm btn-primary" value="保存" style="float:right; margin-right:10%;" />
-		    </div>
-		    
-<!-- 		    <div style="margin-left: 20px;"> -->
-<!-- 		    	<p>注意：使用须知：</p> -->
-<!-- 		    	<ol> -->
-<!-- 		    		<li>属性名称填写规则：必须填写数据表中的列名称！</li> -->
-<!-- 		    		<li>属性列名填写规则：不允许书写中文和数字！</li> -->
-<!-- 		    		<li>文字列名填写规则：不允许书写中文和数字</li> -->
-<!-- 		    		<li>ID字段填写规则： 必须是你设置的是维度选择的物理表中和主题表中选择具有关联的一个字段，因为这里要作为 join 表连接时的  on 条件！</li> -->
-<!-- 		    	</ol> -->
-<!-- 		    </div> -->
-	    </from>
-	</div>
-	<select id="linshi" style="display:none;">
-	
-	</select>
-    
-     <!--  引入js存放的外部脚本库  -->
+  <body style="width:97%; margin-left:20px; background:#ffffff; overflow-x: hidden;">
+  	<!--  BI Content	-->
+  	<div class="row">
+  		<!-- datables开始 -->
+		<div class="table-header">维度管理</div>
+		<div class="row">
+			<div class="col-md-6" style="margin-left:20px;height:30px; margin-bottom:10px; margin-top:5px;">
+				<button class="btn btn-primary btn-sm" id="btnAdd">添加</button>
+				<button class="btn btn-primary btn-sm" id="btnEdit">编辑</button>
+				<button class="btn btn-primary btn-sm" id="btnDelete">删除</button>
+			</div>
+			<div class="col-md-7"></div>
+		</div>
+		<div class="table-responsive">
+			<table id="postTable" class="table table-striped table-bordered table-hover"  style="margin-bottom:20px;">
+				<thead>
+					<tr>
+						<th>
+							<label>
+								<input type="checkbox" class="ace" id="allCheck" />
+								<span class="lbl"></span>
+							</label>
+						</th>
+						<th>
+							维度名称
+						</th>
+						<th>
+							数据库表
+						</th>
+ 						<th>
+							ID字段 
+						</th>
+						<th>
+							文字字段
+						</th>
+						<th>
+							钻取类型
+						</th>
+						<th>
+							钻取信息
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<!-- datables结束 -->
+  	</div>
+ 
+    	
+  	<!--  import javascript	-->
     <jsp:include page="../include/mainFooter.jsp"></jsp:include>
     
     <script type="text/javascript">
-    
-    	loadTableName();
-    	
-    	var param = "";
-    	//加载数据库表名 
-    	function loadTableName(){
-    		$.ajax({ 
-    			type: "POST",
-    			url: "rest/bi/BIDimController/getDatabaseTableName",
-    			cache: false, //禁用缓存
-    			data: "",
-    			dataType: "json",
-    			success: function(result){
-    				if(result.data != "error"){
-    					$("#dbName").html("");
-    					$("#dbName").append("<option value='0'>请选择</option>");
-    					for(var i=0; i< result.data.length; i++){
-    						$("#dbName").append("<option value="+result.data[i]+">"+result.data[i]+"</option>");
-    					}
-    				}else{
-    					parent.bootbox.alert("数据表名称加载失败");
-    				}
-    			},
-    			error: function(){
-    				parent.bootbox.alert("数据表名称加载失败");
-    			}
-    		});
-    	}
-    	
-    	$("#addConn").click(function(){
-    		$.ajax({ 
-    			type: "POST",
-    			url: "rest/bi/BIDimController/addConnection",
-    			cache: false, //禁用缓存
-    			data: {
-    				className: "com.mysql.jdbc.Driver",
-    				url: "jdbc:mysql://192.168.10.216:3306/mgeids?useUnicode=true&characterEncoding=UTF-8",
-					user: "root",
-					pwd: "andot"
-    			},
-    			dataType: "json",
-    			success: function(result){
-    				loadTableName();
-    			},
-    			error: function(){
-    				parent.bootbox.alert("失败");
-    			}
-    		});
-    	});
-    	
-    	//数据表名称发生改变时
-    	$("#dbName").on("change", function(){
-    		param = $("#dbName").val();
-    		loadDbDim(1);
-    		loadDataFaild();
-    	});
-    	
-    	//添加属性
-    	var i = 0;
-    	$("#addValue").on("click", function(){
-    		$("#tip").remove();
-    		i++;
-    		$("#valTbody").append("<tr><td><span class='text' name='value'>属性"+i+"<sup style='color: red;'>新</sup></span><input style='display:none;' id='valueId' name='valueId' value='0'/></td><td><input type='text float-left' class='form-control tableValueInput' name='valueName' /></td><td><select class='form-control tableInput tableValueInput' name='valueColName'>"+$("#linshi").html()+"</select></td><td><select class='form-control tableInput tableValueInput' name='textColName'>"+$("#linshi").html()+"</select></td><td class='glyphicon glyphicon-minus add'  onclick='delValue(this)'></td></tr>");
-    		$('[name="valueColName"]').change(function(){
-    			$($(this).parent().prev().children()[0]).val($(this).val())
-    		});
-    	});
-    	//删除属性
-    	function delValue(obj){
-    		$(obj).parent().remove();
-    	}
-    	
-    	//根据选中的数据表名称加载数据字段
-    	function loadDataFaild(){
-    		$.ajax({
-    			type: "POST",
-    			url: "rest/bi/BIDimController/getTableData",
-    			cache: false, //禁用缓存
-    			data: "tableName="+param,
-    			dataType: "json",
-    			success: function(result){
-    				$("#fieldTbody").empty();
-    				$('[name="idField"]').empty();
-    				$('[name="nameField"]').empty();
-    				$('[name="valueColName"]').append("");
-					$('[name="textColName"]').append("");
-    				if(result.data != "error"){
-    					for(var i=0; i< result.data.length; i++){
-    						$("#fieldTbody").append("<tr><td>字段"+(i+1)+"</td><td>"+result.data[i].dim_Field_Name+"</td><td>"+result.data[i].field_Desc+"</td><td>"+result.data[i].field_Length+"</td><td>"+result.data[i].field_Decimal+"</td><td>"+result.data[i].field_Type+"</td></tr>");
-    						$('[name="idField"]').append("<option value="+result.data[i].dim_Field_Name+">"+result.data[i].dim_Field_Name+"</option>");
-    						$('[name="nameField"]').append("<option value="+result.data[i].dim_Field_Name+">"+result.data[i].dim_Field_Name+"</option>");
-    						$('[name="valueColName"]').append("<option value="+result.data[i].dim_Field_Name+">"+result.data[i].dim_Field_Name+"</option>");
- 							$('[name="textColName"]').append("<option value="+result.data[i].dim_Field_Name+">"+result.data[i].dim_Field_Name+"</option>");
-    						$("#linshi").append("<option value="+result.data[i].dim_Field_Name+">"+result.data[i].dim_Field_Name+"</option>");
-    					}
-    					loadDbDim(0);
-    				}else{
-    					parent.bootbox.alert("表数据加载失败");
-    				}
-    			},
-    			error: function(){
-    				parent.bootbox.alert("表数据加载失败");
-    			}
-    		});
-    	}
-    	
-    	//保存事件
-    	$("#save").on("click", function(){
-    		var dimName = $("#dimName").val();
-    		var dbName = $("#dbName").val();
-    		if(dbName == 0){
-    			parent.bootbox.alert("请选择数据库表名称");
-    			return;
-    		}else if(dimName == ""){
-    		 	parent.bootbox.alert("请输入维名称");
-    		 	return;
-    		}else{
-    			saveDimData();
-    		}
-    	});
-    	
-    	//保存维表数据
-    	function saveDimData(){
-		    $.ajax({
-    			type: "POST",
-    			url: "rest/bi/BIDimController/saveDimData",
-    			cache: false, //禁用缓存
-    			data: $('#iform').serialize(),
-    			dataType: "json",
-    			success: function(result){
-    				if(result.info != "error"){
-    					parent.bootbox.alert(result.info);
-    				}else{
-    					parent.bootbox.alert("表数据加载失败");
-    				}
-    			},
-    			error: function(){
-    				parent.bootbox.alert("表数据加载失败");
-    			}
-    		});
-    	}
-    	
-    	//通过数据库表名查看是否已经有维表
-		function loadDbDim(type){
-		    var dbName = $("#dbName").val();
-			$.ajax({
-                   type: "POST",
-                   url: "rest/bi/BIDimController/loadDbDim",
-                   cache: false,  //禁用缓存
-                   data: "dnName="+dbName,  //传入组装的参数
-                   dataType: "json",
-                   success: function (result) {
-                   		if(result.info == "success"){
-                   			$("#tip").remove();
-                   			$("#dimId").val(result.dim.dim_Id);
-                   			if(type==1){
-                   				$("#dimName").val(result.dim.dim_Name);
-    	                   		$("#openPath").val(result.dim.drill_Info);
-    	                   		$("#idField").val(result.dim.id_Field);
-    			            	var obj = $(":input[name='tree']");
-    			            	if(obj.attr("type") == "radio"){
-    			            		obj.each(function(){
-    			            		    if($(this).attr("value") == result.dim.drill_Type){
-    			            		    	$(this).attr("checked","checked"); 
-    				            		}
-    			            		});
-    			            	}
-    	                   		$("#valTbody").html("");
-    	                   		for(var i=0; i<result.dimInfo.length ;i++){
-    	 							$("#valTbody").append("<tr><td><span class='text' name='value'>属性"+(i+1)+"</span><input id='valueId' style='display:none;' name='valueId' value="+result.dimInfo[i].attribute_Id+" /></td><td><input type='text float-left' class='form-control tableValueInput' name='valueName' value="+result.dimInfo[i].attribute_Caption_Field+" /></td><td><select class='form-control tableInput tableValueInput' name='valueColName'>"+$("#linshi").html()+"</select></td><td><select class='form-control tableInput tableValueInput' name='textColName'>"+$("#linshi").html()+"</select></td><td class='glyphicon glyphicon-minus add' onclick='delValue(this)' style='height: 35px; line-height: 35px;'></td></tr>");
-    	 							$('[name="valueColName"]').val(result.dimInfo[i].attribute_Value_Field);
-    	 							$('[name="textColName"]').val(result.dimInfo[i].attribute_Name);
-    	                   		}
-                   			}else{
-                   				for(var z=0; z<result.dimInfo.length ;z++){
-    	                   			$($('[name="valueColName"]')[z]).val(result.dimInfo[z].attribute_Value_Field)
-    	                   			$($('[name="textColName"]')[z]).val(result.dimInfo[z].attribute_Name)
-    	                   		}
-                   			}
-	                   	}else{
-	                   		$("#dimName").val("");
-	                   		$("#openPath").val("");
-			            	var obj = $(":input[name='tree']");
-	                   		if(obj.attr("type") == "radio"){
-			            		obj.each(function(){
-			            		   $(this).attr("checked","check"); 
-			            		});
-			            	}
-	                   		$("#valTbody").html("<td colspan='5' id='tip'>请点击加号进行添加属性</td>");
-	                   		//$("#valTbody").append("<tr><td><span class='text' name='value'>属性1</span></td><td><input type='text float-left' class='form-control tableValueInput' name='valueName'/></td><td><select class='form-control tableInput tableValueInput' name='valueColName' ></select></td><td><select class='form-control tableInput tableValueInput' name='textColName'></select></td><td class='glyphicon glyphicon-minus add'  onclick='delValue(this)' style='height: 35px; line-height: 35px;'></td></tr>");
-	                   	}
-                   },
-                   error: function(){
-                   		parent.bootbox.alert("数据库表名编辑获取失败", function(){});
-                   }
-               });
-		}
-    	
+	    var langData;
+	    $.ajax({
+		   url: "plug-in/ace/adIcon/lang/zh-cn.json",//json文件位置
+		   async: false,
+		   type: "GET",//请求方式为get
+		   dataType: "json", //返回数据格式为json
+		   success: function(data) {//请求成功完成后要执行的方法 
+			   langData = data;
+		   }
+		});
+   		$(document).ready(function(){
+   			loadGrid();
+   		});
+   
+   		function loadGrid(){
+   			var param = {};
+   			//提示信息
+	        var lang = {
+	            "sProcessing": "处理中...",
+	            "sLengthMenu": "每页 _MENU_ 项",
+	            "sZeroRecords": "没有匹配结果",
+	            "sInfo": "当前第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+	            "sInfoEmpty": "当前显示第 0 至 0 项，共 0 项",
+	            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+	            "sInfoPostFix": "",
+	            "sSearch": "搜索:",
+	            "sUrl": "",
+	            "sEmptyTable": "表中数据为空",
+	            "sLoadingRecords": "载入中...",
+	            "sInfoThousands": ",",
+	            "oPaginate": {
+	                "sFirst": "首页",
+	                "sPrevious": "上页",
+	                "sNext": "下页",
+	                "sLast": "末页",
+	                "sJump": "跳转"
+	            },
+	            "oAria": {
+	                "sSortAscending": ": 以升序排列此列",
+	                "sSortDescending": ": 以降序排列此列"
+	            }
+	        };   
+    		//初始化表格
+        	var table = $("#postTable").dataTable({
+        	    "dom": '<t><"col-md-4"i><"col-md-6"p><"col-md-2"l>',    //为表格元素书写css样式<t>为中间表格  在<t>右边就是在表格下边
+           		language:lang,  //提示信息
+            	stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+	            serverSide: true,  //启用服务器端分页
+	            searching: false,  //禁用原生搜索
+	            bAutoWidth:true, //自适应宽度 
+	            bDestroy:true,//重新加载使用
+	            renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+	            pagingType: "full_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+	            ordering:false,
+	            ajax: function (data, callback, settings) {
+	                param.rows = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+	                param.start = data.start;//开始的记录序号
+	                param.page = (data.start / data.length)+1;//当前页码
+	                console.log(param);
+	                //ajax请求数据
+	                $.ajax({
+	                    type: "POST",
+	                    url: "rest/bi/BIDimController/girdDimList",
+	                    cache: false,  //禁用缓存
+	                    data: param,  //传入组装的参数
+	                    dataType: "json",
+	                    success: function (result) {
+	                        setTimeout(function () {
+	                            //封装返回数据
+	                            var returnData = {};
+	                            returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+	                            returnData.recordsTotal = result.total;//返回数据全部记录
+	                            returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
+	                            returnData.data = result.data;//返回的数据列表
+	                            callback(returnData);
+	                        }, 200);
+	                    }
+	                });
+            	},
+            	columnDefs: [
+                	{
+				    	"targets": [0], // 目标列位置，下标从0开始
+				        "data": "dim_Id", // 数据列名
+				        "orderable":false,
+				        "sWidth":"10px",
+				        "render": function(data, type, full) { // 返回自定义内容
+				       		return "<label><input type='checkbox' class='ace' id='dim_Id' value = '" + data + "' /><span class='lbl' id='dim_Id' value = '" + data + "'></span></label>";
+				         }
+                    },
+                    {
+					  	"targets": [1], // 目标列位置，下标从0开始
+					  	"sWidth":"20%",
+					   	"data": "dim_Name"
+                    },
+                    {
+					  	"targets": [2], // 目标列位置，下标从0开始
+					  	"sWidth":"15%",
+					   	"data": "biz_Table_Name"
+                    },
+                    {
+					  	"targets": [3], // 目标列位置，下标从0开始
+					  	"sWidth":"15%",
+					   	"data": "id_Field"
+                    },       {
+					  	"targets": [4], // 目标列位置，下标从0开始
+					  	"sWidth":"15%",
+					   	"data": "text_Field"
+                    },       {
+					  	"targets": [5], // 目标列位置，下标从0开始
+					  	"sWidth":"15%",
+					   	"data": "drill_Type"
+                    },
+                    {
+					   	"targets": [6], // 目标列位置，下标从0开始
+					   	"sWidth":"15%",
+					   	"data": "drill_Info" // 数据列名
+                    }
+	            ]
+	        }).api();
+	        //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
+	    }
+	    //复选框全选
+		$("#allCheck").on('click' , function(){
+			var that = this;
+			$(this).closest('table').find('tr > td:first-child input:checkbox')
+			.each(function(){
+				this.checked = that.checked;
+				$(this).closest('tr').toggleClass('selected');
+			});
+		});
+		var par = {};   //声明ajax传输参数的数组变量
+		
+		//增删改按钮命令
+	
+		$("#btnAdd").on("click", function(){
+					
+		  window.open("rest/bi/BIDimController/biDimSet?dimId=0", '维度设置', 'height=650,width=1200,top=200,left=200,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			
+		});
+
+		$("#btnEdit").on("click", function(){
+
+			window.open("rest/bi/BIDimController/biDimSet?dimId="+ $("#dim_Id:checked").val(), '维度设置', 'height=650,width=1200,top=200,left=200,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+
+		});
+			
+		$("#btnDelete").on("click", function(e){
+			if($("#dim_Id:checked").length <= 0){
+				parent.parent.bootbox.alert("请先选择要删除的维度", function(){});
+				return;
+			}else{
+				par.dim_Ids = [];
+				parent.parent.bootbox.confirm("你确定要删除维度吗？", function(result) {
+					if(result){
+						for(var i=0; i<$("#dim_Id:checked").length;i++){
+							par.dim_Ids[i] = $("#dim_Id:checked")[i].defaultValue;
+							if(par.dim_Ids.length < 1){
+								parent.parent.bootbox.alert("请先选择要删除的维度", function(){});
+								return;
+							}
+			   	        }
+			   	        $.ajax({
+		    	            url: 'rest/bi/BIDimController/deleteDimData',
+		    	            async: false,
+		    	            data: par,
+		    	            type: 'POST',
+		    	            dataType: 'json',
+		    	            success: function (result) {
+		    	                if(result.data == "success"){
+		    	                	if(result.mes=="")
+
+		    	                	parent.parent.bootbox.alert("删除成功", function(){});
+
+		    	                	else
+									parent.parent.bootbox.alert("删除成功,但其中有已经进行了主题关联，删除主题后再进行维度删除，关联的维度ID为："+result.mes, function(){});
+
+		    	                		loadGrid();
+		   	                	}else{
+									if(result.mes=="")
+										parent.parent.bootbox.alert("删除失败， 失败的维度id为："+result.data, function(){});
+
+									else
+
+									parent.parent.bootbox.alert("该维度已经关联主题，请先删除主题后再进行删除！", function(){});
+
+		   	                	}
+		    	            },
+		    	            error: function(){
+		    	            	parent.parent.bootbox.alert("删除失败", function(){});
+		    	            }
+			   	        });
+					}else{
+						return;
+					}
+				});
+			}
+		});
+		
+	
     </script>
-    
   </body>
 </html>

@@ -1,14 +1,13 @@
 package cn.zup.bi.dao;
 
-import java.util.List;
-
+import cn.zup.bi.entity.BI_Page;
 import org.jeecgframework.minidao.annotation.Arguments;
 import org.jeecgframework.minidao.annotation.MiniDao;
 import org.jeecgframework.minidao.annotation.ResultType;
 import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
-import cn.zup.bi.entity.BI_Page;
+import java.util.List;
 
 @MiniDao
 public interface BIPageDao extends MiniDaoSupportHiber<BI_Page> {

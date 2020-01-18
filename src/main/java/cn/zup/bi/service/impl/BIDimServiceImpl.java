@@ -1,25 +1,21 @@
 package cn.zup.bi.service.impl;
 
+import cn.zup.bi.dao.BIShowEngineDao;
+import cn.zup.bi.dao.DimAttributeDao;
+import cn.zup.bi.dao.DimDao;
+import cn.zup.bi.dao.ReportFieldDao;
+import cn.zup.bi.entity.*;
+import cn.zup.bi.service.BIDimService;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import cn.zup.bi.dao.BIShowEngineDao;
-import cn.zup.bi.dao.DimAttributeDao;
-import cn.zup.bi.dao.DimDao;
-import cn.zup.bi.dao.ReportFieldDao;
-import cn.zup.bi.entity.BIShowField;
-import cn.zup.bi.entity.BI_DIM;
-import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
-import cn.zup.bi.entity.BI_DIM_FIELD;
-import cn.zup.bi.entity.BI_REPORT_FIELD;
-import cn.zup.bi.service.BIDimService;
 
 @Service("biDimService")
 public class BIDimServiceImpl implements BIDimService {
@@ -66,6 +62,19 @@ public class BIDimServiceImpl implements BIDimService {
 		}
 		return tables;
 	}
+	
+	/**
+	 * 维度分页列表
+	 * 
+	 * @param dim 维度实体
+	 * @param rows：分页行数
+	 * @return
+	 */
+	public MiniDaoPage<cn.zup.bi.entity.BI_DIM> getDimPagingList(BI_DIM dim, int page, int rows){
+		MiniDaoPage<cn.zup.bi.entity.BI_DIM> minidaoPage = dimDao.getDimPagingList(dim, page, rows);
+        return minidaoPage;
+	}
+	
 	
 	/**
 	 * 获取数据表中所有列的列名，并添加到列表结构中
@@ -175,7 +184,36 @@ public class BIDimServiceImpl implements BIDimService {
 		}
 		return 1;
 	}
-	
+	/**
+	 * 删除维表属性
+	 * @author
+	 * @date 2
+	 *
+	 * */
+	public void deleteDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute){
+		try{
+			dimAttributeDao.deleteByHiber(biDimAttribute);
+		}catch(Exception e){
+
+		}
+	}
+
+	/**
+	 * 删除维表数据
+	 * @author zzy
+	 * @date 2016-10-10 10:40:18
+	 * @prams BI_DIM_ATTRIBUTE 维表属性实体
+	 *
+	 * */
+	public void deleteDimData(Integer dimid){
+		try{
+			BI_DIM dim = new BI_DIM();
+			dim.setDim_Id(dimid);
+			dimDao.deleteDim(dimid);
+		}catch(Exception e){
+
+		}
+	}
 	/**
 	 * 获取维表名称
 	 * @author antsdot
@@ -231,10 +269,10 @@ public class BIDimServiceImpl implements BIDimService {
 	}
 
 	@Override
-	public List<BIShowField> getDimFieldList(Integer report_Id, List<String> keys, List<Object> values) {
-		List<String> key = new ArrayList<String>(keys);
-		List<Object> value = new ArrayList<Object>(values);
-		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(report_Id);
+	public List<BIShowField> getDimFieldList(ConditionTransfer conditionTransfer) {
+		List<String> key = new ArrayList<String>(conditionTransfer.getKey());
+		List<Object> value = new ArrayList<Object>(conditionTransfer.getValue());
+		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(conditionTransfer.getReport_Id());
 		String hdimFieldIds = "";
 		String ldimFieldIds = "";
 		//第一步遍历获取到对应的主题字段，分为维表和指标
@@ -248,7 +286,7 @@ public class BIDimServiceImpl implements BIDimService {
 		String dimFieldIds = hdimFieldIds + ldimFieldIds;
 		dimFieldIds = dimFieldIds.substring(0, dimFieldIds.length()-2);
 		
-		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, report_Id);
+		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, conditionTransfer.getReport_Id());
 		
 		//查询的列，无需做不同表进行匹配
 		for (int i = 0; i < biShowDimFieldList.size(); i++) {
@@ -257,28 +295,19 @@ public class BIDimServiceImpl implements BIDimService {
 				case 3:
 					System.err.println("钻取");
 					String[] areas = biShowDimFieldList.get(i).getDrill_Info().split("-");
-					if(key != null)
-						if(key.size() > 0)
-							for (int j = 0; j < key.size(); j++) {
-								if(j == 0){
-									for (int j2 = 0; j2 < areas.length; j2++) {
-										if(key.get(0).equals(areas[j2].toLowerCase())){
-											int x = (value+"").length()/2-1;
-											biShowDimFieldList.get(i).setText_Field(areas[x]);
-											key.remove(j);
-											value.remove(j);
-											break;
-										}
-									}
-								}else{
-									biShowDimFieldList.get(i).setText_Field(key.get(j));
-								}
+					if(conditionTransfer.getDrill_Name() != null){
+						for (int j2 = 0; j2 < areas.length; j2++) {
+							if(conditionTransfer.getDrill_Name().equals(areas[j2].toLowerCase())){
+								int x = (conditionTransfer.getDrill_Value()+"").length()/2;
+								biShowDimFieldList.get(i).setText_Field(areas[x]);
+								break;
 							}
-						else
-							biShowDimFieldList.get(i).setText_Field(biShowDimFieldList.get(i).getDrill_Info().split("-")[0]);
-							
-					else
-						biShowDimFieldList.get(i).setText_Field(biShowDimFieldList.get(i).getDrill_Info().split("-")[0]);
+						}
+					}
+//					if(key.size() > 0)
+//						for (int j = 0; j < key.size(); j++) {
+//							biShowDimFieldList.get(i).setText_Field(key.get(j));
+//						}
 					break;
 			}
 		}
@@ -293,5 +322,10 @@ public class BIDimServiceImpl implements BIDimService {
 	@Override
 	public int getDimCount(Integer report_Id) {
 		return reportFieldDao.getReportDimCount(report_Id);
+	}
+
+	@Override
+	public List<BI_DIM> getDimFilter(String filterName) {
+		return dimDao.getDimFilter(filterName);
 	}
 }

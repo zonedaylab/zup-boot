@@ -52,7 +52,7 @@
 	-webkit-transition: background ease .15s;
 	transition: background ease .15s;
 	outline-style: none;
-	margin-left: 230px;
+	/* margin-left: 230px; */
 }
 
 .mine-btn-search-blue {

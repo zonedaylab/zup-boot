@@ -1,17 +1,15 @@
 package cn.zup.bi.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import cn.zup.bi.dao.ReportDao;
 import cn.zup.bi.entity.BI_REPORT;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.ReportService;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service("reportService")
 public class ReportServiceImpl implements ReportService {

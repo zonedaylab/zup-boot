@@ -1,23 +1,22 @@
 package cn.zup.bi.service.impl;
 
-import java.util.List;
-
+import cn.zup.bi.dao.BIPageDao;
+import cn.zup.bi.entity.BI_Page;
+import cn.zup.bi.service.BIPageService;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.zup.bi.dao.BIPageDao;
-import cn.zup.bi.entity.BI_Page;
-import cn.zup.bi.service.BIPageService;
+import java.util.List;
 
 @Service("biPageService")
 public class BIPageServiceImpl implements BIPageService {
-	
+
 	@Autowired
 	private BIPageDao biPageDao;
-	
+
 	private Logger log = LoggerFactory.getLogger(BIPageServiceImpl.class);
 
 	@Override
@@ -47,7 +46,11 @@ public class BIPageServiceImpl implements BIPageService {
 
 	@Override
 	public BI_Page getBiPage(BI_Page biPage) {
-		return biPageDao.getByEntityHiber(biPage);
+		if (biPage.getBi_Page_Id() != null) {
+			return biPageDao.getByIdHiber(BI_Page.class, biPage.getBi_Page_Id());
+		} else {
+			return biPageDao.getByEntityHiber(biPage);
+		}
 	}
 
 	@Override

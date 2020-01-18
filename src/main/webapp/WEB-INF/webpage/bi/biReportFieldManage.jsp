@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <base href="<%=basePath%>">
-    <title>BI 报表字段管理 - 积成能源</title>
+    <title>BI 元素字段管理</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<!--  BI Content	-->
   	<div class="row">
   		<!-- datables开始 -->
-		<div class="table-header">报表字段设置</div>
+		<div class="table-header">元素字段设置</div>
 		<div class="row">
 			<div class="col-md-6" style="margin-left:20px;height:30px; margin-bottom:10px; margin-top:5px;">
 				<button class="btn btn-primary btn-sm" id="btnAdd">添加</button>
@@ -41,13 +41,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 						</th>
 						<th>
-							报表字段名称
+							元素字段名称
 						</th>
 						<th>
 							字段位置
 						</th>
 						<th>
 							维度顺序
+						</th>
+						<th>
+							可见性
 						</th>
 					</tr>
 				</thead>
@@ -82,6 +85,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     						 <strong class="control-label" style="text-align: left; float:left; width:98px;">维度顺序：</strong>
 							 <input class="form-control" id="dim_Order" style="width:180px; float:left;" type="number" />
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:98px;" >可见性：</strong>
+							<select class="form-control" id="display" style="width:180px; float:left;">
+								<option value="1">显示</option>
+								<option value="0">不显示</option>
+							</select>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
         			</form>
 				</div> 
@@ -176,12 +187,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    },
 	                    {
 						  	"targets": [1], // 目标列位置，下标从0开始
-						  	"sWidth":"40%",
+						  	"sWidth":"30%",
 						   	"data": "field_Name"
 	                    },
 	                    {
 						   	"targets": [2], // 目标列位置，下标从0开始
-						   	"sWidth":"30%",
+						   	"sWidth":"20%",
 						   	"data": "field_Location",
 						   	"render": function(data, type, full) { // 返回自定义内容
 						   		var dataname = "";
@@ -204,9 +215,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    },
 	                    {
 						   	"targets": [3], // 目标列位置，下标从0开始
-						   	"sWidth":"30%",
+						   	"sWidth":"20%",
 						   	"data": "dim_Order" // 数据列名
-	                    }
+	                    },
+                        {
+                            "targets": [4], // 目标列位置，下标从0开始
+                            "sWidth":"20%",
+                            "data": "display",
+                            "render": function(data, type, full) { // 返回自定义内容
+                                var dataname = "";
+                                switch (data) {
+                                    case 1:
+                                        dataname = "显示";
+                                        break;
+                                    case 0:
+                                        dataname = "不显示";
+                                        break;
+                                }
+                                return dataname;
+                            }
+                        }
 		            ]
 		        }).api();
 		        //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
@@ -334,6 +362,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	$("#field_Id").val(result.data.field_Id);
 						$("#field_Location").val(result.data.field_Location);
 						$("#dim_Order").val(result.data.dim_Order);
+						$("#display").val(result.data.display);
 						if($("#field_Location").val() == 3){
 							$("#dim").css("display", "none");
 						}else
@@ -427,6 +456,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								par.field_Id = $("#field_Id").val();
 								par.field_Location = $("#field_Location").val();
 								par.dim_Order = $("#dim_Order").val();
+                                par.display = $("#display").val();
 								par.report_Id = "${param.reportId}";
 								if(par.thisid == "btnAdd"){
 									addReportData();	

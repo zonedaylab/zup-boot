@@ -1,16 +1,15 @@
 package cn.zup.bi.service.impl;
 
-import java.util.List;
-
+import cn.zup.bi.dao.BIScreenDao;
+import cn.zup.bi.entity.BI_Screen;
+import cn.zup.bi.service.BIScreenService;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.zup.bi.dao.BIScreenDao;
-import cn.zup.bi.entity.BI_Screen;
-import cn.zup.bi.service.BIScreenService;
+import java.util.List;
 
 @Service("biScreenService")
 public class BIScreenServiceImpl implements BIScreenService {

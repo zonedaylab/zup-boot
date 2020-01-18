@@ -1,27 +1,6 @@
 package cn.zup.bi.controller;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import cn.zup.bi.entity.BI_DIM;
-import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
-import cn.zup.bi.entity.BI_DIM_FIELD;
-import cn.zup.bi.entity.BI_TOPIC;
-import cn.zup.bi.entity.BI_TOPIC_FIELD;
+import cn.zup.bi.entity.*;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.TopicFieldService;
 import cn.zup.bi.service.TopicService;
@@ -29,6 +8,20 @@ import cn.zup.bi.service.settings.MgeidsConfig;
 import cn.zup.bi.utils.PropertiesUtil;
 import cn.zup.rbac.entity.Config;
 import cn.zup.rbac.service.ConfigurationService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest/bi/BITopicFiledController")

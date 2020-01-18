@@ -13,6 +13,7 @@
 		<title></title>
 		<link href="plug-in/ace/adIcon/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" type="text/css" href="plug-in/ace/adIcon/css/bilargeScreen.css" />
+		<link rel="stylesheet" href="plug-in/ace/adIcon/css/loading.css">
 		<style type="text/css">
 			.button-group .dropdown-menu>ul{
 				max-width: 150px;
@@ -62,88 +63,6 @@
 				color: #fff;
 				font-size: 40px;
 				cursor: pointer;
-			}
-			
-			/**
-			 * loading 动画
-			 */
-			.i-loading .layui-layer-content {
-				width: auto !important;
-				height: auto !important;
-				background: none !important;
-			}
-			
-			.i-loading .layui-layer-content .sk-cube-grid {
-				margin: 0;
-			}
-			.sk-wave {
-				margin: 40px auto;
-				width: 50px;
-				height: 40px;
-				text-align: center;
-				font-size: 10px;
-			}
-			
-			.sk-wave .sk-rect {
-				box-shadow: 0 0 2px rgba(255,255,255,.5);
-				background-color: #FFF;
-				height: 100%;
-				width: 3px;
-				margin-right: 3px;
-				display: inline-block;
-				-webkit-animation: sk-waveStretchDelay 1.2s infinite ease-in-out;
-				animation: sk-waveStretchDelay 1.2s infinite ease-in-out;
-			}
-			
-			.sk-wave .sk-rect1 {
-				-webkit-animation-delay: -1.2s;
-				animation-delay: -1.2s;
-			}
-			
-			.sk-wave .sk-rect2 {
-				-webkit-animation-delay: -1.1s;
-				animation-delay: -1.1s;
-			}
-			
-			.sk-wave .sk-rect3 {
-				-webkit-animation-delay: -1s;
-				animation-delay: -1s;
-			}
-			
-			.sk-wave .sk-rect4 {
-				-webkit-animation-delay: -0.9s;
-				animation-delay: -0.9s;
-			}
-			
-			.sk-wave .sk-rect5 {
-				-webkit-animation-delay: -0.8s;
-				animation-delay: -0.8s;
-			}
-			
-			@-webkit-keyframes sk-waveStretchDelay {
-				0%,
-				40%,
-				100% {
-					-webkit-transform: scaleY(0.4);
-					transform: scaleY(0.4);
-				}
-				20% {
-					-webkit-transform: scaleY(1);
-					transform: scaleY(1);
-				}
-			}
-			
-			@keyframes sk-waveStretchDelay {
-				0%,
-				40%,
-				100% {
-					-webkit-transform: scaleY(0.4);
-					transform: scaleY(0.4);
-				}
-				20% {
-					-webkit-transform: scaleY(1);
-					transform: scaleY(1);
-				}
 			}
 		</style>
 	</head>
@@ -711,6 +630,7 @@
 			return result;
 		}
 		var keys=[],values=[];
+		var drill_Name, drill_Value;
 		//获取图表数据
 		function getReportData() {
 			index = layer.load(0, {
@@ -724,7 +644,9 @@
 				block_Id: 0,
 				key:keys,
 				value:values,
-				block_Type: 0
+				block_Type: 0,
+				drill_Name: drill_Name,
+				drill_Value: drill_Value
 			};
 			$.ajax({
 				type: "post",
@@ -761,7 +683,7 @@
 		function getReportListByPageId() {
 			$.ajax({
 				type: "get",
-				url: "/rest/bi/biReportController/getReportListByPageId",
+				url: "rest/bi/biReportController/getReportListByPageId",
 				data:{
 					pageId:'${pageId}',
 					screenIndex: screenIndex
@@ -789,7 +711,7 @@
 					blockId.push(thisBlickId);
 				$.ajax({
 					type: "post",
-					url: "/rest/bi/biPageBlockController/deleteBlock",
+					url: "rest/bi/biPageBlockController/deleteBlock",
 					data:{
 						blockId:blockId
 					},
@@ -822,9 +744,9 @@
 			}
 			$(this).parent().siblings("li").removeClass("active");
 			if(param.block_Id == ""){ //保存
-				ajaxfn("/rest/bi/biPageBlockController/saveBlock");
+				ajaxfn("rest/bi/biPageBlockController/saveBlock");
 			} else {
-				ajaxfn("/rest/bi/biPageBlockController/updateBlock");
+				ajaxfn("rest/bi/biPageBlockController/updateBlock");
 			}
 				
 			function ajaxfn(url){
@@ -849,7 +771,7 @@
 		function dragDropUpdateBlock(blickId,areaId,reportId){
 			$.ajax({
 				type: "post",
-				url: "/rest/bi/biPageBlockController/updateBlock",
+				url: "rest/bi/biPageBlockController/updateBlock",
 				data:{
 					block_Id:blickId,
 					x_Point:areaId,
@@ -872,7 +794,7 @@
 		var mapEcharts = echarts.init(document.getElementById('amap'));
 	    var areaId = {};
 		function echartsInit(areaMineId, areaType, area){
-			var uploadedDataURL = "plug-in/ace/adIcon/json/china.json";
+			var uploadedDataURL = "plug-in/ace/adIcon/json/code/"+area+".json";
 			mapEcharts.showLoading({
 				maskColor: 'rgba(0,0,0,0)',
 				text: '正在加载地图。。。',
@@ -880,208 +802,182 @@
 			  	color: '#00db2e'
 			});
 			$.getJSON(uploadedDataURL, function(geoJson) {
-			    echarts.registerMap('jiangxi', geoJson);
+			    echarts.registerMap(area, geoJson);
 			    mapEcharts.hideLoading();
-			    var geoCoordMap = {};  //各省的标记点
-			    var data = [];  // 各省基本数据
 			    var max = 480, min = 9; // todo 
 			    var maxSize4Pin = 100, minSize4Pin = 20;
-
-			  var convertData = function (data) {
-			    var res = [];
-			    for (var i = 0; i < data.length; i++) {
-			        var geoCoord = geoCoordMap[data[i].name];
-			        if (geoCoord) {
-			            res.push({
-			                name: data[i].name,
-			                value: geoCoord.concat(data[i].value)
-			            });
-			        }
-			    }
-			    return res;
-			};
-
-
-			    option = {
-			        backgroundColor: '#020933',
-			        tooltip: {
-			            trigger: 'item',
-			            formatter: function (params) {
-			              if(typeof(params.value)[2] == "undefined"){
-			              	return params.name + ' : ' + params.value;
-			              }else{
-			              	return params.name + ' : ' + params.value[2];
+			    var param = {};
+			    param.areaType = areaType;
+		        param.type = 0;
+			    param.areaMineId = areaMineId;
+				$.ajax({
+					type : "POST",
+					async: false,
+					url : "#请修改为自己获取区域地址的地址",
+					data : param,
+					dataType : "json", //返回数据形式为json  
+					success : function(result) {
+						var memo = result.attributes.memoMap;
+						var data = result.attributes.dataList;
+						var geoCoordMap = result.attributes.positionMap;
+						areaId = result.attributes.areaId;
+						pinyin = result.attributes.pinyinMap;
+						var convertData = function (data) {
+						    var res = [];
+						    for (var i = 0; i < data.length; i++) {
+						        var geoCoord = geoCoordMap[data[i].name];
+						        if (geoCoord) {
+						            res.push({
+						                name: data[i].name,
+						                value: geoCoord.concat(data[i].value)
+						            });
+						        }
+						    }
+						    return res;
+						};
+					    option = {
+					        title: {
+					            text: '',
+					            subtext: '',
+					            x: 'center',
+					            textStyle: {
+					                color: '#ccc'
+					            }
+					        },
+					        tooltip: {
+					            trigger: 'item',
+					            formatter: function (params) {
+					              if(typeof(memo[params.name]) == "undefined")
+					              	return params.name+" 没有矿山";
+					              else
+					              	return params.name + " " + memo[params.name];
+					            }
+					        },
+					        legend: {
+					            orient: 'vertical',
+					            y: 'bottom',
+					            x: 'right',
+					            data: ['credit_pm2.5'],
+					            textStyle: {
+					                color: '#fff'
+					            }
+					        },
+					        visualMap: {
+					            show: false,
+					            min: 0,
+					            max: 500,
+					            left: 'left',
+					            top: 'bottom',
+					            text: ['高', '低'], // 文本，默认为数值文本
+					            calculable: true,
+					            seriesIndex: [1],
+					            inRange: {
+					                color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
+					            }
+					        },
+					        geo: {
+					            show: true,
+					            map: area,
+					            label: {
+					                normal: {
+					                    show: false
+					                },
+					                emphasis: {
+					                    show: false,
+					                }
+					            },
+					            itemStyle: {
+					                normal: {
+					                    areaColor: 'transparent',
+					                    borderColor: '#3fdaff',
+					                    borderWidth: 2,
+					                    shadowColor: 'rgba(63, 218, 255, 0.5)',
+					                    shadowBlur: 10
+					                },
+					                emphasis: {
+					                    areaColor: '#2B91B7',
+					                }
+					            }
+					        },
+					        series : [{
+			                  name: 'light',
+			                  type: 'scatter',
+			                  coordinateSystem: 'geo',
+			                  itemStyle: {
+			                      normal: {
+			                          color: '#05C3F9'
+			                      }
+			                   }
+			              	},
+			                {
+			                  type: 'map',
+			                  map: area,
+			                  geoIndex: 0,
+			                  aspectScale: 0.75, //长宽比
+			                  showLegendSymbol: false, // 存在legend时显示
+			                  label: {
+			                      normal: {
+			                          show: false
+			                      },
+			                      emphasis: {
+			                          show: false,
+			                          textStyle: {
+			                              color: '#fff'
+			                          }
+			                      }
+			                  },
+			                  roam: true,
+			                  itemStyle: {
+			                      normal: {
+			                          areaColor: '#031525',
+			                          borderColor: '#3B5077',
+			                      },
+			                      emphasis: {
+			                          areaColor: '#2B91B7'
+			                      }
+			                  },
+			                  animation: false,
+			                  data: data
+			              },
+			              {
+			                  name: 'Top 5',
+			                  type: 'effectScatter',
+			                  coordinateSystem: 'geo',
+			                  data: convertData(data.sort(function (a, b) {
+			                      return b.value - a.value;
+			                  }).slice(0, 100)),
+			                  symbolSize: function (val) {
+			                      return val[2] / 30;
+			                  },
+			                  showEffectOn: 'render',
+			                  rippleEffect: {
+			                      brushType: 'stroke'
+			                  },
+			                  hoverAnimation: true,
+			                  label: {
+			                      normal: {
+			                          formatter: '{b}',
+			                          position: 'right',
+			                          show: true
+			                      }
+			                  },
+			                  itemStyle: {
+			                      normal: {
+			                          color: '#FFFFFF',
+			                          shadowBlur: 10,
+			                          shadowColor: '#FFFFFF'
+			                      }
+			                  },
+			                  zlevel: 1
 			              }
-			            }
-			        },
-			     /*   legend: {
-			            orient: 'vertical',
-			            y: 'bottom',
-			            x: 'right',
-			             data:['pm2.5'],
-			            textStyle: {
-			                color: '#fff'
-			            }
-			        },*/
-			            legend: {
-			        orient: 'vertical',
-			        y: 'bottom',
-			        x:'right',
-			        data:['pm2.5'],
-			        textStyle: {
-			            color: '#fff'
-			        }
-			    }, 
-			        visualMap: {
-			            show: false,
-			            min: 0,
-			            max: 500,
-			            left: 'left',
-			            top: 'bottom',
-			            text: ['高', '低'], // 文本，默认为数值文本
-			            calculable: true,
-			            seriesIndex: [1],
-			            inRange: {
-			                // color: ['#3B5077', '#031525'] // 蓝黑
-			                // color: ['#ffc0cb', '#800080'] // 红紫
-			                // color: ['#3C3B3F', '#605C3C'] // 黑绿
-			                //color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
-			                 //color: ['#23074d', '#cc5333'] // 紫红
-			                // color: ['#00467F', '#A5CC82'] // 蓝绿
-			                // color: ['#1488CC', '#2B32B2'] // 浅蓝
-			                // color: ['#00467F', '#A5CC82'] // 蓝绿
-			                // color: ['#00467F', '#A5CC82'] // 蓝绿
-			                // color: ['#00467F', '#A5CC82'] // 蓝绿
-			                // color: ['#00467F', '#A5CC82'] // 蓝绿
-
-			            }
-			        },
-			        // toolbox: {
-			        //     show: true,
-			        //     orient: 'vertical',
-			        //     left: 'right',
-			        //     top: 'center',
-			        //     feature: {
-			        //             dataView: {readOnly: false},
-			        //             restore: {},
-			        //             saveAsImage: {}
-			        //             }
-			        // },
-			        geo: {
-			            show: true,
-			            map: 'jiangxi',
-			            label: {
-			                normal: {
-			                    show: false
-			                },
-			                emphasis: {
-			                    show: false,
-			                }
-			            },
-			            roam: true,
-			            itemStyle: {
-			                normal: {
-			                    areaColor: 'transparent',
-			                    borderColor: '#3fdaff',
-			                    borderWidth: 2,
-			                    shadowColor: 'rgba(63, 218, 255, 0.5)',
-			                    shadowBlur: 30
-			                },
-			                emphasis: {
-			                    areaColor: '#2B91B7',
-			                }
-			            }
-			        },
-			        series : [
-			      {
-			            name: 'light',
-			            type: 'scatter',
-			            coordinateSystem: 'geo',
-			            data: convertData(data),
-			            symbolSize: function (val) {
-			                return val[2] / 10;
-			            },
-			            label: {
-			                normal: {
-			                    formatter: '{b}',
-			                    position: 'right',
-			                    show: true
-			                },
-			                emphasis: {
-			                    show: true
-			                }
-			            },
-			            itemStyle: {
-			                normal: {
-			                    color: '#F4E925'
-			                }
-			            }
-			        },
-			         {
-			            type: 'map',
-			            map: 'jiangxi',
-			            geoIndex: 0,
-			            aspectScale: 0.75, //长宽比
-			            showLegendSymbol: false, // 存在legend时显示
-			            label: {
-			                normal: {
-			                    show: false
-			                },
-			                emphasis: {
-			                    show: false,
-			                    textStyle: {
-			                        color: '#fff'
-			                    }
-			                }
-			            },
-			            roam: true,
-			            itemStyle: {
-			                normal: {
-			                    areaColor: '#031525',
-			                    borderColor: '#FFFFFF',
-			                },
-			                emphasis: {
-			                    areaColor: '#2B91B7'
-			                }
-			            },
-			            animation: false,
-			            data: data
-			        },
-			        {
-			            name: 'Top 5',
-			            type: 'effectScatter',
-			            coordinateSystem: 'geo',
-			            data: convertData(data.sort(function (a, b) {
-			                return b.value - a.value;
-			            }).slice(0, 5)),
-			            symbolSize: function (val) {
-			                return val[2] / 10;
-			            },
-			            showEffectOn: 'render',
-			            rippleEffect: {
-			                brushType: 'stroke'
-			            },
-			            hoverAnimation: true,
-			            label: {
-			                normal: {
-			                    formatter: '{b}',
-			                    position: 'right',
-			                    show: true
-			                }
-			            },
-			            itemStyle: {
-			                normal: {
-			                    color: '#F4E925',
-			                    shadowBlur: 10,
-			                    shadowColor: '#05C3F9'
-			                }
-			            },
-			            zlevel: 1
-			        },
-			         
-			    ]
-			    };
-			    mapEcharts.setOption(option);
+			          	]};
+					    mapEcharts.setOption(option);
+					},
+					error:function(result){
+						layer.msg("此区域没有子区域，请重试");
+					}
+				});
+			    
 			});
 			
 			$(window).resize(function(){
@@ -1089,8 +985,34 @@
 			})
 		}
 		mapEcharts.on('click', function (params) {
-			console.log(params);
-			//TODO 在这里书写点击地图后获取到的区域编码，然后进行钻取
+			$(".areaNames").text(params.data.name);
+			var upname = GloabParam.areaName;
+			var uparea = GloabParam.area;
+		    GloabParam = {
+	    		id: areaId[params.data.name],
+	    		type: (areaId[params.data.name]+"").length,
+	    		area: pinyin[params.data.name],
+	    		areaName: params.data.name
+		    }
+		    if(GloabParam.type == 2){
+		    	propy = GloabParam.area;
+		    	pron = GloabParam.areaName;
+		    	drill_Name = "province";
+				drill_Value = GloabParam.id;
+		    }else if(GloabParam.type == 4){
+		    	citypy = GloabParam.area;
+		    	cityn = GloabParam.areaName;
+		    	drill_Name = "city";
+				drill_Value = GloabParam.id;
+		    }
+			
+		    if(GloabParam.type == 6){
+		    	location.href = "rest/mgeids/mgeidsChinaUni/map?id="+GloabParam.id+
+					"&type="+GloabParam.type+"&areaName="+GloabParam.areaName+
+					"&upname="+upname+"&pinyin="+uparea+"&propinyin="+propy+"&proname="+pron;
+		    }else
+		    	fun(GloabParam.id, GloabParam.type, GloabParam.area, GloabParam.areaName);
+			
 		});
 		
 		function fun(id, type, area, areaName){
@@ -1119,7 +1041,7 @@
 			console.log(param)
 			$.ajax({
 				type: "post",
-				url: "/rest/bi/biPageBlockController/updateBlock",
+				url: "rest/bi/biPageBlockController/updateBlock",
 				data:param,
 				dataType: "json",
 				success: function(result) {

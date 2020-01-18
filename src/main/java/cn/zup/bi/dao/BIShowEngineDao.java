@@ -1,13 +1,12 @@
 package cn.zup.bi.dao;
 
-import java.util.List;
-
+import cn.zup.bi.entity.BIShowField;
 import org.jeecgframework.minidao.annotation.Arguments;
 import org.jeecgframework.minidao.annotation.MiniDao;
 import org.jeecgframework.minidao.annotation.ResultType;
 import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
 
-import cn.zup.bi.entity.BIShowField;
+import java.util.List;
 
 @MiniDao
 public interface BIShowEngineDao extends MiniDaoSupportHiber<BIShowField>{

@@ -913,7 +913,7 @@
 		function getReportListByPageId() {
 			$.ajax({
 				type: "get",
-				url: "/rest/bi/biReportController/getReportListByPageId",
+				url: "rest/bi/biReportController/getReportListByPageId",
 				data:{
 					pageId:'${pageId}',
 					screenIndex: screenIndex
@@ -941,7 +941,7 @@
 					blockId.push(thisBlickId);
 				$.ajax({
 					type: "post",
-					url: "/rest/bi/biPageBlockController/deleteBlock",
+					url: "rest/bi/biPageBlockController/deleteBlock",
 					data:{
 						blockId:blockId
 					},
@@ -974,9 +974,9 @@
 			}
 			$(this).parent().siblings("li").removeClass("active");
 			if(param.block_Id == ""){ //保存
-				ajaxfn("/rest/bi/biPageBlockController/saveBlock");
+				ajaxfn("rest/bi/biPageBlockController/saveBlock");
 			} else {
-				ajaxfn("/rest/bi/biPageBlockController/updateBlock");
+				ajaxfn("rest/bi/biPageBlockController/updateBlock");
 			}
 				
 			function ajaxfn(url){
@@ -1001,7 +1001,7 @@
 		function dragDropUpdateBlock(blickId,areaId,reportId){
 			$.ajax({
 				type: "post",
-				url: "/rest/bi/biPageBlockController/updateBlock",
+				url: "rest/bi/biPageBlockController/updateBlock",
 				data:{
 					block_Id:blickId,
 					screen_Index : screenIndex,
@@ -1024,7 +1024,7 @@
 		var mapEcharts = echarts.init(document.getElementById('amap'));
 	    var areaId = {};
 		function echartsInit(areaMineId, areaType, area){
-			var uploadedDataURL = "plug-in/ace/adIcon/json/"+area+".json";
+			var uploadedDataURL = "plug-in/ace/adIcon/json/code/"+area+".json";
 			mapEcharts.showLoading({
 				maskColor: 'rgba(0,0,0,0)',
 				text: '正在加载地图。。。',
@@ -1043,7 +1043,7 @@
 				$.ajax({
 					type : "POST",
 					async: false,
-					url : "rest/mgeids/mgeidsChinaUni/getAreaInfo",
+					url : "#请修改为自己获取区域地址的地址",
 					data : param,
 					dataType : "json", //返回数据形式为json  
 					success : function(result) {
@@ -1269,7 +1269,7 @@
 			console.log(param)
 			$.ajax({
 				type: "post",
-				url: "/rest/bi/biPageBlockController/updateBlock",
+				url: "rest/bi/biPageBlockController/updateBlock",
 				data:param,
 				dataType: "json",
 				success: function(result) {

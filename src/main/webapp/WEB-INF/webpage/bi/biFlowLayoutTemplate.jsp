@@ -132,7 +132,7 @@
 					console.log(param)
 					$.ajax({
 						type: "post",
-						url: "/rest/bi/biPageBlockController/updateBlock",
+						url: "rest/bi/biPageBlockController/updateBlock",
 						async:false,
 						data:param,
 						dataType: "json",
@@ -357,7 +357,7 @@
 			function getReportListByPageId() {
 				$.ajax({
 					type: "get",
-					url: "/rest/bi/biReportController/getReportListByPageId",
+					url: "rest/bi/biReportController/getReportListByPageId",
 					data:{
 						pageId:'${pageId}',
 						screenIndex: JSON.parse('${screen}')[0].screen_Index
@@ -435,9 +435,9 @@
 				param.screen_Index = JSON.parse('${screen}')[0].screen_Index;
 				if(param.block_Id == ""){ //保存
 					saveLayout(false);
-					ajaxfn("/rest/bi/biPageBlockController/saveBlock",$this.parents(".grid-stack-item"));
+					ajaxfn("rest/bi/biPageBlockController/saveBlock",$this.parents(".grid-stack-item"));
 				} else { //更新
-					ajaxfn("/rest/bi/biPageBlockController/updateBlock");
+					ajaxfn("rest/bi/biPageBlockController/updateBlock");
 				}
 				
 				function ajaxfn(url,dom){
@@ -500,7 +500,7 @@
 					}, function(){
 						$.ajax({
 							type: "post",
-							url: "/rest/bi/biPageBlockController/deleteBlock",
+							url: "rest/bi/biPageBlockController/deleteBlock",
 							data:{
 								blockId:blockIds
 							},
@@ -548,7 +548,7 @@
 				$this.parents(".grid-stack-item").attr("data-blicktype",$this.attr("chartstype"));
 				$.ajax({
 					type: "post",
-					url: "/rest/bi/biPageBlockController/updateBlock",
+					url: "rest/bi/biPageBlockController/updateBlock",
 					data:param,
 					dataType: "json",
 					success: function(result) {

@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <base href="<%=basePath%>">
-    <title>BI 报表页面管理 - 积成能源</title>
+    <title>BI 表单管理</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -21,12 +21,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<!--  BI Content	-->
   	<div class="row">
   		<!-- datables开始 -->
-		<div class="table-header">报表页面设置</div>
+		<div class="table-header">表单配置</div>
 		<div class="row">
 			<div class="col-md-6" style="margin-left:20px;height:30px; margin-bottom:10px; margin-top:5px;">
 				<button class="btn btn-primary btn-sm" id="btnAdd">添加</button>
 				<button class="btn btn-primary btn-sm" id="btnEdit">编辑</button>
 				<button class="btn btn-primary btn-sm" id="btnDelete">删除</button>
+				<button class="btn btn-primary btn-sm" id="btnScreenSetting">布局设置</button>
+				<button class="btn btn-primary btn-sm" id="btnReportSetting">元素设置</button>
 			</div>
 			<div class="col-md-7"></div>
 		</div>
@@ -41,19 +43,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 						</th>
 						<th>
-							页面名称
+							表单名称
 						</th>
 						<th>
-							页面类型
+							表单类型
 						</th>
 						<th>
-							页面标题
+							表单标题
 						</th>
 						<th>
-							页面地址
+							表单模板
 						</th>
 						<th>
-							关联菜单&地址
+							菜单&地址
 						</th>
 					</tr>
 				</thead>
@@ -71,22 +73,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="col-md-12 column">
 					<form class="form-horizontal" role="form">
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">页面名称：</strong>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">表单名称：</strong>
 							 <input class="form-control" id="page_Name" style="width:180px; float:left;" type="text" />
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >页面类型：</strong>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >表单类型：</strong>
 							 <select class="form-control" id="page_Type" style="width:180px; float:left;"></select>
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div> 
 						<div class="form-group row" id="title">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">页面标题：</strong>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">表单标题：</strong>
 							 <input class="form-control" id="page_Title" style="width:180px; float:left;" type="text" />
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">页面地址：</strong>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">表单地址：</strong>
 							 <select class="form-control" id="page_Url" style="width:180px; float:left;"></select>
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
@@ -270,10 +272,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$("#btnEdit").on("click", function(e){
 				par.thisid = this.id;
 				if($("#bi_Page_Id:checked").length != 1) {
-					parent.parent.bootbox.alert("只能选择一个报表页面进行编辑", function(){});
+					parent.parent.bootbox.alert("只能选择一个表单进行编辑", function(){});
 		        	return;
 				}else{
 					getReportData(e);
+				}
+			});
+			
+			
+			//布局设置按钮
+			$("#btnScreenSetting").on("click", function(){
+				var Page_Id = 0;
+				if($("#bi_Page_Id:checked").length != 1) {
+					parent.parent.bootbox.alert("只能选择一个表单设置布局", function(){});
+		        	return;
+				}else{
+					Page_Id = $("#bi_Page_Id:checked").val();
+					window.open("/rest/bi/biScreenController?pageId="+Page_Id+"&tabName="+$("#bi_Page_Id:checked").parent().parent().next().next().next().text(), '表单布局设置', 'height=650,width=1200,top=200,left=50,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+				}
+			});
+			
+			//元素设置按钮
+			$("#btnReportSetting").on("click", function(){
+				var Page_Id = 0;
+				if($("#bi_Page_Id:checked").length != 1) {
+					parent.parent.bootbox.alert("只能选择一个表单设置元素", function(){});
+		        	return;
+				}else{
+					Page_Id = $("#bi_Page_Id:checked").val();
+					window.open("/rest/bi/biReportController?pageId="+Page_Id+"&tabName="+$("#bi_Page_Id:checked").parent().parent().next().next().next().text(), '表单元素设置', 'height=650,width=1200,top=200,left=50,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 				}
 			});
 			
@@ -357,6 +384,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    		$.ajax({
                    type: "POST",
                    url: "rest/bi/biPageController/getMenu",
+                   data: {accountId: "${ usersession.accountId}"},
                    cache: false,  //禁用缓存
                    dataType: "json",
                    success: function (result) {
