@@ -1,18 +1,17 @@
 package cn.zup.bi.dao;
 
+import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import org.jeecgframework.minidao.annotation.Arguments;
 import org.jeecgframework.minidao.annotation.MiniDao;
 import org.jeecgframework.minidao.annotation.ResultType;
 import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
-import cn.zup.bi.entity.BI_TOPIC_FIELD;
-
 @MiniDao
 public interface TopicFieldDao extends MiniDaoSupportHiber<BI_TOPIC_FIELD>{
 	@Arguments({"topicField","page", "rows"})
 	@ResultType(BI_TOPIC_FIELD.class)
-	public MiniDaoPage<BI_TOPIC_FIELD> getTopictopicFieldPagingList(BI_TOPIC_FIELD topicField, int page,int rows);
+	public MiniDaoPage<BI_TOPIC_FIELD> getTopictopicFieldPagingList(BI_TOPIC_FIELD topicField, int page, int rows);
 	
 	@Arguments({"topicId"})
 	public String getTopicFieldAName(int topicId);

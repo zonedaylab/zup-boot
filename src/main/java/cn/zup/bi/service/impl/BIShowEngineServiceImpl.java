@@ -1,18 +1,18 @@
 package cn.zup.bi.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import cn.zup.bi.dao.BIShowEngineDao;
 import cn.zup.bi.dao.DimDao;
 import cn.zup.bi.dao.ReportFieldDao;
 import cn.zup.bi.entity.BIShowField;
 import cn.zup.bi.entity.BI_DIM;
 import cn.zup.bi.entity.BI_REPORT_FIELD;
+import cn.zup.bi.entity.ConditionTransfer;
 import cn.zup.bi.service.BIShowEngineService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("biShowEngineService")
 public class BIShowEngineServiceImpl implements BIShowEngineService {
@@ -25,10 +25,10 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	private DimDao dimDao;
 
 	@Override
-	public String showReport(Integer reportId, List<String> keys, List<Object> values) {
-		List<String> key = new ArrayList<String>(keys);
-		List<Object> value = new ArrayList<Object>(values);
-		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(reportId);
+	public String showReport(ConditionTransfer conditionTransfer) {
+		List<String> key = new ArrayList<String>(conditionTransfer.getKey());
+		List<Object> value = new ArrayList<Object>(conditionTransfer.getValue());
+		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(conditionTransfer.getReport_Id());
 		String hdimFieldIds = "";
 		String ldimFieldIds = "";
 		String topicFieldIds = "";
@@ -57,8 +57,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		else
 			dimFieldIds = hdimFieldIds+","+ldimFieldIds;
 			
-		
-		String sql = this.produceSql(reportId, dimFieldIds, topicFieldIds, key, value);
+		conditionTransfer.setKey(key);
+		conditionTransfer.setValue(value);
+		String sql = this.produceSql(conditionTransfer, dimFieldIds, topicFieldIds);
 		
 		return sql;
 	}
@@ -68,7 +69,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	 * @author Andot
 	 * 
 	 * */
-	private String produceSql(Integer report_Id, String dimFieldIds, String topicFieldIds, List<String> key, List<Object> value){
+	private String produceSql(ConditionTransfer conditionTransfer, String dimFieldIds, String topicFieldIds){
 		StringBuffer sql = new StringBuffer();
 		String showField = "";
 		String join = "";
@@ -77,7 +78,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		String where = " WHERE 1=1 ";
 		
 		/*================维度===============*/
-		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, report_Id);
+		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, conditionTransfer.getReport_Id());
 		for (int i = 0; i < biShowDimFieldList.size(); i++) {
 			BIShowField biShowField = biShowDimFieldList.get(i);
 			//查询的列，无需做不同表进行匹配
@@ -85,12 +86,15 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 			switch (biShowField.getDrill_Type()) {
 				case 1:
 					showField += biShowField.getDim_Table() + "." + biShowField.getText_Field() + ",";
-					if(key != null)
-						if(key.size() > 0)
-							for (int j = 0; j < key.size(); j++) {
-								if(key.get(j).indexOf("@") > -1)
-									where += " AND " + biShowField.getTopic_Table() + "." + key.get(j).replace("@", "") + "=" + value.get(j);
+					if(conditionTransfer.getKey().size() > 0){
+						for (int j = 0; j < conditionTransfer.getKey().size(); j++) {
+							if(conditionTransfer.getValue().get(j).toString().indexOf(",") > -1){
+								where += " AND " + conditionTransfer.getKey().get(j) + " IN (" + conditionTransfer.getValue().get(j)+")";
+							}else{
+								where += " AND " + conditionTransfer.getKey().get(j) + " = " + conditionTransfer.getValue().get(j);
 							}
+						}
+					}
 					System.err.println("无结构");
 					break;
 				case 2:
@@ -98,31 +102,36 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					break;
 				case 3:
 					System.err.println("钻取");
+					//开始钻取条件判断
 					String[] areas = biShowField.getDrill_Info().split("-");
-					if(key != null)
-						if(key.size() > 0)
-							for (int j = 0; j < key.size(); j++) {
-								int x = (value+"").length()/2-1;
-								if(j == 0){
-									for (int j2 = 0; j2 < areas.length; j2++) {
-										if(key.get(0).replace("@", "").equals(areas[j2].toLowerCase())){
-											showField += biShowField.getDim_Table() + "." + areas[x] + ", " + biShowField.getTopic_Table() + "." + areas[x] + " AS areaId,";
-											where += " AND " + biShowField.getTopic_Table() + "." + key.get(j).replace("@", "") + "=" + value.get(j);
-											key.remove(j);
-											value.remove(j);
-											break;
-										}
-									}
+					if(conditionTransfer.getDrill_Name() != null){
+						int x = (conditionTransfer.getDrill_Value()+"").length()/2;
+						for (int j2 = 0; j2 < areas.length; j2++) {
+							if(conditionTransfer.getDrill_Name().equals(areas[j2].toLowerCase())){
+								showField += biShowField.getDim_Table() + "." + areas[x] + ", " + biShowField.getTopic_Table() + "." + areas[x] + " AS areaId,";
+								if(conditionTransfer.getDrill_Value().toString().indexOf(",") > -1){
+									where += " AND " + biShowField.getTopic_Table() + "." + conditionTransfer.getDrill_Name() + " IN (" + conditionTransfer.getDrill_Value()+")";
 								}else{
-									showField += biShowField.getDim_Table() + "." + key.get(j).replace("@", "") + ", " + biShowField.getTopic_Table() + "." + key.get(j).replace("@", "") + " AS areaId,";
-									where += " AND " + biShowField.getDim_Table() + "." + key.get(j).replace("@", "") + "=" + value.get(j);
+									where += " AND " + biShowField.getTopic_Table() + "." + conditionTransfer.getDrill_Name() + "=" + conditionTransfer.getDrill_Value();
 								}
+								break;
 							}
-						else
-							showField += biShowField.getDim_Table() + "." + areas[0] + ", " + biShowField.getTopic_Table() + "." + areas[0] + " AS areaId " + ",";
-					else
-						showField += biShowField.getDim_Table() + "." + areas[0] + ", " + biShowField.getTopic_Table() + "." + areas[0] + " AS areaId " + ",";
+						}
+					}else{
+						showField += biShowField.getDim_Table() + "." + areas[0] + ", " + biShowField.getTopic_Table() + "." + areas[0] + " AS areaId,";
+					}
+//					if(conditionTransfer.getKey().size() > 0)
+//						for (int j = 0; j < conditionTransfer.getKey().size(); j++) {
+//							showField += biShowField.getDim_Table() + "." + conditionTransfer.getKey().get(j) + ", " + biShowField.getTopic_Table() + "." + conditionTransfer.getKey().get(j) + " AS areaId,";
+//							where += " AND " + biShowField.getDim_Table() + "." + conditionTransfer.getKey() + "=" + conditionTransfer.getValue().get(j);
+//						}
 					break;
+					//开始查询条件判断
+//					if(conditionTransfer.getKey().size() > 0){
+//						for (int j = 0; j < areas.length; j++) {
+//							where += " AND " + conditionTransfer.getKey().get(j) + "=" + conditionTransfer.getValue().get(j);
+//						}
+//					}
 			}
 			
 			if(i == 0){
@@ -148,15 +157,23 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		
 		/*================指标===============*/
 		String topicFields = "", baseTopicFields = "";
-		List<BIShowField> biShowTopicFieldList = biShowEngineDao.getReportTopicInfo(topicFieldIds, report_Id);
+		List<BIShowField> biShowTopicFieldList = biShowEngineDao.getReportTopicInfo(topicFieldIds, conditionTransfer.getReport_Id());
+		boolean b = false;
 		for (int i = 0; i < biShowTopicFieldList.size(); i++) {
 			BIShowField biShowField = biShowTopicFieldList.get(i);
-			if(biShowField.getField_Type() == 3){
-				topicFields += biShowField.getAggregate_Type() + "("+ biShowField.getTopic_Table() + "." + biShowField.getField_Name() +") AS "+ biShowField.getField_Caption() +", ";
-			}else{
-				baseTopicFields += biShowField.getField_Name() + ", ";
+			if(conditionTransfer.getIndex() == null || conditionTransfer.getIndex().equals(biShowField.getField_Id())){
+				if(conditionTransfer.getType() == 1){  //为了防止表格，表格只能有一个指标
+					if(b){
+						continue;
+					}
+				}
+				if(biShowField.getField_Type() == 3){
+					topicFields += biShowField.getAggregate_Type() + "("+ biShowField.getTopic_Table() + "." + biShowField.getField_Name() +") AS "+ biShowField.getField_Caption() +", ";
+				}else{
+					baseTopicFields += biShowField.getField_Name() + ", ";
+				}
+				b = true;
 			}
-			
 			if(i == 0){
 				from += biShowField.getTopic_Table() + " ";
 			}

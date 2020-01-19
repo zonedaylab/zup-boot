@@ -1,13 +1,12 @@
 package cn.zup.bi.entity;
 
-import java.io.Serializable;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "BI_DIM_ATTRIBUTE")

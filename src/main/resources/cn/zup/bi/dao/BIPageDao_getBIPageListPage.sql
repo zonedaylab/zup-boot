@@ -9,3 +9,4 @@ SELECT BI_PAGE_ID,
 FROM bi_page 
 JOIN config con ON PAGE_TYPE = con.SUBID
 WHERE con.CONFIGID = ${biPage.pageTypeStr}
+ORDER BY BI_PAGE_ID desc

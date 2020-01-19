@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <base href="<%=basePath%>">
-    <title>BI 报表页面管理 - 积成能源</title>
+    <title>表单布局设置管理</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<!--  BI Content	-->
   	<div class="row">
   		<!-- datables开始 -->
-		<div class="table-header">报表页面设置</div>
+		<div class="table-header">表单布局设置</div>
 		<div class="row">
 			<div class="col-md-6" style="margin-left:20px;height:30px; margin-bottom:10px; margin-top:5px;">
 				<button class="btn btn-primary btn-sm" id="btnAdd">添加</button>
@@ -41,10 +41,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 						</th>
 						<th>
-							关联页面名称
+							表单名称
 						</th>
 						<th>
-							屏幕名称
+							布局名称
 						</th>
 						<th>
 							屏幕索引
@@ -75,8 +75,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">选择页面：</strong>
-							 <select class="form-control" id="bi_Page" style="width:180px; float:left;"></select>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">所属表单：</strong>
+							 <select class="form-control" id="bi_Page" style="width:180px; float:left" disabled="disabled"></select>
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
         			</form>
@@ -89,7 +89,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <jsp:include page="../include/mainFooter.jsp"></jsp:include>
     
     <script type="text/javascript">
+	        var pageID=null;
     		$(document).ready(function(){
+    		
+		        pageID="${pageId}";
     			loadGrid();
     			loadPage();
     		});
@@ -122,7 +125,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                "sSortDescending": ": 以降序排列此列"
 		            }
 		        };   
-	    		//初始化表格
+	        		
+			        
+			   //初始化表格
 	        	var table = $("#postTable").dataTable({
 	        	    "dom": '<t><"col-md-4"i><"col-md-6"p><"col-md-2"l>',    //为表格元素书写css样式<t>为中间表格  在<t>右边就是在表格下边
 	           		language:lang,  //提示信息
@@ -138,6 +143,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                param.rows = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
 		                param.start = data.start;//开始的记录序号
 		                param.page = (data.start / data.length)+1;//当前页码
+		                param.page_Id=pageID;
 		                //console.log(param);
 		                //ajax请求数据
 		                $.ajax({
@@ -204,14 +210,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				par.thisid = this.id;
 				$("#screen_Index").val("");
 				$("#screen_Name").val("");
+				if(pageID==null ||pageID=="" )
 				$("#bi_Page").val(0);
+				else{
+				$("#bi_Page").val(pageID);
+				}
 				msgDialog(e);
 			});
 			
 			$("#btnEdit").on("click", function(e){
 				par.thisid = this.id;
 				if($("#screen_Id:checked").length != 1) {
-					parent.parent.bootbox.alert("只能选择一个报表页面进行编辑", function(){});
+					parent.parent.bootbox.alert("只能选择一个表单布局进行编辑", function(){});
 		        	return;
 				}else{
 					getReportData(e);
@@ -220,16 +230,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 			$("#btnDelete").on("click", function(e){
 				if($("#screen_Id:checked").length <= 0){
-					parent.parent.bootbox.alert("请先选择要删除的报表页面", function(){});
+					parent.parent.bootbox.alert("请先选择要删除的布局", function(){});
 					return;
 				}else{
 					par.screen_Ids = [];
-					parent.parent.bootbox.confirm("你确定要删除报表页面吗？", function(result) {
+					parent.parent.bootbox.confirm("你确定要删除布局吗？", function(result) {
 						if(result){
 							for(var i=0; i<$("#screen_Id:checked").length;i++){
 								par.screen_Ids[i] = $("#screen_Id:checked")[i].defaultValue;
 								if(par.screen_Ids.length < 1){
-									parent.parent.bootbox.alert("请先选择要删除的报表页面", function(){});
+									parent.parent.bootbox.alert("请先选择要删除的布局", function(){});
 									return;
 								}
 				   	        }
@@ -244,7 +254,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    	                	parent.parent.bootbox.alert("删除成功", function(){});
 			    	                	loadGrid();
 			   	                	}else{
-			   	                		parent.parent.bootbox.alert("删除失败， 失败的报表页面id为："+result.data, function(){});
+			   	                		parent.parent.bootbox.alert("删除失败， 失败的表单布局id为："+result.data, function(){});
 			   	                	}
 			    	            },
 			    	            error: function(){
@@ -383,7 +393,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    dataType: "json",
                    success: function (result) {
                    		$("#bi_Page").empty();
-                   		$("#bi_Page").append("<option value='0'>请选择页面</option>");
+                   		$("#bi_Page").append("<option value='0'>请选择表单</option>");
                    		for(var i=0; i<result.data.length; i++){
                    			$("#bi_Page").append("<option value="+result.data[i].bi_Page_Id+">"+result.data[i].page_Name+"</option>");
                     	}

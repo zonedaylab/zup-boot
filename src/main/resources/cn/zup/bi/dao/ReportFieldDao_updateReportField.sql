@@ -8,9 +8,14 @@ SET
 	brf.FIELD_LOCATION = ${ reportField.field_Location},
 </#if>
 
+<#if reportField.display?exists>
+	brf.DISPLAY = ${ reportField.display},
+</#if>
+
 <#if reportField.field_Id?exists>
 	brf.FIELD_ID = ${ reportField.field_Id}
 </#if>
+
 
 WHERE brf.REPORT_FIELD_ID = ${ reportField.report_Field_Id} 
 AND brf.REPORT_ID = ${ reportField.report_Id}

@@ -1,8 +1,7 @@
 package cn.zup.bi.service;
 
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-
 import cn.zup.bi.entity.BI_TOPIC;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
 public interface TopicService {
 	/**
@@ -49,5 +48,5 @@ public interface TopicService {
 	 * @date 2016-10-5 15:30:13
 	 * 
 	 * */
-	int editTopicData(BI_TOPIC topic);
+	int updateTopicData(BI_TOPIC topic);
 }

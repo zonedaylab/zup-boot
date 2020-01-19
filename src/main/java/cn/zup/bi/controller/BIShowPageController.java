@@ -1,50 +1,25 @@
 package cn.zup.bi.controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import cn.zup.bi.entity.BIDimData;
-import cn.zup.bi.entity.BIShowField;
-import cn.zup.bi.entity.BI_Block_Info;
-import cn.zup.bi.entity.BI_Page;
-import cn.zup.bi.entity.BI_REPORT;
-import cn.zup.bi.entity.BI_Screen;
-import cn.zup.bi.entity.V_ReportData;
-import cn.zup.bi.service.BIDimService;
-import cn.zup.bi.service.BIPageBlockService;
-import cn.zup.bi.service.BIPageService;
-import cn.zup.bi.service.BIScreenService;
-import cn.zup.bi.service.BIShowEngineService;
-import cn.zup.bi.service.ReportFieldService;
-import cn.zup.bi.service.ReportService;
-import cn.zup.bi.service.TopicFieldService;
+import cn.zup.bi.entity.*;
+import cn.zup.bi.service.*;
 import cn.zup.bi.utils.PropertiesUtil;
 import cn.zup.framework.json.JsonDateValueProcessor;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.sql.*;
+import java.util.Date;
+import java.util.*;
+
+@Slf4j
 @Controller
 @RequestMapping("/Bi")
 public class BIShowPageController {
@@ -132,7 +107,15 @@ public class BIShowPageController {
 		for (BI_Block_Info bi_Block_Info : blockList) {
 			Map<String, Object> resultMap = new HashMap<String, Object>();
 			//获取div上绑定的报表的数据
-			String sql = biShowEngineService.showReport(bi_Block_Info.getReport_Id(), vreportData.getKey(), vreportData.getValue());
+			ConditionTransfer conditionTransfer = new ConditionTransfer();
+			conditionTransfer.setDrill_Name(vreportData.getDrill_Name());
+			conditionTransfer.setDrill_Value(vreportData.getDrill_Value());
+			conditionTransfer.setKey(vreportData.getKey());
+			conditionTransfer.setValue(vreportData.getValue());
+			conditionTransfer.setReport_Id(bi_Block_Info.getReport_Id());
+			conditionTransfer.setIndex(vreportData.getIndex());
+			conditionTransfer.setType(vreportData.getBlock_Type());
+			String sql = biShowEngineService.showReport(conditionTransfer);
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -147,8 +130,28 @@ public class BIShowPageController {
 							|| rsmd.getColumnLabel(i).toLowerCase().equals("city") 
 							|| rsmd.getColumnLabel(i).toLowerCase().equals("county")))
 						map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i)+"-"+rs.getInt("areaId"));
-					else
-						map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
+					else{
+						Object obj = rs.getObject(i);
+						if(obj != null){
+							if(obj instanceof Integer){
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getInt(i));
+							}else if(obj instanceof Float){
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getFloat(i));
+							}else if(obj instanceof BigDecimal){
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getBigDecimal(i).toPlainString());
+							}else if(obj instanceof Double){
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getDouble(i));
+							}else{
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
+							}
+						} else{
+							if(obj instanceof Integer || obj instanceof Double)
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), 0);
+							else
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), "");
+						}
+							
+					}
 				}
 				listMap.add(map);
 			}
@@ -158,10 +161,18 @@ public class BIShowPageController {
 			List<String> topicNameList = new ArrayList<String>();
 			List<String> topicUnitList = new ArrayList<String>();
 			List<BIShowField> topicFieldList = biTopicFieldService.getTopicFieldList(bi_Block_Info.getReport_Id());
+			boolean ub = false; //判断是否切换指标
 			for (BIShowField biShowField : topicFieldList) {
-				topicList.add(biShowField.getField_Caption().toLowerCase());
-				topicNameList.add(biShowField.getField_Title());
-				topicUnitList.add(biShowField.getField_Unit());
+				if(vreportData.getIndex() == null || vreportData.getIndex().equals(biShowField.getField_Id())){
+					if(vreportData.getBlock_Type() == 1){
+						if(ub)
+							continue;
+					}
+					topicList.add(biShowField.getField_Caption().toLowerCase());
+					topicNameList.add(biShowField.getField_Title());
+					topicUnitList.add(biShowField.getField_Unit());
+					ub = true;
+				}
 			}
 			
 			List<List<String>> tableHeaderList = new ArrayList<List<String>>();
@@ -169,7 +180,7 @@ public class BIShowPageController {
 			List<String> hangDimFields = new ArrayList<String>();
 			
 			//获取维度的字段
-			List<BIShowField> dimFieldList = biDimService.getDimFieldList(bi_Block_Info.getReport_Id(), vreportData.getKey(), vreportData.getValue());
+			List<BIShowField> dimFieldList = biDimService.getDimFieldList(conditionTransfer);
 			List<Map<String, Object>> dimTopicTableHeader = new ArrayList<Map<String, Object>>();
 			for (int i = 0; i < dimFieldList.size(); i++) {
 				BIShowField dimField = dimFieldList.get(i);
@@ -183,21 +194,16 @@ public class BIShowPageController {
 							if(!hangDimFields.contains(dimField.getText_Field().toLowerCase()))
 								hangDimFields.add(dimField.getText_Field().toLowerCase());
 						} else {
-							if(vreportData.getKey().size() > 0) {
-								int lc = (vreportData.getValue()+"").length()/2-1;
+							if(vreportData.getDrill_Name() != null){
+								int lc = (vreportData.getDrill_Value()+"").length()/2;
 								if(listMap.get(k).get(dimField.getDrill_Info().split("-")[lc].toLowerCase()) != null){
 									if(!dimRowList.contains(listMap.get(k).get(dimField.getDrill_Info().split("-")[lc].toLowerCase()).toString())) {
 										dimRowList.add(listMap.get(k).get(dimField.getDrill_Info().split("-")[lc].toLowerCase()).toString());
 									}
+									if(!hangDimFields.contains(dimField.getDrill_Info().split("-")[lc].toLowerCase()))
+										hangDimFields.add(dimField.getDrill_Info().split("-")[lc].toLowerCase());
 								}
-								if(!hangDimFields.contains(dimField.getDrill_Info().split("-")[lc].toLowerCase()))
-									hangDimFields.add(dimField.getDrill_Info().split("-")[lc].toLowerCase());
-							} else {
-								if(listMap.get(k).get(dimField.getDrill_Info().split("-")[0].toLowerCase()) != null){
-									if(!dimRowList.contains(listMap.get(k).get(dimField.getDrill_Info().split("-")[0].toLowerCase()).toString())) {
-										dimRowList.add(listMap.get(k).get(dimField.getDrill_Info().split("-")[0].toLowerCase()).toString());
-									}
-								}
+							}else{
 								if(!hangDimFields.contains(dimField.getDrill_Info().split("-")[0].toLowerCase()))
 									hangDimFields.add(dimField.getDrill_Info().split("-")[0].toLowerCase());
 							}
@@ -211,11 +217,11 @@ public class BIShowPageController {
 						if(!lieDimFields.contains(dimField.getText_Field().toLowerCase()))
 							lieDimFields.add(dimField.getText_Field().toLowerCase());
 					} else {
-						if(vreportData.getKey().size() > 0) {
-							int lc = (vreportData.getValue()+"").length()/2-1;
+						if(vreportData.getDrill_Name() != null){
+							int lc = (vreportData.getDrill_Value()+"").length()/2;
 							if(!lieDimFields.contains(dimField.getDrill_Info().split("-")[lc].toLowerCase()))
 								lieDimFields.add(dimField.getDrill_Info().split("-")[lc].toLowerCase());
-						} else {
+						}else{
 							if(!lieDimFields.contains(dimField.getDrill_Info().split("-")[0].toLowerCase()))
 								lieDimFields.add(dimField.getDrill_Info().split("-")[0].toLowerCase());
 						}
@@ -292,26 +298,30 @@ public class BIShowPageController {
 				//---------------------创建表格-----------------------
 				//1---创建表头  上面创建
 				List<List<String>> listRowCells = new ArrayList<List<String>>();
-				int allLoopCount  = 1;  //总循环次数
+				int allColsCount  = 1;  //需要展示的列数
 				for (int i = 0; i < BIRowDimDatas.size(); i++) {
-					allLoopCount *= BIRowDimDatas.get(i).getListData().size();
+					allColsCount *= BIRowDimDatas.get(i).getListData().size();
 				}
-				for (int i = 0; i < BIRowDimDatas.size(); i++) {
-					List<String> listRowCell = new ArrayList<String>();
-					int loopCount = 0; //重复个数
-					for (int j = 0; j < allLoopCount; j++) {
-						if(loopCount < BIRowDimDatas.get(i).getListData().size()) {
-							listRowCell.add(BIRowDimDatas.get(i).getListData().get(loopCount));
-							loopCount++;
-						}else
-							loopCount = 0;
-						
+				int loopCount=allColsCount;
+				for (int i = 0; i < BIRowDimDatas.size(); i++) {//生成 行表头
+					List<String> listRowCell = new ArrayList<String>();//  表示一行数据，
+					
+					loopCount/=BIRowDimDatas.get(i).getListData().size(); //重复个数					
+					int currentColCnt=0;
+					int dataIndex=0; //当前显示列对应的数据索引
+					while(currentColCnt < allColsCount){
+						for (int j = 0; j < loopCount; j++) {
+							listRowCell.add(BIRowDimDatas.get(i).getListData().get(dataIndex));
+						}
+						dataIndex++;
+						dataIndex=dataIndex%BIRowDimDatas.get(i).getListData().size();
+						currentColCnt+=loopCount;	
 					}
+					
 					if(i != BIRowDimDatas.size()-1)
 						Collections.sort(listRowCell);  
 					listRowCells.add(listRowCell);
-				}
-				
+				}				
 				//2---创建数据行
 				String colsNames="";
 				List<String> listRows = new ArrayList<String>();
@@ -327,10 +337,12 @@ public class BIShowPageController {
 						String keyName=listRows.get(i)+",";
 						keyName += listCells.get(j);
 						rowValue+=",";
-						if(mapIndicatorData.containsKey(keyName))
+						if(mapIndicatorData.containsKey(keyName)){
 							rowValue+=mapIndicatorData.get(keyName);
+						} else{
+							rowValue+="0";
+						}
 					}
-
 					List<String> rowValueList = Arrays.asList(rowValue.split(","));
 					listRowData.add(rowValueList);	
 				}
@@ -374,53 +386,57 @@ public class BIShowPageController {
 	 * listRows 生成的数据行数
 	 */
 	private void GeneReportData(int dimCol, List<BIDimData> BIColDimDatas , String colsNames, int colSize, List<String> listRows) {
-		List<String> listData = BIColDimDatas.get(dimCol).getListData();
-		if(dimCol == colSize-1){	
-			for(int j=0;j<listData.size();j++) {
-				String mycolNames = "";
-				if(colsNames == "")
-					mycolNames = listData.get(j);
-				else
-					mycolNames = colsNames+","+listData.get(j);
-				//指标数据
-				listRows.add(mycolNames);				
-			}
-		} else{
-			dimCol++;
-			for(int j=0;j<listData.size();j++) {				
-				String mycolNames="";
-				if(colsNames == "")
-					mycolNames = listData.get(j);
-				else
-					mycolNames = colsNames+","+listData.get(j);
-				//指标数据
-				GeneReportData(dimCol, BIColDimDatas, mycolNames, colSize, listRows);
+		if(BIColDimDatas != null && BIColDimDatas.size() > 0){
+			List<String> listData = BIColDimDatas.get(dimCol).getListData();
+			if(dimCol == colSize-1){
+				for(int j=0;j<listData.size();j++) {
+					String mycolNames = "";
+					if(colsNames == "")
+						mycolNames = listData.get(j);
+					else
+						mycolNames = colsNames+","+listData.get(j);
+					//指标数据
+					listRows.add(mycolNames);
+				}
+			} else{
+				dimCol++;
+				for(int j=0;j<listData.size();j++) {
+					String mycolNames="";
+					if(colsNames == "")
+						mycolNames = listData.get(j);
+					else
+						mycolNames = colsNames+","+listData.get(j);
+					//指标数据
+					GeneReportData(dimCol, BIColDimDatas, mycolNames, colSize, listRows);
+				}
 			}
 		}
 	}
 	
 	private void GeneReportCellsData(int dimCol, List<BIDimData> BIColDimDatas , String colsNames, int colSize, List<String> listCells) {
-		List<String> listData = BIColDimDatas.get(dimCol).getListData();
-		if(dimCol == colSize-1){	
-			for(int j=0;j<listData.size();j++) {
-				String mycolNames = "";
-				if(colsNames == "")
-					mycolNames = listData.get(j);
-				else
-					mycolNames = colsNames+","+listData.get(j);
-				//指标数据
-				listCells.add(mycolNames);				
-			}
-		} else{
-			dimCol++;
-			for(int j=0;j<listData.size();j++) {				
-				String mycolNames="";
-				if(colsNames == "")
-					mycolNames = listData.get(j);
-				else
-					mycolNames = colsNames+","+listData.get(j);
-				//指标数据
-				GeneReportCellsData(dimCol, BIColDimDatas, mycolNames, colSize, listCells);
+		if(BIColDimDatas != null && BIColDimDatas.size() > 0) {
+			List<String> listData = BIColDimDatas.get(dimCol).getListData();
+			if (dimCol == colSize - 1) {
+				for (int j = 0; j < listData.size(); j++) {
+					String mycolNames = "";
+					if (colsNames == "")
+						mycolNames = listData.get(j);
+					else
+						mycolNames = colsNames + "," + listData.get(j);
+					//指标数据
+					listCells.add(mycolNames);
+				}
+			} else {
+				dimCol++;
+				for (int j = 0; j < listData.size(); j++) {
+					String mycolNames = "";
+					if (colsNames == "")
+						mycolNames = listData.get(j);
+					else
+						mycolNames = colsNames + "," + listData.get(j);
+					//指标数据
+					GeneReportCellsData(dimCol, BIColDimDatas, mycolNames, colSize, listCells);
+				}
 			}
 		}
 	}
@@ -457,6 +473,59 @@ public class BIShowPageController {
 		}
 		json.put("msg", "success");
 		json.put("data", mapResult);
+		return json;
+	}
+	
+	/**
+	 * 获取过滤条件的数据
+	 * @throws ClassNotFoundException 
+	 * @throws SQLException 
+	 * 
+	 * */
+	@RequestMapping(value="/getFilterValue", method=RequestMethod.GET)
+	@ResponseBody
+	public JSONObject getFilterValue(String filterName, Integer areaId) throws ClassNotFoundException, SQLException{
+		List<BI_DIM> dimList = biDimService.getDimFilter(filterName);
+		Class.forName(PropertiesUtil.CLASSNAME);
+		Connection conn = DriverManager.getConnection(PropertiesUtil.URL, PropertiesUtil.USERNAME, PropertiesUtil.PASSWORD);
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		String sql = "";
+		System.err.println(filterName.indexOf("nm") > -1 || filterName.indexOf("name") > -1);
+		if(filterName.indexOf("province") > -1 || filterName.indexOf("city") > -1 || filterName.indexOf("county") > -1){  //字典表插叙条件
+			String where = "";
+			int len = areaId.toString().length();
+			if(areaId == 0){
+				len = 0;
+			} else {
+				where = " AND LEFT(vd.AREA_NUM, "+len+") = "+areaId;
+			}
+			sql = "SELECT LEFT(vd.AREA_NUM, "+(len+2)+") AREA_ID, vd."+filterName+" from v_dicarea vd WHERE 1=1 "+where+" GROUP BY vd."+filterName;
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				map.put(rs.getString(filterName), rs.getInt("AREA_ID"));
+			}
+		}else if(filterName.indexOf("year") > -1){  //调查年份
+			sql = "SELECT "+filterName+" from "+dimList.get(0).getBiz_Table_Name()+" GROUP BY "+filterName;
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				map.put(filterName+"_"+rs.getInt(filterName), rs.getInt(filterName));
+			}
+		}else{  //省市县查询条件
+			String id = filterName.substring(0, filterName.lastIndexOf("_"));
+			sql = "SELECT "+ id + "," +filterName+" from "+dimList.get(0).getBiz_Table_Name()+" GROUP BY "+ id + "," +filterName;
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				map.put(rs.getString(filterName), rs.getInt(id));
+			}
+		}
+		//System.err.println("===>Filter SQL:"+sql);
+		JSONObject json = new JSONObject();
+		json.put("data", map);
 		return json;
 	}
 }

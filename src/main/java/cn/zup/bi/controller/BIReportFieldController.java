@@ -1,17 +1,5 @@
 package cn.zup.bi.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import cn.zup.bi.entity.BI_REPORT;
 import cn.zup.bi.entity.BI_REPORT_FIELD;
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
@@ -19,6 +7,16 @@ import cn.zup.bi.service.ReportFieldService;
 import cn.zup.bi.service.ReportService;
 import cn.zup.bi.service.TopicFieldService;
 import net.sf.json.JSONObject;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest/bi/biReportFieldController")

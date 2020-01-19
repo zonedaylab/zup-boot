@@ -1,10 +1,9 @@
 package cn.zup.bi.service;
 
-import java.util.List;
-
+import cn.zup.bi.entity.BI_Page;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
-import cn.zup.bi.entity.BI_Page;
+import java.util.List;
 
 public interface BIPageService {
 	int updatePageInfo(BI_Page biPage);

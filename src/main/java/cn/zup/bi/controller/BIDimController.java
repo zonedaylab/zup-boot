@@ -1,24 +1,26 @@
 package cn.zup.bi.controller;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import cn.zup.bi.entity.BI_DIM;
+import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
+import cn.zup.bi.entity.BI_TOPIC_FIELD;
+import cn.zup.bi.service.BIDimService;
+import cn.zup.bi.service.TopicFieldService;
+import cn.zup.bi.utils.PropertiesUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.zup.bi.entity.BI_DIM;
-import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
-import cn.zup.bi.service.BIDimService;
-import cn.zup.bi.utils.PropertiesUtil;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest/bi/BIDimController")
@@ -26,7 +28,8 @@ public class BIDimController {
 	
 	@Resource
 	BIDimService biDimService;
-	
+	@Resource
+	TopicFieldService topicFieldService;
 	/**
 	 * 维表设计首页
 	 * @author antsdot
@@ -37,7 +40,35 @@ public class BIDimController {
 	public ModelAndView index(){
 		return new ModelAndView("bi/biDimManage");
 	}
+	/**
+	 * 维度字段设置页面
+	 * @return
+	 */
+	@RequestMapping("/biDimSet")
+	public ModelAndView biDimSet(HttpServletRequest request){
+		String dimId = request.getParameter("dimId");
+		ModelAndView mv = new ModelAndView("bi/biDimSet");
+		mv.addObject("dimId", dimId);
+		return mv;
+		}
+
 	
+	/** 
+	* 获取维表列表
+	 */
+	@RequestMapping("/girdDimList")
+	@ResponseBody 
+	public String getGrid(BI_DIM dim,Integer page,Integer rows,HttpServletRequest request) {
+		
+		MiniDaoPage<BI_DIM> pagedim=biDimService.getDimPagingList(dim, page, rows);
+		JSONObject json = new JSONObject();
+		json.put("rows", rows);
+		json.put("page", pagedim.getPages());
+		json.put("total", pagedim.getTotal());
+		JSONArray jsonarr = JSONArray.fromObject(pagedim.getResults());  
+		json.put("data", jsonarr);
+		return json.toString();
+	}
 	/**
 	 * 
 	 * 获取所有的数据表
@@ -88,10 +119,7 @@ public class BIDimController {
 	 * 
 	 * 保存设计的维表名称
 	 * @author antsdot
-	 * @date 2016-10-10 09:12:08
-	 * @param 维表实体
-	 * 
-	 * */
+	 * @date 2016-10-10 09:12:08 */
 	@RequestMapping("/saveDimData")
 	@ResponseBody
 	public String saveDimData(HttpServletRequest request){
@@ -132,19 +160,20 @@ public class BIDimController {
 		}
 		if( info != 0){
 			if(!tree.equals("1")){
-				for (int i = 0; i < textColName.length; i++) {
-					BI_DIM_ATTRIBUTE dimAttribute = new BI_DIM_ATTRIBUTE();
-					dimAttribute.setAttribute_Id(Integer.parseInt(valueId[i]));
-					dimAttribute.setDim_Id(info);
-					dimAttribute.setAttribute_Caption_Field(valueName[i]);
-					dimAttribute.setAttribute_Name(valueColName[i]);
-					dimAttribute.setAttribute_Value_Field(valueColName[i]);
-					if(Integer.parseInt(valueId[i]) == 0)
-						biDimService.saveDimAttribute(dimAttribute);
-					else{
-						biDimService.updateDimAttribute(dimAttribute);
+				if(!StringUtils.isEmpty(textColName))//weikong
+					for (int i = 0; i < textColName.length; i++) {
+						BI_DIM_ATTRIBUTE dimAttribute = new BI_DIM_ATTRIBUTE();
+						dimAttribute.setAttribute_Id(Integer.parseInt(valueId[i]));
+						dimAttribute.setDim_Id(info);
+						dimAttribute.setAttribute_Caption_Field(valueName[i]);
+						dimAttribute.setAttribute_Name(valueColName[i]);
+						dimAttribute.setAttribute_Value_Field(valueColName[i]);
+						if(Integer.parseInt(valueId[i]) == 0)
+							biDimService.saveDimAttribute(dimAttribute);
+						else{
+							biDimService.updateDimAttribute(dimAttribute);
+						}
 					}
-				}
 			}
 		}
 		JSONObject json = new JSONObject();
@@ -153,6 +182,7 @@ public class BIDimController {
 		}else{
 			json.put("info", "error");
 		}
+		System.err.println(12);
 		return json.toString();
 		
 	}
@@ -161,10 +191,7 @@ public class BIDimController {
 	 * 
 	 * 加载维表保存数据
 	 * @author antsdot
-	 * @date 2016-10-10 09:12:08
-	 * @param 维表实体
-	 * 
-	 * */
+	 * @date 2016-10-10 09:12:08 */
 	@RequestMapping("/loadDbDim")
 	@ResponseBody
 	public String loadDbDim(String dnName, HttpServletRequest request){
@@ -196,6 +223,50 @@ public class BIDimController {
 		JSONObject json = new JSONObject();
 		List<BI_DIM_ATTRIBUTE> list = biDimService.getDimInInfo(dimId);
 		json.put("data", list);
+		return json.toString();
+	}
+
+
+	/**
+	 * 维度数据删除
+	 * @author 张朝阳
+	 * @date 2019
+	 */
+	@RequestMapping("/deleteDimData")
+	@ResponseBody
+	public String deleteDimData(@RequestParam("dim_Ids[]") Integer[] dimIds, HttpServletRequest request) {
+		JSONObject json = new JSONObject();
+		String errorId = "";
+		String tipstr="";
+		List<BI_TOPIC_FIELD> fieldList=null;
+		BI_TOPIC_FIELD field= new BI_TOPIC_FIELD();
+		List<BI_DIM_ATTRIBUTE> dimAttributeList=null;
+		for (int i = 0; i < dimIds.length; i++) {
+			try{
+				field.setDim_Id(dimIds[i]);
+				fieldList=topicFieldService.getTopicFieldList(field);
+				if(fieldList!=null&&fieldList.size()!=0)
+					tipstr+=dimIds[i]+",";
+				else {
+				dimAttributeList=biDimService.getDimInInfo(dimIds[i]);
+				if(dimAttributeList!=null&&dimAttributeList.size()!=0)	{
+					for (BI_DIM_ATTRIBUTE o :dimAttributeList)
+						biDimService.deleteDimAttribute(o);
+					dimAttributeList.clear();
+				}
+				biDimService.deleteDimData(dimIds[i]);
+				errorId = "success";
+				}
+			}catch(Exception e){
+				if(i == dimIds.length-1){
+					errorId += dimIds[i];
+				}else{
+					errorId += dimIds[i]+",";
+				}
+			}
+		}
+		json.put("data", errorId);
+		json.put("mes",tipstr);
 		return json.toString();
 	}
 }

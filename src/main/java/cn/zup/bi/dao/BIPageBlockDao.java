@@ -1,14 +1,13 @@
 package cn.zup.bi.dao;
 
-import java.util.List;
-
+import cn.zup.bi.entity.BI_Block_Info;
 import org.jeecgframework.minidao.annotation.Arguments;
 import org.jeecgframework.minidao.annotation.MiniDao;
 import org.jeecgframework.minidao.annotation.ResultType;
 import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
-import cn.zup.bi.entity.BI_Block_Info;
+import java.util.List;
 
 @MiniDao
 public interface BIPageBlockDao extends MiniDaoSupportHiber<BI_Block_Info> {
@@ -30,4 +29,7 @@ public interface BIPageBlockDao extends MiniDaoSupportHiber<BI_Block_Info> {
 	@Arguments({"bi_Page_Id", "screen_Index", "block_Id"})
 	@ResultType(BI_Block_Info.class)
 	List<BI_Block_Info> getPageBlockByPageId(Integer bi_Page_Id, Integer screen_Index, Integer block_Id);
+	
+	@Arguments({"page_Id"})
+	void deleteBlockByPageId(Integer page_Id);
 }

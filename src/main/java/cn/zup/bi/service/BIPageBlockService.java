@@ -1,10 +1,9 @@
 package cn.zup.bi.service;
 
-import java.util.List;
-
+import cn.zup.bi.entity.BI_Block_Info;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
-import cn.zup.bi.entity.BI_Block_Info;
+import java.util.List;
 
 public interface BIPageBlockService {
 	
@@ -13,6 +12,8 @@ public interface BIPageBlockService {
 	boolean updateBlock(BI_Block_Info bi_Block_Info);
 	
 	boolean deleteBlock(Integer bi_Block_Id);
+	
+	boolean deleteBlockByPageId(Integer page_Id);
 	
 	BI_Block_Info getBlockInfo(Integer bi_Block_Id);
 	

@@ -260,7 +260,7 @@ footer {
 }
 
 .layui-tab-card>.layui-tab-title {
-	z-index: 101;
+	z-index: 999;
 	width: 100%;
 }
 
@@ -294,28 +294,6 @@ body .demo-class .layui-layer-setwin .layui-layer-ico {
     background-color: #02344b;
 }
 
-/*滚动条 start*/  
-::-webkit-scrollbar {  
-  width: 10px;  
-  height: 4px;  
-  background-color: #F5F5F5;  
-}  
-/*定义滚动条轨道 内阴影+圆角*/  
-::-webkit-scrollbar-track {  
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
-  background: #204c5f ;
-}  
-/*定义滑块 内阴影+圆角*/  
-::-webkit-scrollbar-thumb {  
-  border-radius: 3px;  
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
-  background-color:rgba(255,255,255,.2);  
-}  
-::-webkit-scrollbar-thumb:hover {  
-  border-radius: 3px;  
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
-  background-color:rgba(255,255,255,.3); 
-}  
 
 
 

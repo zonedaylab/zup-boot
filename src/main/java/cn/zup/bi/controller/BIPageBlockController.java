@@ -1,21 +1,19 @@
 package cn.zup.bi.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import cn.zup.bi.entity.BI_Block_Info;
 import cn.zup.bi.service.BIPageBlockService;
 import cn.zup.bi.service.settings.MgeidsConfig;
 import cn.zup.rbac.entity.Config;
 import cn.zup.rbac.service.ConfigurationService;
 import net.sf.json.JSONObject;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 区块保存接口
@@ -79,6 +77,22 @@ public class BIPageBlockController {
 			if(!b)
 				json.put("msg", bi_Block_Ids[i]);
 		}
+		if(b)
+			json.put("data", "success");
+		else
+			json.put("data", "fial");
+		return json.toString();
+	}
+	
+	/**
+	 * 根据报表的需求，根据页面删除所有的报表快
+	 * @author 谢炎
+	 * */
+	@RequestMapping("/deleteBlockByPageId")
+	@ResponseBody
+	public String deleteBlockByPageId(Integer page_Id){
+		JSONObject json = new JSONObject();
+		boolean b = biPageBlockService.deleteBlockByPageId(page_Id);
 		if(b)
 			json.put("data", "success");
 		else

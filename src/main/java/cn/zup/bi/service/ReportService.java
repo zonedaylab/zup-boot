@@ -1,9 +1,9 @@
 package cn.zup.bi.service;
 
-import java.util.List;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import cn.zup.bi.entity.BI_REPORT;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+
+import java.util.List;
 
 public interface ReportService {
 	

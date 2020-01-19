@@ -1,12 +1,11 @@
 package cn.zup.bi.service.impl;
 
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import cn.zup.bi.dao.ReportFieldDao;
 import cn.zup.bi.entity.BI_REPORT_FIELD;
 import cn.zup.bi.service.ReportFieldService;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service("reportFieldService")
 public class ReportFieldServiceImpl implements ReportFieldService {

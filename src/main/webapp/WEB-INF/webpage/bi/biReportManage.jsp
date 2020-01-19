@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <base href="<%=basePath%>">
-    <title>BI 报表管理 - 积成能源</title>
+    <title>表单元素设置</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<!--  BI Content	-->
   	<div class="row">
   		<!-- datables开始 -->
-		<div class="table-header">报表设置</div>
+		<div class="table-header">表单配置</div>
 		<div class="row">
 			<div class="col-md-6" style="margin-left:20px;height:30px; margin-bottom:10px; margin-top:5px;">
 				<button class="btn btn-primary btn-sm" id="btnAdd">添加</button>
@@ -42,17 +42,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 						</th>
 						<th>
-							报表名称
+							所属表单
 						</th>
 						<th>
-							报表标题
+							元素名称
+						</th>
+						<th>
+							元素标题
 						</th>
 						<th>
 							关联主题
 						</th>
-						<th>
-							关联页面
-						</th>
+					
 						<th>
 							创建时间
 						</th>
@@ -72,11 +73,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="col-md-12 column">
 					<form class="form-horizontal" role="form">
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >报表名称：</strong>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >元素名称：</strong>
 							 <input class="form-control" id="report_Name" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div> 
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >报表标题：</strong>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >元素标题：</strong>
 							 <input class="form-control" id="report_Title" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
@@ -85,8 +86,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">选择页面：</strong>
-							 <select class="form-control" id="bi_Page" style="width:180px; float:left;"></select>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">所属表单：</strong>
+							 <select class="form-control" id="bi_Page" style="width:180px; float:left;"  disabled="disabled"></select>
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
         			</form>
@@ -99,7 +100,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <jsp:include page="../include/mainFooter.jsp"></jsp:include>
     
     <script type="text/javascript">
+    		var pageID=null;
     		$(document).ready(function(){
+    			pageID="${pageId}";
     			loadGrid();
     			loadTheme();
 				loadPage();
@@ -149,6 +152,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                param.rows = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
 		                param.start = data.start;//开始的记录序号
 		                param.page = (data.start / data.length)+1;//当前页码
+		                param.page_Id=pageID;
 		                //console.log(param);
 		                //ajax请求数据
 		                $.ajax({
@@ -181,25 +185,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					         }
 	                    },
 	                    {
-						  	"targets": [1], // 目标列位置，下标从0开始
-						  	"sWidth":"20%",
-						   	"data": "report_Name"
+						   	"targets": [1], // 目标列位置，下标从0开始
+						   	"sWidth":"20%",
+						   	"data": "page_Name" // 数据列名
 	                    },
 	                    {
 						  	"targets": [2], // 目标列位置，下标从0开始
 						  	"sWidth":"20%",
-						   	"data": "report_Title"
+						   	"data": "report_Name"
 	                    },
 	                    {
-						   	"targets": [3], // 目标列位置，下标从0开始
-						   	"sWidth":"20%",
-						   	"data": "topic_Name" // 数据列名
+						  	"targets": [3], // 目标列位置，下标从0开始
+						  	"sWidth":"20%",
+						   	"data": "report_Title"
 	                    },
 	                    {
 						   	"targets": [4], // 目标列位置，下标从0开始
 						   	"sWidth":"20%",
-						   	"data": "page_Name" // 数据列名
+						   	"data": "topic_Name" // 数据列名
 	                    },
+	                   
 	                    {
 						   	"targets": [5], // 目标列位置，下标从0开始
 						   	"sWidth":"20%",
@@ -219,10 +224,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			});
 			var par = {};   //声明ajax传输参数的数组变量
-			
+			var pageID=null;
 			//增删改按钮命令
 			$("#btnAdd").on("click", function(e){
 				par.thisid = this.id;
+				
+			
+				if(pageID==null ||pageID=="" )
+					$("#bi_Page").val(0);
+				else{
+					$("#bi_Page").val(pageID);
+				
+					
+					}
 				msgDialog(e);
 			});
 			
@@ -233,6 +247,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        	return;
 				}else{
 					par.report_Id = $("#report_Id:checked").val();
+				
 					getReportData(e);
 				}
 			});

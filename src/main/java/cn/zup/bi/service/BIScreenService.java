@@ -1,10 +1,9 @@
 package cn.zup.bi.service;
 
-import java.util.List;
-
+import cn.zup.bi.entity.BI_Screen;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
-import cn.zup.bi.entity.BI_Screen;
+import java.util.List;
 
 public interface BIScreenService {
 	int updateScreenInfo(BI_Screen biScreen);

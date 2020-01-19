@@ -1,19 +1,5 @@
 package cn.zup.bi.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import cn.zup.bi.entity.BI_REPORT;
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import cn.zup.bi.entity.BI_TOPIC_FIELD_VIEW;
@@ -24,6 +10,18 @@ import cn.zup.framework.json.JsonDateValueProcessor;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest/bi/biReportController")
@@ -41,7 +39,12 @@ public class BIReportController {
 	 * */
 	@RequestMapping("")
 	public ModelAndView index(HttpServletRequest request){
-		return new ModelAndView("bi/biReportManage");
+		//需要优化pageId为空
+				String pageId = request.getParameter("pageId");
+				ModelAndView mv = new ModelAndView("bi/biReportManage");
+				mv.addObject("pageId", pageId);
+				return mv;
+	    //return new ModelAndView("bi/biReportManage");
 	}
 	
 	/**

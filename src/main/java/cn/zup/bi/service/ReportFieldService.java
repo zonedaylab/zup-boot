@@ -1,9 +1,7 @@
 package cn.zup.bi.service;
 
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-
 import cn.zup.bi.entity.BI_REPORT_FIELD;
-
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
 
 public interface ReportFieldService {

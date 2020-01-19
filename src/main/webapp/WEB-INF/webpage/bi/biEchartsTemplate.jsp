@@ -64,7 +64,7 @@
 		function getReportListByPageId() {
 			$.ajax({
 				type: "get",
-				url: "/rest/bi/biReportController/getReportListByPageId",
+				url: "rest/bi/biReportController/getReportListByPageId",
 				data:{
 					pageId:'${pageId}',
 					screenIndex: screenIndex
@@ -94,9 +94,9 @@
 			param.screen_Index = screenIndex;
 
 			if(param.block_Id == "") { //保存
-				ajaxfn("/rest/bi/biPageBlockController/saveBlock");
+				ajaxfn("rest/bi/biPageBlockController/saveBlock");
 			} else {
-				ajaxfn("/rest/bi/biPageBlockController/updateBlock");
+				ajaxfn("rest/bi/biPageBlockController/updateBlock");
 			}
 
 			function ajaxfn(url) {
@@ -190,15 +190,17 @@
 					}
 				]
 			};
-			var keys = [],
-				values = [];
+			var keys = [], values = [];
+			var drill_Name, drill_Value;
 			var data = {
 				bi_Page_Id: '${pageId}',
 				screen_Index: screenIndex,
 				key: keys,
 				value: values,
 				block_Type: 0,
-				block_Id: 0
+				block_Id: 0,
+				drill_Name: drill_Name,
+				drill_Value: drill_Value
 			};
 			$.ajax({
 				type: "post",

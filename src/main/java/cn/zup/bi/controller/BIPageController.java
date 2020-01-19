@@ -1,17 +1,5 @@
 package cn.zup.bi.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import cn.zup.bi.entity.BI_Page;
 import cn.zup.bi.service.BIPageService;
 import cn.zup.bi.service.settings.MgeidsConfig;
@@ -20,6 +8,16 @@ import cn.zup.rbac.entity.Menu;
 import cn.zup.rbac.service.ConfigurationService;
 import cn.zup.rbac.service.ResourceService;
 import net.sf.json.JSONObject;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest/bi/biPageController")
@@ -159,8 +157,10 @@ public class BIPageController {
 	 * */
 	@RequestMapping("/getMenu")
 	@ResponseBody
-	public String getMenu(){
-		List<Menu> list = resourceServie.getMenuList(5);
+	public String getMenu(Integer accountId){
+		Menu menu = new Menu();
+		menu.setUrlAddress("@bi");
+		List<Menu> list = resourceServie.getMenuList(accountId, menu);
 		JSONObject json = new JSONObject();
 		json.put("data", list);
 		return json.toString();

@@ -1,13 +1,11 @@
 package cn.zup.bi.service;
 
+import cn.zup.bi.entity.*;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
-import cn.zup.bi.entity.BIShowField;
-import cn.zup.bi.entity.BI_DIM;
-import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
-import cn.zup.bi.entity.BI_DIM_FIELD;
 
 public interface BIDimService {
 	
@@ -18,6 +16,14 @@ public interface BIDimService {
 	 * 
 	 * */
 	public List getTableNameList(Connection conn) throws SQLException ;
+	
+	/**
+	 * 维度分页列表
+	 * 
+     * @param dim 维度实体
+	 * 	 * @return
+	 */
+	MiniDaoPage<BI_DIM> getDimPagingList(BI_DIM dim, int page, int rows);
 	
 	/**
 	 * 获取数据表中所有列的列名，并添加到列表结构中
@@ -61,8 +67,26 @@ public interface BIDimService {
 	 * @prams BI_DIM 维表属性实体
 	 * 
 	 * */
+
 	public int updateDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute);
-	
+
+	/**
+	 * 删除维表属性数据
+	 * @author zzy
+	 * @date 2016-10-10 10:40:18
+	 * @prams BI_DIM_ATTRIBUTE 维表属性实体
+	 *
+	 * */
+	public void deleteDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute);
+
+	/**
+	 * 删除维表数据
+	 * @author zzy
+	 * @date 2016-10-10 10:40:18
+	 * @prams BI_DIM_ATTRIBUTE 维表属性实体
+	 *
+	 * */
+	public void deleteDimData(Integer dimid);
 	/**
 	 * 获取维表名称
 	 * @author antsdot
@@ -112,7 +136,13 @@ public interface BIDimService {
 	
 	BI_DIM getDimInfo(int dimId);
 	
-	List<BIShowField> getDimFieldList(Integer report_Id, List<String> key, List<Object> value);
+	List<BIShowField> getDimFieldList(ConditionTransfer conditionTransfer);
 	
 	int getDimCount(Integer report_Id);
+	
+	/**
+	 * 通过维表字段获取维表数据表名
+	 * 
+	 * */
+	List<BI_DIM> getDimFilter(String filterName);
 }

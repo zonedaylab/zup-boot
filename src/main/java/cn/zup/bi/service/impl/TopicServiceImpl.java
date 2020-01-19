@@ -1,12 +1,11 @@
 package cn.zup.bi.service.impl;
 
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import cn.zup.bi.dao.TopicDao;
 import cn.zup.bi.entity.BI_TOPIC;
 import cn.zup.bi.service.TopicService;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service("topicService")
 public class TopicServiceImpl implements TopicService{
@@ -74,7 +73,7 @@ public class TopicServiceImpl implements TopicService{
 	 * @date 2016-10-5 15:30:13
 	 * 
 	 * */
-	public int editTopicData(BI_TOPIC topic){
+	public int updateTopicData(BI_TOPIC topic){
 		try{
 			topicDao.updateTopic(topic);
 		}catch(Exception e){
