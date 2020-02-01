@@ -17,6 +17,8 @@ public class BI_TOPIC implements Serializable {
 	private String topic_Caption;
 	private Integer topic_Type;
 	private String biz_Table_Name;
+	private Integer ds_id;
+
 	
 
 	@Id
@@ -52,5 +54,12 @@ public class BI_TOPIC implements Serializable {
 	public void setBiz_Table_Name(String bizTableName) {
 		biz_Table_Name = bizTableName;
 	}
-	
+
+	public Integer getDs_id() {
+		return ds_id;
+	}
+
+	public void setDs_id(Integer ds_id) {
+		this.ds_id = ds_id;
+	}
 }

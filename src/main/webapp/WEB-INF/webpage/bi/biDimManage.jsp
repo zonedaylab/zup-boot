@@ -27,6 +27,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<button class="btn btn-primary btn-sm" id="btnAdd">添加</button>
 				<button class="btn btn-primary btn-sm" id="btnEdit">编辑</button>
 				<button class="btn btn-primary btn-sm" id="btnDelete">删除</button>
+				数据源：<select id="ds"></select>
 			</div>
 			<div class="col-md-7"></div>
 		</div>

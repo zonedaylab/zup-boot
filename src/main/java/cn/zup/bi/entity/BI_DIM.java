@@ -18,7 +18,8 @@ public class BI_DIM  implements Serializable{
 	private String id_Field;  // ID字段
 	private String drill_Type;  // 钻取类型
 	private String drill_Info;// 钻取信息
-	
+	private Integer ds_Id;// 数据源id
+
 	@Id
 	@GeneratedValue(generator="_native")
 	@GenericGenerator(name="_native",strategy="native")
@@ -64,5 +65,12 @@ public class BI_DIM  implements Serializable{
 	public void setDrill_Info(String drillInfo) {
 		drill_Info = drillInfo;
 	}
-	
+
+	public Integer getDs_Id() {
+		return ds_Id;
+	}
+
+	public void setDs_Id(Integer ds_Id) {
+		this.ds_Id = ds_Id;
+	}
 }

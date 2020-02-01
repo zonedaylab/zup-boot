@@ -1,33 +1,26 @@
 package cn.zup.bi.dao;
 
 import cn.zup.bi.entity.BI_Datasource;
-import cn.zup.bi.entity.BI_REPORT;
-import org.jeecgframework.minidao.annotation.Arguments;
-import org.jeecgframework.minidao.annotation.MiniDao;
-import org.jeecgframework.minidao.annotation.ResultType;
-import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author 王朔
+ * @update gavin
  */
-@MiniDao
-public interface BIDatasourceDao extends MiniDaoSupportHiber<BI_Datasource> {
+@Repository
+public interface BIDatasourceDao {
 
+    /**
+     * 已经修改了Mybatis
+     * @param id
+     * @return
+     */
+    BI_Datasource getDatasourceInfoById(@Param("id") Integer id);
 
-    @Arguments({"id"})
-    @ResultType(BI_Datasource.class)
-    BI_Datasource getDatasourceInfoById(int id);
+    List<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource);
 
-
-    @Arguments({"biDatasource","page", "rows"})
-    @ResultType(BI_Datasource.class)
-    MiniDaoPage<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource, int page, int rows);
-
-
-    @Arguments({"id"})
     void deleteDatasourceInfo(int id);
 }

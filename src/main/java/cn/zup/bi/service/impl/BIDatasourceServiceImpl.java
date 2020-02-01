@@ -2,17 +2,14 @@ package cn.zup.bi.service.impl;
 
 import cn.zup.bi.dao.BIDatasourceDao;
 import cn.zup.bi.entity.BI_Datasource;
-import cn.zup.bi.entity.BI_REPORT;
 import cn.zup.bi.service.BIDatasourceService;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * @author ucisoft
+ * @author gavin
  */
 @Service("biDatasourceService")
 public class BIDatasourceServiceImpl implements BIDatasourceService {
@@ -24,11 +21,11 @@ public class BIDatasourceServiceImpl implements BIDatasourceService {
     public int addDatasource(BI_Datasource biDatasource) {
 
         try{
-            if(biDatasource.getId() != null){
+            /*if(biDatasource.getId() != null){
                 biDatasourceDao.updateByHiber(biDatasource);
             }else{
                 biDatasourceDao.saveByHiber(biDatasource);
-            }
+            }*/
         }catch(Exception e) {
             e.printStackTrace();
             return 0;
@@ -56,13 +53,13 @@ public class BIDatasourceServiceImpl implements BIDatasourceService {
 
     @Override
     public List<BI_Datasource> getDatasourceList(BI_Datasource biDatasource) {
-        return biDatasourceDao.listByHiber(biDatasource);
+        return null;//biDatasourceDao.listByHiber(biDatasource);
     }
 
     @Override
-    public MiniDaoPage<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource, int page, int rows) {
-        return biDatasourceDao.getDatasourcePagingList(biDatasource, page, rows);
-
+    public List<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource, int page, int rows) {
+        List<BI_Datasource> list = biDatasourceDao.getDatasourcePagingList(biDatasource);
+        return list;
     }
 
 }
