@@ -1,15 +1,7 @@
 package cn.zup.bi.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
-@Entity
-@Table(name="bi_datasource")
 public class BI_Datasource {
     private Integer id;
     private String ds_ip;
@@ -21,9 +13,6 @@ public class BI_Datasource {
     private String ds_dir;
     private Date ds_create_time;
 
-    @Id
-    @GeneratedValue(generator="_native")
-    @GenericGenerator(name="_native",strategy="native")
     public Integer getId() {
         return id;
     }

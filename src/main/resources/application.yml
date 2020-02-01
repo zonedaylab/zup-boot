@@ -8,10 +8,31 @@ spring:
   mvc:
     view:
       prefix: /WEB-INF/webpage/  
-      suffix: .jsp  
+      suffix: .jsp
   thymeleaf: #关闭默认模板引擎
     cache: false
     enabled: false
+  datasource:
+    name: druid
+    url: jdbc:mysql://127.0.0.1:3306/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initialSize: 5
+      minIdle: 15
+      maxActive: 60
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 'x'
+      testWhileIdle: true
+      testOnBorrow: true
+      testOnReturn: true
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat
   devtools:
     restart: #热部署生效
        enabled: true
@@ -20,7 +41,23 @@ spring:
        exclude: WEB-INF/**
   aop:
     auto: true
+
+# Mybatis 配置
+mybatis:
+  configuration:
+    cache-enabled: true
+    default-statement-timeout: 3000
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+  mapper-locations: classpath*:cn/zup/mapper/*/*Mapper.xml
+# 分页器
+pagehelper:
+  helper-dialect: mysql
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  page-size-zero: false
+  reasonable: true
+
 application:
   message: Hello BJ 
-  
   

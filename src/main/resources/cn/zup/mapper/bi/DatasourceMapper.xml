@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.BIDatasourceDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_Datasource">
+        <id column="id" property="id" javaType="java.lang.Integer"></id>
+        <result column="ds_ip" property="ds_ip" javaType="java.lang.String"></result>
+        <result column="ds_username" property="ds_username" javaType="java.lang.String"></result>
+        <result column="ds_password" property="ds_password" javaType="java.lang.String"></result>
+        <result column="ds_create_time" property="ds_create_time" javaType="java.util.Date"></result>
+    </resultMap>
+
+    <select id="getDatasourceInfoById" parameterType="java.lang.Integer" resultType="cn.zup.bi.entity.BI_Datasource">
+        SELECT
+            bd.ds_ip,
+            bd.ds_port,
+            bd.ds_username,
+            bd.ds_password,
+            bd.ds_attr,
+            bd.ds_name,
+            bd.ds_dir
+        FROM bi_datasource bd
+        <where>
+            bd.id = #{id}
+        </where>
+    </select>
+
+    <select id="getDatasourcePagingList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_Datasource">
+        SELECT id,ds_name,ds_ip,ds_username,ds_password,ds_create_time from bi_datasource
+    </select>
+
+    <delete id="deleteDatasourceInfo">
+
+    </delete>
+</mapper>
