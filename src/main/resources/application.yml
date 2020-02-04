@@ -3,7 +3,6 @@ server:
   tomcat:
     uri-encoding: UTF-8   # 配置Tomcat编码,默认为UTF-8
     max-threads: 1000  # 配置最大线程数
-    
 spring:
   mvc:
     view:
@@ -41,6 +40,14 @@ spring:
        exclude: WEB-INF/**
   aop:
     auto: true
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+
+  session:
+    store-type: redis
 
 # Mybatis 配置
 mybatis:
