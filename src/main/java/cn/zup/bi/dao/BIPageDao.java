@@ -1,29 +1,31 @@
 package cn.zup.bi.dao;
 
 import cn.zup.bi.entity.BI_Page;
-import org.jeecgframework.minidao.annotation.Arguments;
-import org.jeecgframework.minidao.annotation.MiniDao;
-import org.jeecgframework.minidao.annotation.ResultType;
-import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@MiniDao
-public interface BIPageDao extends MiniDaoSupportHiber<BI_Page> {
-	@Arguments({"biPage", "page", "rows"})
-	@ResultType(BI_Page.class)
-	MiniDaoPage<BI_Page> getBIPageListPage(BI_Page biPage, int page, int rows);
-	
-	@Arguments({"biPage"})
-	@ResultType(BI_Page.class)
-	List<BI_Page> getBIPageList(BI_Page biPage);
-	
+/**
+ * @author gavin
+ */
+@Repository
+public interface BIPageDao {
 
-	@Arguments({"bi_Page_Id"})
-	@ResultType(BI_Page.class)
-	BI_Page getBIPageInfo(Integer bi_Page_Id);
-	
-	@Arguments({"bi_Page_Id"})
-	void deletePageById(Integer bi_Page_Id);
+	List<BI_Page> getBIPageListPage(@Param("biPage") BI_Page biPage);
+
+
+	List<BI_Page> getBIPageList(@Param("biPage") BI_Page biPage);
+
+
+	BI_Page getBIPageById(@Param("bi_Page_Id") Integer bi_Page_Id);
+
+	BI_Page getBIPageInfo(@Param("biPage") BI_Page biPage);
+
+
+	void deletePageById(@Param("bi_Page_Id") Integer bi_Page_Id);
+
+	void save(@Param("biPage") BI_Page biPage);
+
+	void update(@Param("biPage") BI_Page biPage);
 }

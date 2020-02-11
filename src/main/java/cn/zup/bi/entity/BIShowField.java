@@ -11,7 +11,7 @@ public class BIShowField {
 	private String attribute_Caption_Field;  //属性备注
 	private String field_Title;  //字段标题
 	private Integer field_Type;  //字段类型
-	private String Field_Name;   //字段名称
+	private String field_Name;   //字段名称
 	private String topic_Table;  //主题数据表
 	private String topic_Name;   //主题名称
 	private Integer field_Id;  //字段id
@@ -85,10 +85,10 @@ public class BIShowField {
 		this.field_Type = field_Type;
 	}
 	public String getField_Name() {
-		return Field_Name;
+		return field_Name;
 	}
 	public void setField_Name(String field_Name) {
-		Field_Name = field_Name;
+		field_Name = field_Name;
 	}
 	public String getTopic_Table() {
 		return topic_Table;

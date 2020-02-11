@@ -6,6 +6,7 @@ import cn.zup.bi.service.TopicFieldService;
 import cn.zup.bi.service.TopicService;
 import cn.zup.bi.service.settings.MgeidsConfig;
 import cn.zup.bi.utils.PropertiesUtil;
+import cn.zup.framework.common.vo.CommonResult;
 import cn.zup.rbac.entity.Config;
 import cn.zup.rbac.service.ConfigurationService;
 import net.sf.json.JSONArray;
@@ -52,29 +53,21 @@ public class BITopicFieldController {
 	/** 
 	* 主题列表获取
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 11:36:11
 	*/
 	@RequestMapping("/girdTopicFieldList")
 	@ResponseBody 
-	public String getGrid(Integer topicId,Integer page,Integer rows,HttpServletRequest request) {
+	public CommonResult getGrid(Integer topicId,Integer page,Integer rows,HttpServletRequest request) {
 		BI_TOPIC_FIELD topicField = new BI_TOPIC_FIELD();
 		topicField.setTopic_Id(topicId);
 		topicField.setField_Type(MgeidsConfig.FieldType.getValue());
-		MiniDaoPage<BI_TOPIC_FIELD> pagetopicField = topicFieldService.getTopicFieldPagingList(topicField, page, rows);
-		JSONObject json = new JSONObject();
-		json.put("rows", rows);
-		json.put("page", pagetopicField.getPages());
-		json.put("total", pagetopicField.getTotal());
-		JSONArray jsonarr = JSONArray.fromObject(pagetopicField.getResults());  
-		json.put("data", jsonarr);
-		return json.toString();
+		List<BI_TOPIC_FIELD> pagetopicField = topicFieldService.getTopicFieldPagingList(topicField);
+		return CommonResult.successPage(pagetopicField, page, rows);
 	}
 	
 	/** 
 	* 主题数据编辑
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 11:36:11
 	*/
 	@RequestMapping("/editTopicFieldData")
@@ -93,7 +86,6 @@ public class BITopicFieldController {
 	/** 
 	* 主题数据添加
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 11:36:11
 	*/
 	@RequestMapping("/addTopicFieldData")
@@ -112,7 +104,6 @@ public class BITopicFieldController {
 	/** 
 	* 主题数据删除
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 16:33:54
 	*/
 	@RequestMapping("/deleteTopicFieldData")
@@ -139,7 +130,6 @@ public class BITopicFieldController {
 	/** 
 	* 主题列表数据获取 编辑框填充的数据
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 11:36:11
 	*/
 	@RequestMapping("/getTopicFieldData")

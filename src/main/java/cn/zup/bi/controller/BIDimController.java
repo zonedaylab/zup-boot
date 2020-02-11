@@ -6,9 +6,9 @@ import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.TopicFieldService;
 import cn.zup.bi.utils.PropertiesUtil;
+import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,16 +58,9 @@ public class BIDimController {
 	 */
 	@RequestMapping("/girdDimList")
 	@ResponseBody 
-	public String getGrid(BI_DIM dim,Integer page,Integer rows,HttpServletRequest request) {
-		
-		MiniDaoPage<BI_DIM> pagedim=biDimService.getDimPagingList(dim, page, rows);
-		JSONObject json = new JSONObject();
-		json.put("rows", rows);
-		json.put("page", pagedim.getPages());
-		json.put("total", pagedim.getTotal());
-		JSONArray jsonarr = JSONArray.fromObject(pagedim.getResults());  
-		json.put("data", jsonarr);
-		return json.toString();
+	public CommonResult getGrid(BI_DIM dim,Integer page,Integer rows,HttpServletRequest request) {
+		List<BI_DIM> pagedim=biDimService.getDimPagingList(dim);
+		return CommonResult.successPage(pagedim, page, rows);
 	}
 	/**
 	 * 

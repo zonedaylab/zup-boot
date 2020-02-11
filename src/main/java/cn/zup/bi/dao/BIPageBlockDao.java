@@ -1,35 +1,31 @@
 package cn.zup.bi.dao;
 
 import cn.zup.bi.entity.BI_Block_Info;
-import org.jeecgframework.minidao.annotation.Arguments;
-import org.jeecgframework.minidao.annotation.MiniDao;
-import org.jeecgframework.minidao.annotation.ResultType;
-import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@MiniDao
-public interface BIPageBlockDao extends MiniDaoSupportHiber<BI_Block_Info> {
-	@Arguments({"biBlock", "page", "rows"})
-	@ResultType(BI_Block_Info.class)
-	MiniDaoPage<BI_Block_Info> getBIBlockListPage(BI_Block_Info biBlock, int page, int rows);
-	
-	@Arguments({"biBlock"})
-	@ResultType(BI_Block_Info.class)
-	List<BI_Block_Info> getBIBlockList(BI_Block_Info biBlock);
-	
-	@Arguments({"bi_Block_Id"})
-	@ResultType(BI_Block_Info.class)
-	BI_Block_Info getBIBlockInfo(Integer bi_Block_Id);
-	
-	@Arguments({"bi_Block_Id"})
-	void deleteBlockById(Integer bi_Block_Id);
-	
-	@Arguments({"bi_Page_Id", "screen_Index", "block_Id"})
-	@ResultType(BI_Block_Info.class)
-	List<BI_Block_Info> getPageBlockByPageId(Integer bi_Page_Id, Integer screen_Index, Integer block_Id);
-	
-	@Arguments({"page_Id"})
-	void deleteBlockByPageId(Integer page_Id);
+/**
+ * 页面块仓储
+ * @author gavin
+ */
+@Repository
+public interface BIPageBlockDao {
+
+	List<BI_Block_Info> getBIBlockList(@Param("biBlock") BI_Block_Info biBlock);
+
+	BI_Block_Info getBIBlockInfo(@Param("bi_Block_Id") Integer bi_Block_Id);
+
+	void deleteBlockById(@Param("bi_Block_Id") Integer bi_Block_Id);
+
+	List<BI_Block_Info> getPageBlockByPageId(@Param("bi_Page_Id") Integer bi_Page_Id
+			, @Param("screen_Index") Integer screen_Index
+			, @Param("block_Id") Integer block_Id);
+
+	void save(@Param("biBlock") BI_Block_Info biBlock);
+
+	void update(@Param("biBlock") BI_Block_Info biBlock);
+
+	void deleteBlockByPageId(Integer page_id);
 }

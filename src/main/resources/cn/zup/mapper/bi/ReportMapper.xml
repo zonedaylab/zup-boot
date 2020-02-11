@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.ReportDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_REPORT">
+        <id property="report_Id" column="REPORT_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="topic_Id" column="TOPIC_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="report_Name" column="REPORT_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="report_Title" column="REPORT_TITLE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="create_Date" column="CREATE_DATE" javaType="java.util.Date" jdbcType="TIMESTAMP"></result>
+        <result property="page_Id" column="PAGE_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="topic_Name" column="topic_Name" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="page_Name" column="page_Name" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="getReportListByPageId" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT
+            br.REPORT_ID, br.REPORT_NAME,br.PAGE_ID
+        FROM bi_report br
+        JOIN bi_page bp ON br.PAGE_ID = bp.BI_PAGE_ID
+        JOIN bi_screen bs ON bp.BI_PAGE_ID = bs.PAGE_ID
+        WHERE 1=1
+        AND bp.BI_PAGE_ID = ${pageId}
+        AND bs.SCREEN_INDEX = ${screenIndex}
+        GROUP BY br.REPORT_ID, br.REPORT_NAME;
+    </select>
+
+    <select id="getReportPagingList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_REPORT">
+        SELECT
+        br.PAGE_ID, br.CREATE_DATE, br.REPORT_ID,
+        br.REPORT_NAME, br.REPORT_TITLE, br.TOPIC_ID ,
+        bt.TOPIC_NAME topic_Name, bp.PAGE_NAME page_Name
+        FROM bi_report br
+        JOIN bi_topic bt ON br.TOPIC_ID = bt.TOPIC_ID
+        JOIN bi_page bp ON br.PAGE_ID = bp.BI_PAGE_ID
+        <where>
+            <if test="biReport.page_Id != null">
+                AND br.PAGE_ID = #{ biReport.page_Id}
+            </if>
+
+            <if test="biReport.report_Name != null">
+                AND br.REPORT_NAME LIKE CONCAT('%', #{biReport.report_Name}, '%')
+            </if>
+
+            <if test="biReport.topic_Id != null">
+                AND br.TOPIC_ID = #{ biReport.topic_Id}
+            </if>
+
+            <if test="biReport.report_Title != null">
+                AND br.REPORT_TITLE LIKE CONCAT('%', #{ biReport.report_Title}, '%');
+            </if>
+        </where>
+        ORDER BY br.REPORT_ID desc
+    </select>
+
+    <select id="getReportInfoById" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT
+            br.PAGE_ID, br.CREATE_DATE, br.REPORT_ID,
+            br.REPORT_NAME, br.REPORT_TITLE, br.TOPIC_ID
+        FROM bi_report br
+        WHERE 1=1
+        AND br.REPORT_ID = #{reportId}
+    </select>
+
+    <delete id="deleteReportInfo" parameterType="java.lang.Integer">
+        DELETE FROM bi_report WHERE REPORT_ID = #{reportId}
+    </delete>
+
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_REPORT" useGeneratedKeys="true" keyProperty="report_Id" keyColumn="REPORT_ID">
+        INSERT INTO bi_report (
+            TOPIC_ID,
+            REPORT_NAME,
+            REPORT_TITLE,
+            CREATE_DATE,
+            PAGE_ID
+        ) VALUES
+        (
+            #{report.topic_Id},
+            #{report.report_Name},
+            #{report.page_Id},
+            #{report.report_Title},
+            #{report.create_Date}
+        );
+    </insert>
+
+    <update id="update" parameterType="cn.zup.bi.entity.BI_REPORT">
+        UPDATE bi_report SET
+        <if test="report.topic_Id != null">
+            TOPIC_ID = #{report.topic_Id},
+        </if>
+        <if test="report.report_Name != null">
+            REPORT_NAME = #{report.report_Name},
+        </if>
+        <if test="report.page_Id != null">
+            REPORT_TITLE = #{report.page_Id},
+        </if>
+        <if test="report.report_Title != null">
+            CREATE_DATE = #{report.report_Title},
+        </if>
+        <if test="report.create_Date != null">
+            PAGE_ID = #{report.create_Date},
+        </if>
+        WHERE REPORT_ID = #{report.report_Id}
+    </update>
+</mapper>

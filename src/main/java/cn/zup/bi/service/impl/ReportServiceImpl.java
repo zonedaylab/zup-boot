@@ -9,8 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
+/**
+ * @author gavin
+ * @see cn.zup.bi.service.ReportService
+ */
 @Service("reportService")
 public class ReportServiceImpl implements ReportService {
 	@Autowired
@@ -25,12 +30,14 @@ public class ReportServiceImpl implements ReportService {
 	 * @date 2016-10-11 14:51:30
 	 * 
 	 * */
+	@Override
 	public int saveReport(BI_REPORT report){
+		report.setCreate_Date(new Date());
 		try{
 			if(report.getReport_Id() != null){
-				reportDao.updateByHiber(report);
+				reportDao.update(report);
 			}else{
-				reportDao.saveByHiber(report);
+				reportDao.save(report);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -57,8 +64,8 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
-	public MiniDaoPage<BI_REPORT> getReportPagingList(BI_REPORT bi_Report, int page, int rows) {
-		return reportDao.getReportPagingList(bi_Report, page, rows);
+	public List<BI_REPORT> getReportPagingList(BI_REPORT bi_Report) {
+		return reportDao.getReportPagingList(bi_Report);
 	}
 
 	@Override

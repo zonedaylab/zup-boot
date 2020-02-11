@@ -3,10 +3,10 @@ package cn.zup.bi.controller;
 import cn.zup.bi.entity.BI_Block_Info;
 import cn.zup.bi.service.BIPageBlockService;
 import cn.zup.bi.service.settings.MgeidsConfig;
+import cn.zup.framework.common.vo.CommonResult;
 import cn.zup.rbac.entity.Config;
 import cn.zup.rbac.service.ConfigurationService;
 import net.sf.json.JSONObject;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,8 +42,9 @@ public class BIPageBlockController {
 		if(blcokId != 0){
 			json.put("data", "success");
 			json.put("blcokId", blcokId);
-		}else
+		}else {
 			json.put("data", "fail");
+		}
 		return json.toString();
 	}
 	
@@ -56,10 +57,11 @@ public class BIPageBlockController {
 	public String updateBlock(BI_Block_Info bi_Block_Info){
 		boolean b = biPageBlockService.updateBlock(bi_Block_Info);
 		JSONObject json = new JSONObject();
-		if(b)
+		if(b) {
 			json.put("data", "success");
-		else
+		}else {
 			json.put("data", "fial");
+		}
 		return json.toString();
 	}
 	
@@ -74,13 +76,15 @@ public class BIPageBlockController {
 		boolean b = false;
 		for (int i = 0; i < bi_Block_Ids.length; i++) {
 			b = biPageBlockService.deleteBlock(bi_Block_Ids[i]);
-			if(!b)
+			if(!b) {
 				json.put("msg", bi_Block_Ids[i]);
+			}
 		}
-		if(b)
+		if(b) {
 			json.put("data", "success");
-		else
+		} else {
 			json.put("data", "fial");
+		}
 		return json.toString();
 	}
 	
@@ -93,10 +97,11 @@ public class BIPageBlockController {
 	public String deleteBlockByPageId(Integer page_Id){
 		JSONObject json = new JSONObject();
 		boolean b = biPageBlockService.deleteBlockByPageId(page_Id);
-		if(b)
+		if(b) {
 			json.put("data", "success");
-		else
+		} else {
 			json.put("data", "fial");
+		}
 		return json.toString();
 	}
 	
@@ -132,14 +137,9 @@ public class BIPageBlockController {
 	 * */
 	@RequestMapping("/getBlockListByPage")
 	@ResponseBody
-	public String getBlockListByPage(BI_Block_Info bi_Block_Info, int rows, int page){
-		MiniDaoPage<BI_Block_Info> list = biPageBlockService.getBlockListByPage(bi_Block_Info, rows, page);
-		JSONObject json = new JSONObject();
-		json.put("data", list.getResults());
-		json.put("rows", list.getRows());
-		json.put("page", list.getPage());
-		json.put("total", list.getTotal());
-		return json.toString();
+	public CommonResult getBlockListByPage(BI_Block_Info bi_Block_Info, int rows, int page){
+		List<BI_Block_Info> list = biPageBlockService.getBlockListByPage(bi_Block_Info, rows, page);
+		return CommonResult.successPage(list, page, rows);
 	}
 	
 	/**

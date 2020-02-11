@@ -21,11 +21,11 @@ public class BIDatasourceServiceImpl implements BIDatasourceService {
     public int addDatasource(BI_Datasource biDatasource) {
 
         try{
-            /*if(biDatasource.getId() != null){
-                biDatasourceDao.updateByHiber(biDatasource);
+            if(biDatasource.getId() != null){
+                biDatasourceDao.update(biDatasource);
             }else{
-                biDatasourceDao.saveByHiber(biDatasource);
-            }*/
+                biDatasourceDao.save(biDatasource);
+            }
         }catch(Exception e) {
             e.printStackTrace();
             return 0;
@@ -53,11 +53,11 @@ public class BIDatasourceServiceImpl implements BIDatasourceService {
 
     @Override
     public List<BI_Datasource> getDatasourceList(BI_Datasource biDatasource) {
-        return null;//biDatasourceDao.listByHiber(biDatasource);
+        return biDatasourceDao.getDatasourcePagingList(biDatasource);
     }
 
     @Override
-    public List<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource, int page, int rows) {
+    public List<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource) {
         List<BI_Datasource> list = biDatasourceDao.getDatasourcePagingList(biDatasource);
         return list;
     }

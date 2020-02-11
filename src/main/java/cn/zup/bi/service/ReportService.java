@@ -18,8 +18,8 @@ public interface ReportService {
 	int deleteReport(int report_Id);
 	
 	BI_REPORT getReportInfo(int reportId);
-	
-	MiniDaoPage<BI_REPORT> getReportPagingList(BI_REPORT report, int page, int rows);
+
+	List<BI_REPORT> getReportPagingList(BI_REPORT report);
 	
 	List<BI_REPORT> getReportListByPageId(int pageId, int screenIndex);
 	
