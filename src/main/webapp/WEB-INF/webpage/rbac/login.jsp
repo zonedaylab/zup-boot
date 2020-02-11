@@ -116,7 +116,7 @@
 								</div>
 								<div class="center">
 									<h4 class="blue" id="id-company-text">
-										&copy; 积成能源 v_1.1
+										&copy; freeZUP  v1.1.0
 									</h4>
 								</div>
 								<div class="navbar-fixed-top align-right">
