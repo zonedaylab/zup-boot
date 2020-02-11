@@ -53,6 +53,9 @@ spring:
 #
   session:
     store-type: none
+  cache:
+    type: none
+    cache-names: cache-name1,cache-name2
 
 # Mybatis 配置
 mybatis:
