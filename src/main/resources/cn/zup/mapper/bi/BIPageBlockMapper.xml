@@ -25,10 +25,17 @@
 
     <select id="getPageBlockByPageId" resultMap="baseMap" parameterType="java.lang.Integer">
         SELECT * FROM bi_block
-        Where
-        BI_PAGE_ID = #{bi_Page_Id}
-        and SCREEN_INDEX = #{screen_Index}
-        and BLOCK_ID = #{block_Id}
+        <where>
+            <if test="bi_Page_Id != null">
+                AND BI_PAGE_ID = #{bi_Page_Id}
+            </if>
+            <if test="screen_Index != null">
+                AND SCREEN_INDEX = #{screen_Index}
+            </if>
+            <if test="block_Id != null">
+                AND BLOCK_ID = #{block_Id}
+            </if>
+        </where>
     </select>
 
     <delete id="deleteBlockById" parameterType="java.lang.Integer">

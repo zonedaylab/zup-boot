@@ -19,7 +19,7 @@
         <result property="field_Id" column="FIELD_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
 
         <result property="field_Caption" column="FIELD_CAPTION" javaType="java.lang.String" jdbcType="VARCHAR"></result>
-        <result property="aggregate_Type" column="AGGREGATE_TYPE" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="aggregate_Type" column="AGGREGATE_TYPE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result property="topic_Caption" column="TOPIC_CAPTION" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result property="field_Unit" column="FIELD_UNIT" javaType="java.lang.String" jdbcType="VARCHAR"></result>
 
