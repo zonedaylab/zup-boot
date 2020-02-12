@@ -43,7 +43,7 @@ public class ReportServiceImpl implements ReportService {
 			e.printStackTrace();
 			return 0;
 		}
-		return report.getReport_Id();
+		return 1;
 	}
 
 	@Override

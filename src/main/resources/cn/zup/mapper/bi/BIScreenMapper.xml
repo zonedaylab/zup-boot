@@ -48,11 +48,11 @@
         DELETE FROM bi_screen WHERE SCREEN_ID = ${screen_Id}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_Screen" useGeneratedKeys="true" keyColumn="">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_Screen" useGeneratedKeys="true" keyColumn="SCREEN_ID" keyProperty="biScreen.screen_Id">
         INSERT INTO bi_screen (
-            bs.SCREEN_INDEX,
-            bs.SCREEN_NAME,
-            bs.PAGE_ID
+            SCREEN_INDEX,
+            SCREEN_NAME,
+            PAGE_ID
         ) VALUES
         (
             #{biScreen.screen_Index},
@@ -62,16 +62,18 @@
     </insert>
 
     <update id="update" parameterType="cn.zup.bi.entity.BI_Screen">
-        UPDATE bi_screen SET
-        <if test="biScreen.screen_Index != null">
-            SCREEN_INDEX = #{biScreen.screen_Index},
-        </if>
-        <if test="biScreen.screen_Name != null">
-            SCREEN_NAME = #{biScreen.screen_Name},
-        </if>
-        <if test="biScreen.page_Id != null">
-            PAGE_ID = #{biScreen.page_Id},
-        </if>
-        WHERE BI_PAGE_ID = #{biBlock.screen_Id}
+        UPDATE bi_screen
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biScreen.screen_Index != null">
+                SCREEN_INDEX = #{biScreen.screen_Index},
+            </if>
+            <if test="biScreen.screen_Name != null">
+                SCREEN_NAME = #{biScreen.screen_Name},
+            </if>
+            <if test="biScreen.page_Id != null">
+                PAGE_ID = #{biScreen.page_Id},
+            </if>
+        </trim>
+        WHERE SCREEN_ID = #{biScreen.screen_Id}
     </update>
 </mapper>

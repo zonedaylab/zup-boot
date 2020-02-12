@@ -37,7 +37,7 @@
         DELETE FROM bi_topic WHERE TOPIC_ID = #{topicId}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_TOPIC" useGeneratedKeys="true" keyProperty="topic_Id" keyColumn="TOPIC_ID">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_TOPIC" useGeneratedKeys="true" keyProperty="topic.topic_Id" keyColumn="TOPIC_ID">
         INSERT INTO bi_topic (
             TOPIC_NAME,
             TOPIC_CAPTION,
@@ -55,22 +55,21 @@
     </insert>
 
     <update id="updateTopic" parameterType="cn.zup.bi.entity.BI_TOPIC">
-        UPDATE bi_topic SET
-        <if test="topic.topic_Name != null">
-            TOPIC_NAME = #{topic.topic_Name},
-        </if>
-        <if test="topic.topic_Caption != null">
-            TOPIC_CAPTION = #{topic.topic_Caption},
-        </if>
-        <if test="topic.topic_Type != null">
-            TOPIC_TYPE = #{topic.topic_Type},
-        </if>
-        <if test="topic.biz_Table_Name != null">
-            BIZ_TABLE_NAME = #{topic.biz_Table_Name},
-        </if>
-        <if test="topic.ds_id != null">
-            DS_ID = #{topic.ds_id},
-        </if>
-        WHERE TOPIC_ID = #{biBlock.topic_Id}
+        UPDATE bi_topic
+        <trim prefix="set" suffixOverrides=",">
+            <if test="topic.topic_Name != null">
+                TOPIC_NAME = #{topic.topic_Name},
+            </if>
+            <if test="topic.topic_Caption != null">
+                TOPIC_CAPTION = #{topic.topic_Caption},
+            </if>
+            <if test="topic.topic_Type != null">
+                TOPIC_TYPE = #{topic.topic_Type},
+            </if>
+            <if test="topic.biz_Table_Name != null">
+                BIZ_TABLE_NAME = #{topic.biz_Table_Name},
+            </if>
+        </trim>
+        WHERE TOPIC_ID = #{topic.topic_Id}
     </update>
 </mapper>

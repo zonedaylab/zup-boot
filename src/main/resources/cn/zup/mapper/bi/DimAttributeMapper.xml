@@ -23,7 +23,7 @@
         DELETE FROM bi_dim_attribute WHERE ATTRIBUTE_ID = ${attribute_id}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_DIM_ATTRIBUTE" useGeneratedKeys="true" keyProperty="attribute_id" keyColumn="ATTRIBUTE_ID">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_DIM_ATTRIBUTE" useGeneratedKeys="true" keyProperty="biDimAttribute.attribute_id" keyColumn="ATTRIBUTE_ID">
         INSERT INTO bi_dim_attribute (
             DIM_ID,
             ATTRIBUTE_NAME,
@@ -39,19 +39,21 @@
     </insert>
 
     <update id="update" parameterType="cn.zup.bi.entity.BI_DIM_ATTRIBUTE">
-        UPDATE bi_dim_attribute SET
-        <if test="biDimAttribute.dim_Id != null">
-            DIM_ID = #{biDimAttribute.dim_Id},
-        </if>
-        <if test="biDimAttribute.attribute_Name != null">
-            ATTRIBUTE_NAME = #{biDimAttribute.attribute_Name},
-        </if>
-        <if test="biDimAttribute.attribute_Value_Field != null">
-            ATTRIBUTE_VALUE_FIELD = #{biDimAttribute.attribute_Value_Field},
-        </if>
-        <if test="biDimAttribute.attribute_Caption_Field != null">
-            ATTRIBUTE_CAPTION_FIELD = #{biDimAttribute.attribute_Caption_Field},
-        </if>
+        UPDATE bi_dim_attribute
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biDimAttribute.dim_Id != null">
+                DIM_ID = #{biDimAttribute.dim_Id},
+            </if>
+            <if test="biDimAttribute.attribute_Name != null">
+                ATTRIBUTE_NAME = #{biDimAttribute.attribute_Name},
+            </if>
+            <if test="biDimAttribute.attribute_Value_Field != null">
+                ATTRIBUTE_VALUE_FIELD = #{biDimAttribute.attribute_Value_Field},
+            </if>
+            <if test="biDimAttribute.attribute_Caption_Field != null">
+                ATTRIBUTE_CAPTION_FIELD = #{biDimAttribute.attribute_Caption_Field},
+            </if>
+        </trim>
         WHERE ATTRIBUTE_ID = #{biDimAttribute.attribute_id}
     </update>
 </mapper>

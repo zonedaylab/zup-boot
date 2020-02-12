@@ -66,13 +66,13 @@
         DELETE FROM bi_report WHERE REPORT_ID = #{reportId}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_REPORT" useGeneratedKeys="true" keyProperty="report_Id" keyColumn="REPORT_ID">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_REPORT" useGeneratedKeys="true" keyProperty="report.report_Id" keyColumn="REPORT_ID">
         INSERT INTO bi_report (
             TOPIC_ID,
             REPORT_NAME,
+            PAGE_ID,
             REPORT_TITLE,
-            CREATE_DATE,
-            PAGE_ID
+            CREATE_DATE
         ) VALUES
         (
             #{report.topic_Id},
@@ -84,22 +84,24 @@
     </insert>
 
     <update id="update" parameterType="cn.zup.bi.entity.BI_REPORT">
-        UPDATE bi_report SET
-        <if test="report.topic_Id != null">
-            TOPIC_ID = #{report.topic_Id},
-        </if>
-        <if test="report.report_Name != null">
-            REPORT_NAME = #{report.report_Name},
-        </if>
-        <if test="report.page_Id != null">
-            REPORT_TITLE = #{report.page_Id},
-        </if>
-        <if test="report.report_Title != null">
-            CREATE_DATE = #{report.report_Title},
-        </if>
-        <if test="report.create_Date != null">
-            PAGE_ID = #{report.create_Date},
-        </if>
+        UPDATE bi_report
+        <trim prefix="set" suffixOverrides=",">
+            <if test="report.topic_Id != null">
+                TOPIC_ID = #{report.topic_Id},
+            </if>
+            <if test="report.report_Name != null">
+                REPORT_NAME = #{report.report_Name},
+            </if>
+            <if test="report.page_Id != null">
+                PAGE_ID = #{report.page_Id},
+            </if>
+            <if test="report.report_Title != null">
+                REPORT_TITLE = #{report.report_Title},
+            </if>
+            <if test="report.create_Date != null">
+                CREATE_DATE = #{report.create_Date},
+            </if>
+        </trim>
         WHERE REPORT_ID = #{report.report_Id}
     </update>
 </mapper>

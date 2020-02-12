@@ -75,7 +75,7 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 			e.printStackTrace();
 			return 0;
 		}
-		return topicField.getField_Id();
+		return 1;
 	}
 	
 	/**

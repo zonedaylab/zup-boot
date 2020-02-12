@@ -76,10 +76,10 @@
     </select>
 
     <delete id="deleteDim" parameterType="java.lang.Integer">
-        delete from bi_dim where DIM_ID = #{dimid}
+        delete from bi_dim where DIM_ID = #{dim_Id}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_DIM" useGeneratedKeys="true" keyColumn="DIM_ID" keyProperty="dimm_Id">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_DIM" useGeneratedKeys="true" keyColumn="DIM_ID" keyProperty="dim.dimm_Id">
         INSERT INTO bi_dim (
             DIM_NAME,
             BIZ_TABLE_NAME,
@@ -90,39 +90,38 @@
             DS_ID
         ) VALUES
         (
-            #{biDimAttribute.dim_Name},
-            #{biDimAttribute.biz_Table_Name},
-            #{biDimAttribute.text_Field},
-            #{biDimAttribute.id_Field},
-            #{biDimAttribute.drill_Type},
-            #{biDimAttribute.drill_Info},
-            #{biDimAttribute.ds_Id}
+            #{dim.dim_Name},
+            #{dim.biz_Table_Name},
+            #{dim.text_Field},
+            #{dim.id_Field},
+            #{dim.drill_Type},
+            #{dim.drill_Info},
+            #{dim.ds_Id}
         );
     </insert>
 
     <update id="update" parameterType="cn.zup.bi.entity.BI_DIM">
-        UPDATE bi_dim SET
-        <if test="dim.dim_Name != null">
-            DIM_NAME = #{dim.dim_Name},
-        </if>
-        <if test="dim.attribute_Name != null">
-            BIZ_TABLE_NAME = #{dim.biz_Table_Name},
-        </if>
-        <if test="dim.attribute_Value_Field != null">
-            TEXT_FIELD = #{dim.text_Field},
-        </if>
-        <if test="dim.id_Field != null">
-            ID_FIELD = #{dim.id_Field},
-        </if>
-        <if test="dim.drill_Type != null">
-            DRILL_TYPE = #{dim.drill_Type},
-        </if>
-        <if test="dim.drill_Info != null">
-            DRILL_INFO = #{dim.drill_Info},
-        </if>
-        <if test="dim.ds_Id != null">
-            DS_ID = #{dim.ds_Id},
-        </if>
+        UPDATE bi_dim
+        <trim prefix="set" suffixOverrides=",">
+            <if test="dim.dim_Name != null">
+                DIM_NAME = #{dim.dim_Name},
+            </if>
+            <if test="dim.text_Field != null">
+                TEXT_FIELD = #{dim.text_Field},
+            </if>
+            <if test="dim.id_Field != null">
+                ID_FIELD = #{dim.id_Field},
+            </if>
+            <if test="dim.drill_Type != null">
+                DRILL_TYPE = #{dim.drill_Type},
+            </if>
+            <if test="dim.drill_Info != null">
+                DRILL_INFO = #{dim.drill_Info},
+            </if>
+            <if test="dim.biz_Table_Name != null">
+                BIZ_TABLE_NAME = #{dim.biz_Table_Name},
+            </if>
+        </trim>
         WHERE DIM_ID = #{dim.dim_Id}
     </update>
 </mapper>

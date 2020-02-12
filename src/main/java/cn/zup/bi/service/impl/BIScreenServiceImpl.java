@@ -29,6 +29,7 @@ public class BIScreenServiceImpl implements BIScreenService {
 			}
 			return 1;
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e.getMessage());
 			return 0;
 		}

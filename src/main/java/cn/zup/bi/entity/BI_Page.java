@@ -1,10 +1,8 @@
 package cn.zup.bi.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Setter
-@Getter
+@Data
 public class BI_Page {
 	private Integer bi_Page_Id;   //页面主键
 	private String page_Name;     //页面名称

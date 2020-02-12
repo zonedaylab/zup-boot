@@ -29,16 +29,16 @@ public interface DimDao {
 	 * 根据字段删除维表
 	 *
 	 * */
-	void deleteDim(@Param("dimid") int dimid);
+	void deleteDim(@Param("dimid") int dim_Id);
 
 
-	void save(@Param("biDim") BI_DIM biDim);
+	void save(@Param("dim") BI_DIM dim);
 
-	void update(@Param("biDim") BI_DIM biDim);
+	void update(@Param("dim") BI_DIM dim);
 
-	List<BI_DIM> getDimList(@Param("biDim") BI_DIM biDim);
+	List<BI_DIM> getDimList(@Param("biDim") BI_DIM dim);
 
-	BI_DIM getDimById(@Param("dimId") int dimId);
+	BI_DIM getDimById(@Param("dimId") int dim_Id);
 
 	BI_DIM getDimInfo(@Param("dim") BI_DIM dim);
 }

@@ -81,6 +81,7 @@ public class TopicServiceImpl implements TopicService{
 		try{
 			topicDao.updateTopic(topic);
 		}catch(Exception e){
+			e.printStackTrace();
 			return 0;
 		}
 		return 1;

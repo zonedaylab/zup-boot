@@ -33,7 +33,7 @@
         DELETE FROM bi_datasource WHERE id = #{id}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_Datasource">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_Datasource" useGeneratedKeys="true" keyProperty="biDatasource.id">
         INSERT INTO bi_datasource (
             ds_ip,
             ds_port,
@@ -56,25 +56,27 @@
     </insert>
 
     <update id="update" parameterType="cn.zup.bi.entity.BI_Datasource">
-        UPDATE bi_datasource SET
-        <if test="biDatasource.ds_ip != null">
-            ds_ip = #{biDatasource.ds_ip},
-        </if>
-        <if test="biDatasource.ds_username != null">
-            ds_username = #{biDatasource.ds_username},
-        </if>
-        <if test="biDatasource.ds_password != null">
-            ds_password = #{biDatasource.ds_password},
-        </if>
-        <if test="biDatasource.ds_attr != null">
-            ds_attr = #{biDatasource.ds_attr},
-        </if>
-        <if test="biDatasource.ds_name != null">
-            ds_name = #{biDatasource.ds_name},
-        </if>
-        <if test="biDatasource.ds_dir != null">
-            ds_dir = #{biDatasource.ds_dir},
-        </if>
+        UPDATE bi_datasource
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biDatasource.ds_ip != null">
+                ds_ip = #{biDatasource.ds_ip},
+            </if>
+            <if test="biDatasource.ds_username != null">
+                ds_username = #{biDatasource.ds_username},
+            </if>
+            <if test="biDatasource.ds_password != null">
+                ds_password = #{biDatasource.ds_password},
+            </if>
+            <if test="biDatasource.ds_attr != null">
+                ds_attr = #{biDatasource.ds_attr},
+            </if>
+            <if test="biDatasource.ds_name != null">
+                ds_name = #{biDatasource.ds_name},
+            </if>
+            <if test="biDatasource.ds_dir != null">
+                ds_dir = #{biDatasource.ds_dir},
+            </if>
+        </trim>
         WHERE id = #{biDatasource.id}
     </update>
 </mapper>

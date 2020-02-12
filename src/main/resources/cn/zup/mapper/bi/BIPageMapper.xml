@@ -64,7 +64,7 @@
         DELETE FROM bi_page WHERE BI_PAGE_ID = #{bi_Page_Id}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_Page" useGeneratedKeys="true" keyColumn="BI_PAGE_ID" keyProperty="bi_Page_Id">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_Page" useGeneratedKeys="true" keyColumn="BI_PAGE_ID" keyProperty="biPage.bi_Page_Id">
         INSERT INTO bi_page (
             PAGE_TYPE,
             PAGE_TITLE,
@@ -84,25 +84,27 @@
     </insert>
 
     <update id="update" parameterType="cn.zup.bi.entity.BI_Page">
-        UPDATE bi_page SET
-        <if test="biPage.page_Name != null">
-            PAGE_NAME = #{biPage.page_Name},
-        </if>
-        <if test="biPage.page_Type != null">
-            PAGE_TYPE = #{biPage.page_Type},
-        </if>
-        <if test="biPage.page_Title != null">
-            PAGE_TITLE = #{biPage.page_Title},
-        </if>
-        <if test="biPage.page_Url != null">
-            PAGE_URL = #{biPage.page_Url},
-        </if>
-        <if test="biPage.menu_Id != null">
-            MENU_ID = #{biPage.menu_Id},
-        </if>
-        <if test="biPage.menu_Name != null">
-            MENU_NAME = #{biPage.menu_Name},
-        </if>
+        UPDATE bi_page
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biPage.page_Name != null">
+                PAGE_NAME = #{biPage.page_Name},
+            </if>
+            <if test="biPage.page_Type != null">
+                PAGE_TYPE = #{biPage.page_Type},
+            </if>
+            <if test="biPage.page_Title != null">
+                PAGE_TITLE = #{biPage.page_Title},
+            </if>
+            <if test="biPage.page_Url != null">
+                PAGE_URL = #{biPage.page_Url},
+            </if>
+            <if test="biPage.menu_Id != null">
+                MENU_ID = #{biPage.menu_Id},
+            </if>
+            <if test="biPage.menu_Name != null">
+                MENU_NAME = #{biPage.menu_Name},
+            </if>
+        </trim>
         WHERE BI_PAGE_ID = #{biPage.bi_Page_Id}
     </update>
 </mapper>

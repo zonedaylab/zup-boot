@@ -57,7 +57,7 @@
         LEFT JOIN config ftCon ON ftCon.SUBID = FIELD_TYPE AND ftCon.CONFIGID = 79
         LEFT JOIN bi_dim bd ON bi_topic_field.DIM_ID = bd.DIM_ID
         <where>
-            <if test="topicField.topic_Id">
+            <if test="topicField.topic_Id != null">
                 and TOPIC_ID = #{topicField.topic_Id}
             </if>
         </where>
@@ -65,18 +65,18 @@
     </select>
 
     <select id="getTopicFieldName" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_TOPIC_FIELD">
-        select FIELD_NAME from BI_TOPIC_FIELD t where topic_id = ${ topicId}  AND FIELD_TYPE = 1
+        select FIELD_NAME from BI_TOPIC_FIELD t where topic_id = #{ topicId}  AND FIELD_TYPE = 1
     </select>
 
     <select id="getTopicFieldData" resultMap="baseMap" parameterType="java.lang.Integer">
-        select * from BI_TOPIC_FIELD t where TOPIC_ID = ${ topic_Id}  AND FIELD_ID = ${ field_Id}
+        select * from BI_TOPIC_FIELD t where TOPIC_ID = #{ topic_Id}  AND FIELD_ID = #{ field_Id}
     </select>
 
     <delete id="deleteTopicFieldData" parameterType="java.lang.Integer">
-        delete from bi_topic_field WHERE FIELD_ID = ${titleFieldId}
+        delete from bi_topic_field WHERE FIELD_ID = #{titleFieldId}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_TOPIC_FIELD" useGeneratedKeys="true" keyColumn="FIELD_ID" keyProperty="field_Id">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_TOPIC_FIELD" useGeneratedKeys="true" keyProperty="topicField.field_Id">
         INSERT INTO bi_topic_field (
             FIELD_NAME,
             FIELD_CAPTION,
@@ -118,56 +118,59 @@
     </insert>
 
     <update id="updateTopicFieldData" parameterType="cn.zup.bi.entity.BI_TOPIC_FIELD">
-        UPDATE bi_topic_field btf SET
+        UPDATE bi_topic_field btf
+        <trim prefix="set" suffixOverrides=",">
+            <if test="topicField.aggregate_Type != null">
+                btf.AGGREGATE_TYPE = ${topicField.aggregate_Type},
+            </if>
 
-        <if test="topicField.aggregate_Type != null">
-            btf.AGGREGATE_TYPE = ${topicField.aggregate_Type},
-        </if>
+            <if test="topicField.dim_Id != null">
+                btf.DIM_ID = #{topicField.dim_Id},
+            </if>
 
-        <if test="topicField.dim_Id != null">
-            btf.DIM_ID = #{topicField.dim_Id},
-        </if>
+            <if test="topicField.field_Caption != null">
+                btf.FIELD_CAPTION = #{topicField.field_Caption},
+            </if>
 
-        <if test="topicField.field_Caption != null">
-            btf.FIELD_CAPTION = #{topicField.field_Caption},
-        </if>
+            <if test="topicField.field_Decimal != null">
+                btf.FIELD_DECIMAL = #{topicField.field_Decimal},
+            </if>
 
-        <if test="topicField.field_Decimal != null">
-            btf.FIELD_DECIMAL = #{topicField.field_Decimal},
-        </if>
+            <if test="topicField.field_Identity != null">
+                btf.FIELD_IDENTITY = #{topicField.field_Identity},
+            </if>
 
-        <if test="topicField.field_Identity != null">
-            btf.FIELD_IDENTITY = #{topicField.field_Identity},
-        </if>
+            <if test="topicField.field_Length != null">
+                btf.FIELD_LENGTH = #{topicField.field_Length},
+            </if>
 
-        <if test="topicField.field_Length != null">
-            btf.FIELD_LENGTH = #{topicField.field_Length},
-        </if>
+            <if test="topicField.field_Title != null">
+                btf.FIELD_TITLE = #{topicField.field_Title},
+            </if>
 
-        <if test="topicField.field_Title != null">
-            btf.FIELD_TITLE = #{topicField.field_Title},
-        </if>
+            <if test="topicField.field_Type != null">
+                btf.FIELD_TYPE = #{topicField.field_Type},
+            </if>
 
-        <if test="topicField.field_Type != null">
-            btf.FIELD_TYPE = #{topicField.field_Type},
-        </if>
+            <if test="topicField.field_Null != null">
+                btf.FIELD_NULL = #{topicField.field_Null},
+            </if>
 
-        <if test="topicField.field_Null != null">
-            btf.FIELD_NULL = #{topicField.field_Null},
-        </if>
+            <if test="topicField.field_Name != null">
+                btf.FIELD_NAME = #{topicField.field_Name},
+            </if>
 
-        <if test="topicField.field_Name != null">
-            btf.FIELD_NAME = #{topicField.field_Name},
-        </if>
+            <if test="topicField.data_Type != null">
+                btf.DATA_TYPE = #{topicField.data_Type},
+            </if>
 
-        <if test="topicField.data_Type != null">
-            btf.DATA_TYPE = #{topicField.data_Type},
-        </if>
-
-        <if test="topicField.field_Unit != null">
-            btf.FIELD_UNIT = #{topicField.field_Unit},
-        </if>
-        btf.TOPIC_ID = #{topicField.topic_Id}
+            <if test="topicField.field_Unit != null">
+                btf.FIELD_UNIT = #{topicField.field_Unit},
+            </if>
+            <if test="topicField.topic_Id != null">
+                btf.TOPIC_ID = #{topicField.topic_Id},
+            </if>
+        </trim>
         WHERE btf.FIELD_ID = #{topicField.field_Id}
     </update>
 </mapper>
