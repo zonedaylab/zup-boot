@@ -5,20 +5,26 @@
     <resultMap id="baseMap" type="cn.zup.bi.entity.BI_Datasource">
         <id column="id" property="id" javaType="java.lang.Integer"></id>
         <result column="ds_ip" property="ds_ip" javaType="java.lang.String"></result>
+        <result column="ds_port" property="ds_port" javaType="java.lang.Integer"></result>
         <result column="ds_username" property="ds_username" javaType="java.lang.String"></result>
         <result column="ds_password" property="ds_password" javaType="java.lang.String"></result>
-        <result column="ds_create_time" property="ds_create_time" javaType="java.util.Date"></result>
+        <result column="ds_attr" property="ds_attr" javaType="java.lang.String"></result>
+        <result column="ds_name" property="ds_name" javaType="java.lang.String"></result>
+        <result column="ds_dir" property="ds_dir" javaType="java.lang.String"></result>
+        <result column="ds_create_time" property="ds_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"></result>
     </resultMap>
 
-    <select id="getDatasourceInfoById" parameterType="java.lang.Integer" resultType="cn.zup.bi.entity.BI_Datasource">
+    <select id="getDatasourceInfoById" parameterType="java.lang.Integer" resultMap="baseMap">
         SELECT
+            bd.id,
             bd.ds_ip,
             bd.ds_port,
             bd.ds_username,
             bd.ds_password,
             bd.ds_attr,
             bd.ds_name,
-            bd.ds_dir
+            bd.ds_dir,
+            bd.ds_create_time
         FROM bi_datasource bd
         <where>
             bd.id = #{id}

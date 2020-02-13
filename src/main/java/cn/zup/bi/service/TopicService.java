@@ -17,7 +17,6 @@ public interface TopicService {
 	/**
 	 * 
 	 * 主题数据获取
-	 * @param topic 主题实体
 	 * @date 2016-10-5 15:30:13
 	 * 
 	 * */
@@ -26,7 +25,6 @@ public interface TopicService {
 	/**
 	 * 
 	 * 主题数据删除
-	 * @param topic 主题实体
 	 * @date 2016-10-5 15:30:13
 	 * 
 	 * */

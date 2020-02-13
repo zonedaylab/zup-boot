@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 12/02/2020 17:42:48
+ Date: 13/02/2020 18:25:58
 */
 
 SET NAMES utf8mb4;
@@ -201,7 +201,7 @@ CREATE TABLE `auditlog` (
   `ipAddr` varchar(255) DEFAULT NULL,
   `memo` varchar(999) DEFAULT NULL,
   PRIMARY KEY (`auditId`)
-) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=248 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of auditlog
@@ -316,6 +316,29 @@ INSERT INTO `auditlog` VALUES (221, 1, 1, '1', '确定', 3, '2020-02-12 17:38:02
 INSERT INTO `auditlog` VALUES (222, 1, 1, '1', '添加', 3, '2020-02-12 17:38:03', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
 INSERT INTO `auditlog` VALUES (223, 1, 1, '1', '保存', 3, '2020-02-12 17:38:09', '0:0:0:0:0:0:0:1', '山东省 泰安市', NULL);
 INSERT INTO `auditlog` VALUES (224, 1, 1, '1', '确定', 3, '2020-02-12 17:38:10', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (225, 1, 1, '维度配置 ', '编辑', 3, '2020-02-13 18:21:53', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (226, 1, 1, '表单管理 ', '布局设置', 3, '2020-02-13 18:22:09', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (227, 1, 1, '', '添加', 3, '2020-02-13 18:22:10', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (228, 1, 1, '', '保存', 3, '2020-02-13 18:22:15', '0:0:0:0:0:0:0:1', '山东省 泰安市', NULL);
+INSERT INTO `auditlog` VALUES (229, 1, 1, '1', '确定', 3, '2020-02-13 18:22:16', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (230, 1, 1, '表单管理 ', '布局设置', 3, '2020-02-13 18:22:20', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (231, 1, 1, '', '添加', 3, '2020-02-13 18:22:22', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (232, 1, 1, '', '保存', 3, '2020-02-13 18:22:25', '0:0:0:0:0:0:0:1', '山东省 泰安市', NULL);
+INSERT INTO `auditlog` VALUES (233, 1, 1, '1', '确定', 3, '2020-02-13 18:22:27', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (234, 1, 1, '表单管理 ', '元素设置', 3, '2020-02-13 18:22:30', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (235, 1, 1, '1', '字段设置', 3, '2020-02-13 18:22:34', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (236, 1, 1, '维度配置 ', '编辑', 3, '2020-02-13 18:22:48', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (237, 1, 1, '表单管理 ', '元素设置', 3, '2020-02-13 18:24:46', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (238, 1, 1, '1', '字段设置', 3, '2020-02-13 18:24:49', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (239, 1, 1, '', '添加', 3, '2020-02-13 18:24:50', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (240, 1, 1, '', '保存', 3, '2020-02-13 18:24:56', '0:0:0:0:0:0:0:1', '山东省 泰安市', NULL);
+INSERT INTO `auditlog` VALUES (241, 1, 1, '1', '确定', 3, '2020-02-13 18:24:57', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (242, 1, 1, '1', '添加', 3, '2020-02-13 18:24:58', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (243, 1, 1, '1', '保存', 3, '2020-02-13 18:25:03', '0:0:0:0:0:0:0:1', '山东省 泰安市', NULL);
+INSERT INTO `auditlog` VALUES (244, 1, 1, '1', '确定', 3, '2020-02-13 18:25:04', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (245, 1, 1, '1', '添加', 3, '2020-02-13 18:25:25', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
+INSERT INTO `auditlog` VALUES (246, 1, 1, '1', '保存', 3, '2020-02-13 18:25:31', '0:0:0:0:0:0:0:1', '山东省 泰安市', NULL);
+INSERT INTO `auditlog` VALUES (247, 1, 1, '1', '确定', 3, '2020-02-13 18:25:32', '0:0:0:0:0:0:0:1', '山东省 泰安市', '该用户可能保存了编辑或者添加的数据');
 COMMIT;
 
 -- ----------------------------
@@ -356,15 +379,22 @@ DROP TABLE IF EXISTS `bi_datasource`;
 CREATE TABLE `bi_datasource` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `ds_ip` varchar(1024) DEFAULT NULL COMMENT '数据源ip地址',
-  `ds_port` int(4) DEFAULT NULL COMMENT '数据源端口号',
+  `ds_port` int(4) NOT NULL COMMENT '数据源端口号',
   `ds_username` varchar(64) DEFAULT NULL COMMENT '数据源用户名',
   `ds_password` varchar(256) DEFAULT NULL COMMENT '数据源密码',
   `ds_attr` varchar(255) DEFAULT NULL COMMENT '数据源属性',
-  `ds_name` varchar(255) DEFAULT NULL COMMENT '数据源名称',
+  `ds_name` varchar(255) NOT NULL COMMENT '数据源名称',
   `ds_dir` varchar(255) DEFAULT NULL COMMENT '数据源目录',
-  `ds_create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `ds_create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`ds_port`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of bi_datasource
+-- ----------------------------
+BEGIN;
+INSERT INTO `bi_datasource` VALUES (1, '127.0.0.1', 3306, 'root', '123456', 'mysql', 'bi-demo', 'root', '2020-02-13 17:59:03');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for bi_dim
@@ -378,6 +408,7 @@ CREATE TABLE `bi_dim` (
   `ID_FIELD` varchar(500) DEFAULT '',
   `DRILL_TYPE` int(10) DEFAULT NULL,
   `DRILL_INFO` varchar(512) DEFAULT '',
+  `DS_ID` int(38) DEFAULT NULL,
   PRIMARY KEY (`DIM_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=255 DEFAULT CHARSET=utf8;
 
@@ -385,8 +416,8 @@ CREATE TABLE `bi_dim` (
 -- Records of bi_dim
 -- ----------------------------
 BEGIN;
-INSERT INTO `bi_dim` VALUES (253, '商品分类信息', 'pms_product_catego1ry', 'name', 'id', 1, '');
-INSERT INTO `bi_dim` VALUES (254, '商品品牌', 'pms_bra1nd', 'name', 'id', 1, '');
+INSERT INTO `bi_dim` VALUES (253, '商品分类信息', 'pms_product_catego1ry', 'name', 'id', 1, '', 1);
+INSERT INTO `bi_dim` VALUES (254, '商品品牌', 'pms_bra1nd', 'name', 'id', 1, '', 1);
 COMMIT;
 
 -- ----------------------------
@@ -402,7 +433,14 @@ CREATE TABLE `bi_dim_attribute` (
   PRIMARY KEY (`ATTRIBUTE_ID`),
   KEY `dimids` (`DIM_ID`) USING BTREE,
   CONSTRAINT `bi_dim_attribute_ibfk_1` FOREIGN KEY (`DIM_ID`) REFERENCES `bi_dim` (`DIM_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of bi_dim_attribute
+-- ----------------------------
+BEGIN;
+INSERT INTO `bi_dim_attribute` VALUES (1, 254, 'id', 'name', '品牌');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for bi_page
@@ -465,7 +503,7 @@ CREATE TABLE `bi_report_field` (
   PRIMARY KEY (`REPORT_FIELD_ID`),
   KEY `reportid` (`REPORT_ID`) USING BTREE,
   CONSTRAINT `bi_report_field_ibfk_1` FOREIGN KEY (`REPORT_ID`) REFERENCES `bi_report` (`REPORT_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=588 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=591 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bi_report_field
@@ -474,6 +512,9 @@ BEGIN;
 INSERT INTO `bi_report_field` VALUES (585, 173, 215, 3, 1, 1);
 INSERT INTO `bi_report_field` VALUES (586, 173, 217, 1, 1, 1);
 INSERT INTO `bi_report_field` VALUES (587, 173, 219, 3, 1, 1);
+INSERT INTO `bi_report_field` VALUES (588, 172, 217, 1, 1, 1);
+INSERT INTO `bi_report_field` VALUES (589, 172, 215, 3, 1, 1);
+INSERT INTO `bi_report_field` VALUES (590, 172, 219, 3, 1, 1);
 COMMIT;
 
 -- ----------------------------
@@ -488,14 +529,14 @@ CREATE TABLE `bi_screen` (
   PRIMARY KEY (`SCREEN_ID`),
   KEY `page_Id` (`PAGE_ID`) USING BTREE,
   CONSTRAINT `bi_screen_ibfk_1` FOREIGN KEY (`PAGE_ID`) REFERENCES `bi_page` (`BI_PAGE_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bi_screen
 -- ----------------------------
 BEGIN;
-INSERT INTO `bi_screen` VALUES (33, '首页', 1, 31);
-INSERT INTO `bi_screen` VALUES (34, '首页', 1, 32);
+INSERT INTO `bi_screen` VALUES (35, '首页', 1, 32);
+INSERT INTO `bi_screen` VALUES (36, '首页', 1, 31);
 COMMIT;
 
 -- ----------------------------
@@ -508,14 +549,15 @@ CREATE TABLE `bi_topic` (
   `TOPIC_CAPTION` varchar(128) DEFAULT '',
   `TOPIC_TYPE` int(10) DEFAULT NULL COMMENT '主题类型',
   `BIZ_TABLE_NAME` varchar(63) DEFAULT '' COMMENT '表名称',
-  PRIMARY KEY (`TOPIC_ID`)
+  `DS_ID` int(38) DEFAULT NULL,
+  PRIMARY KEY (`TOPIC_ID`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bi_topic
 -- ----------------------------
 BEGIN;
-INSERT INTO `bi_topic` VALUES (45, 'product_info', '商品信息', NULL, 'pms_product');
+INSERT INTO `bi_topic` VALUES (45, 'product_info', '商品信息', NULL, 'pms_product', 1);
 COMMIT;
 
 -- ----------------------------
@@ -761,7 +803,7 @@ CREATE TABLE `loginlog` (
   `SYSTEMID` int(38) DEFAULT NULL,
   `USERNAME` varchar(255) DEFAULT '',
   PRIMARY KEY (`LOGINLOGID`)
-) ENGINE=InnoDB AUTO_INCREMENT=37576 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37577 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of loginlog
@@ -777,6 +819,7 @@ INSERT INTO `loginlog` VALUES (37572, 1, 1, '2020-01-04 15:19:12', 1, 1, '0:0:0:
 INSERT INTO `loginlog` VALUES (37573, 1, 1, '2020-01-04 16:52:33', 1, 1, '0:0:0:0:0:0:0:1', NULL, NULL, '管理员');
 INSERT INTO `loginlog` VALUES (37574, 1, 1, '2020-01-04 17:27:55', 1, 1, '0:0:0:0:0:0:0:1', NULL, NULL, '管理员');
 INSERT INTO `loginlog` VALUES (37575, 1, 1, '2020-01-06 23:08:11', 1, 1, '0:0:0:0:0:0:0:1', NULL, NULL, '管理员');
+INSERT INTO `loginlog` VALUES (37576, 1, 1, '2020-02-13 18:00:30', 1, 1, '0:0:0:0:0:0:0:1', NULL, NULL, '管理员');
 COMMIT;
 
 -- ----------------------------
@@ -874,7 +917,7 @@ CREATE TABLE `operatelog` (
   KEY `userinfo` (`USERID`) USING BTREE,
   CONSTRAINT `operatelog_ibfk_1` FOREIGN KEY (`USERID`) REFERENCES `userinfo` (`USERID`),
   CONSTRAINT `operatelog_ibfk_2` FOREIGN KEY (`SYSTEMID`) REFERENCES `system` (`SYSTEMID`)
-) ENGINE=InnoDB AUTO_INCREMENT=964 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1130 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of operatelog
@@ -1794,6 +1837,172 @@ INSERT INTO `operatelog` VALUES (960, 1, 1, '', ' 操作层级: Service 层;  �
 INSERT INTO `operatelog` VALUES (961, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getDimFieldList(ConditionTransfer); 操作参数: cn.zup.bi.entity.ConditionTransfer@5f573083 ,', '2020-02-12 17:42:26', 1, '', '', '');
 INSERT INTO `operatelog` VALUES (962, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 173 ,', '2020-02-12 17:42:26', 1, '', '', '');
 INSERT INTO `operatelog` VALUES (963, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.ReportServiceImpl.getReportListByPageId(int,int); 操作参数: 32 ,1 ,', '2020-02-12 17:42:26', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (964, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getAccountPermitSubMenu(int,int,int); 操作参数: 1 ,1 ,2 ,', '2020-02-12 17:43:01', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (965, NULL, NULL, '', ' 操作层级: Service 层;  操作方法: UserSession cn.zup.rbac.service.impl.UserServiceImpl.getUserSessionInfo(String,String); 操作参数: admin ,e10adc3949ba59abbe56e057f20f883e ,', '2020-02-13 18:00:29', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (966, NULL, NULL, '', ' 操作层级: Service 层;  操作方法: UserSession cn.zup.rbac.service.impl.UserServiceImpl.getUserSessionInfo(String,String); 操作参数: admin ,null ,', '2020-02-13 18:00:29', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (967, NULL, NULL, '', ' 操作层级: Service 层;  操作方法: DomainSystem cn.zup.rbac.service.impl.ResourceServiceImpl.getDomainSystemByDomain(String); 操作参数: homeController ,', '2020-02-13 18:00:29', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (968, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.LoginLogServiceImpl.addLoginLog(LoginLog); 操作参数: cn.zup.rbac.entity.LoginLog@5cd2bdda ,', '2020-02-13 18:00:29', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (969, 1, 1, '', ' 操作层级: Service 层;  操作方法: DomainSystem cn.zup.rbac.service.impl.ResourceServiceImpl.getDomainSystemByDomain(String); 操作参数: homeController ,', '2020-02-13 18:00:29', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (970, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getAccountPermitMenu(Integer,Integer,boolean,Integer); 操作参数: 1 ,1 ,true ,2 ,', '2020-02-13 18:00:29', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (971, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getAccountPermitSubMenu(int,int,int); 操作参数: 1 ,5 ,2 ,', '2020-02-13 18:00:43', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (972, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.TopicServiceImpl.getTopicPagingList(BI_TOPIC); 操作参数: BI_TOPIC(topic_Id=null, topic_Name=null, topic_Caption=null, topic_Type=null, biz_Table_Name=null, ds_id=null) ,', '2020-02-13 18:00:45', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (973, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ResourceServiceImpl.getMenuList(Integer,Menu); 操作参数: 1 ,cn.zup.rbac.entity.Menu@50baa321 ,', '2020-02-13 18:00:48', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (974, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ConfigurationServiceImpl.getConfigInfo(Config); 操作参数: cn.zup.rbac.entity.Config@2bd4862d ,', '2020-02-13 18:00:48', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (975, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.rbac.service.impl.ConfigurationServiceImpl.getConfigInfo(Config); 操作参数: cn.zup.rbac.entity.Config@23d53d2f ,', '2020-02-13 18:00:48', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (976, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:00:49', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (977, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:00:50', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (978, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:00:50', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (979, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:00:50', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (980, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:00:50', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (981, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:05:20', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (982, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:05:20', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (983, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:05:22', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (984, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:05:28', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (985, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:05:28', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (986, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:05:42', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (987, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:05:42', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (988, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:05:43', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (989, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:05:43', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (990, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:05:43', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (991, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:08:33', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (992, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:08:33', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (993, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:08:35', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (994, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:08:35', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (995, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:08:35', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (996, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:08:44', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (997, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:12:48', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (998, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:12:48', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (999, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:12:49', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1000, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:12:49', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1001, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:12:49', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1002, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:12:49', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1003, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:13:16', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1004, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:13:16', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1005, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:13:16', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1006, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:13:16', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1007, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:13:16', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1008, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:13:16', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1009, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:14:24', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1010, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:14:24', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1011, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:14:25', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1012, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:14:25', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1013, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:14:25', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1014, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:15:09', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1015, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:15:09', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1016, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:15:10', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1017, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:15:10', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1018, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:15:10', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1019, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:17:43', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1020, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:17:43', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1021, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:17:44', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1022, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:17:44', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1023, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:17:44', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1024, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:17:44', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1025, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:19:29', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1026, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:19:29', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1027, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:19:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1028, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:19:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1029, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:19:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1030, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:19:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1031, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:19:37', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1032, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:19:37', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1033, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:19:37', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1034, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:19:37', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1035, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:19:37', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1036, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:19:37', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1037, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:19:54', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1038, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:19:54', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1039, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:19:54', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1040, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:19:54', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1041, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:19:54', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1042, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:19:54', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1043, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageServiceImpl.getBiPageList(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=null, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:21:36', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1044, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.TopicServiceImpl.getTopicPagingList(BI_TOPIC); 操作参数: BI_TOPIC(topic_Id=null, topic_Name=null, topic_Caption=null, topic_Type=null, biz_Table_Name=null, ds_id=null) ,', '2020-02-13 18:21:36', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1045, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getDimPagingList(BI_DIM); 操作参数: BI_DIM(dim_Id=null, dim_Name=null, biz_Table_Name=null, text_Field=null, id_Field=null, drill_Type=null, drill_Info=null, ds_Id=null) ,', '2020-02-13 18:21:38', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1046, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getTableNameList(Connection); 操作参数: com.mysql.jdbc.JDBC4Connection@6553ce80 ,', '2020-02-13 18:21:53', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1047, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@3fc8aea6 ,', '2020-02-13 18:21:53', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1048, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@6b2f3788 ,', '2020-02-13 18:22:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1049, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBIScreenListPage(BI_Screen,int,int); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=32, page_Name=null) ,1 ,10 ,', '2020-02-13 18:22:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1050, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageServiceImpl.getBiPageList(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=null, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:22:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1051, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@3f681f4e ,', '2020-02-13 18:22:09', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1052, 1, 1, '', ' 操作层级: Service 层;  操作方法: int cn.zup.bi.service.impl.BIScreenServiceImpl.updateScreenInfo(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=1, screen_Name=首页, page_Id=32, page_Name=null) ,', '2020-02-13 18:22:14', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1053, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBIScreenListPage(BI_Screen,int,int); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=32, page_Name=null) ,1 ,10 ,', '2020-02-13 18:22:14', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1054, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@69d60310 ,', '2020-02-13 18:22:14', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1055, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@2abb9ae9 ,', '2020-02-13 18:22:15', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1056, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@52adc02 ,', '2020-02-13 18:22:20', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1057, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBIScreenListPage(BI_Screen,int,int); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,1 ,10 ,', '2020-02-13 18:22:20', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1058, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageServiceImpl.getBiPageList(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=null, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:22:20', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1059, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@317ed8b8 ,', '2020-02-13 18:22:21', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1060, 1, 1, '', ' 操作层级: Service 层;  操作方法: int cn.zup.bi.service.impl.BIScreenServiceImpl.updateScreenInfo(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=1, screen_Name=首页, page_Id=31, page_Name=null) ,', '2020-02-13 18:22:25', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1061, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBIScreenListPage(BI_Screen,int,int); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,1 ,10 ,', '2020-02-13 18:22:25', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1062, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@41fdbb7d ,', '2020-02-13 18:22:25', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1063, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@5a2c1c1 ,', '2020-02-13 18:22:27', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1064, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@4e19b1b8 ,', '2020-02-13 18:22:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1065, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.TopicServiceImpl.getTopicPagingList(BI_TOPIC); 操作参数: BI_TOPIC(topic_Id=null, topic_Name=null, topic_Caption=null, topic_Type=null, biz_Table_Name=null, ds_id=null) ,', '2020-02-13 18:22:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1066, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageServiceImpl.getBiPageList(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=null, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:22:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1067, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.ReportServiceImpl.getReportPagingList(BI_REPORT); 操作参数: BI_REPORT(report_Id=null, topic_Id=null, report_Name=null, page_Id=31, report_Title=null, create_Date=null, topic_Name=null, page_Name=null) ,', '2020-02-13 18:22:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1068, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@4efe9ed1 ,', '2020-02-13 18:22:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1069, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:22:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1070, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.TopicFieldServiceImpl.getTopicFields(Integer); 操作参数: 45 ,', '2020-02-13 18:22:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1071, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@5dd1c40d ,', '2020-02-13 18:22:47', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1072, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getTableNameList(Connection); 操作参数: com.mysql.jdbc.JDBC4Connection@223276d1 ,', '2020-02-13 18:22:47', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1073, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_DIM cn.zup.bi.service.impl.BIDimServiceImpl.getDimInfo(String); 操作参数: pms_product ,', '2020-02-13 18:22:52', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1074, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getColumnNameList(Connection,String); 操作参数: com.mysql.jdbc.JDBC4Connection@63c3a55c ,pms_product ,', '2020-02-13 18:22:52', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1075, 1, 1, '', ' 操作层级: Service 层;  操作方法: String cn.zup.bi.service.impl.BIDimServiceImpl.getPrimaryKey(Connection,String); 操作参数: com.mysql.jdbc.JDBC4Connection@63c3a55c ,pms_product ,', '2020-02-13 18:22:52', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1076, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_DIM cn.zup.bi.service.impl.BIDimServiceImpl.getDimInfo(String); 操作参数: pms_product ,', '2020-02-13 18:22:52', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1077, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_DIM cn.zup.bi.service.impl.BIDimServiceImpl.getDimInfo(String); 操作参数: pms_bra1nd ,', '2020-02-13 18:23:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1078, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getDimInInfo(int); 操作参数: 254 ,', '2020-02-13 18:23:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1079, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getColumnNameList(Connection,String); 操作参数: com.mysql.jdbc.JDBC4Connection@134923a ,pms_bra1nd ,', '2020-02-13 18:23:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1080, 1, 1, '', ' 操作层级: Service 层;  操作方法: String cn.zup.bi.service.impl.BIDimServiceImpl.getPrimaryKey(Connection,String); 操作参数: com.mysql.jdbc.JDBC4Connection@134923a ,pms_bra1nd ,', '2020-02-13 18:23:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1081, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_DIM cn.zup.bi.service.impl.BIDimServiceImpl.getDimInfo(String); 操作参数: pms_bra1nd ,', '2020-02-13 18:23:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1082, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getDimInInfo(int); 操作参数: 254 ,', '2020-02-13 18:23:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1083, 1, 1, '', ' 操作层级: Service 层;  操作方法: int cn.zup.bi.service.impl.BIDimServiceImpl.updateDimData(BI_DIM); 操作参数: BI_DIM(dim_Id=254, dim_Name=商品品牌, biz_Table_Name=pms_bra1nd, text_Field=name, id_Field=id, drill_Type=1, drill_Info=, ds_Id=null) ,', '2020-02-13 18:23:12', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1084, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getDimPagingList(BI_DIM); 操作参数: BI_DIM(dim_Id=null, dim_Name=null, biz_Table_Name=null, text_Field=null, id_Field=null, drill_Type=null, drill_Info=null, ds_Id=null) ,', '2020-02-13 18:23:12', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1085, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:24:01', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1086, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:24:01', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1087, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:24:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1088, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:24:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1089, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:24:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1090, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:24:02', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1091, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@4a8b9d92 ,', '2020-02-13 18:24:46', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1092, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.ReportServiceImpl.getReportPagingList(BI_REPORT); 操作参数: BI_REPORT(report_Id=null, topic_Id=null, report_Name=null, page_Id=31, report_Title=null, create_Date=null, topic_Name=null, page_Name=null) ,', '2020-02-13 18:24:46', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1093, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.TopicServiceImpl.getTopicPagingList(BI_TOPIC); 操作参数: BI_TOPIC(topic_Id=null, topic_Name=null, topic_Caption=null, topic_Type=null, biz_Table_Name=null, ds_id=null) ,', '2020-02-13 18:24:46', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1094, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageServiceImpl.getBiPageList(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=null, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:24:46', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1095, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@4728639 ,', '2020-02-13 18:24:49', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1096, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:24:49', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1097, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.TopicFieldServiceImpl.getTopicFields(Integer); 操作参数: 45 ,', '2020-02-13 18:24:49', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1098, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@629ef4cf ,', '2020-02-13 18:24:50', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1099, 1, 1, '', ' 操作层级: Service 层;  操作方法: int cn.zup.bi.service.impl.ReportFieldServiceImpl.saveReportField(BI_REPORT_FIELD); 操作参数: BI_REPORT_FIELD(report_Field_Id=null, report_Id=172, field_Id=217, field_Location=1, dim_Order=1, display=1, field_Name=null) ,', '2020-02-13 18:24:55', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1100, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@60dc09b4 ,', '2020-02-13 18:24:55', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1101, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@73e4ede0 ,', '2020-02-13 18:24:56', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1102, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@6e18a00a ,', '2020-02-13 18:24:57', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1103, 1, 1, '', ' 操作层级: Service 层;  操作方法: int cn.zup.bi.service.impl.ReportFieldServiceImpl.saveReportField(BI_REPORT_FIELD); 操作参数: BI_REPORT_FIELD(report_Field_Id=null, report_Id=172, field_Id=215, field_Location=3, dim_Order=1, display=1, field_Name=null) ,', '2020-02-13 18:25:03', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1104, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@4033a48f ,', '2020-02-13 18:25:03', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1105, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@2a01e76f ,', '2020-02-13 18:25:04', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1106, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:25:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1107, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:25:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1108, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:25:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1109, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:25:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1110, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:25:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1111, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:25:08', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1112, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.TopicFieldServiceImpl.getTopicFieldList(Integer); 操作参数: 172 ,', '2020-02-13 18:25:19', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1113, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getDimFieldList(ConditionTransfer); 操作参数: cn.zup.bi.entity.ConditionTransfer@5c96c71 ,', '2020-02-13 18:25:19', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1114, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:25:19', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1115, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.ReportServiceImpl.getReportListByPageId(int,int); 操作参数: 31 ,1 ,', '2020-02-13 18:25:19', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1116, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@42dc0b1d ,', '2020-02-13 18:25:24', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1117, 1, 1, '', ' 操作层级: Service 层;  操作方法: int cn.zup.bi.service.impl.ReportFieldServiceImpl.saveReportField(BI_REPORT_FIELD); 操作参数: BI_REPORT_FIELD(report_Field_Id=null, report_Id=172, field_Id=219, field_Location=3, dim_Order=1, display=1, field_Name=null) ,', '2020-02-13 18:25:30', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1118, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@10c4ade ,', '2020-02-13 18:25:31', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1119, 1, 1, '', ' 操作层级: Service 层;  操作方法: void cn.zup.rbac.service.impl.AuditLogServiceImpl.addAuditLog(AuditLog); 操作参数: cn.zup.rbac.entity.AuditLog@4615f6cc ,', '2020-02-13 18:25:32', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1120, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Page cn.zup.bi.service.impl.BIPageServiceImpl.getBiPage(BI_Page); 操作参数: BI_Page(bi_Page_Id=null, page_Name=null, page_Type=null, page_Title=null, page_Url=null, menu_Id=96555, menu_Name=null, pageTypeStr=null) ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1121, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIScreenServiceImpl.getBiScreenList(BI_Screen); 操作参数: BI_Screen(screen_Id=null, screen_Index=null, screen_Name=null, page_Id=31, page_Name=null) ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1122, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIPageBlockServiceImpl.getPageBlockByPageId(Integer,Integer,Integer); 操作参数: 31 ,1 ,null ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1123, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1124, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_TOPIC cn.zup.bi.service.impl.TopicServiceImpl.getTopicData(Integer); 操作参数: 45 ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1125, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_Datasource cn.zup.bi.service.impl.BIDatasourceServiceImpl.getDatasourceInfo(int); 操作参数: 1 ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1126, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.TopicFieldServiceImpl.getTopicFieldList(Integer); 操作参数: 172 ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1127, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.BIDimServiceImpl.getDimFieldList(ConditionTransfer); 操作参数: cn.zup.bi.entity.ConditionTransfer@4c5131c5 ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1128, 1, 1, '', ' 操作层级: Service 层;  操作方法: BI_REPORT cn.zup.bi.service.impl.ReportServiceImpl.getReportInfo(int); 操作参数: 172 ,', '2020-02-13 18:25:34', 1, '', '', '');
+INSERT INTO `operatelog` VALUES (1129, 1, 1, '', ' 操作层级: Service 层;  操作方法: List cn.zup.bi.service.impl.ReportServiceImpl.getReportListByPageId(int,int); 操作参数: 31 ,1 ,', '2020-02-13 18:25:34', 1, '', '', '');
 COMMIT;
 
 -- ----------------------------

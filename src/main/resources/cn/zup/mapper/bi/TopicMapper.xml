@@ -30,7 +30,7 @@
     </select>
 
     <select id="getTopic" resultMap="baseMap" parameterType="java.lang.Integer">
-        select topic_Id, topic_Name, topic_Caption, topic_Type, biz_Table_Name from BI_TOPIC where topic_Id = #{topicId}
+        select topic_Id, topic_Name, topic_Caption, topic_Type, biz_Table_Name, DS_ID from BI_TOPIC where topic_Id = #{topicId}
     </select>
 
     <delete id="deleteTopic" parameterType="java.lang.Integer">
