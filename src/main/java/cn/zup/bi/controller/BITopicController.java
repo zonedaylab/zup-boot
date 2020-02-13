@@ -2,6 +2,7 @@ package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.BI_TOPIC;
 import cn.zup.bi.service.TopicService;
+import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
@@ -13,7 +14,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
+/**
+ * @author gavin
+ */
 @Controller
 @RequestMapping("/rest/bi/BITopicController")
 public class BITopicController {
@@ -34,26 +39,18 @@ public class BITopicController {
 	/** 
 	* 主题列表获取
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 11:36:11
 	*/
 	@RequestMapping("/girdTopicList")
 	@ResponseBody 
-	public String getGrid(BI_TOPIC topic,Integer page,Integer rows,HttpServletRequest request) {
-		MiniDaoPage<BI_TOPIC> pagetopic = topicService.getTopicPagingList(topic, page, rows);
-		JSONObject json = new JSONObject();
-		json.put("rows", rows);
-		json.put("page", pagetopic.getPages());
-		json.put("total", pagetopic.getTotal());
-		JSONArray jsonarr = JSONArray.fromObject(pagetopic.getResults());  
-		json.put("data", jsonarr);
-		return json.toString();
+	public CommonResult getGrid(BI_TOPIC topic,Integer page,Integer rows,HttpServletRequest request) {
+		List<BI_TOPIC> pagetopic = topicService.getTopicPagingList(topic);
+		return CommonResult.successPage(pagetopic, page, rows);
 	}
 	
 	/** 
 	* 主题数据编辑
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 11:36:11
 	*/
 	@RequestMapping("/editTopicData")
@@ -72,7 +69,6 @@ public class BITopicController {
 	/** 
 	* 主题数据添加
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 11:36:11
 	*/
 	@RequestMapping("/addTopicData")
@@ -91,7 +87,6 @@ public class BITopicController {
 	/** 
 	* 主题数据删除
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 16:33:54
 	*/
 	@RequestMapping("/deleteTopicData")
@@ -118,7 +113,6 @@ public class BITopicController {
 	/** 
 	* 主题列表数据获取 编辑框填充的数据
 	* @author 谢炎
-	* @param 主题实体
 	* @date 2016-10-5 11:36:11
 	*/
 	@RequestMapping("/getTopicData")

@@ -1,7 +1,6 @@
 package cn.zup.bi.service;
 
 import cn.zup.bi.entity.*;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,7 +14,7 @@ public interface BIDimService {
 	 * @date 2016-10-9 14:31:21
 	 * 
 	 * */
-	public List getTableNameList(Connection conn) throws SQLException ;
+	List getTableNameList(Connection conn) throws SQLException ;
 	
 	/**
 	 * 维度分页列表
@@ -23,7 +22,7 @@ public interface BIDimService {
      * @param dim 维度实体
 	 * 	 * @return
 	 */
-	MiniDaoPage<BI_DIM> getDimPagingList(BI_DIM dim, int page, int rows);
+	List<BI_DIM> getDimPagingList(BI_DIM dim);
 	
 	/**
 	 * 获取数据表中所有列的列名，并添加到列表结构中
@@ -31,7 +30,7 @@ public interface BIDimService {
 	 * @date 2016-10-9 14:31:21
 	 * 
 	 * */
-	public List<BI_DIM_FIELD> getColumnNameList(Connection conn, String tableName) throws SQLException;
+	List<BI_DIM_FIELD> getColumnNameList(Connection conn, String tableName) throws SQLException;
 	
 	/**
 	 * 保存维表数据
@@ -40,7 +39,7 @@ public interface BIDimService {
 	 * @prams BI_DIM 维表实体
 	 * 
 	 * */
-	public int saveDimData(BI_DIM biDim);
+	int saveDimData(BI_DIM biDim);
 	
 	/**
 	 * 保存维表属性数据
@@ -49,7 +48,7 @@ public interface BIDimService {
 	 * @prams BI_DIM 维表属性实体
 	 * 
 	 * */
-	public int saveDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute);
+	int saveDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute);
 	
 	/**
 	 * 更新维表数据
@@ -58,7 +57,7 @@ public interface BIDimService {
 	 * @prams BI_DIM 维表实体
 	 * 
 	 * */
-	public int updateDimData(BI_DIM biDim);
+	int updateDimData(BI_DIM biDim);
 	
 	/**
 	 * 更新维表属性数据
@@ -67,8 +66,7 @@ public interface BIDimService {
 	 * @prams BI_DIM 维表属性实体
 	 * 
 	 * */
-
-	public int updateDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute);
+	int updateDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute);
 
 	/**
 	 * 删除维表属性数据
@@ -77,7 +75,7 @@ public interface BIDimService {
 	 * @prams BI_DIM_ATTRIBUTE 维表属性实体
 	 *
 	 * */
-	public void deleteDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute);
+	void deleteDimAttribute(BI_DIM_ATTRIBUTE biDimAttribute);
 
 	/**
 	 * 删除维表数据
@@ -86,7 +84,7 @@ public interface BIDimService {
 	 * @prams BI_DIM_ATTRIBUTE 维表属性实体
 	 *
 	 * */
-	public void deleteDimData(Integer dimid);
+	void deleteDimData(Integer dimid);
 	/**
 	 * 获取维表名称
 	 * @author antsdot
@@ -126,13 +124,13 @@ public interface BIDimService {
 	 * @throws SQLException 
 	 * 
 	 * */
-	public String getPrimaryKey(Connection conn, String tableName) throws SQLException;
+	String getPrimaryKey(Connection conn, String tableName) throws SQLException;
 	
 	/**
 	 * 通过维表字段主键id获取维表字段信息
 	 * 
 	 * */
-	public BI_DIM_ATTRIBUTE getBiDimAttribute(int attribute_Id);
+	BI_DIM_ATTRIBUTE getBiDimAttribute(int attribute_Id);
 	
 	BI_DIM getDimInfo(int dimId);
 	

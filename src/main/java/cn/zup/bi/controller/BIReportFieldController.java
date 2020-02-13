@@ -6,6 +6,7 @@ import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import cn.zup.bi.service.ReportFieldService;
 import cn.zup.bi.service.ReportService;
 import cn.zup.bi.service.TopicFieldService;
+import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONObject;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
@@ -103,14 +104,9 @@ public class BIReportFieldController {
 	 * */
 	@RequestMapping("/getReportFieldList")
 	@ResponseBody
-	public String getReportFieldList(BI_REPORT_FIELD reportField, int rows, int page){
-		MiniDaoPage<BI_REPORT_FIELD> list = reportFieldService.getReportFieldList(reportField, rows, page);
-		JSONObject json = new JSONObject();
-		json.put("data", list.getResults());
-		json.put("rows", list.getPage());
-		json.put("page", list.getRows());
-		json.put("total", list.getTotal());
-		return json.toString();
+	public CommonResult getReportFieldList(BI_REPORT_FIELD reportField, int rows, int page){
+		List<BI_REPORT_FIELD> list = reportFieldService.getReportFieldList(reportField, rows, page);
+		return CommonResult.successPage(list, page, rows);
 	}
 	
 	/**

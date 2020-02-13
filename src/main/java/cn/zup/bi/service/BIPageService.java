@@ -14,5 +14,5 @@ public interface BIPageService {
 	
 	List<BI_Page> getBiPageList(BI_Page biPage);
 	
-	MiniDaoPage<BI_Page> getBIPageListPage(BI_Page biPage, int page, int rows);
+	List<BI_Page> getBIPageListPage(BI_Page biPage, int page, int rows);
 }

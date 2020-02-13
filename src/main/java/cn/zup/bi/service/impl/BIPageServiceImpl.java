@@ -22,10 +22,11 @@ public class BIPageServiceImpl implements BIPageService {
 	@Override
 	public int updatePageInfo(BI_Page biPage) {
 		try {
-			if(biPage.getBi_Page_Id() != null)
-				biPageDao.updateByHiber(biPage);
-			else
-				biPageDao.saveByHiber(biPage);
+			if(biPage.getBi_Page_Id() != null) {
+				biPageDao.update(biPage);
+			}else {
+				biPageDao.save(biPage);
+			}
 			return 1;
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -47,9 +48,9 @@ public class BIPageServiceImpl implements BIPageService {
 	@Override
 	public BI_Page getBiPage(BI_Page biPage) {
 		if (biPage.getBi_Page_Id() != null) {
-			return biPageDao.getByIdHiber(BI_Page.class, biPage.getBi_Page_Id());
+			return biPageDao.getBIPageById(biPage.getBi_Page_Id());
 		} else {
-			return biPageDao.getByEntityHiber(biPage);
+			return biPageDao.getBIPageInfo(biPage);
 		}
 	}
 
@@ -60,8 +61,8 @@ public class BIPageServiceImpl implements BIPageService {
 	}
 
 	@Override
-	public MiniDaoPage<BI_Page> getBIPageListPage(BI_Page biPage, int page, int rows) {
-		return biPageDao.getBIPageListPage(biPage, page, rows);
+	public List<BI_Page> getBIPageListPage(BI_Page biPage, int page, int rows) {
+		return biPageDao.getBIPageListPage(biPage);
 	}
 
 }

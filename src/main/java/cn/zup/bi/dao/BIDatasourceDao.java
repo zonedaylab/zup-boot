@@ -20,7 +20,11 @@ public interface BIDatasourceDao {
      */
     BI_Datasource getDatasourceInfoById(@Param("id") Integer id);
 
-    List<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource);
+    List<BI_Datasource> getDatasourcePagingList(@Param("biDatasource") BI_Datasource biDatasource);
 
-    void deleteDatasourceInfo(int id);
+    void deleteDatasourceInfo(@Param("id") int id);
+
+    void save(@Param("biDatasource") BI_Datasource biDatasource);
+
+    void update(@Param("biDatasource") BI_Datasource biDatasource);
 }

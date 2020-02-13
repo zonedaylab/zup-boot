@@ -78,7 +78,7 @@ public class BIDesignFormController {
                     BI_REPORT_FIELD reportField = new BI_REPORT_FIELD();
                     reportField.setReport_Id(reportId);
                     BI_REPORT biReport = reportService.getReportInfo(reportId);
-                    MiniDaoPage<BI_REPORT_FIELD> rflist = reportFieldService.getReportFieldList(reportField, 99999, 1);
+                    List<BI_REPORT_FIELD> rflist = reportFieldService.getReportFieldList(reportField, 99999, 1);
                     jsonObject.put("data", rflist);
                     break;
             }

@@ -2,8 +2,8 @@ package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.BI_Screen;
 import cn.zup.bi.service.BIScreenService;
+import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONObject;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest/bi/biScreenController")
@@ -26,7 +27,6 @@ public class BIScreenController {
 	 * */
 	@RequestMapping("")
 	public ModelAndView index(HttpServletRequest request){
-		
 		//需要优化pageId为空
 		String pageId = request.getParameter("pageId");
 		ModelAndView mv = new ModelAndView("bi/biScreenManage");
@@ -44,10 +44,11 @@ public class BIScreenController {
 	public String saveScreen(BI_Screen bi_Screen){
 		JSONObject json = new JSONObject();
 		int b = biScreenService.updateScreenInfo(bi_Screen);
-		if(b==1)
+		if(b==1) {
 			json.put("data", "success");
-		else
+		} else {
 			json.put("data", "fial");
+		}
 		return json.toString();
 	}
 	
@@ -60,10 +61,11 @@ public class BIScreenController {
 	public String updateScreen(BI_Screen bi_Screen){
 		JSONObject json = new JSONObject();
 		int b = biScreenService.updateScreenInfo(bi_Screen);
-		if(b==1)
+		if(b==1) {
 			json.put("data", "success");
-		else
+		} else {
 			json.put("data", "fial");
+		}
 		return json.toString();
 	}
 	
@@ -81,8 +83,9 @@ public class BIScreenController {
 			if(b == 0){
 				ids += bi_Screen_Ids[i] + ", ";
 				json.put("data", "fial");
-			}else
+			}else {
 				json.put("data", "success");
+			}
 		}
 		json.put("msg", ids);
 		return json.toString();
@@ -107,14 +110,9 @@ public class BIScreenController {
 	 * */
 	@RequestMapping("/getScreenListByPage")
 	@ResponseBody
-	public String getPageListByPage(BI_Screen bi_Screen, int rows, int page){
-		MiniDaoPage<BI_Screen> list = biScreenService.getBIScreenListPage(bi_Screen, page, rows);
-		JSONObject json = new JSONObject();
-		json.put("data", list.getResults());
-		json.put("rows", list.getRows());
-		json.put("page", list.getPage());
-		json.put("total", list.getTotal());
-		return json.toString();
+	public CommonResult getPageListByPage(BI_Screen bi_Screen, int rows, int page){
+		List<BI_Screen> list = biScreenService.getBIScreenListPage(bi_Screen, page, rows);
+		return CommonResult.successPage(list, page, rows);
 	}
 	
 }

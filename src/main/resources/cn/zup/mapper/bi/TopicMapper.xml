@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.TopicDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_TOPIC">
+        <id property="topic_Id" column="TOPIC_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="topic_Name" column="TOPIC_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="topic_Caption" column="TOPIC_CAPTION" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="topic_Type" column="TOPIC_TYPE" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="biz_Table_Name" column="BIZ_TABLE_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="ds_id" column="DS_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+    </resultMap>
+
+    <select id="getBiScreenList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_TOPIC">
+        SELECT bs.SCREEN_ID,
+            bs.SCREEN_INDEX,
+            bs.SCREEN_NAME,
+            bs.PAGE_ID,
+            bp.PAGE_NAME
+        FROM bi_screen bs
+        LEFT JOIN bi_page bp ON bs.PAGE_ID = bp.BI_PAGE_ID
+        WHERE PAGE_ID=${biScreen.page_Id}
+    </select>
+
+    <select id="getTopicPagingList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_TOPIC">
+        select TOPIC_ID,TOPIC_NAME,TOPIC_CAPTION,TOPIC_TYPE,BIZ_TABLE_NAME
+        from BI_TOPIC
+        where 1=1
+        ORDER BY TOPIC_ID DESC
+    </select>
+
+    <select id="getTopic" resultMap="baseMap" parameterType="java.lang.Integer">
+        select topic_Id, topic_Name, topic_Caption, topic_Type, biz_Table_Name, DS_ID from BI_TOPIC where topic_Id = #{topicId}
+    </select>
+
+    <delete id="deleteTopic" parameterType="java.lang.Integer">
+        DELETE FROM bi_topic WHERE TOPIC_ID = #{topicId}
+    </delete>
+
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_TOPIC" useGeneratedKeys="true" keyProperty="topic.topic_Id" keyColumn="TOPIC_ID">
+        INSERT INTO bi_topic (
+            TOPIC_NAME,
+            TOPIC_CAPTION,
+            TOPIC_TYPE,
+            BIZ_TABLE_NAME,
+            DS_ID
+        ) VALUES
+        (
+            #{topic.topic_Name},
+            #{topic.topic_Caption},
+            #{topic.topic_Type},
+            #{topic.biz_Table_Name},
+            #{topic.ds_id}
+        );
+    </insert>
+
+    <update id="updateTopic" parameterType="cn.zup.bi.entity.BI_TOPIC">
+        UPDATE bi_topic
+        <trim prefix="set" suffixOverrides=",">
+            <if test="topic.topic_Name != null">
+                TOPIC_NAME = #{topic.topic_Name},
+            </if>
+            <if test="topic.topic_Caption != null">
+                TOPIC_CAPTION = #{topic.topic_Caption},
+            </if>
+            <if test="topic.topic_Type != null">
+                TOPIC_TYPE = #{topic.topic_Type},
+            </if>
+            <if test="topic.biz_Table_Name != null">
+                BIZ_TABLE_NAME = #{topic.biz_Table_Name},
+            </if>
+        </trim>
+        WHERE TOPIC_ID = #{topic.topic_Id}
+    </update>
+</mapper>

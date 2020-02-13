@@ -64,6 +64,7 @@ mybatis:
     default-statement-timeout: 3000
     map-underscore-to-camel-case: true
     use-generated-keys: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:cn/zup/mapper/*/*Mapper.xml
 # 分页器
 pagehelper:
@@ -73,6 +74,6 @@ pagehelper:
   page-size-zero: false
   reasonable: true
 
+
 application:
-  message: Hello BJ 
-  
+  message: Hello BJ

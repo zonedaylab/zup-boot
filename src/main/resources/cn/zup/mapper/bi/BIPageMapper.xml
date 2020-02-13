@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.BIPageDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_Page">
+        <id property="bi_Page_Id" column="BI_PAGE_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="page_Name" column="PAGE_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="page_Type" column="PAGE_TYPE" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="page_Title" column="PAGE_TITLE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="page_Url" column="PAGE_URL" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="menu_Id" column="MENU_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="menu_Name" column="MENU_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="pageTypeStr" column="pageTypeStr" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="getBIPageList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_Page">
+        SELECT * FROM bi_page
+    </select>
+
+    <select id="getBIPageListPage" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_Page">
+        SELECT BI_PAGE_ID,
+            PAGE_TYPE,
+            PAGE_TITLE,
+            PAGE_NAME,
+            PAGE_URL,
+            MENU_ID,
+            MENU_NAME,
+            con.SUBNAME AS pageTypeStr
+        FROM bi_page
+        JOIN config con ON PAGE_TYPE = con.SUBID
+        WHERE con.CONFIGID = ${biPage.pageTypeStr}
+        ORDER BY BI_PAGE_ID desc
+    </select>
+
+    <select id="getBIPageById" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT * FROM bi_page Where BI_PAGE_ID = #{bi_Page_Id}
+    </select>
+
+    <select id="getBIPageInfo" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT * FROM bi_page
+        <where>
+            <if test="biPage.page_Name != null">
+                AND PAGE_NAME = #{biPage.page_Name}
+            </if>
+            <if test="biPage.page_Type != null">
+                AND PAGE_TYPE = #{biPage.page_Type}
+            </if>
+            <if test="biPage.page_Title != null">
+                AND PAGE_TITLE = #{biPage.page_Title}
+            </if>
+            <if test="biPage.page_Url != null">
+                AND PAGE_URL = #{biPage.page_Url}
+            </if>
+            <if test="biPage.menu_Id != null">
+                AND MENU_ID = #{biPage.menu_Id}
+            </if>
+            <if test="biPage.menu_Name != null">
+                AND MENU_NAME = #{biPage.menu_Name}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deletePageById" parameterType="java.lang.Integer">
+        DELETE FROM bi_page WHERE BI_PAGE_ID = #{bi_Page_Id}
+    </delete>
+
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_Page" useGeneratedKeys="true" keyColumn="BI_PAGE_ID" keyProperty="biPage.bi_Page_Id">
+        INSERT INTO bi_page (
+            PAGE_TYPE,
+            PAGE_TITLE,
+            PAGE_NAME,
+            PAGE_URL,
+            MENU_ID,
+            MENU_NAME
+        ) VALUES
+        (
+            #{biPage.page_Type},
+            #{biPage.page_Title},
+            #{biPage.page_Name},
+            #{biPage.page_Url},
+            #{biPage.menu_Id},
+            #{biPage.menu_Name}
+        );
+    </insert>
+
+    <update id="update" parameterType="cn.zup.bi.entity.BI_Page">
+        UPDATE bi_page
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biPage.page_Name != null">
+                PAGE_NAME = #{biPage.page_Name},
+            </if>
+            <if test="biPage.page_Type != null">
+                PAGE_TYPE = #{biPage.page_Type},
+            </if>
+            <if test="biPage.page_Title != null">
+                PAGE_TITLE = #{biPage.page_Title},
+            </if>
+            <if test="biPage.page_Url != null">
+                PAGE_URL = #{biPage.page_Url},
+            </if>
+            <if test="biPage.menu_Id != null">
+                MENU_ID = #{biPage.menu_Id},
+            </if>
+            <if test="biPage.menu_Name != null">
+                MENU_NAME = #{biPage.menu_Name},
+            </if>
+        </trim>
+        WHERE BI_PAGE_ID = #{biPage.bi_Page_Id}
+    </update>
+</mapper>

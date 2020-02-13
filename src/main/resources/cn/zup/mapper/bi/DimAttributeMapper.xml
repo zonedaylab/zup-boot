@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.DimAttributeDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_DIM_ATTRIBUTE">
+        <id property="attribute_Id" column="ATTRIBUTE_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="dim_Id" column="DIM_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="attribute_Name" column="ATTRIBUTE_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="attribute_Value_Field" column="ATTRIBUTE_VALUE_FIELD" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="attribute_Caption_Field" column="ATTRIBUTE_CAPTION_FIELD" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="getDimInfoList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_DIM_ATTRIBUTE">
+        SELECT * FROM bi_dim_attribute
+    </select>
+
+    <select id="getBiDimAttributeById" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT * FROM bi_dim_attribute
+        WHERE ATTRIBUTE_ID=#{attribute_id}
+    </select>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM bi_dim_attribute WHERE ATTRIBUTE_ID = ${attribute_id}
+    </delete>
+
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_DIM_ATTRIBUTE" useGeneratedKeys="true" keyProperty="biDimAttribute.attribute_id" keyColumn="ATTRIBUTE_ID">
+        INSERT INTO bi_dim_attribute (
+            DIM_ID,
+            ATTRIBUTE_NAME,
+            ATTRIBUTE_VALUE_FIELD,
+            ATTRIBUTE_CAPTION_FIELD
+        ) VALUES
+        (
+            #{biDimAttribute.dim_Id},
+            #{biDimAttribute.attribute_Name},
+            #{biDimAttribute.attribute_Value_Field},
+            #{biDimAttribute.attribute_Caption_Field}
+        );
+    </insert>
+
+    <update id="update" parameterType="cn.zup.bi.entity.BI_DIM_ATTRIBUTE">
+        UPDATE bi_dim_attribute
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biDimAttribute.dim_Id != null">
+                DIM_ID = #{biDimAttribute.dim_Id},
+            </if>
+            <if test="biDimAttribute.attribute_Name != null">
+                ATTRIBUTE_NAME = #{biDimAttribute.attribute_Name},
+            </if>
+            <if test="biDimAttribute.attribute_Value_Field != null">
+                ATTRIBUTE_VALUE_FIELD = #{biDimAttribute.attribute_Value_Field},
+            </if>
+            <if test="biDimAttribute.attribute_Caption_Field != null">
+                ATTRIBUTE_CAPTION_FIELD = #{biDimAttribute.attribute_Caption_Field},
+            </if>
+        </trim>
+        WHERE ATTRIBUTE_ID = #{biDimAttribute.attribute_id}
+    </update>
+</mapper>

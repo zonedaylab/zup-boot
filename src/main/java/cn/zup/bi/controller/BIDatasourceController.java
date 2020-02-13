@@ -1,14 +1,9 @@
 package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.BI_Datasource;
-import cn.zup.bi.entity.BI_REPORT;
 import cn.zup.bi.service.BIDatasourceService;
 import cn.zup.framework.common.vo.CommonResult;
-import cn.zup.framework.json.JsonDateValueProcessor;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.Date;
@@ -55,10 +50,11 @@ public class BIDatasourceController {
         bi_datasource.setDs_create_time(new Date());
         int r = biDatasourceService.addDatasource(bi_datasource);
         JSONObject json = new JSONObject();
-        if(r!=0)
+        if(r!=0) {
             json.put("data", "success");
-        else
+        }else {
             json.put("data", "error");
+        }
         return json.toString();
     }
 
@@ -84,10 +80,11 @@ public class BIDatasourceController {
     public String updateReport(BI_Datasource datasource){
         int r = biDatasourceService.addDatasource(datasource);
         JSONObject json = new JSONObject();
-        if(r!=0)
+        if(r!=0) {
             json.put("data", "success");
-        else
+        }else {
             json.put("data", "error");
+        }
         return json.toString();
     }
 
@@ -100,7 +97,7 @@ public class BIDatasourceController {
     @RequestMapping("/getDatasourceList")
     @ResponseBody
     public CommonResult<BI_Datasource> getDatasourceList(BI_Datasource bi_datasource, int rows, int page){
-        List<BI_Datasource> list = biDatasourceService.getDatasourcePagingList(bi_datasource, page, rows);
+        List<BI_Datasource> list = biDatasourceService.getDatasourcePagingList(bi_datasource);
         return CommonResult.successPage(list, page, rows);
     }
 

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.BIPageBlockDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_Block_Info">
+        <id property="block_Id" column="BLOCK_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="block_Flag" column="BLOCK_FLAG" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="x_Point" column="X_POINT" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="y_Point" column="Y_POINT" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="width" column="WIDTH" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="height" column="HEIGHT" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="report_Id" column="REPORT_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="bi_Page_Id" column="BI_PAGE_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="block_Type" column="BLOCK_TYPE" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="screen_Index" column="SCREEN_INDEX" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+    </resultMap>
+
+    <select id="getBIBlockList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_Block_Info">
+        SELECT * FROM bi_block
+    </select>
+
+    <select id="getBIBlockInfo" resultType="cn.zup.bi.entity.BI_Block_Info" parameterType="java.lang.Integer">
+        SELECT * FROM bi_block Where BLOCK_ID = #{bi_Block_Id}
+    </select>
+
+    <select id="getPageBlockByPageId" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT * FROM bi_block
+        <where>
+            <if test="bi_Page_Id != null">
+                AND BI_PAGE_ID = #{bi_Page_Id}
+            </if>
+            <if test="screen_Index != null">
+                AND SCREEN_INDEX = #{screen_Index}
+            </if>
+            <if test="block_Id != null">
+                AND BLOCK_ID = #{block_Id}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteBlockById" parameterType="java.lang.Integer">
+        DELETE FROM bi_block WHERE BLOCK_ID = #{bi_Block_Id}
+    </delete>
+
+    <delete id="deleteBlockByPageId" parameterType="java.lang.Integer">
+        DELETE FROM bi_block WHERE  = BI_PAGE_ID = #{bi_Page_Id}
+    </delete>
+
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_Block_Info" useGeneratedKeys="true" keyProperty="biBlock.block_Id" keyColumn="BLOCK_ID">
+        INSERT INTO bi_block (
+            BLOCK_FLAG,
+            X_POINT,
+            Y_POINT,
+            WIDTH,
+            HEIGHT, REPORT_ID, BI_PAGE_ID, BLOCK_TYPE, SCREEN_INDEX
+        ) VALUES
+        (
+            #{biBlock.block_Flag},
+            #{biBlock.x_Point},
+            #{biBlock.y_Point},
+            #{biBlock.width},
+            #{biBlock.height},
+            #{biBlock.report_Id},
+            #{biBlock.bi_Page_Id},
+            #{biBlock.block_Type},
+            #{biBlock.screen_Index}
+        );
+    </insert>
+
+    <update id="update" parameterType="cn.zup.bi.entity.BI_Block_Info">
+        UPDATE bi_block
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biBlock.block_Flag != null">
+                BLOCK_FLAG = #{biBlock.block_Flag},
+            </if>
+            <if test="biBlock.x_Point != null">
+                X_POINT = #{biBlock.x_Point},
+            </if>
+            <if test="biBlock.y_Point != null">
+                Y_POINT = #{biBlock.y_Point},
+            </if>
+            <if test="biBlock.width != null">
+                WIDTH = #{biBlock.width},
+            </if>
+            <if test="biBlock.height != null">
+                HEIGHT = #{biBlock.height},
+            </if>
+            <if test="biBlock.report_Id != null">
+                REPORT_ID = #{biBlock.report_Id},
+            </if>
+            <if test="biBlock.bi_Page_Id != null">
+                BI_PAGE_ID = #{biBlock.bi_Page_Id},
+            </if>
+            <if test="biBlock.block_Type != null">
+                BLOCK_TYPE = #{biBlock.block_Type},
+            </if>
+            <if test="biBlock.screen_Index != null">
+                SCREEN_INDEX = #{biBlock.screen_Index},
+            </if>
+        </trim>
+        WHERE BLOCK_ID = #{biBlock.block_Id}
+    </update>
+</mapper>

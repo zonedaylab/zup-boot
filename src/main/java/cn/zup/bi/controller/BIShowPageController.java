@@ -2,6 +2,7 @@ package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.*;
+import cn.zup.bi.utils.DatabaseParamBuilder;
 import cn.zup.bi.utils.PropertiesUtil;
 import cn.zup.framework.json.JsonDateValueProcessor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,15 +32,17 @@ public class BIShowPageController {
 	@Resource
 	private BIShowEngineService biShowEngineService;
 	@Resource
-	private ReportFieldService biReportFieldService;
-	@Resource
 	private BIDimService biDimService;
 	@Resource
 	private TopicFieldService biTopicFieldService;
 	@Resource
+	private TopicService topicService;
+	@Resource
 	private ReportService biReportService;
 	@Resource
 	private BIScreenService biScreenService;
+	@Resource
+	private BIDatasourceService biDatasourceService;
 	
 	@RequestMapping("/{id}")
 	public ModelAndView index(@PathVariable("id") Integer id) {
@@ -99,8 +102,18 @@ public class BIShowPageController {
 		}
 		List<BI_Block_Info> blockList = biPageBlockService.getPageBlockByPageId(vreportData.getBi_Page_Id(), vreportData.getScreen_Index(), vreportData.getBlock_Id());
 		JSONObject json = new JSONObject();
-		Class.forName(PropertiesUtil.CLASSNAME);
-		Connection conn = DriverManager.getConnection(PropertiesUtil.URL, PropertiesUtil.USERNAME, PropertiesUtil.PASSWORD);
+
+		Connection conn = null;
+		if(blockList.size() > 0) {
+			Integer reportId = blockList.get(0).getReport_Id();
+			BI_REPORT bi_report = biReportService.getReportInfo(reportId);
+			BI_TOPIC bi_topic = topicService.getTopicData(bi_report.getTopic_Id());
+			BI_Datasource biDatasource = biDatasourceService.getDatasourceInfo(bi_topic.getDs_id());
+			Class.forName(DatabaseParamBuilder.getClassName(biDatasource.getDs_attr()));
+			conn = DriverManager.getConnection(DatabaseParamBuilder.getUrl(biDatasource.getDs_ip()
+					, biDatasource.getDs_port(), biDatasource.getDs_name()
+					, biDatasource.getDs_attr()), biDatasource.getDs_username(), biDatasource.getDs_password());
+		}
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();

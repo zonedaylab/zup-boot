@@ -22,12 +22,14 @@ public class BIScreenServiceImpl implements BIScreenService {
 	@Override
 	public int updateScreenInfo(BI_Screen biScreen) {
 		try {
-			if(biScreen.getScreen_Id() != null)
-				biScreenDao.updateByHiber(biScreen);
-			else
-				biScreenDao.saveByHiber(biScreen);
+			if(biScreen.getScreen_Id() != null) {
+				biScreenDao.update(biScreen);
+			} else {
+				biScreenDao.save(biScreen);
+			}
 			return 1;
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e.getMessage());
 			return 0;
 		}
@@ -46,17 +48,17 @@ public class BIScreenServiceImpl implements BIScreenService {
 
 	@Override
 	public BI_Screen getBiScreen(BI_Screen biScreen) {
-		return biScreenDao.getByIdHiber(BI_Screen.class, biScreen.getScreen_Id());
+		return biScreenDao.getById(biScreen.getScreen_Id());
 	}
 
 	@Override
 	public List<BI_Screen> getBiScreenList(BI_Screen biScreen) {
-		List<BI_Screen> list = biScreenDao.getBIScreenList(biScreen);
+		List<BI_Screen> list = biScreenDao.getBiScreenList(biScreen);
 		return list;
 	}
 
 	@Override
-	public MiniDaoPage<BI_Screen> getBIScreenListPage(BI_Screen biScreen, int page, int rows) {
-		return biScreenDao.getBIScreenListPage(biScreen, page, rows);
+	public List<BI_Screen> getBIScreenListPage(BI_Screen biScreen, int page, int rows) {
+		return biScreenDao.getBiScreenListPage(biScreen);
 	}
 }
