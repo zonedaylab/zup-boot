@@ -219,8 +219,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				} 
 			};
 			var keys = new Array(), values = new Array();  //查询条件
-			keys.push("survey_year");
-			values.push(2017);
+			//keys.push("survey_year"); //去掉特定过滤语句 by liuxf
+			//values.push(2017);
 			var index = 0;
 			function getList(id, indexs) {
 				var drill_Name, drill_Value;
