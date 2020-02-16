@@ -575,17 +575,89 @@
 		            data: 'menuID='+v.id,
 		            cache: false,  //禁用缓存
 		            dataType: "json",
-		            success: function (result) { 
-		        		$("#subMenu"+v.id).html(""); 
+		            success: function (result) {
+		        		$("#subMenu"+v.id).html("");
 		        		if(result.submenulist.length>0)
 		        		{
-		            		for(var i=0;i<result.submenulist.length;i++){ 
-								$("#subMenu"+v.id).append("<li><a href=\"javascript:addTabs({id:"+result.submenulist[i].menuId+",title:'"+result.submenulist[i].menuName+"',close: true,url:'"+result.submenulist[i].urlAddress+"?menuid="+result.submenulist[i].menuId+"'})\" title=\""+result.submenulist[i].menuName+"\"><i class=\"icon-double-angle-right\"></i>"+result.submenulist[i].menuName+"</a></li> ");  
-			            	}
+		            		for(var i=0;i<result.submenulist.length;i++){
+								//$("#subMenu"+v.id).append("<li><a href=\"javascript:addTabs({id:"+result.submenulist[i].menuId+",title:'"+result.submenulist[i].menuName+"',close: true,url:'"+result.submenulist[i].urlAddress+"?menuid="+result.submenulist[i].menuId+"'})\" title=\""+result.submenulist[i].menuName+"\"><i class=\"icon-double-angle-right\"></i>"+result.submenulist[i].menuName+"</a></li> ");
+								$("#subMenu"+v.id).append("<li><a href=\"javascript:addTabs({id:"+result.submenulist[i].menuId+
+										",title:'"+result.submenulist[i].menuName+"',close: true,url:'"+
+										result.submenulist[i].urlAddress.replace("@ip", "http://").replace("@uname", "&user_name=").replace("@pwd", "&password=").replace("{{menuid}}", result.submenulist[i].menuId).replace("@bi", "/Bi/MenuShow")+
+										"?menuid=" + result.submenulist[i].menuId + "'})\" title=\""+result.submenulist[i].menuName+"\">"+result.submenulist[i].menuName+"</a></li> ");
+
+							}
 		            	}
 		        		else{
-		        			$("#arrowDown"+v.id).hide(); 
+		        			$("#arrowDown"+v.id).hide();
 						}
+
+
+		        		// ///////////////////////////////////////////
+						//
+						// level=2;
+						//
+						// $("#subMenu"+v.id).html("");
+						// $("#sanMenu"+v.id).html("");
+						//
+						// if($(v).attr("href") != "javascript:void(0);"){
+						// 	var pars = $(v).attr("href").split("-");
+						// 	addTabs({id:pars[0],title:pars[1],close: true,url: pars[2]});
+						// }
+						// if(result.submenulist.length>0){
+						// 	for(var i=0;i<result.submenulist.length;i++){
+						// 		if(level == 2){
+						// 			if(result.submenulist[i].mobileFlagConfig == 3){
+						// 				var addtab = "javascript:void(0);";
+						// 				if(result.submenulist[i].urlAddress != "1"){
+						// 					addtab = result.submenulist[i].menuId+"-"+result.submenulist[i].menuName+"-"+result.submenulist[i].urlAddress;
+						// 				}
+						// 				var subMenu = "";
+						// 				subMenu += "<li class='esale-dianji'>";
+						// 				subMenu += "	<a href='"+addtab+"' onclick='showSubMenu(this, 3)' id='"+result.submenulist[i].menuId+"' title='"+result.submenulist[i].menuName+"' class='dropdown-toggle subsub'>";
+						// 				subMenu += "		<i class='san'></i>"+result.submenulist[i].menuName+"</a>";
+						// 				subMenu += "	<ul class='submenu' id='sanMenu"+result.submenulist[i].menuId+"' style='display: none;'> ";
+						// 				subMenu += "	</ul> </li>";
+						// 				$("#subMenu"+v.id).append(subMenu);
+						// 				$("#subMenu1"+v.id).append(subMenu);
+						// 			}else{
+						// 				$("#subMenu"+v.id).append("<li><a href=\"javascript:addTabs({id:"+result.submenulist[i].menuId+
+						// 						",title:'"+result.submenulist[i].menuName+"',close: true,url:'"+
+						// 						result.submenulist[i].urlAddress.replace("@ip", "http://").replace("@uname", "&user_name=").replace("@pwd", "&password=").replace("{{menuid}}", result.submenulist[i].menuId).replace("@bi", "/Bi/MenuShow")+
+						// 						"?menuid=" + result.submenulist[i].menuId + "'})\" title=\""+result.submenulist[i].menuName+"\">"+result.submenulist[i].menuName+"</a></li> ");
+						// 				$("#subMenu1"+v.id).append("<li><a href=\"javascript:addTabs({id:"+result.submenulist[i].menuId+
+						// 						",title:'"+result.submenulist[i].menuName+"',close: true,url:'"+
+						// 						result.submenulist[i].urlAddress.replace("@ip", "http://").replace("@uname", "&user_name=").replace("@pwd", "&password=").replace("{{menuid}}", result.submenulist[i].menuId).replace("@bi", "/Bi/MenuShow")+
+						// 						"?menuid=" + result.submenulist[i].menuId + "'})\" title=\""+result.submenulist[i].menuName+"\">"+result.submenulist[i].menuName+"</a></li> ");
+						// 			}
+						// 		}else{  //3级
+						// 			if(result.submenulist[i].urlAddress == "@@")
+						// 				$("#sanMenu"+v.id).append("<li><a href=\"javascript:yaogan()\" title=\""+result.submenulist[i].menuName+
+						// 						"\" style='padding-left: 32%; text-decoration: none;'>"+
+						// 						result.submenulist[i].menuName+"</a></li> ");
+						// 			else{
+						// 				var ap = "";
+						// 				if((result.submenulist[i].urlAddress).indexOf("?") > -1)
+						// 					ap = "";
+						// 				else
+						// 					ap = "&n="+result.submenulist[i].menuName;
+						// 				$("#sanMenu"+v.id).append("<li><a href=\"javascript:addTabs({id:"+result.submenulist[i].menuId+
+						// 						",title:'"+result.submenulist[i].menuName+"',close: true,url:'"+
+						// 						result.submenulist[i].urlAddress.replace("@ip", "http://").replace("@uname", "&user_name=").replace("@pwd", "&password=").replace("@bi", "/Bi/MenuShow")+"?menuid=" + result.submenulist[i].menuId+
+						// 						ap + "'})\" title=\""+result.submenulist[i].menuName+"\" style='padding-left: 32%; text-decoration: none;'>"+
+						// 						result.submenulist[i].menuName+"</a></li> ");
+						// 			}
+						// 		}
+						// 	}
+						// }else{
+						// 	$("#arrowDown"+v.id).hide();
+						// }
+
+
+
+
+
+						//---------------------------------------
 		        	},
 		            error:function(){	            	
 		            }
