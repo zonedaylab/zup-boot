@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8093
   tomcat:
     uri-encoding: UTF-8   # 配置Tomcat编码,默认为UTF-8
     max-threads: 1000  # 配置最大线程数
@@ -13,9 +13,9 @@ spring:
     enabled: false
   datasource:
     name: druid
-    url: jdbc:mysql://127.0.0.1:3306/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256
+    url: jdbc:mysql://localhost:3306/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256
     username: root
-    password: 123456
+    password: iesapp
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -40,14 +40,22 @@ spring:
        exclude: WEB-INF/**
   aop:
     auto: true
-  redis:
-    database: 0
-    host: 127.0.0.1
-    port: 6379
-    password:
-
+#  redis:
+#    database: 0
+#    host: 127.0.0.1
+#    port: 6379
+#    password:
+#    pool:
+#      max-active: 8
+#      max-wait: -1
+#      max-idle: 8
+#      min-idle: 0
+#
   session:
-    store-type: redis
+    store-type: none
+  cache:
+    type: none
+    cache-names: cache-name1,cache-name2
 
 # Mybatis 配置
 mybatis:

@@ -177,7 +177,8 @@ public class LoginController {
 		
 		UserSession userSessionRevify = (UserSession)request.getSession().getAttribute("usersession");
 	    if (userSessionRevify != null) {
-	      json.put("have", "have");
+	      //json.put("have", "you have login");
+	      json.put("msg", "success");
 	    } 
 	    else if(!FilterUrl(accountname)) //验证accountName
 	    {
@@ -195,7 +196,8 @@ public class LoginController {
 			}else if(request.getParameter("Hongjialou")!=null && "true".equals(request.getParameter("Hongjialou"))){
 					domainSystem=resourceService.getDomainSystemByDomain("Hongjialou");
 			}else{//默认济南光伏
-				domainSystem=resourceService.getDomainSystemByDomain("homeController");
+				//改为资金
+				domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
 			}
 			LoginLog loginLog = new LoginLog(); 
 			Date nowTime = new Date(System.currentTimeMillis()); 
