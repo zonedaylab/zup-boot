@@ -1,16 +1,9 @@
 package cn.zup.rbac.entity;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
 //账户
 @Entity
 @Table(name="account")
@@ -25,6 +18,8 @@ public class Account implements Serializable {
 	private Integer validFlag;
 	private String validFlagString;
 	private Integer validFlagConfig;
+	private String accountUsed;//财务职能 如果拥有多种财务职能则用英文逗号分开 如   1,2 
+	private String responsiblePersion;//责任人
 	
 	@Id
 	@GeneratedValue(generator="_native")
@@ -73,5 +68,17 @@ public class Account implements Serializable {
 	public void setValidFlagConfig(Integer validFlagConfig) {
 		this.validFlagConfig = validFlagConfig;
 	}
-		
+	public String getAccountUsed() {
+		return accountUsed;
+	}
+	public void setAccountUsed(String accountUsed) {
+		this.accountUsed = accountUsed;
+	}
+	public String getResponsiblePersion() {
+		return responsiblePersion;
+	}
+	public void setResponsiblePersion(String responsiblePersion) {
+		this.responsiblePersion = responsiblePersion;
+	}	
+	
 }

@@ -1,28 +1,26 @@
 package cn.zup.rbac.dao;
 
-import java.util.List;
-
+import cn.zup.rbac.entity.Menu;
+import cn.zup.rbac.entity.MenuRoleEx;
 import org.jeecgframework.minidao.annotation.Arguments;
 import org.jeecgframework.minidao.annotation.MiniDao;
 import org.jeecgframework.minidao.annotation.ResultType;
 import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
 
-import cn.zup.rbac.entity.Menu;
-import cn.zup.rbac.entity.MenuRoleEx;
-import cn.zup.rbac.entity.System;
+import java.util.List;
 
 @MiniDao
 public interface ResourceMenuDao extends MiniDaoSupportHiber<Menu> {	
 	@Arguments({"menu","system","parentMenu","menuName"})
-	List<Menu> getmenuRepeatVerify(Integer menu, int system, int parentMenu,String menuName);
+	List<Menu> getmenuRepeatVerify(Integer menu, int system, int parentMenu, String menuName);
 	@Arguments({"menu"})
 	List<Menu> getMenuList(Menu menu);
 	@Arguments({"roleId","systemId"})
 	List<Menu> getRolePermitMenu(int roleId, int systemId);
 	@Arguments({"accountId","systemId","mobileFlag","superSystemId"})
-	List<Menu> getAccountPermitMenu(Integer accountId, Integer systemId,Integer mobileFlag,int superSystemId);
+	List<Menu> getAccountPermitMenu(Integer accountId, Integer systemId, Integer mobileFlag, int superSystemId);
 	@Arguments({"accountId","parentMenuId","mobileFlag"})
-	List<Menu> getAccountPermitSubMenu(int accountId, int parentMenuId,int mobileFlag);
+	List<Menu> getAccountPermitSubMenu(int accountId, int parentMenuId, int mobileFlag);
 	@Arguments("menuid")
 	void deleteFromRoleMenu(int menuid);
 	@Arguments("menu")
@@ -35,7 +33,7 @@ public interface ResourceMenuDao extends MiniDaoSupportHiber<Menu> {
 	@Arguments({"url","accountid"})
 	int getUrlRoleVerify(String url, int accountid);
 	@Arguments({"roleId","systemId","parentMenuId"})
-	List<MenuRoleEx> getRolePermitChildMenu(int roleId, int systemId,int parentMenuId);
+	List<MenuRoleEx> getRolePermitChildMenu(int roleId, int systemId, int parentMenuId);
 	@Arguments({"menu"})
 	@ResultType(Menu.class)
 	List<Menu> getSystemMenuList(Menu menu);

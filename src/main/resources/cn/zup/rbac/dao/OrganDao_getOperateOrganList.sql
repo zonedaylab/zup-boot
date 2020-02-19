@@ -12,7 +12,7 @@ left join config organTypeConfig on  organTypeConfig.subid=organ.organType
 </#if>
 where 1=1
 <#if organ.parentOrganId ?exists>
-	and parentOrganId =  ${parentOrganId}
+	and parentOrganId =  ${organ.parentOrganId}
 </#if>
 <#if organ.organType?exists>
 	and organType =  ${organ.organType}

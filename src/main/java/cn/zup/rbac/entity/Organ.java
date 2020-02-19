@@ -1,13 +1,9 @@
 package cn.zup.rbac.entity;
 
-import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "ORGAN")
@@ -32,6 +28,7 @@ public class Organ implements Serializable {
 	private String validFlagString;
 	private Integer validFlagConfig;
 	private Integer organTypeConfig;
+	private String  organUsed;//财务职能 -资金项目特殊字段
 	@Id
 	@GeneratedValue(generator="_native")
 	@GenericGenerator(name="_native",strategy="native")
@@ -123,7 +120,15 @@ public class Organ implements Serializable {
 	}
 	public void setChildCounts(Integer childCounts) {
 		this.childCounts = childCounts;
+	}
+	@Transient
+	public String getOrganUsed() {
+		return organUsed;
+	}
+	public void setOrganUsed(String organUsed) {
+		this.organUsed = organUsed;
 	}	
+	
 	
 	
 }

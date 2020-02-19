@@ -1,27 +1,25 @@
 package cn.zup.rbac.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import cn.zup.rbac.controller.ViewEntity.TreeView;
 import cn.zup.rbac.entity.Config;
-import cn.zup.rbac.entity.EnergyMerchant;
 import cn.zup.rbac.entity.Organ;
 import cn.zup.rbac.entity.UserSession;
 import cn.zup.rbac.service.ConfigurationService;
 import cn.zup.rbac.service.MerchantService;
 import cn.zup.rbac.service.OrganPostService;
 import cn.zup.rbac.service.UserService;
-import cn.zup.rbac.service.settings.ConfigOrganType;
 import cn.zup.rbac.service.settings.ConfigSetting;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用于组织管理操作的相关控制
@@ -83,21 +81,6 @@ import cn.zup.rbac.service.settings.ConfigSetting;
 				tree.add(t);
 			}
 		}
-		json.put("data", tree);
-		return json.toString();
-	}
-
-	
-	@RequestMapping("/getMyOrgan")
-	@ResponseBody
-	public String getMyOrgan(int parentOrganId,HttpServletRequest request){
-		JSONObject json = new JSONObject();
-		List<TreeView> tree = new ArrayList<TreeView>();
-		UserSession userSession = (UserSession)request.getSession().getAttribute("usersession");
-		String myOrganIds = "(";
-		myOrganIds += organPostService.getMySubOrganIdsAll(userSession.getOrganId());
-		myOrganIds +=userSession.getOrganId()+")";
-		tree=getMyOrganTree(parentOrganId, myOrganIds);
 		json.put("data", tree);
 		return json.toString();
 	}
@@ -260,6 +243,33 @@ import cn.zup.rbac.service.settings.ConfigSetting;
 		List<Config> listOrganType =configurationService.getConfigInfo(config);
 		JSONObject json = new JSONObject();
 		json.put("data", listOrganType);
+		return json.toString();
+	}	
+
+	/**
+	 * 通过枚举获取组织类型
+	 * @return
+	 */
+	@RequestMapping("/getOrganUsed")
+	@ResponseBody 
+	public String GetOrganUsed(int organId,int used){
+		long start = System.currentTimeMillis();
+		List<Organ> organLL = new ArrayList<Organ>();
+		for (int i = 1; i < 4; i++) {
+			long start1 = System.currentTimeMillis();
+			List<Organ> organList = organPostService.GetOrganUsed(organId, used, i);
+			for (Organ organ : organList) {
+				System.out.println(organ.toString());
+			}
+			organLL = organList;
+			long end1 = System.currentTimeMillis();
+			System.out.println(i+"--------->>> "+(end1-start1)+"ms"); 
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("程序运行时间： "+(end-start)+"ms"); 
+
+		JSONObject json = new JSONObject();
+		json.put("data", organLL);
 		return json.toString();
 	}	
 }

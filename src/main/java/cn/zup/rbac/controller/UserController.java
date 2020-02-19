@@ -1,18 +1,15 @@
 package cn.zup.rbac.controller;
 
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import cn.zup.framework.json.JsonDateValueProcessor;
+import cn.zup.framework.util.MD5Base;
+import cn.zup.rbac.entity.*;
+import cn.zup.rbac.service.*;
+import cn.zup.rbac.service.settings.ConfigSetting;
+import cn.zup.wechat.entity.WechatRegister;
+import cn.zup.wechat.service.BindWechatService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
-
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,24 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.zup.framework.json.JsonDateValueProcessor;
-import cn.zup.framework.util.MD5Base;
-import cn.zup.rbac.entity.Account;
-import cn.zup.rbac.entity.Config;
-import cn.zup.rbac.entity.Organ;
-import cn.zup.rbac.entity.Post;
-import cn.zup.rbac.entity.UserInfo;
-import cn.zup.rbac.entity.UserSession;
-import cn.zup.rbac.interceptors.MySQLJDBCConn;
-import cn.zup.rbac.service.AccountRoleService;
-import cn.zup.rbac.service.ConfigurationService;
-import cn.zup.rbac.service.MerchantService;
-import cn.zup.rbac.service.OrganPostService;
-import cn.zup.rbac.service.UserService;
-import cn.zup.rbac.service.settings.ConfigSetting;
-import cn.zup.wechat.entity.WechatRegister;
-import cn.zup.wechat.service.BindWechatService;
-import cn.zup.wechat.service.impl.BindWechatServiceImpl;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+import java.lang.System;
 /**
  * 用于关于用户操作的管理
  * @author iesies
@@ -128,14 +115,22 @@ public class UserController
 	public String getGridByOrgans(UserInfo userInfo, int page, int rows,HttpServletRequest request) {	
 
 		//通过当前登录用户获取所有部门，进行数据过滤
+		long date1 = System.currentTimeMillis();
 		UserSession userSession = (UserSession)request.getSession().getAttribute("usersession");
-		
-		String myOrganIds = "(";
-		myOrganIds += organPostService.getMySubOrganIdsAll(userSession.getOrganId());
-		myOrganIds +=userSession.getOrganId()+")";
 		//判断组织查询
-		if(userInfo.getOrganId() !=null && userInfo.getOrganId().equals(0))
+		if(userInfo.getOrganId() == null ||  userInfo.getOrganId().equals(0))
 		{
+			String myOrganIds = "(";
+			myOrganIds += organPostService.getMySubOrganIdsAll(userSession.getOrganId());
+			myOrganIds +=")";
+			userInfo.setOrganId(null);
+			userInfo.setOrganIds(myOrganIds);
+		}
+		else
+		{
+			String myOrganIds = "(";
+			myOrganIds += organPostService.getMySubOrganIdsAll(userInfo.getOrganId());
+			myOrganIds +=")";
 			userInfo.setOrganId(null);
 			userInfo.setOrganIds(myOrganIds);
 		}
@@ -154,7 +149,11 @@ public class UserController
 		userInfo.setPoliticsStatusConfig(ConfigSetting.PoliticStatus.getValue());
 		userInfo.setContractTypeConfig(ConfigSetting.ContractType.getValue());
 		userInfo.setEducationConfig(ConfigSetting.Education.getValue());
-		MiniDaoPage<UserInfo> pageopers = userService.getUserPagingList(userInfo, page, rows);		
+		long date2 = System.currentTimeMillis();
+		System.out.println("organS=----->"+(date2-date1));
+		MiniDaoPage<UserInfo> pageopers = userService.getUserPagingList(userInfo, page, rows);	
+		long date3 = System.currentTimeMillis();	
+		System.out.println("organS=----->"+(date3-date1));
 		JSONObject json = new JSONObject(); 
 		json.put("rows", rows);
 		json.put("page", pageopers.getPages());
@@ -343,7 +342,7 @@ public class UserController
 	@ResponseBody
 	public String editUserInfo(UserInfo user, HttpServletRequest request)
 	{
-		java.lang.System.out.println("获取到的userid======================="+user.getUserId());
+		System.out.println("获取到的userid======================="+user.getUserId());
 		JSONObject json = new JSONObject();
 		if(userService.getUserRepeatVerify(user.getUserId(), user.getRealName())){
 			json.put("result", "error");
@@ -399,7 +398,7 @@ public class UserController
 	@ResponseBody 
 	public String gridAccount(Account account, int page, int rows,HttpServletRequest request) {			
 		account.setValidFlagConfig(ConfigSetting.ValigFlag.getValue());		
-		if(account.getValidFlag()==0){//判断有效值是否为0，若为0，则设置为null
+		if(account.getValidFlag()!=null && account.getValidFlag()==0){//判断有效值是否为0，若为0，则设置为null
 			account.setValidFlag(null);
 		}
 		MiniDaoPage<Account>  pageopers = accountService.getAccountPagingList(account,page,rows);			

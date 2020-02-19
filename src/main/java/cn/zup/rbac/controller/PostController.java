@@ -1,13 +1,14 @@
 package cn.zup.rbac.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import cn.zup.rbac.entity.Organ;
+import cn.zup.rbac.entity.Post;
+import cn.zup.rbac.entity.UserSession;
+import cn.zup.rbac.service.MerchantService;
+import cn.zup.rbac.service.OrganPostService;
+import cn.zup.rbac.service.UserService;
+import cn.zup.rbac.service.settings.ConfigSetting;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,17 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.zup.rbac.entity.Organ;
-import cn.zup.rbac.entity.Post;
-import cn.zup.rbac.entity.OperateLog;
-import cn.zup.rbac.entity.System;
-import cn.zup.rbac.entity.UserInfo;
-import cn.zup.rbac.entity.UserSession;
-import cn.zup.rbac.service.MerchantService;
-import cn.zup.rbac.service.OperateLogService;
-import cn.zup.rbac.service.OrganPostService;
-import cn.zup.rbac.service.UserService;
-import cn.zup.rbac.service.settings.ConfigSetting;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 岗位管理页面控制器
@@ -53,7 +46,7 @@ public class PostController{
 	 * */
 	@RequestMapping("")
 	public ModelAndView index(HttpServletRequest request){
-		return new ModelAndView("rbac/villagerManage");
+		return new ModelAndView("rbac/postManage");
 	}
 	
 	/** 
@@ -66,10 +59,31 @@ public class PostController{
 	@ResponseBody 
 	public String getGrid(Post post,Integer page,Integer rows,HttpServletRequest request) {
 		UserSession userSession = (UserSession)request.getSession().getAttribute("usersession");
-		String mySubOrganIds=merchantService.getMySubOrganIds(userSession);
-		if(mySubOrganIds!=""){
-			post.setMyOrganIds(mySubOrganIds);
+		
+
+		//判断组织查询
+		if(post.getOrganId() ==null ||  post.getOrganId().equals(0))
+		{
+			String myOrganIds = "(";
+			myOrganIds += organPostService.getMySubOrganIdsAll(userSession.getOrganId());
+			myOrganIds +=")";
+			post.setOrganId(null);
+			post.setMyOrganIds(myOrganIds);
 		}
+		else
+		{
+			String myOrganIds = "(";
+			myOrganIds += organPostService.getMySubOrganIdsAll(post.getOrganId());
+			myOrganIds +=")";
+			post.setOrganId(null);
+			post.setMyOrganIds(myOrganIds);
+		}
+		
+		
+//		String mySubOrganIds=merchantService.getMySubOrganIds(userSession);
+//		if(mySubOrganIds!=""){
+//			post.setMyOrganIds(mySubOrganIds);
+//		}
 		post.setValidFlagConfig(ConfigSetting.ValigFlag.getValue());
 		MiniDaoPage<Post> pagepost = postservice.getPostPagingList(post, page, rows);
 		JSONObject json = new JSONObject();
