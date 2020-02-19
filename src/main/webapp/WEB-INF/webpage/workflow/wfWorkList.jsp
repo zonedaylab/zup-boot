@@ -87,7 +87,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="col-md-8" style="margin-left:6px;height:30px; margin-bottom:10px; margin-top:5px;">
 					<button class="btn btn-primary btn-sm" id="btnDealt">办理</button>
 					<button class="btn btn-primary btn-sm" id="btnWorkHistory">审批过程</button>
-					<button class="btn btn-primary btn-sm" id="btnDelete">删除我发起的</button>
+					<button class="btn btn-primary btn-sm" id="btnDelete" style="display: none;">删除我发起的</button>
 					<button class="btn btn-primary btn-sm" id="btnRefresh">刷新</button>
 				</div>
 				<div class="col-md-7"></div>
@@ -106,6 +106,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<th>工作状态</th>
 							<th>接受者</th>
 							<th>接收时间</th>
+							<th>编码</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -203,28 +204,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    		}
 		//点击审查按钮触发的事件
 		$( "#btnWorkHistory" ).on('click', function(e) {
-			var workID = $("#work_ID:checked").val();
+			//var workID = $("#work_item_ID:checked").val();
 		    //获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
-			window.open(encodeURI(encodeURI('rest/workflow/WorkHistoryInfo?workID='+workID+"&title="+$("#work_ID:checked").parent().parent().next().text())), 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			window.open(encodeURI(encodeURI('rest/workflow/WorkHistoryInfo?workID='+$("#work_item_ID:checked").parent().parent().next().next().next().next().next().next().next().next().text()+"&title="+$("#work_item_ID:checked").parent().parent().next().text())), 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 		});
 
 		//点击办理按钮触发的事件
 		$( "#btnDealt" ).on('click', function(e) {
-			if($("#work_ID:checked").length > 1){
+			if($("#work_item_ID:checked").length > 1){
 				parent.bootbox.alert("只能选择一项", function(){});
 				return;
-			}else if($("#work_ID:checked").length < 1){
+			}else if($("#work_item_ID:checked").length < 1){
 				parent.bootbox.alert("请选择一条工作", function(){});
 				return;
 			}else{
-				var workID = $("#work_ID:checked").val();
+				var workItemID = $("#work_item_ID:checked").val();
 				//workID//获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
-				window.open('rest/workflow/workFormAutoController?workID='+workID, 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+				//location.reload(); 
+				location.replace("rest/workflow/workFormAutoController?workItemID="+workItemID);
 			}
 		});
 		//双击打开详情
 		$(document).on("dblclick","tr",function(){
-			var workID = $(this).find("input").val();
+			var workItemID = $(this).find("input").val();
 			window.open('rest/workflow/workFormAutoController?workID='+workID, 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 		})
 	    function loadTableData(){
@@ -322,11 +324,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	columnDefs: [
                 	{
 				    	"targets": [0], // 目标列位置，下标从0开始
-				        "data": "WORK_ID", // 数据列名
+				        "data": "WORK_ITEM_ID", // 数据列名
 				        "orderable":false,
 				        "sWidth":"40px",
 				        "render": function(data, type, full) { // 返回自定义内容
-				       		return "<label><input type='radio' name='radio' class='ace' id='work_ID' value = '" + data + "' /><span class='lbl' id='postId' value = '" + data + "'></span></label>";
+				       		return "<label><input type='radio' name='radio' class='ace' id='work_item_ID' value = '" + data + "' /><span class='lbl' id='postId' value = '" + data + "'></span></label>";
 				         }
                     },
                     {
@@ -412,9 +414,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 return "";
                             }
 				         }
+                    },
+                    {
+					   	"targets": [8], // 目标列位置，下标从0开始
+					   	"sWidth":"1%",
+					   	"data": "WORK_ID",
+					   	"render": function(data, type, full) { // 返回自定义内容
+	                    	if(data !=null && data!=""){
+                                return data;
+                            }else{
+                                return "";
+                            }
+				         }
                     }
 	            ]
 	        }).api();
+        	//$('#gridDealt').dataTable().column(8).visible(false);
 	        //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
 		}
 	  
@@ -423,8 +438,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$( "#btnDelete" ).on('click', function(e) {
 			var delparam = {};
 			delparam.workIds = [];
-			for(var i=0; i<$("#work_ID:checked").length;i++){
-				delparam.workIds[i] = $("#work_ID:checked")[i].defaultValue;
+			for(var i=0; i<$("#work_item_ID:checked").length;i++){
+				delparam.workIds[i] = $("#work_item_ID:checked")[i].defaultValue;
    	        }
    	        parent.bootbox.confirm("你确定要删除吗？", function(result) {
 				if(result){
@@ -436,7 +451,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						cache: true,
 						type: "POST",
 						url:"rest/workflow/workPersonal/WorkFlowDel",
-						data:delparam,// WORK_ID
+						data:delparam,// work_item_ID
 						async: false,
 						dataType:"json",
 						success: function(data) {

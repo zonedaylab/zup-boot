@@ -127,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                  $(".title").css("margin-left", mx-110);
                  $(".title").css("display", "block");
                  $(".title").html("");
-                 if(data.data[0].WORK_ITEM_STATE == 2){
+                 if(data.data[0].WORK_ITEM_STATE == 0){
                  	$(".title").css("display", "none");
                  }else{
                  	if(typeof(data.data[0].RECEIVER_NAME)=="undefined"){

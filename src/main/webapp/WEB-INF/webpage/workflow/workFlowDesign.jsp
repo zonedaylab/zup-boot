@@ -1454,6 +1454,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	        type: "POST",
 	        url: "design/getHandlerSetType", 
 	        cache: false,  //禁用缓存
+            async: false,
 	        dataType: "json",
 	        success: function (result) {
 	   			$("#handlerSetType").html("");  

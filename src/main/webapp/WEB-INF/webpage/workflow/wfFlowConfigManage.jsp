@@ -819,6 +819,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			if(datapar.organId == null){
 				parent.bootbox.alert("请选择非根节点的组织机构", function(){});
 			}
+			datapar.operateFlag=1;
 			datapar.strategy_id = $("#strategy_id:selected").val();
 			$.ajax({
 	            url: "rest/workflow/design/getUserInfoByOrganId",
@@ -890,6 +891,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				messageStrategyPerson(e);
 				datapar.organId = 0;
 				datapar.userIds = $("#receiversDialog").val();
+				datapar.operateFlag=1;
 				$.ajax({
 		            //url: 'design/getUserInfoByOrganId',
 		            url: "rest/workflow/design/getUserInfoByOrganId",

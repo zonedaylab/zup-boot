@@ -87,9 +87,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<button class="btn btn-primary btn-sm" id="btnWorkFinishDetail">查看详情</button>
 					<button class="btn btn-primary btn-sm" id="btnWorkFlowView">流程图查看</button>
 					<button class="btn btn-primary btn-sm" id="btnWorkFlowCheckView">审批过程</button>
-					<button class="btn btn-primary btn-sm" id="btnWorkFlowPause">暂停工作</button>
-					<button class="btn btn-primary btn-sm" id="btnWorkFlowReLaunch">重启工作</button>
-					<button class="btn btn-primary btn-sm" id="btnWorkFlowForceStop">强制结束工作</button>
+					<button class="btn btn-primary btn-sm" id="btnWorkFlowPause" style="display: none;">暂停工作</button>
+					<button class="btn btn-primary btn-sm" id="btnWorkFlowReLaunch" style="display: none;">重启工作</button>
+					<button class="btn btn-primary btn-sm" id="btnWorkFlowForceStop" style="display: none;">强制结束工作</button>
 				</div>
 			</div>
 			<div class="table-responsive">
@@ -105,6 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<th>工作状态</th>
 							<th>发起人</th>
 							<th>开始时间</th>
+							<th>编码</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -384,6 +385,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                           return "";
                                       }
           				         }
+                              },
+                              {
+          					   	"targets": [8], // 目标列位置，下标从0开始
+          					   	"sWidth":"1%",
+          					   	"data": "ACTIVITY_ID",
+          					   	"render": function(data, type, full) { // 返回自定义内容
+          	                    	if(data !=null && data!=""){
+                                          return data;
+                                      }else{
+                                          return "";
+                                      }
+          				         }
                               }
           	            ]
           	        }).api();
@@ -453,15 +466,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				parent.bootbox.alert("请选择一条工作", function(){});
 				return;
 			}else{
-				var workID = $("#workID:checked").val();
-			    //workID//获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
-			    window.open('rest/workflow/workPersonal/WorkFinishDetail?workID='+workID+'&statId=2', 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
-			}
+                var par = {};
+                par.workID = $("#workID:checked").val();
+                par.activityID = $("#workID:checked").parent().parent().next().next().next().next().next().next().next().next().text();
+				$.ajax({
+                    type: "POST",
+                    url: "rest/workflow/WorkHistoryInfo/GetActivityInfo",
+                    async: false,
+                    data: par,  //传入组装的参数
+                    dataType: "json",
+                    success: function (result) {
+           				for(var i =0;i<result.data.length;i++){
+               				var workItemID = result.data[i].WORK_ITEM_ID;
+               			    //workID//获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
+               			    window.open('rest/workflow/workPersonal/WorkFinishDetail?workItemID='+workItemID+'&statId=2', 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+           					
+           				}
+                    }
+                    })
+				}
 		});
 		//双击打开详情
 		$(document).on("dblclick","tr",function(){
 			var workID = $(this).find("input").val();
-			window.open('rest/workflow/workPersonal/WorkFinishDetail?workID='+workID+'&statId=2', 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			//window.open('rest/workflow/workPersonal/WorkFinishDetail?workID='+workID+'&statId=2', 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 		})
 		//点击审查按钮触发的事件
 		$( "#btnWorkFlowCheckView" ).on('click', function(e) {
