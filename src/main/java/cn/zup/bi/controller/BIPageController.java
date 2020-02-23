@@ -1,13 +1,13 @@
 package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.BI_Page;
+import cn.zup.bi.entity.BiMenu;
 import cn.zup.bi.service.BIPageService;
 import cn.zup.bi.service.settings.MgeidsConfig;
 import cn.zup.framework.common.vo.CommonResult;
 import cn.zup.rbac.entity.Config;
 import cn.zup.rbac.entity.Menu;
 import cn.zup.rbac.service.ConfigurationService;
-import cn.zup.rbac.service.ResourceService;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +27,7 @@ public class BIPageController {
 	private BIPageService biPageService;
 	@Resource
 	private ConfigurationService configurationService;
-	@Resource
-	ResourceService resourceServie;
-	
+
 	/**
 	 * 返回首页
 	 * @author 谢炎
@@ -158,7 +156,7 @@ public class BIPageController {
 	public String getMenu(Integer accountId){
 		Menu menu = new Menu();
 		menu.setUrlAddress("@bi");
-		List<Menu> list = resourceServie.getMenuList(accountId, menu);
+		List<BiMenu> list = biPageService.getMenuList(accountId);
 		JSONObject json = new JSONObject();
 		json.put("data", list);
 		return json.toString();
