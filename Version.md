@@ -43,3 +43,5 @@ COMMIT;
 -- 添加数据源字段,默认数据源字段1.
 ALTER TABLE BI_TOPIC DROP COLUMN DS_ID;
 ALTER TABLE BI_TOPIC ADD COLUMN DS_ID int(38) DEFAULT 1
+
+####配置数据源配置菜单  BI_datasource

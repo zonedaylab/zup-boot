@@ -288,7 +288,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				$.ajax({
 					type: "post",
 					async: true,
-					url: "/Bi/getReportData?type=table",
+					url: "/Bi/getReportData",
 					data:JSON.stringify(data),
 					contentType:'application/json;charset=utf-8',
 					dataType: "json",
