@@ -391,8 +391,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                    		$("#menu_Id").empty();
                    		$("#menu_Id").append("<option value='0'>请选择菜单</option>");
                    		for(var i=0; i<result.data.length; i++){
-                   			if(result.data[i].urlAddress == "@bi")
-                   				$("#menu_Id").append("<option value="+result.data[i].menuId+">"+result.data[i].menuName+"</option>");
+                   			$("#menu_Id").append("<option value="+result.data[i].menuId+">"+result.data[i].menuName+"</option>");
                     	}
                    		$("#menu_Id").val(0);
                    }
