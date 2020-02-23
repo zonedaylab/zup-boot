@@ -58,7 +58,7 @@ public class CharacterFilter  implements Filter {
             System.out.println("============================SQL"+sql);
             //有sql关键字，跳转到error.html
             if (sqlValidate(sql)) {
-                throw new IOException("您发送请求中的参数中含有非法字符");
+                throw new IOException("您发送请求中的参数中含有非法字符："+ sql);
                 //String ip = req.getRemoteAddr();
             } else {
                 chain.doFilter(args0,args1);
