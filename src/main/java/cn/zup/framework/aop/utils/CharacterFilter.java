@@ -58,6 +58,7 @@ public class CharacterFilter  implements Filter {
                     sql = sql + " "+value[i];
                 }
             }
+            sql=sql.trim();
             System.out.println("============================SQL"+sql);
             if (sql.equals(""))
                 chain.doFilter(args0,args1);
