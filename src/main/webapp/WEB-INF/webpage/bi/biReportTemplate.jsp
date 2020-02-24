@@ -336,11 +336,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
 									 $("#filter").append(hf);
-									 /*
-									 re.data[0].dimField[i] != "sub_nm" && 
-										re.data[0].dimField[i] != "province" && 
-										re.data[0].dimField[i] != "city" && 
-										re.data[0].dimField[i] != "county"*/
+
 									 if(re.data[0].dimField[i] == "province"){
 									 	getFilterInfo(re.data[0].dimField[i], 0);
 									 }else if(re.data[0].dimField[i] == "city"){

@@ -506,7 +506,10 @@ public class BIShowPageController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String sql = "";
 		System.err.println(filterName.indexOf("nm") > -1 || filterName.indexOf("name") > -1);
-		if(filterName.indexOf("province") > -1 || filterName.indexOf("city") > -1 || filterName.indexOf("county") > -1){  //字典表插叙条件
+
+        System.err.println("filterName:"+filterName);
+
+		if(filterName.equals("province") || filterName.equals("city")  || filterName.equals("county")){  //字典表插叙条件
 			String where = "";
 			int len = areaId.toString().length();
 			if(areaId == 0){
@@ -520,14 +523,15 @@ public class BIShowPageController {
 			while(rs.next()){
 				map.put(rs.getString(filterName), rs.getInt("AREA_ID"));
 			}
-		}else if(filterName.indexOf("year") > -1){  //调查年份
+		}else if(filterName.equals("year") ){  //调查年份
 			sql = "SELECT "+filterName+" from "+dimList.get(0).getBiz_Table_Name()+" GROUP BY "+filterName;
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			while(rs.next()){
 				map.put(filterName+"_"+rs.getInt(filterName), rs.getInt(filterName));
 			}
-		}else{  //省市县查询条件
+		}else{
+
 			String id = filterName.substring(0, filterName.lastIndexOf("_"));
 			sql = "SELECT "+ id + "," +filterName+" from "+dimList.get(0).getBiz_Table_Name()+" GROUP BY "+ id + "," +filterName;
 			ps = conn.prepareStatement(sql);
