@@ -43,11 +43,11 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 			}
 		}
 		String dimFieldIds = "";
-		if(hdimFieldIds.indexOf(",") > -1)
+		if(hdimFieldIds.indexOf(",") > -1)//行维
 			hdimFieldIds = hdimFieldIds.substring(0, hdimFieldIds.length()-2);
-		if(ldimFieldIds.indexOf(",") > -1)
+		if(ldimFieldIds.indexOf(",") > -1)//列维
 			ldimFieldIds = ldimFieldIds.substring(0, ldimFieldIds.length()-2);
-		if(topicFieldIds.indexOf(",") > -1)
+		if(topicFieldIds.indexOf(",") > -1)//指标
 			topicFieldIds = topicFieldIds.substring(0, topicFieldIds.length()-2);
 		
 		if(hdimFieldIds.length() == 0)
@@ -66,6 +66,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	
 	/**
 	 * 通过主题字段id进行生产SQL语句
+	 * dimFields       维度
+	 * topicFielIds   指标。 liuxf
 	 * @author Andot
 	 * 
 	 * */
@@ -79,13 +81,24 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		
 		/*================维度===============*/
 		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, conditionTransfer.getReport_Id());
+		String lastDimTable=null;
 		for (int i = 0; i < biShowDimFieldList.size(); i++) {
+
 			BIShowField biShowField = biShowDimFieldList.get(i);
-			//查询的列，无需做不同表进行匹配
-			//分段信息
-			switch (biShowField.getDrill_Type()) {
-				case 1:
+
+			//判断是否有对应的维度表 add by liuxf
+			Integer drillType=biShowField.getDrill_Type();
+			if(drillType==null||drillType==0){//如果没有对应的维度表，则直接获取主题表中的维度字段
+
+				showField += biShowField.getTopic_Table() + "." + biShowField.getField_Name() + ",";
+				continue;
+			}
+
+			switch (drillType) {//分段信息
+				case 1:  //DRILL_NONE
+
 					showField += biShowField.getDim_Table() + "." + biShowField.getText_Field() + ",";
+
 					if(conditionTransfer.getKey().size() > 0){
 						for (int j = 0; j < conditionTransfer.getKey().size(); j++) {
 							if(conditionTransfer.getValue().get(j).toString().indexOf(",") > -1){
@@ -95,12 +108,12 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 							}
 						}
 					}
-					System.err.println("无结构");
+					System.err.println("DRILL_NONE");
 					break;
-				case 2:
+				case 2://DRILL_SEGMENT
 					System.err.println("分段");
 					break;
-				case 3:
+				case 3://DRILL_PATH
 					System.err.println("钻取");
 					//开始钻取条件判断
 					String[] areas = biShowField.getDrill_Info().split("-");
@@ -120,57 +133,44 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					}else{
 						showField += biShowField.getDim_Table() + "." + areas[0] + ", " + biShowField.getTopic_Table() + "." + areas[0] + " AS areaId,";
 					}
-//					if(conditionTransfer.getKey().size() > 0)
-//						for (int j = 0; j < conditionTransfer.getKey().size(); j++) {
-//							showField += biShowField.getDim_Table() + "." + conditionTransfer.getKey().get(j) + ", " + biShowField.getTopic_Table() + "." + conditionTransfer.getKey().get(j) + " AS areaId,";
-//							where += " AND " + biShowField.getDim_Table() + "." + conditionTransfer.getKey() + "=" + conditionTransfer.getValue().get(j);
-//						}
 					break;
-					//开始查询条件判断
-//					if(conditionTransfer.getKey().size() > 0){
-//						for (int j = 0; j < areas.length; j++) {
-//							where += " AND " + conditionTransfer.getKey().get(j) + "=" + conditionTransfer.getValue().get(j);
-//						}
-//					}
 			}
-			
 			if(i == 0){
-				join += " JOIN " + biShowField.getDim_Table() + " ON " + 
+				join += " JOIN " + biShowField.getDim_Table() + " ON " +
 						biShowField.getTopic_Table() + "." + biShowField.getField_Name() + " = " +
 						biShowField.getDim_Table()+ "." + biShowField.getId_Field();
-			}else{  //第二开始，和上一值对比，如果相同，就代表是同一张数据表，不同则是新表
-				if(!biShowDimFieldList.get(i-1).getDim_Table().equals(biShowField.getDim_Table())){
-					join += "\n JOIN " + biShowField.getDim_Table() + " ON " + 
-							biShowField.getTopic_Table() + "." + biShowField.getField_Name() + " = " +
-							biShowField.getDim_Table()+ "." + biShowField.getId_Field();
-				}else{
-					
-				}
+			}else if(lastDimTable==null|| !lastDimTable.equals(biShowField.getDim_Table())){//不是同一个DIM数据表
+				join += "\n JOIN " + biShowField.getDim_Table() + " ON " +
+						biShowField.getTopic_Table() + "." + biShowField.getField_Name() + " = " +
+						biShowField.getDim_Table()+ "." + biShowField.getId_Field();
 			}
+			lastDimTable=biShowField.getDim_Table();
 		}
-		
+
 		if(showField.length() > 0 && showField.indexOf(",") > -1)
 			showField = showField.substring(0, showField.length()-1);
 		
-		if(showField.length() > 0)
-			groupby = " GROUP BY " + showField.replace(" AS areaId", "");
-		
+
 		/*================指标===============*/
-		String topicFields = "", baseTopicFields = "";
+		String topicFields = "" ;
+		String 	baseTopicFields = "";  //基本维度？
 		List<BIShowField> biShowTopicFieldList = biShowEngineDao.getReportTopicInfo(topicFieldIds, conditionTransfer.getReport_Id());
 		boolean b = false;
 		for (int i = 0; i < biShowTopicFieldList.size(); i++) {
+
 			BIShowField biShowField = biShowTopicFieldList.get(i);
+
 			if(conditionTransfer.getIndex() == null || conditionTransfer.getIndex().equals(biShowField.getField_Id())){
-				if(conditionTransfer.getType() == 1){  //为了防止表格，表格只能有一个指标
+				if(conditionTransfer.getType() == 1){  //图表类型：为了防止表格，表格只能有一个指标
 					if(b){
 						continue;
 					}
 				}
-				if(biShowField.getField_Type() == 3){
-					topicFields += biShowField.getAggregate_Type() + "("+ biShowField.getTopic_Table() + "." + biShowField.getField_Name() +") AS "+ biShowField.getField_Caption() +", ";
+				if(biShowField.getField_Type() == 3){//1.行维度 2.列维度 3.指标
+					topicFields += biShowField.getAggregate_Type() + "("+ biShowField.getTopic_Table() + "." +
+									biShowField.getField_Name() +") AS "+ biShowField.getField_Caption() +", ";
 				}else{
-					baseTopicFields += biShowField.getField_Name() + ", ";
+					baseTopicFields += biShowField.getField_Name() + ", ";//维度，这个永远没有意义把，不是获取指标吗？
 				}
 				b = true;
 			}
@@ -178,15 +178,24 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				from += biShowField.getTopic_Table() + " ";
 			}
 		}
-		
+
+		//感觉 topicFields 代表指标字段；baseTopicFields 代表 维度字段； showFields 代表有维度表对应的维度。
 		topicFields += baseTopicFields;
 		if(topicFields.length() > 0 && topicFields.indexOf(",") > -1)
 			topicFields = topicFields.trim().substring(0, topicFields.length()-1);
+
+		//group by 维度；
+		if(showField.length() > 0)
+			groupby = " GROUP BY " + showField.replace(" AS areaId", "");
+
+		//目测没有用 liuxf
 		if(baseTopicFields.length() > 0 && baseTopicFields.indexOf(",") > -1)
 			groupby += ", "+ baseTopicFields.trim().substring(0, baseTopicFields.trim().length()-1);
+
+		//需要查询的字段，包括所有的维度和指标。
 		String col = "";
-		if(showField.length() > 0)
-			col = showField + ", " + topicFields;
+		if(showField.length() > 0) //这是废话 liuxf
+			col = showField + ", " + topicFields; //维度  +  指标
 		else
 			col = topicFields;
 		if(col.lastIndexOf(",") > -1)
@@ -200,7 +209,6 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		sql.append(groupby);
 		sql.append(";");
 		System.err.println(sql.toString());
-		
 		return sql.toString();
 	}
 

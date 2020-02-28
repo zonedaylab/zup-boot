@@ -19,5 +19,5 @@ public class ConditionTransfer {
 	private List<Object> value;
 	private Integer report_Id;
 	private Integer index;  //是否指定指标
-	private Integer type; //图标类型
+	private Integer type; //图表类型
 }

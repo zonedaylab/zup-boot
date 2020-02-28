@@ -95,7 +95,7 @@ public class BIShowPageController {
 	 * */
 	@RequestMapping("/getReportData")
 	@ResponseBody
-	public Object getReportData(@RequestBody V_ReportData vreportData, String callback) throws SQLException, ClassNotFoundException{
+	public Object getReportData(@RequestBody V_ReportData vreportData, String callback) throws Exception {
 		//获取一个页面、一个屏幕上的所有div
 		if(vreportData.getBlock_Id() == 0){
 			vreportData.setBlock_Id(null);
@@ -113,7 +113,11 @@ public class BIShowPageController {
 			conn = DriverManager.getConnection(DatabaseParamBuilder.getUrl(biDatasource.getDs_ip()
 					, biDatasource.getDs_port(), biDatasource.getDs_name()
 					, biDatasource.getDs_attr()), biDatasource.getDs_username(), biDatasource.getDs_password());
+		}else{
+			throw new Exception("BI配置中blockList为空，请配置区块信息.");
 		}
+
+
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -133,7 +137,7 @@ public class BIShowPageController {
 			rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int count = rsmd.getColumnCount();
-			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();//数据
 			//从数据库中查询出来放入map中
 			while (rs.next()) {
 				Map<String, Object> map = new HashMap<String, Object>();
@@ -188,9 +192,9 @@ public class BIShowPageController {
 				}
 			}
 			
-			List<List<String>> tableHeaderList = new ArrayList<List<String>>();
-			List<String> lieDimFields = new ArrayList<String>();
-			List<String> hangDimFields = new ArrayList<String>();
+			//List<List<String>> tableHeaderList = new ArrayList<List<String>>();//这个没有用到  liuxf
+			List<String> lieDimFields = new ArrayList<String>(); //行维  右上为行维度。 by liuxf
+			List<String> hangDimFields = new ArrayList<String>();//列维 左侧为列维度
 			
 			//获取维度的字段
 			List<BIShowField> dimFieldList = biDimService.getDimFieldList(conditionTransfer);
@@ -198,9 +202,29 @@ public class BIShowPageController {
 			for (int i = 0; i < dimFieldList.size(); i++) {
 				BIShowField dimField = dimFieldList.get(i);
 				Map<String, Object> dimTopicTableHeaderMap = new HashMap<String, Object>();
-				if(dimField.getField_Location() == 1){
+				if(dimField.getField_Location() == 1){        //针对行维度,  右侧的为行维度。
 					List<String> dimRowList = new ArrayList<String>();
 					for (int k = 0; k < listMap.size(); k++) {
+						if(dimField.getDrill_Type() == null) {
+
+							/*  加入行数据,生成行维度，例如by liuxf
+								dimName=行业种类
+								dimValue= 电力/ 服务/水务等
+								维度横向生成
+							*   电力 服务   水务   。。。。。。
+							 */
+							String dimName=dimField.getField_Name().toLowerCase();
+							String dimVaue=listMap.get(k).get(dimName).toString();
+							if(!dimRowList.contains(dimVaue))
+								dimRowList.add(dimVaue);
+
+							//加入维度的名字，例如 "行业种类"
+							if(!hangDimFields.contains(dimName))//加入行维度
+								hangDimFields.add(dimName);
+
+							//tableHeaderList.add(dimRowList);
+							continue;
+						}
 						if(dimField.getDrill_Type() != 3) {
 							if(!dimRowList.contains(listMap.get(k).get(dimField.getText_Field().toLowerCase()).toString()))
 								dimRowList.add(listMap.get(k).get(dimField.getText_Field().toLowerCase()).toString());
@@ -221,11 +245,30 @@ public class BIShowPageController {
 									hangDimFields.add(dimField.getDrill_Info().split("-")[0].toLowerCase());
 							}
 						}
-						tableHeaderList.add(dimRowList);
+						//tableHeaderList.add(dimRowList);
 					}
-					dimTopicTableHeaderMap.put(dimField.getText_Field().toLowerCase(), dimFieldList.get(i).getDim_Order());
+					if(dimField.getDrill_Type() != null)
+						dimTopicTableHeaderMap.put(dimField.getText_Field().toLowerCase(), dimFieldList.get(i).getDim_Order());
+					else
+						dimTopicTableHeaderMap.put(dimField.getField_Name().toLowerCase(), dimFieldList.get(i).getDim_Order());
 					dimTopicTableHeader.add(dimTopicTableHeaderMap);
 				}else if(dimFieldList.get(i).getField_Location() == 2){
+					/*
+					* 列维度
+					* 例如 dimName="省份" dimValue=山东省/河南省/....
+					* 纵向排列：
+					*
+					* 山东省
+					* 河南省
+					* 河北省
+					* ......
+					* */
+					if(dimField.getDrill_Type() == null) {
+						//列维度 例如 河南省 山东省
+						if(!lieDimFields.contains(dimField.getField_Name().toLowerCase()))
+							lieDimFields.add(dimField.getField_Name().toLowerCase());
+						continue;
+					}
 					if(dimField.getDrill_Type() != 3) {
 						if(!lieDimFields.contains(dimField.getText_Field().toLowerCase()))
 							lieDimFields.add(dimField.getText_Field().toLowerCase());
@@ -244,6 +287,7 @@ public class BIShowPageController {
 			
 			//表格数据清洗
 			if(vreportData.getBlock_Type() == 1){
+
 				//列维 行维    数据格式  <"2017-集体-云南省", "494">
 				Map<String,String> mapIndicatorData = new HashMap<String,String>();
 				for (Map<String, Object> map : listMap) {

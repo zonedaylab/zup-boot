@@ -291,19 +291,27 @@ public class BIDimServiceImpl implements BIDimService {
 		String ldimFieldIds = "";
 		//第一步遍历获取到对应的主题字段，分为维表和指标
 		for (int i = 0; i < reportFieldList.size(); i++) {
-			if(reportFieldList.get(i).getField_Location() == 1){
+			//字段位置分为行和列，分别使用   0、指标 1、行维度  2、列维度  by liuxf
+			if(reportFieldList.get(i).getField_Location() == 1){        //行维度 h
 				hdimFieldIds += reportFieldList.get(i).getField_Id()+", ";
-			}else if(reportFieldList.get(i).getField_Location() == 2){
+			}else if(reportFieldList.get(i).getField_Location() == 2){  //列维度 l
 				ldimFieldIds += reportFieldList.get(i).getField_Id()+", ";
 			}
 		}
 		String dimFieldIds = hdimFieldIds + ldimFieldIds;
 		dimFieldIds = dimFieldIds.substring(0, dimFieldIds.length()-2);
-		
+
+		//获取维度表，需要处理没有对应维度表的维度。
 		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, conditionTransfer.getReport_Id());
 		
 		//查询的列，无需做不同表进行匹配
 		for (int i = 0; i < biShowDimFieldList.size(); i++) {
+
+			if(biShowDimFieldList.get(i).getDrill_Type()==null) {
+
+
+				continue;
+			}
 			//分段信息
 			switch (biShowDimFieldList.get(i).getDrill_Type()) {
 				case 3:
@@ -318,10 +326,6 @@ public class BIDimServiceImpl implements BIDimService {
 							}
 						}
 					}
-//					if(key.size() > 0)
-//						for (int j = 0; j < key.size(); j++) {
-//							biShowDimFieldList.get(i).setText_Field(key.get(j));
-//						}
 					break;
 			}
 		}
