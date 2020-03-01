@@ -13,4 +13,5 @@ public class BI_DIM implements Serializable{
 	private String drill_Type;  // 钻取类型
 	private String drill_Info;// 钻取信息
 	private Integer ds_Id;// 数据源id
+	private String ds_name;
 }

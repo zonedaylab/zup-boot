@@ -27,19 +27,6 @@ public class BIDatasourceController {
         return new ModelAndView("bi/biDatasourceManage");
     }
 
-//    @PostMapping("/saveDatasource")
-//    public JSONObject saveDatasource(BI_Datasource bi_datasource){
-//        int i = biDatasourceService.addDatasource(bi_datasource);
-//        JSONObject json = new JSONObject();
-//        if(i == 0){
-//            json.put("data", "success");
-//            return json;
-//        }else{
-//            json.put("data", "error");
-//            return json;
-//        }
-//    }
-
     /**
      * 保存数据源信息
      * @author 王朔
@@ -88,8 +75,6 @@ public class BIDatasourceController {
         return json.toString();
     }
 
-
-
     /**
      * 获取数据源列表
      * @author 王朔
@@ -99,6 +84,17 @@ public class BIDatasourceController {
     public CommonResult<BI_Datasource> getDatasourceList(BI_Datasource bi_datasource, int rows, int page){
         List<BI_Datasource> list = biDatasourceService.getDatasourcePagingList(bi_datasource);
         return CommonResult.successPage(list, page, rows);
+    }
+
+    /**
+     * 获取数据源列表
+     * @author gavin
+     */
+    @RequestMapping("/getDsList")
+    @ResponseBody
+    public CommonResult<BI_Datasource> getDatasourceList(){
+        List<BI_Datasource> list = biDatasourceService.getDatasourcePagingList(new BI_Datasource());
+        return CommonResult.success("查询成功", list);
     }
 
     /**
