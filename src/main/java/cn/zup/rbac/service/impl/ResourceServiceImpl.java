@@ -208,7 +208,7 @@ public class ResourceServiceImpl implements ResourceService{
 	 */
 	public List<Menu> getMenuList(int parentMenuId) {
 		Menu menu=new Menu();
-		menu.setUrlAddress("Bi/MenuShow");
+		menu.setParentMenuId(parentMenuId);
 		return resourceMenuDao.listByHiber(menu);
 	}
 

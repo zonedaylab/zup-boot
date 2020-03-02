@@ -197,7 +197,7 @@ public class LoginController {
 					domainSystem=resourceService.getDomainSystemByDomain("Hongjialou");
 			}else{//默认济南光伏
 				//改为资金
-				domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
+				domainSystem=resourceService.getDomainSystemByDomain("homeController");
 			}
 			LoginLog loginLog = new LoginLog(); 
 			Date nowTime = new Date(System.currentTimeMillis()); 

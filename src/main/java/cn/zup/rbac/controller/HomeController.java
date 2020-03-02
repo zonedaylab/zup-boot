@@ -1,26 +1,22 @@
 package cn.zup.rbac.controller;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import cn.zup.rbac.entity.DomainSystem;
+import cn.zup.rbac.entity.Menu;
+import cn.zup.rbac.entity.MenuView;
+import cn.zup.rbac.entity.UserSession;
+import cn.zup.rbac.service.ResourceService;
+import cn.zup.workflow.biz.IWorkFlowConfig;
 import net.sf.json.JSONObject;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
- 
-import cn.zup.rbac.entity.DomainSystem;
-import cn.zup.rbac.entity.Menu;
-import cn.zup.rbac.entity.MenuView;
-import cn.zup.rbac.entity.UserSession; 
-import cn.zup.rbac.service.ResourceService;
-import cn.zup.workflow.biz.IWorkFlowConfig;
-import cn.zup.workflow.biz.impl.WorkFlowConfig;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/rest/rbac/homeController")
@@ -42,7 +38,7 @@ public class HomeController{
 		if(userSession != null && userSession.getAccountId() != null){
 			//log.error("获取域名为"+request.getServerName());
 			//Systemout.println("获取域名为"+request.getServletPath());
-			java.lang.System.err.println("======================"+request.getServletPath()+"=============================");
+			System.err.println("======================"+request.getServletPath()+"=============================");
 			
 			String domains[]=request.getServletPath().split("/");
 			if(domains.length>0){

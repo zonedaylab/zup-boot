@@ -48,7 +48,7 @@ public interface AccountRoleService {
 	 * @param accountName
 	 *            账户名称
 	 */
-	boolean getAccountRepeatVerify(Integer accountId, Integer userId,String accountName);	
+	boolean getAccountRepeatVerify(Integer accountId, Integer userId, String accountName);
 	 
 	 /**
 	 * 获取账户信息
@@ -84,7 +84,7 @@ public interface AccountRoleService {
 	 * @return
 	 */
 	List<Account> getUserAccountList(int userId);
-	MiniDaoPage<Account> getAccountPagingList(Account account,int page, int rows);
+	MiniDaoPage<Account> getAccountPagingList(Account account, int page, int rows);
 	 /**
 	 * 根据组织ID获取账户列表
 	 *
@@ -175,7 +175,7 @@ public interface AccountRoleService {
 	 * 页码
 	 * @return
 	 */
-	MiniDaoPage<Role> getRolePagingList(Role role,int page, int rows);
+	MiniDaoPage<Role> getRolePagingList(Role role, int page, int rows);
 	
 	 /**
 	 * 获取父角色的子角色
@@ -246,7 +246,7 @@ public interface AccountRoleService {
 		 * @param roledata  角色数据
 		 * @return
 		 */
-	 public MiniDaoPage<RoleDataViewModel> getDataInfo(RoleData roledata,int page, int rows);
+	 public MiniDaoPage<RoleDataViewModel> getDataInfo(RoleData roledata, int page, int rows);
 	 /**
 		 * 角色重复验证(或是否与其他重复)，true为重复
 		 *
@@ -265,5 +265,15 @@ public interface AccountRoleService {
 	  * @return
 	  */
 	 List<AccountRole> getAccountRoleInfoByAccountId(Integer accountId);
+	 
+	 /**
+	  * 根据账号和部门获取账号分页信息
+	  * @param account
+	  * @param organId
+	  * @param page
+	  * @param rows
+	  * @return
+	  */
+	 public MiniDaoPage<Account> getAccountByOrganPagingList(Account account, Integer organId, int page, int rows);
 	 
 }

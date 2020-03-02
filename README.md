@@ -44,3 +44,11 @@ zup-boot\src\main\resources\dbconfig.properties
 #### 菜单点进去的
 ![](img/caidanyanshi2.png)
 
+
+
+
+####BI说明
+配置菜单，自动生成跳转页面  BI/MenuSHow ？ menuID= 对应报表ID。  
+BIShowPageController.java的函数：
+@RequestMapping("/MenuShow")
+BI/BIReportTemplate.jsp

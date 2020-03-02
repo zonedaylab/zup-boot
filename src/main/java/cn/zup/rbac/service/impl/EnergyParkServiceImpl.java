@@ -180,7 +180,6 @@ public class EnergyParkServiceImpl implements EnergyParkService{
 		//判断园区跟电量计划是否有子表关联mysql数据库
 		return b;
 	}
-	
 
 	/**
 	 * 获取园区的信息

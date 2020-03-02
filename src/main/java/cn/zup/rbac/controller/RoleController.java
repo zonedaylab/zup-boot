@@ -1,16 +1,12 @@
 package cn.zup.rbac.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import cn.zup.rbac.controller.ViewEntity.RoleDataViewModel;
+import cn.zup.rbac.controller.ViewEntity.TreeView;
+import cn.zup.rbac.entity.*;
+import cn.zup.rbac.service.*;
+import cn.zup.rbac.service.settings.ConfigSetting;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,27 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.zup.rbac.controller.ViewEntity.RoleDataViewModel;
-import cn.zup.rbac.controller.ViewEntity.TreeView;
-import cn.zup.rbac.entity.Account;
-import cn.zup.rbac.entity.AccountRole;
-import cn.zup.rbac.entity.Action;
-import cn.zup.rbac.entity.ActionPermission;
-import cn.zup.rbac.entity.Config;
-import cn.zup.rbac.entity.Menu;
-import cn.zup.rbac.entity.Post;
-import cn.zup.rbac.entity.Role;
-import cn.zup.rbac.entity.RoleAction;
-import cn.zup.rbac.entity.RoleData;
-import cn.zup.rbac.entity.RoleMenu;
-import cn.zup.rbac.entity.UserInfo;
-import cn.zup.rbac.entity.UserSession;
-import cn.zup.rbac.service.AccountRoleService;
-import cn.zup.rbac.service.ConfigurationService;
-import cn.zup.rbac.service.ResourcePermissionService;
-import cn.zup.rbac.service.ResourceService;
-import cn.zup.rbac.service.UserService;
-import cn.zup.rbac.service.settings.ConfigSetting;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.lang.System;
 
 @Controller
 @RequestMapping("/rest/rbac/roleController")
@@ -332,7 +314,7 @@ public class RoleController
 
 	/**
 	 * 
-	 * desc:获取有效标识
+	 * desc: 保存操作项按钮 默认权限为1 
 	 * Author：samson
 	 * Date: 2016.07.30 
 	 * 
@@ -347,6 +329,34 @@ public class RoleController
 			roleAction.setActionId(Integer.valueOf(actionIds[i]));
 			roleAction.setRoleId(roleId);
 			roleAction.setActionPermission(1); //1代码新增的角色操作项有效 
+			resourcePermissionService.addActionPermission(roleAction);  
+		}  
+		return true;
+	}
+
+	/**
+	 * 
+	 * desc: 保存操作项按钮 参数权限由页面参数决定
+	 * Author：samson
+	 * Date: 2019.08.19 
+	 * 
+	 * */ 
+	@RequestMapping("/saveActionDataPermission")
+	@ResponseBody
+	public boolean saveActionDataPermission(@RequestParam("actionIds[]") String[] actionIds,@RequestParam("actionPermissions[]") String[] actionPermissions,int roleId)
+	{  
+		for(int i = 0;i<actionIds.length;i++)
+		{ 
+			RoleAction roleAction = new RoleAction();
+			roleAction.setActionId(Integer.valueOf(actionIds[i]));
+			roleAction.setRoleId(roleId);
+			roleAction.setActionPermission(1); //1代码新增的角色操作项有效 
+			
+			//判断如果带有操作项的显隐性参数则存储--实现按钮的显隐性
+			if(actionPermissions !=null && actionPermissions.length == actionIds.length)
+			{
+				roleAction.setActionPermission(Integer.valueOf(actionPermissions[i])); //元素权限
+			}
 			resourcePermissionService.addActionPermission(roleAction);  
 		}  
 		return true;

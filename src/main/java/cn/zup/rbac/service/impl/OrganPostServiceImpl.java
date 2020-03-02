@@ -1,16 +1,20 @@
 package cn.zup.rbac.service.impl;
 
-import java.util.List;
+import cn.zup.rbac.dao.OrganDao;
+import cn.zup.rbac.dao.PostDao;
+import cn.zup.rbac.dao.UserDao;
+import cn.zup.rbac.entity.Account;
+import cn.zup.rbac.entity.Organ;
+import cn.zup.rbac.entity.Post;
+import cn.zup.rbac.entity.UserInfo;
+import cn.zup.rbac.service.OrganPostService;
+import cn.zup.rbac.service.settings.ConfigSetting;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.zup.rbac.dao.OrganDao; 
-import cn.zup.rbac.dao.PostDao; 
-import cn.zup.rbac.entity.*;
-import cn.zup.rbac.service.*;
-import cn.zup.rbac.service.settings.ConfigOrganType;
-import cn.zup.rbac.service.settings.ConfigSetting;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * OrganPostService的实现类
@@ -24,6 +28,8 @@ import cn.zup.rbac.service.settings.ConfigSetting;
 		private OrganDao organDao;
 		@Autowired
 		private PostDao postDao; 
+		@Autowired
+		private UserDao userdao;
 
 	/**
 	 * 添加组织
@@ -268,14 +274,214 @@ import cn.zup.rbac.service.settings.ConfigSetting;
 
 	@Override
 	public String getMySubOrganIdsAll(int organId) {
-		String myOrganIds="";
-		List<Organ> mySubOrganList=getSubOrganList(organId);
-		for(int i=0;i<mySubOrganList.size();i++){
-			myOrganIds+=mySubOrganList.get(i).getOrganId()+",";
+		//获取所有organ 放置map中
+		List<Organ> organList = getSubOrganList(organId);
+        Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+		for (Organ organ : organList) {
+			if(organ.getParentOrganId()!=null)
+				map.put(organ.getOrganId(), organ.getParentOrganId());
+			else
+				map.put(organ.getOrganId(), 0);
 		}
-		return myOrganIds;
+		String organIds = organId+",";
+		organIds = getOrganIds(map,organId,organIds);
+		if(organIds.indexOf(",")>0)
+			organIds=organIds.substring(0,organIds.length()-1);
+		return organIds;
+//		String myOrganIds=String.valueOf(organId);
+//		List<Organ> mySubOrganList=getSubOrganList(organId);
+//		for(int i=0;i<mySubOrganList.size();i++){
+//			myOrganIds += ","+getMySubOrganIdsAll(mySubOrganList.get(i).getOrganId()); 
+//		}
+//		return myOrganIds;
+		
 	}
+	
+	private String getOrganIds(Map map,Integer value,String organIds){
 
+        ArrayList<Integer>  re1 = getKey(map, value);
+        for (Integer organId : re1) {
+            organIds += organId+",";
+            organIds = getOrganIds(map,organId,organIds);
+        }
+        return organIds;
+    }
+	
+	private ArrayList<Integer> getKey(Map map, Integer value){
+        Set set = map.entrySet(); //通过entrySet()方法把map中的每个键值对变成对应成Set集合中的一个对象
+        Iterator<Entry<Integer, Integer>> iterator = set.iterator();
+        ArrayList<Integer> arrayList = new ArrayList();
+        while(iterator.hasNext()){
+            //Map.Entry是一种类型，指向map中的一个键值对组成的对象
+            Entry<Integer, Integer> entry = iterator.next();
+            if(entry.getValue().equals(value)){
+                arrayList.add(entry.getKey());
+            }
+        }
+        return arrayList;
+    }
+
+	@Override
+	public List<Organ> getOrganLevel(int organId,int level,int organType){
+		//获取level级别下的值
+		Integer levelCur = new Integer(0);
+		List<Organ> organList = getOrganList();
+		
+        Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+		for (Organ organ : organList) {
+			//去除单列市
+			if(organ.getOrganType()==null || organ.getOrganType() != 5)
+				map.put(organ.getOrganId(), organ.getParentOrganId());
+		}
+		String organIds = "";
+		//找到所有organId下的第一层的子节点
+        ArrayList<Integer>  re1 = getKey(map, organId);
+        //遍历第一层节点获取第二层节点并放到organIds字符串中
+        for (Integer integer : re1) {
+            ArrayList<Integer>  reSecond = getKey(map, integer);
+            for (Integer id : reSecond) {
+            	organIds += id+",";
+			}
+		}
+        //获取单列市
+        if(organType!=0)
+		{
+			Organ organParam = new Organ();
+//			organParam.setParentOrganId(organId);
+			organParam.setValidFlagConfig(ConfigSetting.ValigFlag.getValue());
+			organParam.setOrganTypeConfig(ConfigSetting.OrganType.getValue());
+			organParam.setOrganType(organType);
+			List<Organ> organTypeList = organDao.getOperateOrganList(organParam);
+			
+			for (Organ organ : organTypeList) {
+				organIds += organ.getOrganId()+",";
+			}
+		}
+		if(organIds.indexOf(",")>0)
+			organIds=organIds.substring(0,organIds.length()-1);
+		organIds = "("+organIds+")";
+		//通过部门ID和
+		List<Organ> organSubList = organDao.getMySubOrganList(ConfigSetting.ValigFlag.getValue(),ConfigSetting.OrganType.getValue(),null,organIds);
+		return organSubList;
+	}
+	
+	@Override
+	public List<Organ> getOrganForLevel(int organId,int level,int organType,String excludeOrganIds,boolean flag){
+
+		//获取level级别下的值
+		Integer levelCur = new Integer(0);
+		List<Organ> organList = getOrganList();
+        Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+		for (Organ organ : organList) {
+			map.put(organ.getOrganId(), organ.getParentOrganId());
+		}
+		String organIds = "";
+		
+		if(flag)
+			organIds += organId+",";
+		
+		organIds = getLevelOrganIds(map,organId,organIds,level,levelCur);
+		
+
+		if(organType!=0)
+		{
+			Organ organParam = new Organ();
+//			organParam.setParentOrganId(organId);
+			organParam.setValidFlagConfig(ConfigSetting.ValigFlag.getValue());
+			organParam.setOrganTypeConfig(ConfigSetting.OrganType.getValue());
+			organParam.setOrganType(organType);
+			List<Organ> organTypeList = organDao.getOperateOrganList(organParam);
+			for (Organ organ : organTypeList) {
+				organIds += organ.getOrganId()+",";
+			}
+		}
+		if(organIds.indexOf(",")>0)
+			organIds=organIds.substring(0,organIds.length()-1);
+		
+		if(organIds.equals(""))
+			organIds = null;
+		else
+			organIds = "("+organIds+")";
+		
+		if(excludeOrganIds.equals(""))
+			excludeOrganIds = null;
+		else
+			excludeOrganIds = "("+excludeOrganIds+")";
+		//通过部门ID和
+		List<Organ> organSubList = organDao.getMyPermissionOrganList(ConfigSetting.ValigFlag.getValue(),ConfigSetting.OrganType.getValue(),null,organIds,excludeOrganIds);
+		return organSubList;
+	}
+	private String getLevelOrganIds(Map map,Integer value,String organIds,int level,Integer levelCurs){
+
+		levelCurs++;
+        if(levelCurs > level)
+        	return organIds;
+        ArrayList<Integer>  re1 = getKey(map, value);
+        for (Integer organId : re1) {
+            organIds += organId+",";
+            organIds = getLevelOrganIds(map,organId,organIds,level,levelCurs);
+        }
+        return organIds;
+    }
+	/**
+	 * 3	通过组织ID、职能、级别获取组织列表
+	 * @param organId  本级organId
+	 * @param used 财务职能
+	 * @param levelType 1 本级 2上级（一层） 3 下级（一层）
+	 * @return
+	 */
+	public List<Organ> GetOrganUsed(int organId,int used,int levelType){
+		//获取部门信息
+		List<Organ> organUsedList = new ArrayList<Organ>();
+		Organ organ = getOrganInfo(organId);
+		if(levelType == 1){//本级
+			//获取当前部门下的所以账号
+			List<Account> accoundList = userdao.getorganAccountList(organId);
+			for (Account account : accoundList) {
+				if(account.getAccountUsed()!=null)
+				{
+					String usedStrs = account.getAccountUsed()+",";
+					String usedStr = used+",";
+					if (usedStrs.indexOf(usedStr)!=-1)
+					{
+						organ.setOrganUsed(String.valueOf(used));
+						organUsedList.add(organ);
+						return organUsedList;
+					}
+				}
+			}
+		}else if(levelType==2){//上级
+			//获取当前部门下的所以账号
+			List<Account> accoundList = userdao.getorganAccountList(organ.getParentOrganId());
+			organ = getOrganInfo(organ.getParentOrganId());
+			for (Account account : accoundList) {
+				if(account.getAccountUsed()!=null)
+				{
+					String usedStrs = account.getAccountUsed()+",";
+					String usedStr = used+",";
+					if (usedStrs.indexOf(usedStr)!=-1)
+					{
+						organ.setOrganUsed(String.valueOf(used));
+						organUsedList.add(organ);
+						return organUsedList;
+					}
+				}
+			}
+		}else if(levelType==3){ //下级
+			return getSubOrganByUsedList(organ.getOrganId(),String.valueOf(used));
+		}
+		return organUsedList;
+	}
+	
+	/***
+	 * 通过职能获取下级相同职能的组织列表
+	 * @param parentOrganId 父ID
+	 * @param usedStr 职能字符串 如1,2
+	 * @return
+	 */
+	public List<Organ> getSubOrganByUsedList(int parentOrganId,String usedStr) {
+		return organDao.getSubOrganByUsedList(parentOrganId,usedStr);
+	}
 
 	
 }

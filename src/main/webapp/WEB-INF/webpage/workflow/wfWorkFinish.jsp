@@ -104,6 +104,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<th>活动名称</th> 
 							<th>工作状态</th>
 							<th>接收时间</th>
+							<th>编码</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -293,11 +294,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	columnDefs: [
                 	{
 				    	"targets": [0], // 目标列位置，下标从0开始
-				        "data": "WORK_ID", // 数据列名
+				        "data": "WORK_ITEM_ID", // 数据列名
 				        "orderable":false,
 				        "sWidth":"40px",
 				        "render": function(data, type, full) { // 返回自定义内容
-				       		return "<label><input type='radio' name='radio' class='ace' id='workID' value = '" + data + "' /><span class='lbl' id='postId' value = '" + data + "'></span></label>";
+				       		return "<label><input type='radio' name='radio' class='ace' id='workItemID' value = '" + data + "' /><span class='lbl' id='postId' value = '" + data + "'></span></label>";
 				         }
                     },
                     {
@@ -359,6 +360,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 return "";
                             }
 				         }
+                    },
+                    {
+					   	"targets": [6], // 目标列位置，下标从0开始
+					   	"sWidth":"1%",
+					   	"data": "WORK_ID",
+					   	"render": function(data, type, full) { // 返回自定义内容
+	                    	if(data !=null && data!=""){
+                                return data;
+                            }else{
+                                return "";
+                            }
+				         }
                     }
 	            ]
 	        }).api();
@@ -372,22 +385,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript">
     	//点击查看详情触发的事件
 		$( "#btnWorkFinishDetail" ).on('click', function(e) {
-			if($("#workID:checked").length > 1){
+			if($("#workItemID:checked").length > 1){
 				parent.bootbox.alert("只能选择一项", function(){});
 				return;
-			}else if($("#workID:checked").length < 1){
+			}else if($("#workItemID:checked").length < 1){
 				parent.bootbox.alert("请选择一条工作", function(){});
 				return;
 			}else{
-				var workID = $("#workID:checked").val();
-			    //workID//获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
-			    window.open('rest/workflow/workPersonal/WorkFinishDetail?workID='+workID+'&flag=2&statId=2', 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+				var workItemID = $("#workItemID:checked").val();
+			    //workItemID//获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
+			    window.open('rest/workflow/workPersonal/WorkFinishDetail?workItemID='+workItemID+'&flag=2&statId=2', 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 			}
 		});
 		//双击打开详情
 		$(document).on("dblclick","tr",function(){
-			var workID = $(this).find("input").val();
-			window.open('rest/workflow/workPersonal/WorkFinishDetail?workID='+workID+'&flag=2&statId=2', 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			var workItemID = $(this).find("input").val();
+			window.open('rest/workflow/workPersonal/WorkFinishDetail?workItemID='+workItemID+'&flag=2&statId=2', 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 		})	
 		//点击删除按钮触发的事件
 		$( "#btnDelete" ).on('click', function(e) {
@@ -397,23 +410,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		//点击审查按钮触发的事件
 		$( "#btnWorkFlowCheckView" ).on('click', function(e) {
-			var workID = $("#workID:checked").val();
+			var workItemID = $("#workItemID:checked").val();
 		    //获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
-			window.open(encodeURI(encodeURI('rest/workflow/workPersonal/WorkFlowCheckView?workID='+workID+"&title="+$("#workID:checked").parent().parent().next().text())), 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			window.open(encodeURI(encodeURI('rest/workflow/workPersonal/WorkFlowCheckView?workID='+$("#workItemID:checked").parent().parent().next().next().next().next().next().next().text()+"&title="+$("#workItemID:checked").parent().parent().next().text())), 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 		});
 		
 		//点击流程图查看触发的事件
 		$( "#btnWorkFlowView" ).on('click', function(e) {
-			var workID = $("#workID:checked").val();
+			var workItemID = $("#workItemID:checked").val();
 		    //获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
-			window.open('rest/workflow/workPersonal/WorkFlowView?workID='+workID, 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			window.open('rest/workflow/workPersonal/WorkFlowView?workID='+$("#workItemID:checked").parent().parent().next().next().next().next().next().next().text(), 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 		});
 		
 		//点击打印按钮触发的事件
 		$( "#btnWorkFlowPrint" ).on('click', function(e) {
-			var workID = $("#workID:checked").val();
+			var workItemID = $("#workItemID:checked").val();
 		    //获取id之后传入后台根据workid查询itemid和活动id  然后返回到前台  拿着全部数据填充到里面
-			window.open('rest/workflow/workPersonal/WorkFlowPrint?workID='+workID, 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+			window.open('rest/workflow/workPersonal/WorkFlowPrint?workID='+$("#workItemID:checked").parent().parent().next().next().next().next().next().next().text(), 'workflow', 'height=618,width=1000,top=50,left=100,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 		});
 		$("#btnRefresh").on("click",function(e){
 			loadTableData();

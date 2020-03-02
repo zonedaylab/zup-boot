@@ -1,14 +1,14 @@
 package cn.zup.rbac.dao;
 
 
-import java.util.List;
-
+import cn.zup.rbac.entity.CodeConfig;
 import org.jeecgframework.minidao.annotation.Arguments;
 import org.jeecgframework.minidao.annotation.MiniDao;
 import org.jeecgframework.minidao.annotation.ResultType;
 import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import cn.zup.rbac.entity.CodeConfig;
+
+import java.util.List;
 
 
 @MiniDao
@@ -18,6 +18,6 @@ public interface CodeConfigDao extends MiniDaoSupportHiber<CodeConfig>{
 	
 	@Arguments({"codeconfig","page", "rows"})
 	@ResultType(CodeConfig.class)
-	public MiniDaoPage<CodeConfig> getAllCodeConfigs(CodeConfig codeconfig,	int page, int rows);
+	public MiniDaoPage<CodeConfig> getAllCodeConfigs(CodeConfig codeconfig, int page, int rows);
 
 }

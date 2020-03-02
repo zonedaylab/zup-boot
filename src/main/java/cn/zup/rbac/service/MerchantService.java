@@ -57,14 +57,14 @@ public interface MerchantService {
   	 * Date: 2017.2.21
   	 * @param 
   	 * */
-    List<EnergyRegion> getCity(String  provinceCode);
+    List<EnergyRegion> getCity(String provinceCode);
     /**
   	 * desc:根据市加载区县
   	 * Author：zss
   	 * Date: 2017.2.21
   	 * @param 
   	 * */
-    List<EnergyRegion> getCounty(String  cityCode);
+    List<EnergyRegion> getCounty(String cityCode);
     /**
    	 * desc:增加商户信息
    	 * Author：zss
@@ -82,7 +82,7 @@ public interface MerchantService {
      * @param energyMerchant
      * @return
      */
-	MiniDaoPage<EnergyMerchant> getMerchantPagingList(EnergyMerchant energyMerchant,int page,int rows);
+	MiniDaoPage<EnergyMerchant> getMerchantPagingList(EnergyMerchant energyMerchant, int page, int rows);
 	/**
 	 * 更新商户信息
 	 * lixin
@@ -189,7 +189,7 @@ public interface MerchantService {
 	 * marketId ：marketId 改为saleMerchantId
 	 * @return
 	 */
-	List<Organ> getElectricityGeneratorList(EnergyMerchant energyMerchant,Integer saleMerchantId);
+	List<Organ> getElectricityGeneratorList(EnergyMerchant energyMerchant, Integer saleMerchantId);
 	/**
 	 * 商户注册的三证合一号重复验证
 	 * lixin
@@ -198,7 +198,7 @@ public interface MerchantService {
 	 * @param regNumber
 	 * @return
 	 */
-	boolean getRegNumberRepeatVerify(Integer organid,String regNumber);
+	boolean getRegNumberRepeatVerify(Integer organid, String regNumber);
 	/**
 	 * 增加一个获取商户列表的分页方法
 	 * lixin
@@ -209,7 +209,7 @@ public interface MerchantService {
 	 * @param rows
 	 * @return
 	 */
-	MiniDaoPage<EnergyMerchant> getCommonMerchantListPage(int userId,EnergyMerchant enercyMerchant,int page, int rows);
+	MiniDaoPage<EnergyMerchant> getCommonMerchantListPage(int userId, EnergyMerchant enercyMerchant, int page, int rows);
 	/**
 	 * 获取商户关系信息
 	 * lixin

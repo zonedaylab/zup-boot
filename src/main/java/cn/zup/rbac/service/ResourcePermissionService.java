@@ -112,7 +112,7 @@ public interface ResourcePermissionService {
 	 * @return
 	 */
 	
-	List<ActionPermission> getActionPermissionList(int account,int menu);
+	List<ActionPermission> getActionPermissionList(int account, int menu);
 
 	/**
 	 * 根据权限码验证权限
@@ -174,7 +174,7 @@ public interface ResourcePermissionService {
 	 * @return
 	 */
 	
-	List<RoleData> getAccountDataPermissionList(int account,int menu, cn.zup.rbac.service.settings.DataPermissionType type);
+	List<RoleData> getAccountDataPermissionList(int account, int menu, cn.zup.rbac.service.settings.DataPermissionType type);
 
 	/**
 	 * 获取角色的数据权限列表

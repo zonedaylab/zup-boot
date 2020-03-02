@@ -114,7 +114,7 @@ public interface UserService {
 	 * @return
 	 */
 	
-	List<UserInfo> getUserList(Integer organId, Integer postId,String realName, Integer validFlag);
+	List<UserInfo> getUserList(Integer organId, Integer postId, String realName, Integer validFlag);
 	/**
 	 * 根据userid获取用户关联的的子表关系
 	 * @param userId
@@ -165,7 +165,7 @@ public interface UserService {
 	 * @param accountId
 	 * @param password
 	 */
-	int updatePassword(String password,int accountId);
+	int updatePassword(String password, int accountId);
 	
 	List<UserInfo> getUserInfoList(String stationIds, String realName);
 	/**

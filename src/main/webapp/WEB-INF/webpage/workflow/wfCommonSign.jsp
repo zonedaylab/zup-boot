@@ -71,11 +71,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	
 	<!--弹出框放置位置  添加 删除  查看详情 布局-->
-    <div id="formEdit" class="hide">
-		<form class="bootbox-form" id="addOrEditForm">
-            <strong>采样时间：</strong><input name="FROM_TIME" id="FROM_TIME" type="date" style="height: 30px; width: 160px; margin-bottom:5px;"/><br/>
-            <strong>采样地点：</strong><input name="date-picker" id="FROM_ADDRESS" type="text" style="height: 30px; width: 160px; margin-bottom:5px;"/><br/>
-            <strong>水样类别：</strong><input name="FROM_TYPE" id="FROM_TYPE" type="text" style="height: 30px; width: 160px; margin-bottom:5px;"/>
+    <div id="nextSelect" class="hide">
+		<form class="bootbox-form" id="nextSelectForm">
+           	<div id="nextActivityList" style="margin-bottom:5px; margin-top:5px; border:1px solid #cccccc; padding:10px;">		
+           	</div>
         </form>
 	</div>
 	
@@ -180,37 +179,91 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				else title.text($title);
 			}
 		}));
-		
-		var rows = 0;
-		var rowd = 0;
+
+		var nextActivityflag="";//返回标识
 		//弹出框js方法
-		function msgDialog(e){
-			e.preventDefault();
-				var dialog = $( "#formEdit" ).removeClass('hide').dialog({
-					modal: true,
-					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='icon-ok'></i>表单字段设置</h4></div>",
-					title_html: true,
-					buttons: [ 
-						{
-							text: "取消",
-							"class" : "btn btn-xs",
-							click: function() {
-								$( this ).dialog( "close" );
-							} 
-						},
-						{
-							text: "保存",
-							"class" : "btn btn-primary btn-xs",
-							click: function() {
-								var time = $("#FROM_TIME").val();
-								var address = $("#FROM_ADDRESS").val();
-								var type = $("#FROM_TYPE").val();
-								$("#appendTable").append("<tr><td><label><input type='checkbox' class='ace' id='rs' value="+(rowd++)+"><span class='lbl'></span></label></td><td>"+time+"</td><td>"+address+"</td><td>"+type+"</td></tr>");
-								$(this).dialog( "close" );
-							} 
-						}
-					]
-				});
+		function getNextActivityInfo(){
+			//获取节点信息
+			var paramActivity = {};
+			paramActivity.FlowID="${ flowRequest.flowID}";
+			paramActivity.ActivityID="${flowRequest.activityID}";
+			$.ajax({
+				cache: true,
+				type: "POST",
+				url:"rest/workflow/workPersonal/gvwActivitySel_onDataBound",
+				data: paramActivity,// 你的formid
+				async: false,
+				dataType:"json",
+				success: function(data) {
+					//如果是结束节点则直接返回
+					if(data.activityType==3)//3代表结束节点
+					{
+						nextActivityflag="Default";
+						return;
+					}
+					var selectType ;
+					if(data.batchType==3)//多选
+					{
+						nextActivityflag="Multiple";
+						selectType = "checkbox";
+					}
+					else if(data.batchType==2)//单选
+					{
+						nextActivityflag="Single";
+						selectType = "radio";
+					}
+					else//默认
+					{
+						nextActivityflag="Default";
+						return;
+					}
+					$("#nextActivityList").html("");
+					//遍历下一节点
+					for(var i=0; i<data.data.length; i++){
+						//遍历节点的经办人
+						for(var j=0; j<data.data[i].handerList.length; j++){
+								$("#nextActivityList").append('<div style="width:100%; height:30px;" class="list-item"><input id="handlerId" class="ace" type="'+selectType+'" name="activityHandlerId" value='+data.data[i].activityID+"-"+data.data[i].activityCode+"-"+data.data[i].handerList[j].HANDLER_ID+"-"+data.data[i].handerList[j].HANDLER+"-"+data.data[i].handerList[j].HANDLER_TYPE+'><span class="lbl" style="white-space:nowrap;">'+data.data[i].activityName+"--"+data.data[i].handerList[j].HANDLER_NAME+'</span></div>');	
+							}
+					}
+					var dialog = $( "#nextSelect" ).removeClass('hide').dialog({
+						modal: true,
+						title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='icon-ok'></i>下一流程节点操作者选择</h4></div>",
+						title_html: true,
+						width:450,
+						height:450,
+						buttons: [ 
+							{
+								text: "取消",
+								"class" : "btn btn-xs",
+								click: function() {
+									$( this ).dialog( "close" );
+								} 
+							},
+							{
+								text: "提交",
+								"class" : "btn btn-primary btn-xs",
+								click: function() {
+									if($("#handlerId:checked").length <= 0){
+										parent.bootbox.alert("请选择操作者", function(){});
+										return;
+									}
+									var activityHandlerStr="";
+									for(var i=0; i<$("#handlerId:checked").length;i++){
+										activityHandlerStr += $("#handlerId:checked")[i].defaultValue+",";
+									}
+									nextActivityCommit(activityHandlerStr);
+									$(this).dialog( "close" );
+								} 
+							}
+						]
+					})
+				},
+	            error:function(){
+					flag="Default";
+					return;
+	            }
+			});
+			return nextActivityflag;
 		}
 		
 		
