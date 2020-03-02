@@ -50,7 +50,7 @@ public class BIDimController {
 		ModelAndView mv = new ModelAndView("bi/biDimSet");
 		mv.addObject("dimId", dimId);
 		return mv;
-		}
+	}
 
 	
 	/** 
@@ -178,6 +178,55 @@ public class BIDimController {
 		System.err.println(12);
 		return json.toString();
 		
+	}
+
+	/**
+	 *
+	 * 保存设计的维表名称
+	 * @author antsdot
+	 * @date 2020-03-01 16:05:21
+	 * */
+	@RequestMapping("/saveDim")
+	@ResponseBody
+	public String saveDim(BI_DIM biDim){
+		int result = biDimService.saveDimData(biDim);
+		JSONObject json = new JSONObject();
+		if( result != 0){
+			json.put("info", "success");
+		}else{
+			json.put("info", "error");
+		}
+		return json.toString();
+	}
+	/**
+	 *
+	 * 更新设计的维表名称
+	 * @author antsdot
+	 * @date 2020-03-01 16:05:21
+	 * */
+	@RequestMapping("/updateDim")
+	@ResponseBody
+	public String updateDim(BI_DIM biDim){
+		int result = biDimService.updateDimData(biDim);
+		JSONObject json = new JSONObject();
+		if( result != 0){
+			json.put("info", "success");
+		}else{
+			json.put("info", "error");
+		}
+		return json.toString();
+	}
+	/**
+	 *
+	 * 获取设计的维表名称
+	 * @author antsdot
+	 * @date 2020-03-01 16:05:21
+	 * */
+	@RequestMapping("/getDim")
+	@ResponseBody
+	public CommonResult getDim(Integer dimId){
+		BI_DIM dim = biDimService.getDimInfo(dimId);
+		return CommonResult.success("查询成功", dim);
 	}
 	
 	/**
