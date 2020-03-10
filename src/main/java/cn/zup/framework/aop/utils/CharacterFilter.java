@@ -84,7 +84,8 @@ public class CharacterFilter  implements Filter {
                 "information_schema.columns|table_schema|union|where|select|delete|update|order|by|count|*|" +
                 "chr|mid|master|truncate|char|declare|or|;|--|++|like|#";//过滤掉的sql关键字，可以手动添加
         for(int i=0;i<words.length;i++){
-            if(badStr.indexOf(words[i])>=0)
+            String word = "|" + words[i] + "|";
+            if(badStr.indexOf(word)>=0)
                 return true;
         }
         return false;

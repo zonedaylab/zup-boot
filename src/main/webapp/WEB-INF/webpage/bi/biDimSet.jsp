@@ -160,15 +160,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    	<input type="button" id="save" class="btn btn-sm btn-primary" value="保存" style="float:right; margin-right:10%;" />
 		    </div>
 
-<!-- 		    <div style="margin-left: 20px;"> -->
-<!-- 		    	<p>注意：使用须知：</p> -->
-<!-- 		    	<ol> -->
-<!-- 		    		<li>属性名称填写规则：必须填写数据表中的列名称！</li> -->
-<!-- 		    		<li>属性列名填写规则：不允许书写中文和数字！</li> -->
-<!-- 		    		<li>文字列名填写规则：不允许书写中文和数字</li> -->
-<!-- 		    		<li>ID字段填写规则： 必须是你设置的是维度选择的物理表中和主题表中选择具有关联的一个字段，因为这里要作为 join 表连接时的  on 条件！</li> -->
-<!-- 		    	</ol> -->
-<!-- 		    </div> -->
+ 		    <div style="margin-left: 20px;">
+ 		    	<p>注意：使用须知：</p>
+ 		    	<ol>
+ 		    		<li>属性名称填写规则：必须填写数据表中的列名称！</li>
+ 		    		<li>属性列名填写规则：不允许书写中文和数字！</li>
+ 		    		<li>文字列名填写规则：不允许书写中文和数字</li>
+ 		    		<li>ID字段填写规则： 必须是你设置的是维度选择的物理表中和主题表中选择具有关联的一个字段，因为这里要作为 join 表连接时的  on 条件！</li>
+ 		    	</ol>
+ 		    </div>
 	    </form>
 	</div>
 	<select id="linshi" style="display:none;">
