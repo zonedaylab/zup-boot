@@ -96,7 +96,9 @@ public class BITopicController {
 		String errorId = "";
 		for (int i = 0; i < topicIds.length; i++) {
 			try{
+
 				topicService.deleteTopicData(Integer.parseInt(topicIds[i]));
+
 				errorId = "success";
 			}catch(Exception e){
 				if(i == topicIds.length-1){
@@ -104,6 +106,7 @@ public class BITopicController {
 				}else{
 					errorId += topicIds[i]+",";
 				}
+				errorId=errorId+" error:"+e.getMessage();
 			}
 		}
 		json.put("data", errorId);

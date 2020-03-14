@@ -41,6 +41,14 @@
             FIELD_TYPE
         FROM
             bi_topic_field
+        <where>
+            <if test="topicField.dim_Id != null">
+                and DIM_ID = #{topicField.dim_Id}
+            </if>
+            <if test="topicField.topic_Id != null">
+                and TOPIC_ID = #{topicField.topic_Id}
+            </if>
+        </where>
     </select>
 
     <select id="getTopictopicFieldPagingList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_TOPIC_FIELD">
@@ -74,6 +82,10 @@
 
     <delete id="deleteTopicFieldData" parameterType="java.lang.Integer">
         delete from bi_topic_field WHERE FIELD_ID = #{titleFieldId}
+    </delete>
+
+    <delete id="deleteTopicFieldDatabyTopic" parameterType="java.lang.Integer">
+        delete from bi_topic_field WHERE TOPIC_ID = #{topic_Id}
     </delete>
 
     <insert id="save" parameterType="cn.zup.bi.entity.BI_TOPIC_FIELD" useGeneratedKeys="true" keyProperty="topicField.field_Id">

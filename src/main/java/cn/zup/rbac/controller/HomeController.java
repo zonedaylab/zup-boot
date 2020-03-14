@@ -42,7 +42,7 @@ public class HomeController{
 			
 			String domains[]=request.getServletPath().split("/");
 			if(domains.length>0){
-				DomainSystem domainSystem=resourceService.getDomainSystemByDomain(domains[domains.length-1]);
+				DomainSystem domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
 				if(domainSystem!=null){
 					menulist = resourceService.getAccountPermitMenu(userSession.getAccountId(),domainSystem.getSystem_Id(),true, 2);
 					JSONObject json = new JSONObject();

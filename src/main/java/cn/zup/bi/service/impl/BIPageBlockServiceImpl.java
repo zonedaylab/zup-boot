@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service("biPageBlockService")
-public class BIPageBlockServiceImpl implements BIPageBlockService {
-	
-	@Autowired
-	private BIPageBlockDao biPageBlockDao;
+	public class BIPageBlockServiceImpl implements BIPageBlockService {
 
-	@Override
-	public Integer saveBlock(BI_Block_Info bi_Block_Info) {
-		try {
-			biPageBlockDao.save(bi_Block_Info);
-			return bi_Block_Info.getBlock_Id();
-		} catch (Exception e) {
-			return 0;
+		@Autowired
+		private BIPageBlockDao biPageBlockDao;
+
+		@Override
+		public Integer saveBlock(BI_Block_Info bi_Block_Info) {
+			try {
+				biPageBlockDao.save(bi_Block_Info);
+				return bi_Block_Info.getBlock_Id();
+			} catch (Exception e) {
+				return 0;
+			}
 		}
-	}
 
 	@Override
 	public boolean updateBlock(BI_Block_Info bi_Block_Info) {

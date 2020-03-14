@@ -1,1 +1,0 @@
-SELECT id,ds_name,ds_ip,ds_username,ds_password,ds_create_time from bi_datasource

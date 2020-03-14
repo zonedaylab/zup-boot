@@ -22,6 +22,8 @@ public interface TopicFieldDao{
 
 	void deleteTopicFieldData(@Param("titleFieldId") int titleFieldId);
 
+	void deleteTopicFieldDatabyTopic(@Param("topic_Id") Integer topic_Id);
+
 
 	BI_TOPIC_FIELD getTopicFieldData(@Param("topic_Id") Integer topic_Id, @Param("field_Id") Integer field_Id);
 

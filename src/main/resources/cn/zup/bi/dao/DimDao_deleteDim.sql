@@ -1,1 +1,0 @@
-delete from bi_dim where DIM_ID = ${dimid}

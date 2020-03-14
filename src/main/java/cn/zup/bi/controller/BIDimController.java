@@ -285,11 +285,13 @@ public class BIDimController {
 		List<BI_DIM_ATTRIBUTE> dimAttributeList=null;
 		for (int i = 0; i < dimIds.length; i++) {
 			try{
+
 				field.setDim_Id(dimIds[i]);
 				fieldList=topicFieldService.getTopicFieldList(field);
-				if(fieldList!=null&&fieldList.size()!=0)
-					tipstr+=dimIds[i]+",";
-				else {
+				if(fieldList!=null&&fieldList.size()!=0) {
+					tipstr += dimIds[i] + ",";
+
+				} else {
 				dimAttributeList=biDimService.getDimInInfo(dimIds[i]);
 				if(dimAttributeList!=null&&dimAttributeList.size()!=0)	{
 					for (BI_DIM_ATTRIBUTE o :dimAttributeList)
@@ -305,6 +307,7 @@ public class BIDimController {
 				}else{
 					errorId += dimIds[i]+",";
 				}
+				errorId=errorId+" error:"+e.getMessage();
 			}
 		}
 		json.put("data", errorId);

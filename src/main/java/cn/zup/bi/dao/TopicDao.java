@@ -18,6 +18,7 @@ public interface TopicDao{
 
 	void deleteTopic(@Param("topicId") int topicId);
 
+
 	BI_TOPIC getTopic(@Param("topicId") int topicId);
 
 	void save(@Param("topic") BI_TOPIC topic);

@@ -1,1 +1,0 @@
-select * from BI_TOPIC_FIELD t where TOPIC_ID = ${ topic_Id}  AND FIELD_ID = ${ field_Id}

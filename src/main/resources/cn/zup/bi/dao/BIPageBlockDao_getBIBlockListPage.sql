@@ -1,1 +1,0 @@
-SELECT * FROM bi_block

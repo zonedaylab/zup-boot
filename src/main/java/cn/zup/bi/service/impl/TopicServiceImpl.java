@@ -1,6 +1,7 @@
 package cn.zup.bi.service.impl;
 
 import cn.zup.bi.dao.TopicDao;
+import cn.zup.bi.dao.TopicFieldDao;
 import cn.zup.bi.entity.BI_TOPIC;
 import cn.zup.bi.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import java.util.List;
 public class TopicServiceImpl implements TopicService{
 	
 	@Autowired
-	private TopicDao topicDao; 
+	private TopicDao topicDao;
+	@Autowired
+	private TopicFieldDao topicFieldDao;
 	
 	/**
 	 * 主题分页列表
@@ -47,9 +50,14 @@ public class TopicServiceImpl implements TopicService{
 	 * */
 	@Override
 	public void deleteTopicData(Integer topicid){
+
+		//删除主题字段
+		topicFieldDao.deleteTopicFieldDatabyTopic(topicid);
+
 		BI_TOPIC topic = new BI_TOPIC();
 		topic.setTopic_Id(topicid);
 		topicDao.deleteTopic(topicid);
+
 	}
 	
 	/**
