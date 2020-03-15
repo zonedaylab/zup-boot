@@ -74,7 +74,9 @@ public class BITopicController {
 	@RequestMapping("/addTopicData")
 	@ResponseBody
 	public String addTopicData(BI_TOPIC topic, HttpServletRequest request) {
-		JSONObject json = new JSONObject(); 
+		JSONObject json = new JSONObject();
+		if(topic.getDs_id()==null||topic.getDs_id()==0)
+			topic.setDs_id(1);
 		int flag = topicService.addTopicData(topic);
 		if(flag != 0){
 			json.put("data", "success");
@@ -106,7 +108,6 @@ public class BITopicController {
 				}else{
 					errorId += topicIds[i]+",";
 				}
-				errorId=errorId+" error:"+e.getMessage();
 			}
 		}
 		json.put("data", errorId);
