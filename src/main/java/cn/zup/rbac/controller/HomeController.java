@@ -36,20 +36,10 @@ public class HomeController{
 		UserSession userSession = (UserSession)request.getSession().getAttribute("usersession");
 		List<Menu> menulist = new ArrayList<Menu>();
 		if(userSession != null && userSession.getAccountId() != null){
-			//log.error("获取域名为"+request.getServerName());
-			//Systemout.println("获取域名为"+request.getServletPath());
-			System.err.println("======================"+request.getServletPath()+"=============================");
-			
-			String domains[]=request.getServletPath().split("/");
-			if(domains.length>0){
-				DomainSystem domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
-				if(domainSystem!=null){
-					menulist = resourceService.getAccountPermitMenu(userSession.getAccountId(),domainSystem.getSystem_Id(),true, 2);
-					JSONObject json = new JSONObject();
-					json.put("parmenulist", menulist); 
-					request.setAttribute("parmenulist",menulist);
-				}
-			}
+			menulist = resourceService.getAccountPermitMenu(userSession.getAccountId(),userSession.getSystemId(),true, 2);
+			JSONObject json = new JSONObject();
+			json.put("parmenulist", menulist);
+			request.setAttribute("parmenulist",menulist);
 			return new ModelAndView("rbac/main");
 		}else{
 			return new ModelAndView("rbac/login");
