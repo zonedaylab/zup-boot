@@ -10,18 +10,12 @@
         <result property="id_Field" column="ID_FIELD" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result property="drill_Type" column="DRILL_TYPE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result property="drill_Info" column="DRILL_INFO" javaType="java.lang.String" jdbcType="VARCHAR"></result>
-        <result property="ds_Id" column="DS_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
         <result property="ds_name" column="ds_name" javaType="java.lang.String" jdbcType="VARCHAR"></result>
     </resultMap>
 
     <select id="getDimPagingList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_DIM">
-        select DIM_ID,DIM_NAME,BIZ_TABLE_NAME,TEXT_FIELD,ID_FIELD,DRILL_TYPE,DRILL_INFO, DS_ID, ds.ds_name
+        select DIM_ID,DIM_NAME,BIZ_TABLE_NAME,TEXT_FIELD,ID_FIELD,DRILL_TYPE,DRILL_INFO
         from bi_dim
-        JOIN bi_datasource ds ON bi_dim.DS_ID = ds.id
-        where 1=1
-        <if test="dim.ds_Id != null">
-            AND DS_ID = #{dim.ds_Id},
-        </if>
         ORDER BY DIM_ID DESC
     </select>
 
@@ -66,9 +60,6 @@
             <if test="dim.drill_Info != null">
                 AND DRILL_INFO = #{dim.drill_Info}
             </if>
-            <if test="dim.ds_Id != null">
-                AND DS_ID = #{dim.ds_Id},
-            </if>
         </where>
     </select>
 
@@ -88,8 +79,8 @@
             TEXT_FIELD,
             ID_FIELD,
             DRILL_TYPE,
-            DRILL_INFO,
-            DS_ID
+            DRILL_INFO
+
         ) VALUES
         (
             #{dim.dim_Name},
@@ -97,8 +88,8 @@
             #{dim.text_Field},
             #{dim.id_Field},
             #{dim.drill_Type},
-            #{dim.drill_Info},
-            #{dim.ds_Id}
+            #{dim.drill_Info}
+
         );
     </insert>
 
