@@ -43,10 +43,11 @@
             AND btf.FIELD_ID IN (${ids})
         </if>
         AND brf.REPORT_ID = ${report_Id}
-        AND brf.DISPLAY = 1
+
         <!--
         GROUP BY bd.BIZ_TABLE_NAME, bd.DRILL_TYPE, bd.DRILL_INFO, bd.ID_FIELD, bd.TEXT_FIELD,
-            btf.FIELD_TITLE, btf.FIELD_TYPE, btf.FIELD_NAME, bt.BIZ_TABLE_NAME, bt.TOPIC_NAME-->
+            btf.FIELD_TITLE, btf.FIELD_TYPE, btf.FIELD_NAME, bt.BIZ_TABLE_NAME, bt.TOPIC_NAME
+        -->
         ORDER BY brf.FIELD_LOCATION,
         brf.DIM_ORDER ;
     </select>
@@ -63,7 +64,7 @@
         <if test="ids != null">
             AND btf.FIELD_ID IN (${ids})
         </if>
-        AND brf.DISPLAY = 1
+
         AND brf.REPORT_ID = ${report_Id};
     </select>
 

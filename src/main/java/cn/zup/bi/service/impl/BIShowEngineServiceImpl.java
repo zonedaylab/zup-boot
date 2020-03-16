@@ -25,7 +25,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	private DimDao dimDao;
 
 	@Override
-	public String showReport(ConditionTransfer conditionTransfer) {
+	public String showReport(ConditionTransfer conditionTransfer) throws Exception {
 		List<String> key = new ArrayList<String>(conditionTransfer.getKey());
 		List<Object> value = new ArrayList<Object>(conditionTransfer.getValue());
 		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(conditionTransfer.getReport_Id());
@@ -71,7 +71,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	 * @author Andot
 	 * 
 	 * */
-	private String produceSql(ConditionTransfer conditionTransfer, String dimFieldIds, String topicFieldIds){
+	private String produceSql(ConditionTransfer conditionTransfer, String dimFieldIds, String topicFieldIds) throws Exception {
 		StringBuffer sql = new StringBuffer();
 		String showField = "";
 		String join = "";
@@ -155,6 +155,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		String topicFields = "" ;
 		String 	baseTopicFields = "";  //基本维度？
 		List<BIShowField> biShowTopicFieldList = biShowEngineDao.getReportTopicInfo(topicFieldIds, conditionTransfer.getReport_Id());
+		if(biShowTopicFieldList.size()==0) {
+			throw new Exception("当前主题指标字段为空，请检查配置");
+		}
 		boolean b = false;
 		for (int i = 0; i < biShowTopicFieldList.size(); i++) {
 

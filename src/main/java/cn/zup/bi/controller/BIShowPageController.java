@@ -73,7 +73,7 @@ public class BIShowPageController {
 		biPage.setMenu_Id(menuid);
 		BI_Page bi_Page = biPageService.getBiPage(biPage);
 		if(bi_Page == null){
-			throw new Exception("请去BI页面管理中绑定此菜单");
+			throw new Exception("BI/MenuShow:请去BI--表单管理--菜单中进行表单与此菜单绑定！");
 		}
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName(bi_Page.getPage_Url());
