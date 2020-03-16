@@ -5,7 +5,7 @@ import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.TopicFieldService;
-import cn.zup.bi.utils.PropertiesUtil;
+import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -72,14 +72,14 @@ public class BIDimController {
 	@ResponseBody
 	public String getDatabaseTableName(){
 		JSONObject json = new JSONObject();
-		Connection conn = PropertiesUtil.OpenConn();
+		Connection conn = BIConnection.OpenConn();
 		try {
 			json.put("data", biDimService.getTableNameList(conn));
 		} catch (SQLException e) {
 			json.put("data", "error");
 			e.printStackTrace();
 		}finally {
-			PropertiesUtil.CloseConn(conn);
+			BIConnection.CloseConn(conn);
 		}
 		
 		return json.toString();
@@ -95,7 +95,7 @@ public class BIDimController {
 	@ResponseBody
 	public String getTableData(String tableName){
 		JSONObject json = new JSONObject();
-		Connection conn = PropertiesUtil.OpenConn();
+		Connection conn = BIConnection.OpenConn();
 		try {
 			json.put("data", biDimService.getColumnNameList(conn, tableName));
 			json.put("pk", biDimService.getPrimaryKey(conn, tableName));
@@ -103,7 +103,7 @@ public class BIDimController {
 			json.put("data", "error");
 			e.printStackTrace();
 		} finally {
-			PropertiesUtil.CloseConn(conn);
+			BIConnection.CloseConn(conn);
 		}
 		return json.toString();
 	}

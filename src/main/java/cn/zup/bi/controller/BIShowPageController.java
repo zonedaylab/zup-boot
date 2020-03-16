@@ -3,7 +3,7 @@ package cn.zup.bi.controller;
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.*;
 import cn.zup.bi.utils.DatabaseParamBuilder;
-import cn.zup.bi.utils.PropertiesUtil;
+import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.json.JsonDateValueProcessor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
@@ -103,7 +103,7 @@ public class BIShowPageController {
 		List<BI_Block_Info> blockList = biPageBlockService.getPageBlockByPageId(vreportData.getBi_Page_Id(), vreportData.getScreen_Index(), vreportData.getBlock_Id());
 		JSONObject json = new JSONObject();
 
-		Connection conn = null;
+
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		if(blockList.size() > 0) {
 			Integer reportId = blockList.get(0).getReport_Id();
@@ -114,15 +114,17 @@ public class BIShowPageController {
 				biPageBlockService.deleteBlock(blockList.get(0).getBlock_Id());
 
 			}
-			BI_Datasource biDatasource = biDatasourceService.getDatasourceInfo(bi_topic.getDs_id());
-			Class.forName(DatabaseParamBuilder.getClassName(biDatasource.getDs_attr()));
-			conn = DriverManager.getConnection(DatabaseParamBuilder.getUrl(biDatasource.getDs_ip()
-					, biDatasource.getDs_port(), biDatasource.getDs_name()
-					, biDatasource.getDs_attr()), biDatasource.getDs_username(), biDatasource.getDs_password());
 
+			//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
+			Connection conn = BIConnection.OpenConn();
+			//BI_Datasource biDatasource = biDatasourceService.getDatasourceInfo(bi_topic.getDs_id());
+			//Class.forName(DatabaseParamBuilder.getClassName(biDatasource.getDs_attr()));
+			//conn = DriverManager.getConnection(DatabaseParamBuilder.getUrl(biDatasource.getDs_ip()
+			//		, biDatasource.getDs_port(), biDatasource.getDs_name()
+			//		, biDatasource.getDs_attr()), biDatasource.getDs_username(), biDatasource.getDs_password());
 
-			PreparedStatement ps = null;
-			ResultSet rs = null;
+			PreparedStatement ps ;
+			ResultSet rs ;
 			for (BI_Block_Info bi_Block_Info : blockList) {
 				Map<String, Object> resultMap = new HashMap<String, Object>();
 				//获取div上绑定的报表的数据
@@ -510,8 +512,8 @@ public class BIShowPageController {
 	public JSONObject getDimData(Integer reportId) throws SQLException, ClassNotFoundException{
 		List<String> sqlList = biShowEngineService.showDimField(reportId);
 		JSONObject json = new JSONObject();
-		Class.forName(PropertiesUtil.CLASSNAME);
-		Connection conn = DriverManager.getConnection(PropertiesUtil.URL, PropertiesUtil.USERNAME, PropertiesUtil.PASSWORD);
+		Class.forName(BIConnection.CLASSNAME);
+		Connection conn = DriverManager.getConnection(BIConnection.URL, BIConnection.USERNAME, BIConnection.PASSWORD);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Map<String, Object> mapResult = new HashMap<String, Object>();
@@ -546,8 +548,8 @@ public class BIShowPageController {
 	@ResponseBody
 	public JSONObject getFilterValue(String filterName, Integer areaId) throws ClassNotFoundException, SQLException{
 		List<BI_DIM> dimList = biDimService.getDimFilter(filterName);
-		Class.forName(PropertiesUtil.CLASSNAME);
-		Connection conn = DriverManager.getConnection(PropertiesUtil.URL, PropertiesUtil.USERNAME, PropertiesUtil.PASSWORD);
+		Class.forName(BIConnection.CLASSNAME);
+		Connection conn = DriverManager.getConnection(BIConnection.URL, BIConnection.USERNAME, BIConnection.PASSWORD);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Map<String, Object> map = new HashMap<String, Object>();

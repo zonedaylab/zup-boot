@@ -5,13 +5,12 @@ import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.TopicFieldService;
 import cn.zup.bi.service.TopicService;
 import cn.zup.bi.service.settings.MgeidsConfig;
-import cn.zup.bi.utils.PropertiesUtil;
+import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.common.vo.CommonResult;
 import cn.zup.rbac.entity.Config;
 import cn.zup.rbac.service.ConfigurationService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -185,11 +184,11 @@ public class BITopicFieldController {
 	@ResponseBody
 	public String getAggreField(Integer topic_Id) throws SQLException{
 		JSONObject json = new JSONObject();
-		Connection conn = PropertiesUtil.OpenConn();
+		Connection conn = BIConnection.OpenConn();
 		BI_TOPIC topic = topicService.getTopicData(topic_Id);
 		List<BI_DIM_FIELD> list = biDimService.getColumnNameList(conn, topic.getBiz_Table_Name());
 		json.put("data", list);
-		PropertiesUtil.CloseConn(conn);
+		BIConnection.CloseConn(conn);
 		return json.toString();
 	}
 	

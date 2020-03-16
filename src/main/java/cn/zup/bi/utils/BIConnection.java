@@ -11,7 +11,7 @@ import java.util.Properties;
  * 读取Properties文件的例子，根据properties返回Connection
  * @author han
  */
-public final class PropertiesUtil {
+public final class BIConnection {
 	public static String URL;
 	public static String USERNAME;
 	public static String PASSWORD;
@@ -19,7 +19,7 @@ public final class PropertiesUtil {
 
 	static {
 		Properties prop = new Properties();
-		InputStream in = PropertiesUtil.class.getResourceAsStream("/dbconfig.properties");
+		InputStream in = BIConnection.class.getResourceAsStream("/dbconfig.properties");
 		try {
 			prop.load(in);
 			URL = prop.getProperty("jdbc.url.mysql.bi").trim();
@@ -34,7 +34,7 @@ public final class PropertiesUtil {
 	/**
 	 * 私有构造方法，不需要创建对象
 	 */
-	private PropertiesUtil() {
+	private BIConnection() {
 	}
 
 	/**
