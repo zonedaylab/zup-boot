@@ -18,7 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @ImportResource("classpath:zup-*.xml")
 @ComponentScan({"cn.zup.*"})
-@MapperScan("cn.zup.bi.dao")
+@MapperScan({"cn.zup.bi.dao","cn.zup.rbacmap.dao"})
 @ServletComponentScan
 @EnableSwagger2
 public class ZupApplication extends SpringBootServletInitializer {
