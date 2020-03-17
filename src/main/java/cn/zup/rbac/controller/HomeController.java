@@ -1,10 +1,10 @@
 package cn.zup.rbac.controller;
 
-import cn.zup.rbac.entity.DomainSystem;
 import cn.zup.rbac.entity.Menu;
 import cn.zup.rbac.entity.MenuView;
 import cn.zup.rbac.entity.UserSession;
 import cn.zup.rbac.service.ResourceService;
+import cn.zup.rbacmap.entity.DomainSystem;
 import cn.zup.workflow.biz.IWorkFlowConfig;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;

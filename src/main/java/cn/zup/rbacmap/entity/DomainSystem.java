@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Data
 @Table(name = "Domain_System")
-public class DomainSystemMap {
+public class DomainSystem {
 	private Integer relation_Id;//关系id
 	private Integer system_Id;//系统id
 	private String system_Name;//系统名称

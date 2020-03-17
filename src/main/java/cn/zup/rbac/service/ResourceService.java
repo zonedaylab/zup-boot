@@ -1,14 +1,11 @@
 package cn.zup.rbac.service;
 
-import java.util.List;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import cn.zup.rbac.entity.Action;
-import cn.zup.rbac.entity.ActionPermission;
-import cn.zup.rbac.entity.DomainSystem;
-import cn.zup.rbac.entity.Menu;
-import cn.zup.rbac.entity.MenuRoleEx;
 import cn.zup.rbac.entity.System;
+import cn.zup.rbac.entity.*;
+import cn.zup.rbacmap.entity.DomainSystem;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+
+import java.util.List;
 /**
  * 用于资源管理的service层
  * @author lixin

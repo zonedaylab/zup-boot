@@ -1,39 +1,28 @@
 package cn.zup.rbac.controller;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import cn.zup.rbac.controller.ViewEntity.TreeView;
 import cn.zup.rbac.controller.ViewEntity.TreeViewChecked;
 import cn.zup.rbac.entity.Config;
-import cn.zup.rbac.entity.DomainSystem;
 import cn.zup.rbac.entity.Menu;
 import cn.zup.rbac.entity.MenuRoleEx;
-import cn.zup.rbac.entity.MenuView;
 import cn.zup.rbac.entity.System;
-import cn.zup.rbac.entity.UserSession;
 import cn.zup.rbac.service.AccountRoleService;
 import cn.zup.rbac.service.ConfigurationService;
 import cn.zup.rbac.service.ResourceService;
 import cn.zup.rbac.service.settings.ConfigSetting;
 import cn.zup.workflow.biz.IWorkFlowConfig;
-import cn.zup.workflow.biz.impl.WorkFlowConfig;
-import cn.zup.workflow.model.FLOW_MANAGE;
 import cn.zup.workflow.model.WF_FLOW;
-import cn.zup.workflow.structure.PagingData;
-import cn.zup.workflow.structure.QueryParameter;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 菜单管理页面
