@@ -70,6 +70,7 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	@Override
 	public int addTopicData(BI_TOPIC_FIELD topicField){
 		try{
+			trimComma(topicField);
 			topicFieldDao.save(topicField);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -87,13 +88,22 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	@Override
 	public int updateTopicData(BI_TOPIC_FIELD topicField){
 		try{
+			//聚合类型
+			trimComma(topicField);
 			topicFieldDao.updateTopicFieldData(topicField);
 		}catch(Exception e){
 			return 0;
 		}
 		return topicField.getField_Id();
 	}
-	
+	//聚合类型包含 特殊字符count avg  传递为count;  avg;
+	private void trimComma(BI_TOPIC_FIELD topicField){
+		String source=topicField.getAggregate_Type();
+		source=source.trim();
+		if(source.lastIndexOf(";") > -1)
+			source.substring(0, source.length()-1);
+		topicField.setAggregate_Type(source);
+	}
 	/**
 	 * 
 	 * 主题字段数据获取
