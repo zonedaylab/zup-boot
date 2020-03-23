@@ -191,6 +191,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					*/
 					Map<String, String> mapIndicatorData = new HashMap<String, String>();
 
+					//key_row,key_col,value;
+					Map<String, HashMap<String, String>> mapBizdata=new HashMap<String, HashMap<String, String>>();
+
 					for (Map<String, Object> map : listDataMap) {//获取数据
 						String xkey = "";
 						String xvalue = "";
@@ -221,6 +224,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 								xvalue = xvalue.substring(0, xvalue.length() - 1);
 							}
 							mapIndicatorData.put(xkey, xvalue);  // 数据格式  <"2017-集体-云南省", "494">
+
+							//生成新的数据
+							//mapBizdata.put(rowK,)
 						}
 					}
 
@@ -495,7 +501,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					for (Map<String, Object> map : listDataMap) {//获取数据
 						String xkey = "";
 						String xvalue = "";
-						for (int j = 0; j < map.size(); j++) {
+
 							String rowK = "";
 							String colK = "";
 							String valK = "";
@@ -522,7 +528,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 								xvalue = xvalue.substring(0, xvalue.length() - 1);
 							}
 							mapIndicatorData.put(xkey, xvalue);  // 数据格式  <"2017-集体-云南省", "494">
-						}
+
 					}
 
 					//4.创建列维度数据集合。
