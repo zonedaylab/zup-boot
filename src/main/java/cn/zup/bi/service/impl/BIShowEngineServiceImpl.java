@@ -911,7 +911,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 			lastDimTable=biShowField.getDim_Table();
 		}
 
-		showDimFields=trimComma(showDimFields);
+		showDimFields=trimComma(showDimFields,",");
 
 		/*================指标===============*/
 		List<BIShowField> biShowTopicFieldList = biShowEngineDao.getReportTopicInfo(topicFieldIds, conditionTransfer.getReport_Id());
@@ -928,19 +928,23 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				if(conditionTransfer.getBlock_type() == 1){  //图表类型：为了防止表格，表格只能有一个指标
 					if(b) continue;
 				}
-				showTopicFields += biShowField.getAggregate_Type() + "("+ biShowField.getTopic_Table() + "." +
+				String AggregateType=trimComma(biShowField.getAggregate_Type(),"_"); //
+				showTopicFields +=  AggregateType + "("+ biShowField.getTopic_Table() + "." +
 									biShowField.getField_Name() +") AS "+ biShowField.getField_Caption() +", ";
+				if(biShowField.getAggregate_Type()==null){
+					throw new Exception("显示字段Aggregate_Type为空，请检查配置,语句:<!--"+showTopicFields+"-->");
+				}
 				b = true;
 			}
 			if(i == 0){
 				from += biShowField.getTopic_Table() + " ";
 			}
 		}
-		showTopicFields=trimComma(showTopicFields);
+		showTopicFields=trimComma(showTopicFields,",");
 
 		//if(showDimFields.length() > 0)//group by 维度；
 		//	groupby = " group by " + showDimFields.replace(" AS areaId", "");
-		groupby=trimComma(groupby);
+		groupby=trimComma(groupby,",");
 
 		//需要查询的字段，包括所有的维度和指标。
 		String showFields = showDimFields + ", " + showTopicFields; //维度  +  指标
@@ -949,9 +953,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		System.err.println(sql);
 		return sql;
 	}
-    private String trimComma(String source){
+    private String trimComma(String source,String comma){
 		source=source.trim();
-		if(source.lastIndexOf(",") > -1)
+		if(source.lastIndexOf(comma) > -1)
 			return source.substring(0, source.length()-1);
 		return source;
 	}

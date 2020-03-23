@@ -165,11 +165,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     						 <strong class="control-label" style="text-align: left; float:left; width:78px;" >聚合类型：</strong>
 							 <select class="form-control" id="aggregate_Type" style="width:200px; float:left;">
 							 	<option value="0">请选择</option>
-							 	<option value='AVG;'>AVG</option>
-								<option value='COUNT;'>COUNT</option>
-								<option value='MAX;'>MAX</option>
-								<option value='MIN;'>MIN</option>
-								<option value='SUM;'>SUM</option>
+							 	<option value='AVG_'>AVG</option>
+								<option value='COUNT_'>COUNT</option>
+								<option value='MAX_'>MAX</option>
+								<option value='MIN_'>MIN</option>
+								<option value='SUM_'>SUM</option>
 							 </select>
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>

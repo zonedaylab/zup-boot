@@ -133,7 +133,7 @@
         UPDATE bi_topic_field btf
         <trim prefix="set" suffixOverrides=",">
             <if test="topicField.aggregate_Type != null">
-                btf.AGGREGATE_TYPE = ${topicField.aggregate_Type},
+                btf.AGGREGATE_TYPE = #{topicField.aggregate_Type},
             </if>
 
             <if test="topicField.dim_Id != null">
