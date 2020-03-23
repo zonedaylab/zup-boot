@@ -98,11 +98,9 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	}
 	//聚合类型包含 特殊字符count avg  传递为count;  avg;
 	private void trimComma(BI_TOPIC_FIELD topicField){
-		String source=topicField.getAggregate_Type();
-		source=source.trim();
+		String source=topicField.getAggregate_Type().trim();
 		if(source.lastIndexOf(";") > -1)
-			source.substring(0, source.length()-1);
-		topicField.setAggregate_Type(source);
+			topicField.setAggregate_Type(source.substring(0, source.length()-1));
 	}
 	/**
 	 * 
