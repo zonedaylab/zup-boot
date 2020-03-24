@@ -2,22 +2,17 @@ package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.*;
-import cn.zup.bi.utils.DatabaseParamBuilder;
 import cn.zup.bi.utils.BIConnection;
-import cn.zup.framework.json.JsonDateValueProcessor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.sql.*;
-import java.util.Date;
 import java.util.*;
 
 @Slf4j
@@ -97,7 +92,7 @@ public class BIShowPageController {
 	@ResponseBody
 	public Object getReportData(@RequestBody V_ReportData vreportData, String callback) throws Exception {
 
-		List<Map<String, Object>> list  =biShowEngineService.getReport(vreportData);
+		List<Map<String, Object>> list  =biShowEngineService.getBIPageService(vreportData);
 
 		JSONObject json = new JSONObject();
 		json.put("msg", "success");

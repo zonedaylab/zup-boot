@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface BIShowEngineService {
 
-	List<Map<String, Object>> getReport(V_ReportData vreportData) throws Exception;
+	List<Map<String, Object>> getBIPageService(V_ReportData vreportData) throws Exception;
 	List<String> showDimField(Integer reportId);
 }

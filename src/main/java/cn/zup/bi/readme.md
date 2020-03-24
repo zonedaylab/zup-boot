@@ -72,8 +72,18 @@ key为 维度信息   r1,r2...c1,c2   分别代表行维度 ，列维度的数�
 value为汇聚数据
 例如（dimkey=山东省，集体企业，  value=5）
 
-定义Map<String dimName,Hashmap<String dimData, int dimDataValue>> mapDimConfig;
 
 根据维度定义 表格的长度和宽度，假设行维度 4个数据，列维度为3个数据，则3行4列的表格。
 ```
 
+钻取方式：
+
+1.NONE
+2.分段
+3.路径
+
+钻取信息：
+
+1.NONE
+2.分段  252322  进行划分  2-2-2    省市县
+3.路径 
