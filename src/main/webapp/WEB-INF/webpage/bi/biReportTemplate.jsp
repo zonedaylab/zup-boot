@@ -395,7 +395,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							for (var z = 0; z < re.data.length; z++) {
 								definaReport.push(re.data[z].reportInfo.report_Id); 
 								var smallTotal = new Array(), reSmallTotal = new Array();
-								var allRows = re.data[z].dimField.length + re.data[z].dimFieldHeader[re.data[z].dimFieldHeader.length-1].length;
+								//dimField---->colDimFields
+								//allRows应该是只所有的列数据，包括列维度个数+ 业务数据的列数
+								var allRows = re.data[z].dimField.length ;
+								if (re.data[z].dimFieldHeader!=null &&re.data[z].dimFieldHeader.length>0)//判断表头是否为空，如果为空，则不计算在内
+									allRows+= re.data[z].dimFieldHeader[re.data[z].dimFieldHeader.length-1].length;
+								else
+									allRows+=1;//只有一列数据
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
 									var tr = "<tr>";  //总
 									var heji = 0, flag = 0;

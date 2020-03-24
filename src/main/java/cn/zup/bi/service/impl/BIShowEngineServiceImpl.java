@@ -102,7 +102,10 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				}
 
 				/*2.获取维度对应的数据信息
-
+				钻取方式：
+				1.NONE
+				2.分段
+				3.路径
 				*/
 				for (int i = 0; i < dimFieldList.size(); i++) {
 					BIShowField dimField = dimFieldList.get(i);
@@ -113,8 +116,10 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 
 						List<String> dimRowDataList = new ArrayList<String>(); //行数据
 
+
 						for (int k = 0; k < listDataMap.size(); k++) {
 							if (dimField.getDrill_Type() == null) {
+
 
 							/*  加入行数据,生成行维度，例如by liuxf
 								dimName=行业种类
@@ -250,20 +255,10 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 							if (map.containsKey(topicList.get(i)))
 								valK += map.get(topicList.get(i)) + ",";
 						}
-
-						xkey = colK + "" + rowK;
-						xvalue = valK;
-						if (xkey.lastIndexOf(",") > -1) {
-							xkey = xkey.substring(0, xkey.length() - 1);
-						}
-						if (xvalue.lastIndexOf(",") > -1) {
-							xvalue = xvalue.substring(0, xvalue.length() - 1);
-						}
+						xkey = trimComma(colK + "" + rowK,",");
+						xvalue =  trimComma(valK,",");
 						mapIndicatorData.put(xkey, xvalue);  // 数据格式  <"2017-集体-云南省", "494">
-
 					}
-
-
 
 					//---------------------开始创建展示表格-----------------------
 					//6.创建表头。这个应该是我写的，我自己看了半天,需要注释。  liuxf
@@ -308,27 +303,43 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 
 					//8.向生成的单元格里设置业务数据
 					List<List<String>> listRowData = new ArrayList<List<String>>();
+
+					if(listRows.size()==0) {//没有列维度，则不会生成行数.只有一行数据。
+					  listRows.add("");
+					}
+					if(listCols.size()==0){//没有行维度，则只有一列数据
+						listCols.add("");
+					}
 					int[] arrColDataCount=new int[listCols.size()];
 					for (int i = 0; i < listRows.size(); i++) {
 
-						String rowValue = listRows.get(i);//行数据  维度1，维度2，值1 ，值2 ，值3.........
-
+						String rowDatas = listRows.get(i);//行数据  维度1，维度2，值1 ，值2 ，值3.........
+						if(rowDatas.length()>0)
+							rowDatas+=",";
 						int rowDataCount=0;//测试本行数据有效条数，如果==0说明没有数据
 						for (int j = 0; j < listCols.size(); j++) {
-							String keyName = listRows.get(i) + ",";
-							keyName += listCols.get(j);
-							rowValue += ",";
+							String keyName ="";
+							if(listRows.size()>1)//如果只有一行数据，说明没有列维度
+								keyName+=listRows.get(i);
+							if(listCols.size()>1) {//如果只有一列数据，说明没有行维度
+								if (keyName.length() > 0)
+									keyName += "," + listCols.get(j);
+								else
+									keyName += listCols.get(j);
+							}
 							if (mapIndicatorData.containsKey(keyName)) {
-								rowValue += mapIndicatorData.get(keyName);
+								rowDatas += mapIndicatorData.get(keyName);
 								rowDataCount++;
 								arrColDataCount[j]++;
 							} else {
-								rowValue += "";
+								rowDatas += "";
 							}
+							rowDatas += ",";
 						}
 						if(rowDataCount>0) {//本行数据有效
+							rowDatas=trimComma(rowDatas,",");
 							List<String> rowValueList = new ArrayList<String>();
-							rowValueList.addAll(Arrays.asList(rowValue.split(",")));
+							rowValueList.addAll(Arrays.asList(rowDatas.split(",")));
 							listRowData.add(rowValueList);
 						}
 					}
