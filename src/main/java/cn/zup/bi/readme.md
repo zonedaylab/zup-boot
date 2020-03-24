@@ -1,7 +1,8 @@
 #### 1.业务说明
 
 
-1. 维度的排列说明
+1. ##### 维度的排列说明
+
     * 列维度:纵向排列    
     * 例如 dimName="省份" dimValue=山东省/河南省/....
         + 纵向排列：    
@@ -16,7 +17,7 @@
          * 维度横向生成
          * 电力 服务   水务   。。。。。。
 
-2. GenerateTableRows根据列维度生成行信息,返回值listRows<String>
+2. ##### GenerateTableRows根据列维度生成行信息,返回值listRows<String>
 
    ```
    private void GeneTableRows(int dimCol, List<BIDimData> BIColDimDatas , String colsNames, int colSize, List<String> listRows)
@@ -54,19 +55,8 @@
 |      | listCols[0]    | listCols[1]  | listCols[2]          | listCols[3]      | listCols[4]    |
 |      |                |              |                      |                  |                |
 
-#### 2.设计思路
+‘
 
-```
-4，是否可以允许没有行维度和列维度。
-5.blockid的诡异写入方法需要更新
-6.多个报表融合
-```
-
-每个维度列表设置一个hash表，对应索引。Dim<string,value>map
-
-根据维度字段信息快速获索引，根据行维度，列维的索引，取所在行、列位置信息，
-
-```
 mapIndicatorData   key,value ,
 key为 维度信息   r1,r2...c1,c2   分别代表行维度 ，列维度的数据，
 value为汇聚数据
@@ -74,7 +64,17 @@ value为汇聚数据
 
 
 根据维度定义 表格的长度和宽度，假设行维度 4个数据，列维度为3个数据，则3行4列的表格。
-```
+
+#### 2.设计思路
+
+1. 行维度、列维度只取其一能够展示.ok
+
+1. 能够拼接多个报表进行展示
+2. 多个报表块的查询时写入存在严重的问题，需要重构
+3. 重构代码，加入图形展示、大屏展示、混合图表展示。
+4. 能够拖拽维度展示
+
+f. 钻取：
 
 钻取方式：
 

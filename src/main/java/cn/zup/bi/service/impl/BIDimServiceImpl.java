@@ -6,6 +6,7 @@ import cn.zup.bi.dao.DimDao;
 import cn.zup.bi.dao.ReportFieldDao;
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.BIDimService;
+import cn.zup.bi.utils.BIConfig;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -314,7 +315,7 @@ public class BIDimServiceImpl implements BIDimService {
 			}
 			//分段信息
 			switch (biShowDimFieldList.get(i).getDrill_Type()) {
-				case 3:
+				case BIConfig.DRILL_TYPE.DRILL_TYPE_PATH:
 					System.err.println("钻取");
 					String[] areas = biShowDimFieldList.get(i).getDrill_Info().split("-");
 					if(conditionTransfer.getDrill_Name() != null){

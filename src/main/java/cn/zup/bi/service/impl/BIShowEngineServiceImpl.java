@@ -5,6 +5,7 @@ import cn.zup.bi.dao.DimDao;
 import cn.zup.bi.dao.ReportFieldDao;
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.*;
+import cn.zup.bi.utils.BIConfig;
 import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.json.JsonDateValueProcessor;
 import net.sf.json.JSONObject;
@@ -109,6 +110,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				*/
 				for (int i = 0; i < dimFieldList.size(); i++) {
 					BIShowField dimField = dimFieldList.get(i);
+
 					Map<String, Object> dimTopicTableHeaderMap = new HashMap<String, Object>();//表头
 
 					String dimFieldName = dimField.getField_Name().toLowerCase();
@@ -136,7 +138,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 									dimRowDataList.add(dimValue);
 								continue;
 							}
-							if (dimField.getDrill_Type() != 3) {
+
+							if (dimField.getDrill_Type() != BIConfig.DRILL_TYPE.DRILL_TYPE_PATH) {
 								if (!rowDimFields.contains(dimFieldName))
 									rowDimFields.add(dimFieldName);
 
