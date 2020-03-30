@@ -133,7 +133,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var pageid=0, screenIndex=0;
 			var definaReport = new Array(); //默认选中报表下拉框
 			var loading = new Loading();
+
 			var p1 = "", p2 = 0, c1 = "", c2 = 0, x1 = "", x2 = 0;
+
 			$(document).ready(function() {
 				index = loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
 				$('#article').readmore({
@@ -147,11 +149,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				getList(0);
 			});
 
-			function getDataIndex(v){
+			//获取指定报表的指标字段  report_id报表Id  by liuxf
+			function getDataIndex(report_id){
                 $.ajax({
                     type: "get",
                     async: true,
-                    url: "rest/bi/biReportFieldController/getReportFieldList?report_Id="+v+"&field_Location=3&rows=99999&page=1",
+                    url: "rest/bi/biReportFieldController/getReportFieldList?report_Id="+report_id+"&field_Location=3&rows=99999&page=1",
                     dataType: "json",
                     success: function (re) {
                         $("#dataIndex").empty();
@@ -162,7 +165,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 });
 			}
 
-			//选择数据源信息
+			//选择报表模块
 			function datasourceReload(reportIdArr){
 				var _this = $(this);
 				var param = {};
@@ -176,9 +179,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				ajaxfn("rest/bi/biPageBlockController/deleteBlockByPageId");
 				for (var i = 0; i < reportIdArr.length; i++) {
 					param.report_Id = reportIdArr[i];//报表id
-					ajaxfn("rest/bi/biPageBlockController/saveBlock");
+					ajaxfn("rest/bi/biPageBlockController/saveBlock");//保存数据块saveBlock
 				}
-				
+
 				function ajaxfn(url){
 					$.ajax({
 						type: "post",
@@ -222,6 +225,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			//keys.push("survey_year"); //去掉特定过滤语句 by liuxf
 			//values.push(2017);
 			var index = 0;
+			/*
+			* id      表示维度钻取  例如id=3701，id.length=4,表示济南市，
+			* indexs  指标列表*/
 			function getList(id, indexs) {
 				var drill_Name, drill_Value;
 				if((id+"").length == 2){
@@ -249,12 +255,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								drill_Name = "province";
 								drill_Value = ($(this).val()+"").substring(0, 2);
 								p1 = "province";
-								p2 = ($(this).val()+"").substring(0, 2);
+								p2 = ($(this).val()+"").substring(0, 2);//省是两个字符
 							}else if(idn == "county"){
 								drill_Name = "city";
 								drill_Value = ($(this).val()+"").substring(0, 4);
 								c1 = "city";
-								c2 = ($(this).val()+"").substring(0, 4);
+								c2 = ($(this).val()+"").substring(0, 4);//city 用四个字符
 							}
 							keys.push("mine_survey_info."+idn);
 					 		values.push($(this).val());
@@ -273,6 +279,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						//keys.remove(idn);
 					}
 		 		});
+
 				var data={
 					bi_Page_Id: pageid,
 					screen_Index: screenIndex,
@@ -285,6 +292,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 				if(indexs != 0)
 				    data.index = indexs;
+				//获取报数据数据
 				$.ajax({
 					type: "post",
 					async: true,
@@ -305,7 +313,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}else{
                                 $("#title").text(year+"${pageTitle} （"+re.data[0].unit[0]+"）");
 							}
-							//显示查询条件
+							//1.显示查询条件
 							$("thead").empty();
 							$("tbody").empty();
 							$("#report_Id").val(re.data[0].blockInfo.report_Id);
@@ -329,8 +337,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									 }
 								}
 							}
+							//2.列维度 by liuxf
 							for(var i=0; i<re.data[0].dimField.length; i++){
 								if(re.data[0].dimField[i] != "sub_nm"){
+
 									var hf = '<label class="control-label lab">'+filterNm[re.data[0].dimField[i]]+'：</label>'+
 											 '<select class="form-control filters" id="'+re.data[0].dimField[i]+'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
@@ -349,10 +359,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								}
 							}
 							
-							//准备表头
+							//3.准备表头
 							var theadTr = "";
 							var titleTr = "";
-							for(var x = 0;x<re.data[0].dimHeader.length;x++){
+							for(var x = 0;x<re.data[0].dimHeader.length;x++){//x表示一个维度，y表示维度中的每一列数据 by liuxf
 								var theadTh = "";
 								var titleTh = "";
 								//判断有多少列标题，准备多少"<th></th>"
@@ -360,14 +370,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									theadTh += "<th style='white-space: nowrap'></th>";
 									titleTh += "<th style='font-size:18px;'>${pageTitle}</th>";
 								}
-								//获取th
+								//获取th  dimFieldHeader  行维度 对应 java listRowHeader
 								for(var y = 0;y<re.data[0].dimFieldHeader[x].length;y++){
 									if(typeof(re.data[0].dimFieldHeader[x][y]) === "undefined")
 										tr += "<th></th>"
 									else{
 										var thCon = re.data[0].dimFieldHeader[x][y]+"";
 										if(thCon.indexOf("-") > -1){
-											if((thCon.split("-")[1]+"").length == 6){
+											if((thCon.split("-")[1]+"").length == 6){//表示是县级单位（第三级 长度为6  .xxxxxx.
                                                 let year = 2017;
                                                 if(values.length > 0){
                                                     if(keys[0] == "survey_year")
@@ -391,21 +401,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 							titleTr +="<tr>"+ titleTh +"</tr>";
 							$("thead").append(theadTr);
-							//准备内容
+							//4.准备业务数据内容
 							for (var z = 0; z < re.data.length; z++) {
 								definaReport.push(re.data[z].reportInfo.report_Id); 
 								var smallTotal = new Array(), reSmallTotal = new Array();
 								//dimField---->colDimFields
-								//allRows应该是只所有的列数据，包括列维度个数+ 业务数据的列数
-								var allRows = re.data[z].dimField.length ;
+								//allDataCols  是所有的列数据，包括列维度个数+ 业务数据的列数 by liuxf
+								var allDataCols = re.data[z].dimField.length ;//列维度个数 一个列维度占据一列
 								if (re.data[z].dimFieldHeader!=null &&re.data[z].dimFieldHeader.length>0)//判断表头是否为空，如果为空，则不计算在内
-									allRows+= re.data[z].dimFieldHeader[re.data[z].dimFieldHeader.length-1].length;
+									allDataCols+= re.data[z].dimFieldHeader[re.data[z].dimFieldHeader.length-1].length;
 								else
-									allRows+=1;//只有一列数据
+									allDataCols+=1;//只有一列数据
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
 									var tr = "<tr>";  //总
 									var heji = 0, flag = 0;
-									for(var j = 0; j < allRows; j++){ //数据
+									for(var j = 0; j < allDataCols; j++){ //数据
 										if(typeof(re.data[z].tableData[i][j]) === "undefined"){
 											tr += "<td></td>";
 										} else {
@@ -506,7 +516,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			}
 			
-		 	//获取数据源信息
+		 	//根据pageID获取报表列表（一个页面会有多个报表）
 			function getReportListByPageId() {
 				$.ajax({
 					type: "GET",
@@ -530,8 +540,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 	
 			$('#btnLoadReport').on('click', function () {
 				index = loading.start("#1c6bab");
-				var v = $("#dataSource").val();
-			  	if(v == null)
+				var reportIdArr = $("#dataSource").val();
+			  	if(reportIdArr == null)
 			  		parent.bootbox.alert("至少选择一项");
 			  	else{
 			  		index = loading.start("#1c6bab");
@@ -539,7 +549,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						$("#dataIndex").css("disable", "disable");
 						$("#dataIndex option:first").prop("seleced", "selected");
 					}
-					datasourceReload(v);
+					datasourceReload(reportIdArr);
 			  	}
 			});
 
@@ -617,6 +627,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					success: function(result) {
 						$("#filter"+filterName).empty();
 						$("#filter"+filterName).append("<option value='0'>全部</option>");
+
 						if(filterName == "survey_year"){
 							for (var item in result.data) {
 								$("#"+filterName).append("<option value="+result.data[item]+">"+result.data[item]+"</option>");
@@ -639,7 +650,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 	
 		 	function onBack(){
 		 		if(p1 == ""){
-		 			parent.bootbox.alert("你已经在省级了，无法后退了");
+		 			parent.bootbox.alert("你已经在最顶层，无法后退了");
 		 		}else if(c1 == ""){
 		 			getList(0);
 		 			p1 = "";

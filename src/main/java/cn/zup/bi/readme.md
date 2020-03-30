@@ -87,4 +87,10 @@ f. 钻取：
 1.NONE
 2.分段  252322  进行划分  2-2-2    省市县
 3.路径 
-4.不同主题连接，dim_field进行设置，例如 省级主题-城市主题-县级主题  
+drill_name-drill_value
+4.不同主题连接，
+  dim_field进行设置，例如 省级主题-城市主题-县级主题
+  配置BI_Page时，只是配置第一个主题，在维度表里配置下一级主题。
+  发送到前端的维度对应超级连接，点击时连接服务函数getReport,判断当前的主题字段。
+  
+ 维度  DrillName-dimValue-   dimNameData-topicName-filter    山东省-v_mytopic-'3701'
