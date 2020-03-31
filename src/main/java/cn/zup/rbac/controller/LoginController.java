@@ -181,9 +181,13 @@ public class LoginController {
 					domainSystem=resourceService.getDomainSystemByDomain("Sitai");
 			}else if(request.getParameter("Hongjialou")!=null && "true".equals(request.getParameter("Hongjialou"))){
 					domainSystem=resourceService.getDomainSystemByDomain("Hongjialou");
-			}else{//默认济南光伏
-				//改为资金
-				domainSystem=resourceService.getDomainSystemByDomain("homeController");
+			}
+			else if(request.getParameter("fund")!=null && "true".equals(request.getParameter("fund"))){
+				domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
+			}
+			else{//默认济南光伏 homeController
+				//改为资金fundHome Controller
+				domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
 			}
 			LoginLog loginLog = new LoginLog(); 
 			Date nowTime = new Date(System.currentTimeMillis()); 

@@ -123,6 +123,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				*/
 				for (int i = 0; i < dimFieldList.size(); i++) {
 					BIShowField dimField = dimFieldList.get(i);
+
 					Map<String, Object> dimTopicTableHeaderMap = new HashMap<String, Object>();//表头
 					String dimFieldName = dimField.getField_Name().toLowerCase();
 					if (dimField.getField_Location() == BIConfig.FIELD_TYPE.ROW_DIM) {        //针对行维度,  右侧的为行维度。
@@ -382,7 +383,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	List<BIDimData> BIColDimDatas  维度列表 包含了每个维度的具体信息一级对应的数据 ，
 	 */
 	void AddDimFieldToList(BIShowField  dimField, List<String> dimFields, List<BIDimData> BIColDimDatas ){
-		String dimFieldName=dimField.getField_Name();
+		String dimFieldName=dimField.getField_Name().toLowerCase();
 		dimFields.add(dimFieldName);
 		BIDimData dimData=new BIDimData();
 		dimData.setDrill_Type(dimField.getDrill_Type());
@@ -711,6 +712,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				if(conditionTransfer.getBlock_type() == 1){  //图表类型：为了防止表格，表格只能有一个指标
 					if(b) continue;
 				}
+				if(biShowField.getAggregate_Type()==null)
+					throw new  Exception(String.format("biShowField指标 %s 没有设置聚合字符，如count sum 等",biShowField.getField_Name()));
 				String AggregateType=trimComma(biShowField.getAggregate_Type(),"_"); //
 				showTopicFields +=  AggregateType + "("+ biShowField.getTopic_Table() + "." +
 									biShowField.getField_Name() +") AS "+ biShowField.getField_Caption() +", ";
