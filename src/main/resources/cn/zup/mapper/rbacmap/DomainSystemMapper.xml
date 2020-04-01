@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.rbacmap.dao.DomainSystemDao">
+    <resultMap id="baseMap" type="cn.zup.rbacmap.entity.DomainSystem">
+        <id property="relation_Id" column="relation_Id" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="system_Id" column="system_Id" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="system_Name" column="system_Name" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="domain" column="domain" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="getDomainSystemByDomain" resultMap="baseMap" parameterType="java.lang.String">
+        SELECT * FROM Domain_System
+        WHERE domain = #{domain} LIMIT 1
+    </select>
+    <select id="getDomainSystemBySystemId" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT * FROM Domain_System
+        WHERE system_Id = ${systemId} LIMIT 1
+    </select>
+
+    <select id="getDomainSystemList" resultMap="baseMap" parameterType="cn.zup.rbacmap.entity.DomainSystem">
+        SELECT * FROM Domain_System
+        <where>
+            <if test="domainSystem.relation_Id != null">
+                AND relation_Id = #{domainSystem.relation_Id}
+            </if>
+            <if test="domainSystem.system_Id != null">
+                AND system_Id = #{domainSystem.system_Id}
+            </if>
+            <if test="domainSystem.system_Name != null">
+                AND system_Name = #{domainSystem.system_Name}
+            </if>
+            <if test="domainSystem.domain != null">
+                AND domain = #{domainSystem.domain}
+            </if>
+        </where>
+    </select>
+</mapper>

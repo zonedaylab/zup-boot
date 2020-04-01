@@ -15,7 +15,7 @@ public interface EnergyParkService {
 	 * @param rows
 	 * @return
 	 */
-	MiniDaoPage<EnergyPark> girdEnergyParkPagingList(EnergyPark energyPark,int page, int rows);
+	MiniDaoPage<EnergyPark> girdEnergyParkPagingList(EnergyPark energyPark, int page, int rows);
 	/**
 	 * 通过登录用户的id，获取该用户所属组织机构下的所有的园区列表
 	 * @param userId

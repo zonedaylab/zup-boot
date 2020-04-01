@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.DimDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_DIM">
+        <id property="dim_Id" column="DIM_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="dim_Name" column="DIM_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="biz_Table_Name" column="BIZ_TABLE_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="text_Field" column="TEXT_FIELD" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="id_Field" column="ID_FIELD" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="drill_Type" column="DRILL_TYPE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="drill_Info" column="DRILL_INFO" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="ds_name" column="ds_name" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="getDimPagingList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_DIM">
+        select DIM_ID,DIM_NAME,BIZ_TABLE_NAME,TEXT_FIELD,ID_FIELD,DRILL_TYPE,DRILL_INFO
+        from bi_dim
+        ORDER BY DIM_ID DESC
+    </select>
+
+    <select id="getDimList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_DIM">
+        SELECT * FROM bi_dim
+    </select>
+    <select id="getDimField" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_DIM">
+        SELECT bd.TEXT_FIELD AS text_Field, bd.BIZ_TABLE_NAME AS biz_Table_Name, bda.ATTRIBUTE_CAPTION_FIELD AS dim_Name
+        FROM bi_dim_attribute bda
+        JOIN bi_dim bd ON bda.DIM_ID = bd.DIM_ID
+        JOIN bi_topic_field btf ON bd.DIM_ID = btf.DIM_ID
+        JOIN bi_topic bt ON btf.TOPIC_ID = bt.TOPIC_ID
+        JOIN bi_report br ON bt.TOPIC_ID = br.TOPIC_ID
+        WHERE 1=1
+        AND br.REPORT_ID = #{reportId}
+    </select>
+
+    <select id="getDimFilter" resultMap="baseMap" parameterType="java.lang.String">
+        SELECT bd.* FROM bi_dim bd
+        LEFT JOIN bi_dim_attribute bda  ON bd.DIM_ID = bda.DIM_ID
+        WHERE (bda.ATTRIBUTE_NAME = #{filterName} OR bd.TEXT_FIELD = #{filterName});
+    </select>
+
+    <select id="getDimInfo" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_DIM">
+        SELECT * FROM bi_dim
+        <where>
+            <if test="dim.dim_Name != null">
+                AND DIM_NAME = #{dim.dim_Name}
+            </if>
+            <if test="dim.biz_Table_Name != null">
+                AND BIZ_TABLE_NAME = #{dim.biz_Table_Name}
+            </if>
+            <if test="dim.text_Field != null">
+                AND TEXT_FIELD = #{dim.text_Field}
+            </if>
+            <if test="dim.id_Field != null">
+                AND ID_FIELD = #{dim.id_Field}
+            </if>
+            <if test="dim.drill_Type != null">
+                AND DRILL_TYPE = #{dim.drill_Type}
+            </if>
+            <if test="dim.drill_Info != null">
+                AND DRILL_INFO = #{dim.drill_Info}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDimById" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT * FROM bi_dim
+        WHERE DIM_ID = #{dimId}
+    </select>
+
+    <delete id="deleteDim" parameterType="java.lang.Integer">
+        delete from bi_dim where DIM_ID = #{dimid}
+    </delete>
+
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_DIM" useGeneratedKeys="true" keyColumn="DIM_ID" keyProperty="dim.dim_Id">
+        INSERT INTO bi_dim (
+            DIM_NAME,
+            BIZ_TABLE_NAME,
+            TEXT_FIELD,
+            ID_FIELD,
+            DRILL_TYPE,
+            DRILL_INFO
+
+        ) VALUES
+        (
+            #{dim.dim_Name},
+            #{dim.biz_Table_Name},
+            #{dim.text_Field},
+            #{dim.id_Field},
+            #{dim.drill_Type},
+            #{dim.drill_Info}
+
+        );
+    </insert>
+
+    <update id="update" parameterType="cn.zup.bi.entity.BI_DIM">
+        UPDATE bi_dim
+        <trim prefix="set" suffixOverrides=",">
+            <if test="dim.dim_Name != null">
+                DIM_NAME = #{dim.dim_Name},
+            </if>
+            <if test="dim.text_Field != null">
+                TEXT_FIELD = #{dim.text_Field},
+            </if>
+            <if test="dim.id_Field != null">
+                ID_FIELD = #{dim.id_Field},
+            </if>
+            <if test="dim.drill_Type != null">
+                DRILL_TYPE = #{dim.drill_Type},
+            </if>
+            <if test="dim.drill_Info != null">
+                DRILL_INFO = #{dim.drill_Info},
+            </if>
+            <if test="dim.biz_Table_Name != null">
+                BIZ_TABLE_NAME = #{dim.biz_Table_Name},
+            </if>
+        </trim>
+        WHERE DIM_ID = #{dim.dim_Id}
+    </update>
+</mapper>

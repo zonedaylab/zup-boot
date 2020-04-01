@@ -2,7 +2,6 @@ package cn.zup.bi.service;
 
 import cn.zup.bi.entity.BIShowField;
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public interface TopicFieldService {
 	 * 
 	 * @return
 	 */
-	MiniDaoPage<BI_TOPIC_FIELD> getTopicFieldPagingList(BI_TOPIC_FIELD topicField, int page, int rows);
+	List<BI_TOPIC_FIELD> getTopicFieldPagingList(BI_TOPIC_FIELD topicField);
 	
 	/**
 	 * 

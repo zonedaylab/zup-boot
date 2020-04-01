@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.BIScreenDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_Screen">
+        <id property="screen_Id" column="SCREEN_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="screen_Index" column="SCREEN_INDEX" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="screen_Name" column="SCREEN_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="page_Id" column="PAGE_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="page_Name" column="PAGE_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <select id="getBiScreenList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_Screen">
+        SELECT bs.SCREEN_ID,
+            bs.SCREEN_INDEX,
+            bs.SCREEN_NAME,
+            bs.PAGE_ID,
+            bp.PAGE_NAME
+        FROM bi_screen bs
+        LEFT JOIN bi_page bp ON bs.PAGE_ID = bp.BI_PAGE_ID
+        WHERE PAGE_ID=${biScreen.page_Id}
+    </select>
+
+    <select id="getBiScreenListPage" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_Screen">
+        SELECT bs.SCREEN_ID,
+            bs.SCREEN_INDEX,
+            bs.SCREEN_NAME,
+            bs.PAGE_ID,
+            bp.PAGE_NAME
+        FROM bi_screen bs
+        LEFT JOIN bi_page bp ON bs.PAGE_ID = bp.BI_PAGE_ID
+        WHERE 1=1
+        AND PAGE_ID=#{biScreen.page_Id}
+    </select>
+
+    <select id="getById" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT bs.SCREEN_ID,
+            bs.SCREEN_INDEX,
+            bs.SCREEN_NAME,
+            bs.PAGE_ID,
+            bp.PAGE_NAME
+        FROM bi_screen bs
+        LEFT JOIN bi_page bp ON bs.PAGE_ID = bp.BI_PAGE_ID
+        WHERE SCREEN_ID=${screen_Id}
+    </select>
+
+    <delete id="deleteScreenById" parameterType="java.lang.Integer">
+        DELETE FROM bi_screen WHERE SCREEN_ID = ${screen_Id}
+    </delete>
+
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_Screen" useGeneratedKeys="true" keyColumn="SCREEN_ID" keyProperty="biScreen.screen_Id">
+        INSERT INTO bi_screen (
+            SCREEN_INDEX,
+            SCREEN_NAME,
+            PAGE_ID
+        ) VALUES
+        (
+            #{biScreen.screen_Index},
+            #{biScreen.screen_Name},
+            #{biScreen.page_Id}
+        );
+    </insert>
+
+    <update id="update" parameterType="cn.zup.bi.entity.BI_Screen">
+        UPDATE bi_screen
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biScreen.screen_Index != null">
+                SCREEN_INDEX = #{biScreen.screen_Index},
+            </if>
+            <if test="biScreen.screen_Name != null">
+                SCREEN_NAME = #{biScreen.screen_Name},
+            </if>
+            <if test="biScreen.page_Id != null">
+                PAGE_ID = #{biScreen.page_Id},
+            </if>
+        </trim>
+        WHERE SCREEN_ID = #{biScreen.screen_Id}
+    </update>
+</mapper>

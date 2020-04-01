@@ -1,1 +1,0 @@
-DELETE FROM bi_datasource WHERE id = ${id}

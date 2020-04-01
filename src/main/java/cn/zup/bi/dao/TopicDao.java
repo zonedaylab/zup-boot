@@ -1,25 +1,25 @@
 package cn.zup.bi.dao;
 
 import cn.zup.bi.entity.BI_TOPIC;
-import org.jeecgframework.minidao.annotation.Arguments;
-import org.jeecgframework.minidao.annotation.MiniDao;
-import org.jeecgframework.minidao.annotation.ResultType;
-import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
-@MiniDao
-public interface TopicDao extends MiniDaoSupportHiber<BI_TOPIC>{
-	@Arguments({"topic","page", "rows"})
-	@ResultType(BI_TOPIC.class)
-	MiniDaoPage<BI_TOPIC> getTopicPagingList(BI_TOPIC topic, int page, int rows);
-	
-	@Arguments({"topic"})
-	void updateTopic(BI_TOPIC topic);
-	
-	@Arguments({"topicId"})
-	void deleteTopic(int topicId);
-	
-	@Arguments({"topicId"})
-	@ResultType(BI_TOPIC.class)
-	BI_TOPIC getTopic(int topicId);
+import java.util.List;
+
+/**
+ * @author gavin
+ */
+@Repository
+public interface TopicDao{
+
+	List<BI_TOPIC> getTopicPagingList(@Param("topic") BI_TOPIC topic);
+
+	void updateTopic(@Param("topic") BI_TOPIC topic);
+
+	void deleteTopic(@Param("topicId") int topicId);
+
+
+	BI_TOPIC getTopic(@Param("topicId") int topicId);
+
+	void save(@Param("topic") BI_TOPIC topic);
 }

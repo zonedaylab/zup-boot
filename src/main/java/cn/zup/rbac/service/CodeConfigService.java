@@ -51,7 +51,7 @@ public interface CodeConfigService {
 	 * @return
 	 */
 	
-	MiniDaoPage<CodeConfig> getCodeConfigList(CodeConfig codeconfig,int page, int rows);
+	MiniDaoPage<CodeConfig> getCodeConfigList(CodeConfig codeconfig, int page, int rows);
 
 	/**
 	 * 获取新的编号

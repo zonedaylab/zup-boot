@@ -1,14 +1,14 @@
 package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.BI_Page;
+import cn.zup.bi.entity.BiMenu;
 import cn.zup.bi.service.BIPageService;
 import cn.zup.bi.service.settings.MgeidsConfig;
+import cn.zup.framework.common.vo.CommonResult;
 import cn.zup.rbac.entity.Config;
 import cn.zup.rbac.entity.Menu;
 import cn.zup.rbac.service.ConfigurationService;
-import cn.zup.rbac.service.ResourceService;
 import net.sf.json.JSONObject;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,9 +27,7 @@ public class BIPageController {
 	private BIPageService biPageService;
 	@Resource
 	private ConfigurationService configurationService;
-	@Resource
-	ResourceService resourceServie;
-	
+
 	/**
 	 * 返回首页
 	 * @author 谢炎
@@ -45,13 +43,14 @@ public class BIPageController {
 	 * */
 	@RequestMapping("/savePage")
 	@ResponseBody
-	public String savePage(BI_Page bi_Page){
+	public String savePage(BI_Page bi_Page) {
 		JSONObject json = new JSONObject();
 		int b = biPageService.updatePageInfo(bi_Page);
-		if(b==1)
+		if (b == 1){
 			json.put("data", "success");
-		else
+		} else {
 			json.put("data", "fial");
+		}
 		return json.toString();
 	}
 	
@@ -61,13 +60,14 @@ public class BIPageController {
 	 * */
 	@RequestMapping("/updatePage")
 	@ResponseBody
-	public String updatePage(BI_Page bi_Page){
+	public String updatePage(BI_Page bi_Page) {
 		JSONObject json = new JSONObject();
 		int b = biPageService.updatePageInfo(bi_Page);
-		if(b==1)
+		if (b == 1) {
 			json.put("data", "success");
-		else
+		} else {
 			json.put("data", "fial");
+		}
 		return json.toString();
 	}
 	
@@ -85,8 +85,9 @@ public class BIPageController {
 			if(b == 0){
 				ids += bi_Page_Ids[i] + ", ";
 				json.put("data", "fial");
-			}else
+			}else {
 				json.put("data", "success");
+			}
 		}
 		json.put("msg", ids);
 		return json.toString();
@@ -124,15 +125,10 @@ public class BIPageController {
 	 * */
 	@RequestMapping("/getPageListByPage")
 	@ResponseBody
-	public String getPageListByPage(BI_Page bi_Page, int rows, int page){
+	public CommonResult getPageListByPage(BI_Page bi_Page, int rows, int page){
 		bi_Page.setPageTypeStr(MgeidsConfig.Page_Type.getValue()+"");
-		MiniDaoPage<BI_Page> list = biPageService.getBIPageListPage(bi_Page, page, rows);
-		JSONObject json = new JSONObject();
-		json.put("data", list.getResults());
-		json.put("rows", list.getRows());
-		json.put("page", list.getPage());
-		json.put("total", list.getTotal());
-		return json.toString();
+		List<BI_Page> list = biPageService.getBIPageListPage(bi_Page, page, rows);
+		return CommonResult.successPage(list, page, rows);
 	}
 	
 	/**
@@ -160,7 +156,7 @@ public class BIPageController {
 	public String getMenu(Integer accountId){
 		Menu menu = new Menu();
 		menu.setUrlAddress("@bi");
-		List<Menu> list = resourceServie.getMenuList(accountId, menu);
+		List<BiMenu> list = biPageService.getMenuList(accountId);
 		JSONObject json = new JSONObject();
 		json.put("data", list);
 		return json.toString();

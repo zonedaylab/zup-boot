@@ -5,10 +5,10 @@ import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.TopicFieldService;
-import cn.zup.bi.utils.PropertiesUtil;
+import cn.zup.bi.utils.BIConnection;
+import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +50,7 @@ public class BIDimController {
 		ModelAndView mv = new ModelAndView("bi/biDimSet");
 		mv.addObject("dimId", dimId);
 		return mv;
-		}
+	}
 
 	
 	/** 
@@ -58,16 +58,9 @@ public class BIDimController {
 	 */
 	@RequestMapping("/girdDimList")
 	@ResponseBody 
-	public String getGrid(BI_DIM dim,Integer page,Integer rows,HttpServletRequest request) {
-		
-		MiniDaoPage<BI_DIM> pagedim=biDimService.getDimPagingList(dim, page, rows);
-		JSONObject json = new JSONObject();
-		json.put("rows", rows);
-		json.put("page", pagedim.getPages());
-		json.put("total", pagedim.getTotal());
-		JSONArray jsonarr = JSONArray.fromObject(pagedim.getResults());  
-		json.put("data", jsonarr);
-		return json.toString();
+	public CommonResult getGrid(BI_DIM dim,Integer page,Integer rows,HttpServletRequest request) {
+		List<BI_DIM> pagedim=biDimService.getDimPagingList(dim);
+		return CommonResult.successPage(pagedim, page, rows);
 	}
 	/**
 	 * 
@@ -79,14 +72,14 @@ public class BIDimController {
 	@ResponseBody
 	public String getDatabaseTableName(){
 		JSONObject json = new JSONObject();
-		Connection conn = PropertiesUtil.OpenConn();
+		Connection conn = BIConnection.OpenConn();
 		try {
 			json.put("data", biDimService.getTableNameList(conn));
 		} catch (SQLException e) {
 			json.put("data", "error");
 			e.printStackTrace();
 		}finally {
-			PropertiesUtil.CloseConn(conn);
+			BIConnection.CloseConn(conn);
 		}
 		
 		return json.toString();
@@ -102,7 +95,7 @@ public class BIDimController {
 	@ResponseBody
 	public String getTableData(String tableName){
 		JSONObject json = new JSONObject();
-		Connection conn = PropertiesUtil.OpenConn();
+		Connection conn = BIConnection.OpenConn();
 		try {
 			json.put("data", biDimService.getColumnNameList(conn, tableName));
 			json.put("pk", biDimService.getPrimaryKey(conn, tableName));
@@ -110,7 +103,7 @@ public class BIDimController {
 			json.put("data", "error");
 			e.printStackTrace();
 		} finally {
-			PropertiesUtil.CloseConn(conn);
+			BIConnection.CloseConn(conn);
 		}
 		return json.toString();
 	}
@@ -186,6 +179,55 @@ public class BIDimController {
 		return json.toString();
 		
 	}
+
+	/**
+	 *
+	 * 保存设计的维表名称
+	 * @author antsdot
+	 * @date 2020-03-01 16:05:21
+	 * */
+	@RequestMapping("/saveDim")
+	@ResponseBody
+	public String saveDim(BI_DIM biDim){
+		int result = biDimService.saveDimData(biDim);
+		JSONObject json = new JSONObject();
+		if( result != 0){
+			json.put("info", "success");
+		}else{
+			json.put("info", "error");
+		}
+		return json.toString();
+	}
+	/**
+	 *
+	 * 更新设计的维表名称
+	 * @author antsdot
+	 * @date 2020-03-01 16:05:21
+	 * */
+	@RequestMapping("/updateDim")
+	@ResponseBody
+	public String updateDim(BI_DIM biDim){
+		int result = biDimService.updateDimData(biDim);
+		JSONObject json = new JSONObject();
+		if( result != 0){
+			json.put("info", "success");
+		}else{
+			json.put("info", "error");
+		}
+		return json.toString();
+	}
+	/**
+	 *
+	 * 获取设计的维表名称
+	 * @author antsdot
+	 * @date 2020-03-01 16:05:21
+	 * */
+	@RequestMapping("/getDim")
+	@ResponseBody
+	public CommonResult getDim(Integer dimId){
+		BI_DIM dim = biDimService.getDimInfo(dimId);
+		return CommonResult.success("查询成功", dim);
+	}
 	
 	/**
 	 * 
@@ -243,11 +285,13 @@ public class BIDimController {
 		List<BI_DIM_ATTRIBUTE> dimAttributeList=null;
 		for (int i = 0; i < dimIds.length; i++) {
 			try{
+
 				field.setDim_Id(dimIds[i]);
 				fieldList=topicFieldService.getTopicFieldList(field);
-				if(fieldList!=null&&fieldList.size()!=0)
-					tipstr+=dimIds[i]+",";
-				else {
+				if(fieldList!=null&&fieldList.size()!=0) {
+					tipstr += dimIds[i] + ",";
+
+				} else {
 				dimAttributeList=biDimService.getDimInInfo(dimIds[i]);
 				if(dimAttributeList!=null&&dimAttributeList.size()!=0)	{
 					for (BI_DIM_ATTRIBUTE o :dimAttributeList)
@@ -263,6 +307,7 @@ public class BIDimController {
 				}else{
 					errorId += dimIds[i]+",";
 				}
+				errorId=errorId+" error:"+e.getMessage();
 			}
 		}
 		json.put("data", errorId);

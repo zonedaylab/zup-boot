@@ -1,29 +1,33 @@
 package cn.zup.bi.dao;
 
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
-import org.jeecgframework.minidao.annotation.Arguments;
-import org.jeecgframework.minidao.annotation.MiniDao;
-import org.jeecgframework.minidao.annotation.ResultType;
-import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
-@MiniDao
-public interface TopicFieldDao extends MiniDaoSupportHiber<BI_TOPIC_FIELD>{
-	@Arguments({"topicField","page", "rows"})
-	@ResultType(BI_TOPIC_FIELD.class)
-	public MiniDaoPage<BI_TOPIC_FIELD> getTopictopicFieldPagingList(BI_TOPIC_FIELD topicField, int page, int rows);
-	
-	@Arguments({"topicId"})
-	public String getTopicFieldAName(int topicId);
-	
-	@Arguments({"topicField"})
-	void updateTopicFieldData(BI_TOPIC_FIELD topicField);
-	
-	@Arguments({"titleFieldId"})
-	void deleteTopicFieldData(int titleFieldId);
-	
-	@Arguments({"topic_Id", "field_Id"})
-	@ResultType(BI_TOPIC_FIELD.class)
-	BI_TOPIC_FIELD getTopicFieldData(Integer topic_Id, Integer field_Id);
-	
+import java.util.List;
+
+/**
+ * @author gavin
+ */
+@Repository
+public interface TopicFieldDao{
+
+	List<BI_TOPIC_FIELD> getTopictopicFieldPagingList(@Param("topicField") BI_TOPIC_FIELD topicField);
+
+	String getTopicFieldName(@Param("topicId") int topicId);
+
+
+	void updateTopicFieldData(@Param("topicField") BI_TOPIC_FIELD topicField);
+
+
+	void deleteTopicFieldData(@Param("titleFieldId") int titleFieldId);
+
+	void deleteTopicFieldDatabyTopic(@Param("topic_Id") Integer topic_Id);
+
+
+	BI_TOPIC_FIELD getTopicFieldData(@Param("topic_Id") Integer topic_Id, @Param("field_Id") Integer field_Id);
+
+	void save(@Param("topicField") BI_TOPIC_FIELD topicField);
+
+	List<BI_TOPIC_FIELD> getTopicFieldList(@Param("topicField") BI_TOPIC_FIELD topicField);
 }

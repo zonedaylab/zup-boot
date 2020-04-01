@@ -1,19 +1,20 @@
  package cn.zup.rbac.service.impl;
 
-import java.util.List;
+import cn.zup.rbac.dao.ResourceActionDao;
+import cn.zup.rbac.dao.ResourceMenuDao;
+import cn.zup.rbac.dao.ResourceSystemDao;
+import cn.zup.rbac.entity.System;
+import cn.zup.rbac.entity.*;
+import cn.zup.rbac.service.ResourceService;
+import cn.zup.rbac.service.settings.ConfigSetting;
+import cn.zup.rbacmap.dao.DomainSystemDao;
+import cn.zup.rbacmap.entity.DomainSystem;
+import cn.zup.wechat.util.GlobalConstants;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.zup.rbac.dao.DomainSystemDao;
-import cn.zup.rbac.dao.ResourceActionDao;
-import cn.zup.rbac.dao.ResourceMenuDao;
-import cn.zup.rbac.dao.ResourceSystemDao;
-import cn.zup.rbac.entity.*;
-import cn.zup.rbac.entity.System;
-import cn.zup.rbac.service.ResourceService;
-import cn.zup.rbac.service.settings.ConfigSetting;
-import cn.zup.wechat.util.GlobalConstants;
+import java.util.List;
 /**
  * ResourceService的实现类
  * @author lixin 
@@ -208,7 +209,7 @@ public class ResourceServiceImpl implements ResourceService{
 	 */
 	public List<Menu> getMenuList(int parentMenuId) {
 		Menu menu=new Menu();
-		menu.setUrlAddress("Bi/MenuShow");
+		menu.setParentMenuId(parentMenuId);
 		return resourceMenuDao.listByHiber(menu);
 	}
 

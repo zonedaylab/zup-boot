@@ -13,6 +13,6 @@ public interface BIScreenService {
 	BI_Screen getBiScreen(BI_Screen biScreen);
 	
 	List<BI_Screen> getBiScreenList(BI_Screen biScreen);
-	
-	MiniDaoPage<BI_Screen> getBIScreenListPage(BI_Screen biScreen, int page, int rows);
+
+	List<BI_Screen> getBIScreenListPage(BI_Screen biScreen, int page, int rows);
 }

@@ -127,7 +127,7 @@ public interface OrganPostService {
 	 * @param validFlag：有效性
 	 * @return
 	 */
-	List<Post> getPostList(Integer organId, String postName,Integer validFlag);
+	List<Post> getPostList(Integer organId, String postName, Integer validFlag);
 
 	/**
 	 * 岗位分页列表
@@ -186,4 +186,43 @@ public interface OrganPostService {
 	 * @return
 	 */
 	String getMySubOrganIdsAll(int organId);
+	
+	/***
+	 * 获取某几个层级的组织机构
+	 * @param organId  根级别
+	 * @param level  获取第2层的数据
+	 * @param organType 是否获取某些特点类型的组织机构  如果0 则不额外增加 解决某些特殊组织类型的如 单列市
+	 * @return
+	 */
+	List<Organ> getOrganLevel(int organId, int level, int organType);
+	
+	/***
+	 * 获取某几个层级的组织机构
+	 * @param organId  根级别
+	 * @param level  获取几层
+	 * @param organType 是否获取某些特点类型的组织机构  如果0 则不额外增加 解决某些特殊组织类型的如 单列市
+	 * @param excludeOrganIds 去除的组织 逗号隔开 如 1,2,3
+	 * @param flag 是否包含传递组织单位的这一条数据
+	 * @return
+	 */
+	List<Organ> getOrganForLevel(int organId, int level, int organType, String excludeOrganIds, boolean flag);
+	
+
+	/**
+	 * 3	通过组织ID、职能、级别获取组织列表
+	 * @param organId  本级organId
+	 * @param used 财务职能
+	 * @param levelType 1 本级 2上级（一层） 3 下级（一层）
+	 * @return
+	 */
+	List<Organ> GetOrganUsed(int organId, int used, int levelType);
+	
+	/***
+	 * 通过职能获取下级相同职能的组织列表
+	 * @param parentOrganId 父ID
+	 * @param usedStr 职能字符串 如1,2
+	 * @return
+	 */
+	List<Organ> getSubOrganByUsedList(int parentOrganId, String usedStr);
+	
 }

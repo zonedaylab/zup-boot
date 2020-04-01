@@ -1,1 +1,0 @@
-select topic_Id, topic_Name, topic_Caption, topic_Type, biz_Table_Name from BI_TOPIC where topic_Id = ${topicId}

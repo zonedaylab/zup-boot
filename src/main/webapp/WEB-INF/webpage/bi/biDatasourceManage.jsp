@@ -8,7 +8,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <base href="<%=basePath%>">
-    <title>BI 数据源管理 - 积成能源</title>
+    <title>BI 数据源管理</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -117,8 +117,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript">
     		$(document).ready(function(){
     			loadGrid();
-    			loadTheme();
-				loadPage();
+
     		});
     
     		function loadGrid(){
@@ -293,40 +292,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			});
 			
-			//选择主题下拉框
-	    	function loadTheme(){
-	    		$.ajax({
-                   type: "POST",
-                   url: "rest/bi/BITopicController/girdTopicList",
-                   cache: false,  //禁用缓存
-                   data: "rows=9999&page=1",  //传入组装的参数
-                   dataType: "json",
-                   success: function (result) {
-                   		$("#topic_Id").empty();
-                   		$("#topic_Id").append("<option value='0'>请选择主题</option>");
-                   		for(var i=0; i<result.data.length; i++){
-                   			$("#topic_Id").append("<option value="+result.data[i].topic_Id+">"+result.data[i].topic_Name+"</option>");
-                    	}
-                   }
-               });
-	    	}
+
 			
-	    	//选择页面下拉框
-	    	function loadPage(){
-	    		$.ajax({
-                   type: "POST",
-                   url: "rest/bi/biPageController/getPageList",
-                   cache: false,  //禁用缓存
-                   dataType: "json",
-                   success: function (result) {
-                   		$("#bi_Page").empty();
-                   		$("#bi_Page").append("<option value='0'>请选择页面</option>");
-                   		for(var i=0; i<result.data.length; i++){
-                   			$("#bi_Page").append("<option value="+result.data[i].bi_Page_Id+">"+result.data[i].page_Name+"</option>");
-                    	}
-                   }
-               });
-	    	}
+
 			
 			//点击编辑时根据主键获取到数据进行填充文本框
 			function getReportData(e){

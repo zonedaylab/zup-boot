@@ -29,6 +29,6 @@ public interface OperateLogService {
 	 * @return
 	 */
 	
-	 MiniDaoPage<OperateLog> getOperateLogPagingList(OperateLog operatelog,int page, int rows);
+	 MiniDaoPage<OperateLog> getOperateLogPagingList(OperateLog operatelog, int page, int rows);
 
 }

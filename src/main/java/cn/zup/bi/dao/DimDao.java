@@ -1,41 +1,44 @@
 package cn.zup.bi.dao;
 
 import cn.zup.bi.entity.BI_DIM;
-import org.jeecgframework.minidao.annotation.Arguments;
-import org.jeecgframework.minidao.annotation.MiniDao;
-import org.jeecgframework.minidao.annotation.ResultType;
-import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@MiniDao
-public interface DimDao extends MiniDaoSupportHiber<BI_DIM> {
+/**
+ * @author gavin
+ */
+@Repository
+public interface DimDao {
 	/**
 	 * 分页模式获取维度列表
 	 *
 	 * */
-	@Arguments({"dim","page", "rows"})
-	@ResultType(cn.zup.bi.entity.BI_DIM.class)
-	MiniDaoPage<BI_DIM> getDimPagingList(BI_DIM dim, int page, int rows);
+    List<BI_DIM> getDimPagingList(@Param("dim") BI_DIM dim);
 
-	@Arguments({"reportId"})
-	@ResultType(BI_DIM.class)
-	List<BI_DIM> getDimField(Integer reportId);
+	List<BI_DIM> getDimField(@Param("reportId") Integer reportId);
 	
 	/**
 	 * 根据字段名称获取到表名
 	 * 
 	 * */
-	@Arguments({"filterName"})
-	@ResultType(BI_DIM.class)
-	List<BI_DIM> getDimFilter(String filterName);
+	List<BI_DIM> getDimFilter(@Param("filterName") String filterName);
 
 	/**
 	 * 根据字段删除维表
 	 *
 	 * */
-	@Arguments({"dimid"})
-	void deleteDim(int dimid);
+	void deleteDim(@Param("dimid") int dim_Id);
 
+
+	void save(@Param("dim") BI_DIM dim);
+
+	void update(@Param("dim") BI_DIM dim);
+
+	List<BI_DIM> getDimList(@Param("biDim") BI_DIM dim);
+
+	BI_DIM getDimById(@Param("dimId") int dim_Id);
+
+	BI_DIM getDimInfo(@Param("dim") BI_DIM dim);
 }

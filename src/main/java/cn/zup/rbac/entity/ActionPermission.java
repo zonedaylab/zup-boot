@@ -1,7 +1,8 @@
 package cn.zup.rbac.entity;
 
 
-import javax.persistence.Entity; 
+import javax.persistence.Transient;
+
 public class ActionPermission {
 
 	private Integer actionId;//操作项ID
@@ -19,6 +20,8 @@ public class ActionPermission {
 	private String menuName;// 菜单名称 
 	
 	private String caption;  //操作项说明
+	
+	private String actionPermissionName;  //操作项说明
 
 	public Integer getActionId() {
 		return actionId;
@@ -84,6 +87,17 @@ public class ActionPermission {
 
 	public void setCaption(String caption) {
 		this.caption = caption;
+	}
+
+	@Transient
+	public String getActionPermissionName() {
+		return actionPermissionName;
+	}
+
+	public void setActionPermissionName(String actionPermissionName) {
+		this.actionPermissionName = actionPermissionName;
 	} 
+	
+	
 	
 }

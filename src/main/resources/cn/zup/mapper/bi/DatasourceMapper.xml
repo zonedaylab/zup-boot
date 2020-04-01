@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.BIDatasourceDao">
+
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BI_Datasource">
+        <id column="id" property="id" javaType="java.lang.Integer"></id>
+        <result column="ds_ip" property="ds_ip" javaType="java.lang.String"></result>
+        <result column="ds_port" property="ds_port" javaType="java.lang.Integer"></result>
+        <result column="ds_username" property="ds_username" javaType="java.lang.String"></result>
+        <result column="ds_password" property="ds_password" javaType="java.lang.String"></result>
+        <result column="ds_attr" property="ds_attr" javaType="java.lang.String"></result>
+        <result column="ds_name" property="ds_name" javaType="java.lang.String"></result>
+        <result column="ds_dir" property="ds_dir" javaType="java.lang.String"></result>
+        <result column="ds_create_time" property="ds_create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"></result>
+    </resultMap>
+
+    <select id="getDatasourceInfoById" parameterType="java.lang.Integer" resultMap="baseMap">
+        SELECT
+            bd.id,
+            bd.ds_ip,
+            bd.ds_port,
+            bd.ds_username,
+            bd.ds_password,
+            bd.ds_attr,
+            bd.ds_name,
+            bd.ds_dir,
+            bd.ds_create_time
+        FROM bi_datasource bd
+        <where>
+            bd.id = #{id}
+        </where>
+    </select>
+
+    <select id="getDatasourcePagingList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_Datasource">
+        SELECT id,ds_name,ds_ip,ds_username,ds_password,ds_create_time from bi_datasource
+    </select>
+
+    <delete id="deleteDatasourceInfo" parameterType="java.lang.Integer">
+        DELETE FROM bi_datasource WHERE id = #{id}
+    </delete>
+
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_Datasource" useGeneratedKeys="true" keyProperty="biDatasource.id">
+        INSERT INTO bi_datasource (
+            ds_ip,
+            ds_port,
+            ds_username,
+            ds_password,
+            ds_attr,
+            ds_name,
+            ds_dir,
+            ds_create_time
+        ) VALUES
+        (
+            #{biDatasource.ds_ip},
+            #{biDatasource.ds_username},
+            #{biDatasource.ds_password},
+            #{biDatasource.ds_attr},
+            #{biDatasource.ds_name},
+            #{biDatasource.ds_dir},
+            #{biDatasource.ds_create_time}
+        );
+    </insert>
+
+    <update id="update" parameterType="cn.zup.bi.entity.BI_Datasource">
+        UPDATE bi_datasource
+        <trim prefix="set" suffixOverrides=",">
+            <if test="biDatasource.ds_ip != null">
+                ds_ip = #{biDatasource.ds_ip},
+            </if>
+            <if test="biDatasource.ds_username != null">
+                ds_username = #{biDatasource.ds_username},
+            </if>
+            <if test="biDatasource.ds_password != null">
+                ds_password = #{biDatasource.ds_password},
+            </if>
+            <if test="biDatasource.ds_attr != null">
+                ds_attr = #{biDatasource.ds_attr},
+            </if>
+            <if test="biDatasource.ds_name != null">
+                ds_name = #{biDatasource.ds_name},
+            </if>
+            <if test="biDatasource.ds_dir != null">
+                ds_dir = #{biDatasource.ds_dir},
+            </if>
+        </trim>
+        WHERE id = #{biDatasource.id}
+    </update>
+</mapper>

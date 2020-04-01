@@ -71,6 +71,8 @@ public class AuditLogController {
 	public String addAuditLog(AuditLog auditLog, HttpServletRequest request, HttpServletResponse response){
 		HttpSession session = request.getSession();
 		UserSession us = (UserSession)session.getAttribute("usersession");
+		if(us==null)
+			return "addAuditlog 出错，userSession为空，请重新登录!";
 		auditLog.setUserIp(request.getRemoteAddr());
 		String url = URL+"key="+KEY+"&ip="+auditLog.getUserIp()+"&output=JSON";
 		try {

@@ -6,11 +6,11 @@ import cn.zup.bi.entity.BI_TOPIC_FIELD_VIEW;
 import cn.zup.bi.service.ReportFieldService;
 import cn.zup.bi.service.ReportService;
 import cn.zup.bi.service.TopicFieldService;
+import cn.zup.framework.common.vo.CommonResult;
 import cn.zup.framework.json.JsonDateValueProcessor;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author gavin
+ */
 @Controller
 @RequestMapping("/rest/bi/biReportController")
 public class BIReportController {
@@ -77,10 +80,11 @@ public class BIReportController {
 		report.setCreate_Date(new Date());
 		int r = reportService.saveReport(report);
 		JSONObject json = new JSONObject();
-		if(r!=0)
+		if(r!=0) {
 			json.put("data", "success");
-		else
+		}else {
 			json.put("data", "error");
+		}
 		return json.toString();
 	}
 	
@@ -93,10 +97,11 @@ public class BIReportController {
 	public String updateReport(BI_REPORT report){
 		int r = reportService.saveReport(report);
 		JSONObject json = new JSONObject();
-		if(r!=0)
+		if(r!=0) {
 			json.put("data", "success");
-		else
+		}else {
 			json.put("data", "error");
+		}
 		return json.toString();
 	}
 	
@@ -143,19 +148,9 @@ public class BIReportController {
 	 * */
 	@RequestMapping("/getReportList")
 	@ResponseBody
-	public String getReportList(BI_REPORT report, int rows, int page){
-		MiniDaoPage<BI_REPORT> list = reportService.getReportPagingList(report, page, rows);
-		JSONObject json = new JSONObject();
-		json.put("rows", rows); 
-		json.put("page", list.getPages());
-		json.put("total",list.getTotal());		
-		//日期类型转换
-		JsonConfig jsonConfig = new JsonConfig();
-		jsonConfig.registerJsonValueProcessor(Date.class,  
-		          new JsonDateValueProcessor("yyyy-MM-dd HH:mm:ss")); 
-		JSONArray jsonArray = JSONArray.fromObject(list.getResults(), jsonConfig);  
-		json.put("data", jsonArray);
-		return json.toString();
+	public CommonResult getReportList(BI_REPORT report, int rows, int page){
+		List<BI_REPORT> list = reportService.getReportPagingList(report);
+		return CommonResult.successPage(list, page, rows);
 	}
 	
 	/**

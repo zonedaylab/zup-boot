@@ -1,19 +1,18 @@
 package cn.zup.workflow.dal;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-
+import cn.zup.rbac.entity.UserSession;
+import cn.zup.workflow.structure.FlowRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
-import cn.zup.rbac.entity.UserSession;
-import cn.zup.workflow.structure.FlowRequest;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository("item")
 public class WF_WORK_ITEM  extends WF_WORK_ItemBase{
@@ -101,9 +100,11 @@ public class WF_WORK_ITEM  extends WF_WORK_ItemBase{
 	*/
 	public List<cn.zup.workflow.model.WF_WORK_ITEM> GetListArray(int workID, int activityID) throws SQLException{
    		StringBuilder strSql = new StringBuilder();
-   		strSql.append("select WORK_ITEM_ID,WORK_ACTIVITY_ID,RECEIVER_TYPE,RECEIVER_ID,RECEIVER_NAME,CONTENT,WORK_ITEM_DATETIME,WORK_ITEM_STATE,RESPONSIBLE_ID,SIGN_NAME,SIGN_DATE,SIGN_OPINION");
+   		strSql.append("select WORK_ITEM_ID,WF_WORK_ITEM.WORK_ACTIVITY_ID,RECEIVER_TYPE,RECEIVER_ID,wf_handler.HANDLER_NAME as RECEIVER_NAME,CONTENT,WORK_ITEM_DATETIME,WORK_ITEM_STATE,RESPONSIBLE_ID,SIGN_NAME,SIGN_DATE,SIGN_OPINION");
    		strSql.append("  from WF_WORK_ITEM ");
-   		strSql.append(" where WORK_ACTIVITY_ID in (select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where WORK_ID="+workID+" and ACTIVITY_ID="+activityID+" ) ");
+		strSql.append("  left join wf_work_activity on wf_work_activity.WORK_ACTIVITY_ID = WF_WORK_ITEM.WORK_ACTIVITY_ID ");
+		strSql.append("  left join wf_handler on wf_work_activity.ACTIVITY_ID = wf_handler.ACTIVITY_ID and WF_WORK_ITEM.RECEIVER_TYPE=wf_handler.HANDLER_TYPE and WF_WORK_ITEM.RECEIVER_ID = wf_handler.`HANDLER` ");
+   		strSql.append(" where WF_WORK_ITEM.WORK_ACTIVITY_ID in (select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where WORK_ID="+workID+" and ACTIVITY_ID="+activityID+" ) ");
    		System.err.println("GetListArray===="+strSql.toString());
    		List<cn.zup.workflow.model.WF_WORK_ITEM> list = jdbcTemplate_workflow.query(strSql.toString(), 
 				new ResultSetExtractor<List<cn.zup.workflow.model.WF_WORK_ITEM>>(){

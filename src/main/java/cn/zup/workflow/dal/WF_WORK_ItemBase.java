@@ -1,17 +1,17 @@
 package cn.zup.workflow.dal;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 //import com.mn886.frame.tool.ZFUUID;
 /// <summary>
 /// 数据访问类WF_WORK_ItemBase
@@ -26,6 +26,7 @@ public class WF_WORK_ItemBase{
 	/// 增加一条数据
 	/// </summary>
 	public int add(cn.zup.workflow.model.WF_WORK_ITEM model) throws SQLException{
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String sql = "SELECT max(WORK_ITEM_ID) FROM WF_WORK_ITEM ";
 		StringBuffer strSql = new StringBuffer();
 		strSql.append("insert into WF_WORK_ITEM(");
@@ -34,7 +35,7 @@ public class WF_WORK_ItemBase{
 		strSql.append(MessageFormat.format(" values ({0},{1},{2},{3},{4},now(),{5},{6},{7},{8},{9})",
 				model.getWORK_ACTIVITY_ID()+"", model.getRECEIVER_TYPE()+"", model.getRECEIVER_ID()+"",
 				"'"+model.getRECEIVER_NAME()+"'", "'"+model.getCONTENT()+"'", model.getWORK_ITEM_STATE(),
-				model.getRESPONSIBLE_ID()+"", "'"+model.getSIGN_NAME()+"'", model.getSIGN_DATE()==null?" now() " : "date_format('"+model.getSIGN_DATE()+"', '%Y-%c-%d') ",
+				model.getRESPONSIBLE_ID()+"", "'"+model.getSIGN_NAME()+"'", model.getSIGN_DATE()==null?" now() " : "date_format('"+df.format(model.getSIGN_DATE())+"', '%Y-%m-%d %H:%i:%s') ",
 				"'"+model.getSIGN_OPINION()+"'"));
 		jdbcTemplate_workflow.update(strSql.toString());
 		
@@ -45,6 +46,7 @@ public class WF_WORK_ItemBase{
 	/// 更新一条数据
 	/// </summary>
 	public void update(cn.zup.workflow.model.WF_WORK_ITEM model) throws SQLException{
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		StringBuffer strSql=new StringBuffer();
 		strSql.append("update WF_WORK_ITEM set ");
 		strSql.append(MessageFormat.format("WORK_ACTIVITY_ID={0},",model.getWORK_ACTIVITY_ID()+"")); 
@@ -56,7 +58,7 @@ public class WF_WORK_ItemBase{
 		strSql.append(MessageFormat.format("WORK_ITEM_STATE={0},",model.getWORK_ITEM_STATE()+"")); 
 		strSql.append(MessageFormat.format("RESPONSIBLE_ID={0},",model.getRESPONSIBLE_ID()+"")); 
 		strSql.append(MessageFormat.format("SIGN_NAME={0},", "'"+model.getSIGN_NAME()+"'")); 
-		strSql.append(MessageFormat.format("SIGN_DATE={0},", model.getSIGN_DATE()==null?"now()":"date_format('"+model.getSIGN_DATE()+"', '%Y-%c-%d')")); 
+		strSql.append(MessageFormat.format("SIGN_DATE={0},", model.getSIGN_DATE()==null?"now()":"date_format('"+df.format(model.getSIGN_DATE())+"', '%Y-%m-%d %H:%i:%s')")); 
 		strSql.append(MessageFormat.format("SIGN_OPINION={0}", "'"+model.getSIGN_OPINION()+"'"));
 		strSql.append(MessageFormat.format(" where WORK_ITEM_ID={0} ",model.getWORK_ITEM_ID()+""));
 		

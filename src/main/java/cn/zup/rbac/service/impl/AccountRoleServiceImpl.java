@@ -356,5 +356,11 @@ public class AccountRoleServiceImpl implements AccountRoleService{
 		return accountroledao.getAccountRoleInfo(accountId, null);
 	}
 	
+	/**
+	 * 账户信息的分页查询按照部门和账号信息
+	 */
+	public MiniDaoPage<Account> getAccountByOrganPagingList(Account account,Integer organId, int page,int rows) {		
+			return accountDao.getAccountByOrganPagingList(account,organId,page,rows);
+	}
 	
 }

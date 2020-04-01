@@ -45,6 +45,6 @@ public interface BIDatasourceService {
      *
      * @author 王朔
      */
-    MiniDaoPage<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource, int page, int rows);
+    List<BI_Datasource> getDatasourcePagingList(BI_Datasource biDatasource);
 
 }

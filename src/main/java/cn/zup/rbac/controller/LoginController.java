@@ -1,39 +1,25 @@
 package cn.zup.rbac.controller;
 
  
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import cn.zup.rbac.entity.LoginLog;
+import cn.zup.rbac.entity.Organ;
+import cn.zup.rbac.entity.UserSession;
+import cn.zup.rbac.service.*;
+import cn.zup.rbac.service.settings.LoginLogType;
+import cn.zup.rbacmap.entity.DomainSystem;
+import cn.zup.wechat.util.GlobalConstants;
 import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
-import cn.zup.framework.util.MD5Base;
-import cn.zup.rbac.entity.AccountRole;
-import cn.zup.rbac.entity.DomainSystem;
-import cn.zup.rbac.entity.LoginLog;
-import cn.zup.rbac.entity.Organ;
-import cn.zup.rbac.entity.UserSession;
-import cn.zup.rbac.service.AccountRoleService;
-import cn.zup.rbac.service.LoginLogService;
-import cn.zup.rbac.service.MerchantService;
-import cn.zup.rbac.service.ResourceService;
-import cn.zup.rbac.service.UserService;
-import cn.zup.rbac.service.settings.ConfigOrganType;
-import cn.zup.rbac.service.settings.ConfigSetting;
-import cn.zup.rbac.service.settings.LoginLogType;
-import cn.zup.wechat.util.GlobalConstants;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/rest/rbac/loginController")
@@ -177,7 +163,8 @@ public class LoginController {
 		
 		UserSession userSessionRevify = (UserSession)request.getSession().getAttribute("usersession");
 	    if (userSessionRevify != null) {
-	      json.put("have", "have");
+	      //json.put("have", "you have login");
+	      json.put("msg", "success");
 	    } 
 	    else if(!FilterUrl(accountname)) //验证accountName
 	    {
@@ -194,7 +181,12 @@ public class LoginController {
 					domainSystem=resourceService.getDomainSystemByDomain("Sitai");
 			}else if(request.getParameter("Hongjialou")!=null && "true".equals(request.getParameter("Hongjialou"))){
 					domainSystem=resourceService.getDomainSystemByDomain("Hongjialou");
-			}else{//默认济南光伏
+			}
+			else if(request.getParameter("fund")!=null && "true".equals(request.getParameter("fund"))){
+				domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
+			}
+			else{//默认济南光伏 homeController
+				//改为资金fundHome Controller
 				domainSystem=resourceService.getDomainSystemByDomain("homeController");
 			}
 			LoginLog loginLog = new LoginLog(); 

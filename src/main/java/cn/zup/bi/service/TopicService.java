@@ -3,21 +3,20 @@ package cn.zup.bi.service;
 import cn.zup.bi.entity.BI_TOPIC;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
+import java.util.List;
+
 public interface TopicService {
 	/**
 	 * 主题分页列表
 	 * 
-	 * @param Topic 主题实体
-	 * @param pageSize：分页行数
-	 * @param pageination：页码
+	 * @param topic 主题实体
 	 * @return 
 	 */
-	MiniDaoPage<BI_TOPIC> getTopicPagingList(BI_TOPIC topic, int page, int rows);
+	List<BI_TOPIC> getTopicPagingList(BI_TOPIC topic);
 	
 	/**
 	 * 
 	 * 主题数据获取
-	 * @param Topic 主题实体
 	 * @date 2016-10-5 15:30:13
 	 * 
 	 * */
@@ -26,16 +25,16 @@ public interface TopicService {
 	/**
 	 * 
 	 * 主题数据删除
-	 * @param Topic 主题实体
 	 * @date 2016-10-5 15:30:13
 	 * 
 	 * */
 	void deleteTopicData(Integer TOPIC_ID);
+
 	
 	/**
 	 * 
 	 * 主题数据添加
-	 * @param Topic 主题实体
+	 * @param topic 主题实体
 	 * @date 2016-10-5 15:30:13
 	 * 
 	 * */
@@ -44,7 +43,7 @@ public interface TopicService {
 	/**
 	 * 
 	 * 主题数据编辑
-	 * @param Topic 主题实体
+	 * @param topic 主题实体
 	 * @date 2016-10-5 15:30:13
 	 * 
 	 * */

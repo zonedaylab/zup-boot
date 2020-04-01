@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zup.bi.dao.BIMenuDao">
+    <resultMap id="baseMap" type="cn.zup.bi.entity.BiMenu">
+        <id property="menuId" column="MENUID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
+        <result property="systemId" column="SYSTEMID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="parentMenuId" column="PARENTMENUID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="menuName" column="MENUNAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="orderCode" column="ORDERCODE" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="iconStyle" column="ICONSTYLE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="nameSpace" column="NAMESPACE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="urlAddress" column="URLADDRESS" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="formAddress" column="FORMADDRESS" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="flowId" column="FLOWID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="mobileFlag" column="MOBILEFLAG" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+    </resultMap>
+
+    <select id="getBiMenuList" resultMap="baseMap" parameterType="java.lang.Integer">
+        SELECT m.* FROM menu m
+        JOIN rolemenu rm ON m.MENUID = rm.MENUID
+        JOIN accountrole ar ON rm.ROLEID = ar.ROLEID
+        JOIN account a ON ar.ACCOUNTID = a.ACCOUNTID
+        WHERE m.URLADDRESS = '@Bi'
+        <if test="accountId != null">
+            AND a.ACCOUNTID = ${accountId}
+        </if>
+    </select>
+</mapper>

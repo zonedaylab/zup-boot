@@ -1,19 +1,4 @@
 package cn.zup.workflow.dal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.stereotype.Repository;
-
 import cn.zup.rbac.entity.UserSession;
 import cn.zup.workflow.config.ConfigList;
 import cn.zup.workflow.config.EntrustState;
@@ -22,6 +7,18 @@ import cn.zup.workflow.config.WorkItemState;
 import cn.zup.workflow.structure.PagingData;
 import cn.zup.workflow.structure.QueryParameter;
 import cn.zup.workflow.util.StringHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Repository("workDal")
 public class WF_WORK extends WF_WorkBase{
@@ -48,9 +45,11 @@ public class WF_WORK extends WF_WorkBase{
 		strSql.append(" from Wf_Work a");
 		strSql.append(" left join WF_FLOW b on a.flow_id=b.flow_id");
 		strSql.append(" left join WF_SYSTEM c on b.system_id=c.system_id");
-		strSql.append(" left join WF_ACTIVITY d on b.flow_id=d.flow_id");
+		strSql.append(" left join WF_ACTIVITY d on b.flow_id=d.flow_id and d.activity_type=1");
 		strSql.append(" left join WF_CONFIG e on a.work_state=e.sub_id and e.id=" + ConfigList.WorkState.getValue());
+		strSql.append(" left join wf_monitor f on f.FLOW_ID = b.FLOW_ID ");
 		strSql.append(" where 1=1");
+		strSql.append(" and f.MONITOR = '" + currentHandler.getUserId()+ "'");
 		if(queryParameter.getSystemID() != 0){
 			strSql.append(" and c.SYSTEM_ID=" + queryParameter.getSystemID());
 		}
@@ -128,7 +127,7 @@ public class WF_WORK extends WF_WorkBase{
 		model.setSPONSOR_NAME(rs.getString(6));
 		ojb = rs.getTimestamp(7);
 		if(ojb != null){
-			model.setCREATE_DATETIME((java.util.Date)ojb);
+			model.setCREATE_DATETIME((Date)ojb);
 		}
 		model.setMAIN_BIZ_KEY(rs.getString(8));
 		ojb = rs.getObject(9);
@@ -512,7 +511,7 @@ public class WF_WORK extends WF_WorkBase{
 		strSql.append("A.SPONSOR_ID,A.SPONSOR_NAME, A.CREATE_DATETIME,A.FLOW_ID, B.FLOW_NAME ");
 		strSql.append(" from dbo.WF_WORK as A left outer join ");
 		strSql.append(" dbo.WF_FLOW as B on A.FLOW_ID=B.FLOW_ID left outer join ");
-		strSql.append(" dbo.WF_CONFIG as D on A.WORK_STATE=D.SUB_ID and D.ID=" + cn.zup.workflow.config.ConfigList.WorkState.getValue());
+		strSql.append(" dbo.WF_CONFIG as D on A.WORK_STATE=D.SUB_ID and D.ID=" + ConfigList.WorkState.getValue());
 		strSql.append(" where A.SPONSOR_ID=" + currentHandler.getUserId() + " and B.SYSTEM_ID=" + queryParameter.getSystemID());
 		if (!StringHelper.isNullOrEmpty(queryParameter.getFlowName())){
 			strSql.append(" and B.FLOW_NAME like '%" + queryParameter.getFlowName() + "%'");
@@ -529,7 +528,7 @@ public class WF_WORK extends WF_WorkBase{
 		if (queryParameter.getWorkState() != 0){
 			strSql.append(" and A.WORK_STATE =" + queryParameter.getWorkState());
 		}
-		String pagingSql = new cn.zup.workflow.dal.PagingService().GetPagingSql(
+		String pagingSql = new PagingService().GetPagingSql(
 				strSql.toString(), "WORK_ITEM_ID", "CREATE_DATETIME desc", pageIndex,
 				pageSize);
 
@@ -591,7 +590,7 @@ public class WF_WORK extends WF_WorkBase{
 		model.setSPONSOR_NAME(rs.getString(7));
 		ojb = rs.getObject(8);
 		if(ojb != null){
-			model.setCREATE_DATETIME((java.util.Date)ojb);
+			model.setCREATE_DATETIME((Date)ojb);
 		}
 		ojb = rs.getObject(10);
 		if(ojb != null){
@@ -612,7 +611,7 @@ public class WF_WORK extends WF_WorkBase{
 		strSql.append("A.SPONSOR_ID,A.SPONSOR_NAME,A.CREATE_DATETIME,A.FLOW_ID,B.FLOW_NAME");
 		strSql.append(" from WF_WORK A left outer join ");
 		strSql.append(" WF_FLOW B on A.FLOW_ID=B.FLOW_ID left outer join ");
-		strSql.append(" WF_CONFIG E on A.WORK_STATE=E.SUB_ID and E.ID=" + cn.zup.workflow.config.ConfigList.WorkState.getValue());
+		strSql.append(" WF_CONFIG E on A.WORK_STATE=E.SUB_ID and E.ID=" + ConfigList.WorkState.getValue());
 		strSql.append(" where A.FLOW_ID IN(select FLOW_ID from WF_MONITOR where MONITOR_ID IN(" + monitorIDs + "))");
 		if (!StringHelper.isNullOrEmpty(queryParameter.getFlowName())){
 			strSql.append(" and B.FLOW_NAME like '%" + queryParameter.getFlowName() + "%'");
@@ -629,7 +628,7 @@ public class WF_WORK extends WF_WorkBase{
 		if (queryParameter.getWorkState() != 0){
 			strSql.append(" and A.WORK_STATE =" + queryParameter.getWorkState());
 		}
-		String pagingSql = new cn.zup.workflow.dal.PagingService().GetPagingSql(
+		String pagingSql = new PagingService().GetPagingSql(
 				strSql.toString(), "WORK_ITEM_ID", "CREATE_DATETIME desc", pageIndex,
 				pageSize);
 		
@@ -689,7 +688,7 @@ public class WF_WORK extends WF_WorkBase{
 		model.setSPONSOR_NAME(rs.getString(7));
 		ojb = rs.getObject(8);
 		if(ojb != null){
-			model.setCREATE_DATETIME((java.util.Date)ojb);
+			model.setCREATE_DATETIME((Date)ojb);
 		}
 		ojb = rs.getObject(9);
 		if(ojb != null){
@@ -706,7 +705,7 @@ public class WF_WORK extends WF_WorkBase{
 	public List<cn.zup.workflow.model.WORK_HISTORY> WorkHistoryList(int workID) throws SQLException{
 		StringBuilder strSql = new StringBuilder();
 		strSql.append("select C.WORK_ITEM_ID,B.ACTIVITY_ID, B.ACTIVITY_NAME, C.RECEIVER_TYPE,C.RECEIVER_ID,C.RECEIVER_NAME, C.RESPONSIBLE_ID,C.SIGN_NAME,C.SIGN_OPINION, " + "\r\n" + "                                A.CREATE_DATETIME, isnull(C.SIGN_DATE,A.FINISHED_DATETIME) as FINISHED_DATETIME,C.WORK_ITEM_STATE," + "\r\n" + "                                E.SUB_NAME as WORK_ITEM_STATE_NAME");
-		strSql.append(" from WF_WORK_ACTIVITY as A" + "\r\n" + "				                left outer join  WF_ACTIVITY  as B on A.ACTIVITY_ID = B.ACTIVITY_ID " + "\r\n" + "				                left outer join  WF_WORK_ITEM as C on C.WORK_ACTIVITY_ID = A.WORK_ACTIVITY_ID " + "\r\n" + "				                left outer join  WF_CONFIG as E on C.WORK_ITEM_STATE = E.SUB_ID and E.ID=" + cn.zup.workflow.config.ConfigList.WorkItemState);
+		strSql.append(" from WF_WORK_ACTIVITY as A" + "\r\n" + "				                left outer join  WF_ACTIVITY  as B on A.ACTIVITY_ID = B.ACTIVITY_ID " + "\r\n" + "				                left outer join  WF_WORK_ITEM as C on C.WORK_ACTIVITY_ID = A.WORK_ACTIVITY_ID " + "\r\n" + "				                left outer join  WF_CONFIG as E on C.WORK_ITEM_STATE = E.SUB_ID and E.ID=" + ConfigList.WorkItemState);
 		strSql.append(" where A.WORK_ID =" + workID);
 		strSql.append(" order by A.CREATE_DATETIME  desc, A.FINISHED_DATETIME desc ,C.WORK_ITEM_STATE asc");
 
@@ -761,11 +760,11 @@ public class WF_WORK extends WF_WorkBase{
 		model.setSIGN_NAME(rs.getString("SIGN_NAME"));
 		ojb = rs.getString("SIGN_OPINION");
 		if(ojb != null){
-			model.setCREATE_DATETIME((java.util.Date)ojb);
+			model.setCREATE_DATETIME((Date)ojb);
 		}
 		ojb = rs.getObject("FINISHED_DATETIME");
 		if(ojb != null){
-			model.setFINISHED_DATETIME((java.util.Date)ojb);
+			model.setFINISHED_DATETIME((Date)ojb);
 		}
 		ojb = rs.getObject("WORK_ITEM_STATE");
 		if(ojb != null){
@@ -818,7 +817,7 @@ public class WF_WORK extends WF_WorkBase{
 		model.setSIGN_NAME(rs.getString("SIGN_NAME"));
 		ojb = rs.getTimestamp("SIGN_DATE");
 		if(ojb != null){
-			model.setSIGN_DATE((java.util.Date)ojb);
+			model.setSIGN_DATE((Date)ojb);
 		}
 		model.setSIGN_OPINION(rs.getString("SIGN_OPINION"));
 		return model;
@@ -888,15 +887,15 @@ public class WF_WORK extends WF_WorkBase{
 		StringBuilder strSql = new StringBuilder();
 		//1-工作项
 		strSql.append("update WF_WORK_ITEM set");
-		strSql.append(" WORK_ITEM_STATE="+cn.zup.workflow.config.WorkItemState.Pause.getValue());
+		strSql.append(" WORK_ITEM_STATE="+ WorkItemState.Pause.getValue());
 		strSql.append(MessageFormat.format(" where WORK_ACTIVITY_ID in(select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where WORK_ID={0} and WORK_ACTIVITY_STATE={1} ) and ",
-				workID+"", cn.zup.workflow.config.WorkItemState.InProgress.getValue()+""));
-		strSql.append(" WORK_ITEM_STATE="+cn.zup.workflow.config.WorkItemState.Pause.getValue());
+				workID+"", WorkItemState.InProgress.getValue()+""));
+		strSql.append(" WORK_ITEM_STATE="+ WorkItemState.Pause.getValue());
 		//2-工作活动
 		strSql.append(" update WF_WORK_ACTIVITY set");
-		strSql.append(" WORK_ACTIVITY_STATE="+cn.zup.workflow.config.WorkItemState.InProgress.getValue());
+		strSql.append(" WORK_ACTIVITY_STATE="+ WorkItemState.InProgress.getValue());
 		strSql.append(MessageFormat.format(" where WORK_ID={0} and WORK_ACTIVITY_STATE={1}",
-				workID+"", cn.zup.workflow.config.WorkItemState.InProgress.getValue()+""));
+				workID+"", WorkItemState.InProgress.getValue()+""));
 		//3-工作
 		strSql.append(" update WF_WORK set");
 		strSql.append(" WORK_STATE="+cn.zup.workflow.config.WorkState.Pause.getValue()+"");
@@ -914,10 +913,10 @@ public class WF_WORK extends WF_WorkBase{
 		StringBuilder strSql = new StringBuilder();
 		//1-工作项
 		strSql.append("update WF_WORK_ITEM set");
-		strSql.append(" WORK_ITEM_STATE="+cn.zup.workflow.config.WorkItemState.InProgress.getValue());
+		strSql.append(" WORK_ITEM_STATE="+ WorkItemState.InProgress.getValue());
 		strSql.append(MessageFormat.format(" where WORK_ACTIVITY_ID in(select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where WORK_ID={0} and WORK_ACTIVITY_STATE={1} ) and",
 				workID+"", cn.zup.workflow.config.WorkActivityState.InProgress.getValue()+""));
-		strSql.append(" WORK_ITEM_STATE="+cn.zup.workflow.config.WorkItemState.InProgress.getValue());
+		strSql.append(" WORK_ITEM_STATE="+ WorkItemState.InProgress.getValue());
 		//2-工作活动
 		strSql.append(" update WF_WORK_ACTIVITY set");
 		strSql.append(" WORK_ACTIVITY_STATE="+cn.zup.workflow.config.WorkActivityState.InProgress.getValue());
@@ -943,7 +942,7 @@ public class WF_WORK extends WF_WorkBase{
 		strSql.append(MessageFormat.format(" update WF_WORK_ACTIVITY set WORK_ACTIVITY_STATE={0} where WORK_ID={1}",
 				cn.zup.workflow.config.WorkActivityState.ForcedEnd.getValue()+"", workID+""));
 		strSql.append(MessageFormat.format(" update WF_WORK_ITEM set WORK_ITEM_STATE={0} where WORK_ACTIVITY_ID in (select WORK_ACTIVITY_ID from WF_WORK_ACTIVITY where WORK_ID={1})",
-				cn.zup.workflow.config.WorkItemState.ForcedEnd.getValue()+"", workID+""));
+				WorkItemState.ForcedEnd.getValue()+"", workID+""));
 		jdbcTemplate_workflow.update(strSql.toString());
 	}
 	/** 

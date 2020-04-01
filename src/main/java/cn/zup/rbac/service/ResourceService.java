@@ -1,14 +1,11 @@
 package cn.zup.rbac.service;
 
-import java.util.List;
-
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import cn.zup.rbac.entity.Action;
-import cn.zup.rbac.entity.ActionPermission;
-import cn.zup.rbac.entity.DomainSystem;
-import cn.zup.rbac.entity.Menu;
-import cn.zup.rbac.entity.MenuRoleEx;
 import cn.zup.rbac.entity.System;
+import cn.zup.rbac.entity.*;
+import cn.zup.rbacmap.entity.DomainSystem;
+import org.jeecgframework.minidao.pojo.MiniDaoPage;
+
+import java.util.List;
 /**
  * 用于资源管理的service层
  * @author lixin
@@ -104,7 +101,7 @@ public interface ResourceService {
 	 * @return
 	 */
 	
-	boolean getMenuRepeatVerify(Integer menuId, int systemId, int parentMenuId,String menuName);
+	boolean getMenuRepeatVerify(Integer menuId, int systemId, int parentMenuId, String menuName);
 /**
 	 * 单选框填充
 	 * @param menuId
@@ -112,7 +109,7 @@ public interface ResourceService {
 	 * @return
 	 * 
 	 */
-	boolean getMenuPermission (int menuId,int roleId);
+	boolean getMenuPermission(int menuId, int roleId);
 	/**
 	 * 获取菜单实体
 	 * 
@@ -180,7 +177,7 @@ public interface ResourceService {
 	 * @param rootOnly是否只获取根目录
 	 * @return
 	 */
-	List<Menu> getAccountPermitMenu(Integer accountId, Integer systemId,boolean rootOnly,Integer MobileFlag);
+	List<Menu> getAccountPermitMenu(Integer accountId, Integer systemId, boolean rootOnly, Integer MobileFlag);
 	
 	/**
 	 * 根据条件获取有所有菜单
@@ -199,7 +196,7 @@ public interface ResourceService {
 	 * @return
 	 */
 	
-	List<Menu> getAccountPermitSubMenu(int accountId, int parentMenuId,int MobileFlag);
+	List<Menu> getAccountPermitSubMenu(int accountId, int parentMenuId, int MobileFlag);
 
 	
 	/**
@@ -261,7 +258,7 @@ public interface ResourceService {
 	 * @return
 	 */
 	
-	List<Action> getActionListByMenuAndAccount(int menuId,int accountId);
+	List<Action> getActionListByMenuAndAccount(int menuId, int accountId);
 
 
 	/**
@@ -272,7 +269,7 @@ public interface ResourceService {
 	 * @return
 	 */
 	
-	MiniDaoPage<ActionPermission> getRolePermitAction(Integer menuId, int roleId, int page,int rows);
+	MiniDaoPage<ActionPermission> getRolePermitAction(Integer menuId, int roleId, int page, int rows);
 	/**
 	 * 获取角色未选择的操作项列表
 	 * 
@@ -281,7 +278,7 @@ public interface ResourceService {
 	 * @return
 	 */
 	
-	MiniDaoPage<ActionPermission> getRolePermitActionAdd(Integer menuId, int roleId, int page,int rows);
+	MiniDaoPage<ActionPermission> getRolePermitActionAdd(Integer menuId, int roleId, int page, int rows);
 	/**
 	 * 获取角色已经选择的操作项列表
 	 * 
@@ -290,7 +287,7 @@ public interface ResourceService {
 	 * @return
 	 */
 	
-	MiniDaoPage<ActionPermission> getAlreadyRolePermitActionAdd(Integer menuId, int roleId, int page,int rows);
+	MiniDaoPage<ActionPermission> getAlreadyRolePermitActionAdd(Integer menuId, int roleId, int page, int rows);
 	/**
 	 * 操作信息分页列表
 	 * 
@@ -309,7 +306,7 @@ public interface ResourceService {
 	 * @param accountId:账号id
 	 * @return
 	 */
-	boolean getUrlRoleVerify(String url,int accountId);
+	boolean getUrlRoleVerify(String url, int accountId);
 
 
 	/**
@@ -319,7 +316,7 @@ public interface ResourceService {
 	 * @param parentMenuId
 	 * @return
 	 */
-	List<MenuRoleEx> getRolePermitChildMenu(int roleId, int systemId,int parentMenuId);
+	List<MenuRoleEx> getRolePermitChildMenu(int roleId, int systemId, int parentMenuId);
 	/**
 	 * 通过域名获取域名系统的信息
 	 * lixin

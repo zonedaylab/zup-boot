@@ -1,15 +1,12 @@
 package cn.zup.rbac.dao;
 
-import java.util.List;
-
+import cn.zup.rbac.entity.Organ;
+import cn.zup.rbac.entity.Post;
 import org.jeecgframework.minidao.annotation.Arguments;
 import org.jeecgframework.minidao.annotation.MiniDao;
 import org.jeecgframework.minidao.hibernate.MiniDaoSupportHiber;
 
-import cn.zup.rbac.entity.Account;
-import cn.zup.rbac.entity.Organ;
-import cn.zup.rbac.entity.Post;
-import cn.zup.rbac.entity.UserInfo;
+import java.util.List;
 
 @MiniDao
 public interface OrganPostDao extends MiniDaoSupportHiber<Organ>{
@@ -24,7 +21,7 @@ public interface OrganPostDao extends MiniDaoSupportHiber<Organ>{
 	@Arguments({"postid"})
 	public void deletePostFromUserInfo(Integer postid);
 	@Arguments({"organ","postName","validFlag"})
-	public List<Post> getPostListByCondition(Integer organ, String postName,Integer validFlag);
+	public List<Post> getPostListByCondition(Integer organ, String postName, Integer validFlag);
 
 
 		
