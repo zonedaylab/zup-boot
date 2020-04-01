@@ -187,7 +187,7 @@ public class LoginController {
 			}
 			else{//默认济南光伏 homeController
 				//改为资金fundHome Controller
-				domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
+				domainSystem=resourceService.getDomainSystemByDomain("homeController");
 			}
 			LoginLog loginLog = new LoginLog(); 
 			Date nowTime = new Date(System.currentTimeMillis()); 
