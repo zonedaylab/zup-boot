@@ -67,6 +67,12 @@ value为汇聚数据
 
 #### 2.设计思路
 
+##### 2.1 数据库设计
+
+![image-20200406214659545](readme.assets/image-20200406214659545.png)
+
+##### 2.2 开发思路
+
 1. 行维度、列维度只取其一能够展示.ok
 
 1. 能够拼接多个报表进行展示
@@ -92,5 +98,5 @@ drill_name-drill_value
   dim_field进行设置，例如 省级主题-城市主题-县级主题
   配置BI_Page时，只是配置第一个主题，在维度表里配置下一级主题。
   发送到前端的维度对应超级连接，点击时连接服务函数getReport,判断当前的主题字段。
-  
+
  维度  DrillName-dimValue-   dimNameData-topicName-filter    山东省-v_mytopic-'3701'
