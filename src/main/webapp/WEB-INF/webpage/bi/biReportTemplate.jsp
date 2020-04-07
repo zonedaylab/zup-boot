@@ -222,8 +222,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				} 
 			};
 			var keys = new Array(), values = new Array();  //查询条件
-			//keys.push("survey_year"); //去掉特定过滤语句 by liuxf
-			//values.push(2017);
 			var index = 0;
 			/*
 			* id      表示维度钻取  例如id=3701，id.length=4,表示济南市，
@@ -275,8 +273,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						if(idn.indexOf("_nm") > -1){
 							idn = " mine_survey_info."+idn.replace("_nm", "");
 						}
-						//values.remove(keys.indexOf(idn));
-						//keys.remove(idn);
 					}
 		 		});
 
@@ -326,6 +322,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
 									 $("#filter").append(hf);
+
 									 if(re.data[0].dimHeader[i] == "province"){
 									 	getFilterInfo(re.data[0].dimHeader[i], 0);
 									 }else if(re.data[0].dimHeader[i] == "city"){
@@ -378,17 +375,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										var thCon = re.data[0].dimFieldHeader[x][y]+"";
 										if(thCon.indexOf("-") > -1){
 											if((thCon.split("-")[1]+"").length == 6){//表示是县级单位（第三级 长度为6  .xxxxxx.
-                                                let year = 2017;
-                                                if(values.length > 0){
-                                                    if(keys[0] == "survey_year")
-                                                        year = values[0];
-                                                }
 												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county="+thCon.split("-")[1]+"&year="+year+"'>" + thCon.split("-")[0]+"</a></th>";
 											}else{
 												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+thCon.split("-")[1]+")'>"+ thCon.split("-")[0] +"</a></th>";
 											}
-										}else
-											theadTh += "<th title='"+thCon+"'><span class='sla'>"+ thCon +"</span></th>";
+										}
+										else {
+											/*
+											   by liuxf   drill_type=4 按照不同的主题进行钻取
+											   getList (drill_name ,drill_value
+
+										       getList(dim_name - current_topic_index,  dim_data) 生成连接进行钻取。
+											*/
+											if(re.data[0].BIRowDimDatas[x].dill_type==4){
+												param=re.data[0].BIRowDimDatas[x].field_name+'-' +re.data[0].BIRowDimDatas[x].currentTableIndex+","+thCon;
+												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+param+")'>"+ thCon.split("-")[0] +"</a></th>";
+											}
+											else
+												theadTh += "<th title='" + thCon + "'><span class='sla'>" + thCon + "</span></th>";
+										}
 									}
 									titleTh += "<th style='font-size:18px;'>${pageTitle}</th>";
 								}
@@ -422,11 +427,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											var tdCon = re.data[z].tableData[i][j];
 											if(tdCon.indexOf("-") > -1){
 												if((tdCon.split("-")[1]+"").length == 6){
-												    let year = 2017;
-												    if(values.length > 0){
-												        if(keys[0] == "survey_year")
-                                                        	year = values[0];
-													}
 													tr += "<td><a target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county="+tdCon.split("-")[1]+"&year="+year+"'>" + tdCon.split("-")[0]+"</a></td>";
 												}else{
 													tr += "<td><a href='javascript:getList("+tdCon.split("-")[1]+")'>"+ tdCon.split("-")[0] +"</a></td>";
