@@ -78,7 +78,7 @@ value为汇聚数据
 
 
 
-![image-20200406214659545](../../src/main/java/cn/zup/bi/readme.assets/image-20200406214659545.png)
+![image-20200406214659545](readme.assets/image-20200406214659545.png)
 
 ##### 2.2 开发思路
 
