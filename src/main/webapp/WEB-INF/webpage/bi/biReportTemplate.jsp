@@ -166,41 +166,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 });
 			}
 
-			//选择报表模块
-			function datasourceReload(reportIdArr){
-				var _this = $(this);
-				var param = {};
-				definaReport = new Array();
-				param.block_Id =  $("#block_Id").val();//区块ID
-				param.x_Point = 1;//区块位置
-				param.bi_Page_Id = '${pageId}';
-				param.page_Id = '${pageId}';
-				param.block_Type = 1;
-				param.screen_Index = 1;
-				ajaxfn("rest/bi/biPageBlockController/deleteBlockByPageId");
-				for (var i = 0; i < reportIdArr.length; i++) {
-					param.report_Id = reportIdArr[i];//报表id
-					ajaxfn("rest/bi/biPageBlockController/saveBlock");//保存数据块saveBlock
-				}
 
-				function ajaxfn(url){
-					$.ajax({
-						type: "post",
-						async: false,
-						url: url,
-						data:param,
-						dataType: "json",
-						success: function(result) {
-							if(result.data == "success"){
-								getList(0, $("#dataIndex").val());
-							}
-						}, 
-						error: function(error) {
-							console.log(error)
-						}
-					});
-				}
-			}
 
 			Array.prototype.remove = function(val) { 
 				var index = this.indexOf(val); 
@@ -209,7 +175,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				} 
 			};
 			var keys = new Array(), values = new Array();  //查询条件
-			var index = 0;
 			/*
 			* id 表示维度钻取
 			* 			例如id=3701，id.length=4,表示济南市，
@@ -399,7 +364,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									allDataCols+=1;//只有一列数据
 
 								// add by liuxf 数据统计列，
-								for (var index=0; index<allDataCols- re.data[z].dimField.length;index++){
+								for (var ind=0; ind<allDataCols- re.data[z].dimField.length;ind++){
 									smallTotal.push(0);  //汇总数据
 								}
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
@@ -517,7 +482,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		 	
 			$('#btnLoadReport').on('click', function () {
-				 loading.start("#1c6bab");
 				var reportIdArr = $("#dataSource").val();
 			  	if(reportIdArr == null)
 			  		parent.bootbox.alert("至少选择一项");
@@ -527,8 +491,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						$("#dataIndex").css("disable", "disable");
 						$("#dataIndex option:first").prop("seleced", "selected");
 					}
-					datasourceReload(reportIdArr);
+					loading.stop();
 			  	}
+
 			});
 
 			//函数说明：合并指定表格（表格id为_w_table_id）指定列（列数为_w_table_colnum）的相同文本的相邻单元格
