@@ -137,7 +137,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var p1 = "", p2 = 0, c1 = "", c2 = 0, x1 = "", x2 = 0;
 
 			$(document).ready(function() {
-				index = loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
+				loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
 				$('#article').readmore({
    				  speed: 5,
    				  maxHeight: 5
@@ -201,21 +201,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					});
 				}
 			}
-			
-			var filterNm = {
-				survey_year: "调查年份",
-				mine_method_nm: "开采方式",
-				province: "所属省",
-				mine_scale_nm: "矿山规模",
-				city: "所属市",
-				county: "所属县",
-				economic_type_nm: "经济类型",
-				production_status_nm: "生产状态",
-				minerals_type_name: "矿类",
-				minerals_variety_name: "矿种"
-			};
-			
-			var index;
+
 			Array.prototype.remove = function(val) { 
 				var index = this.indexOf(val); 
 				if (index > -1) { 
@@ -225,9 +211,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var keys = new Array(), values = new Array();  //查询条件
 			var index = 0;
 			/*
-			* id      表示维度钻取  例如id=3701，id.length=4,表示济南市，
-			* indexs  指标列表*/
-			function getList(id, indexs) {
+			* id 表示维度钻取
+			* 			例如id=3701，id.length=4,表示济南市，
+			* indicators  指标列表
+			* */
+			function getList(id, indicators) {
+
 				var drill_Name, drill_Value;
 				if((id+"").length == 2){
 					drill_Name = "province";
@@ -263,16 +252,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 							keys.push("mine_survey_info."+idn);
 					 		values.push($(this).val());
-						} else {
-							if(idn.indexOf("_nm") > -1){
-								idn = " mine_survey_info."+idn.replace("_nm", "");
-							}
-							keys.push(idn);
-					 		values.push($(this).val());
-						}
-					}else{
-						if(idn.indexOf("_nm") > -1){
-							idn = " mine_survey_info."+idn.replace("_nm", "");
 						}
 					}
 		 		});
@@ -287,8 +266,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					drill_Name: drill_Name,
 					drill_Value: drill_Value
 				}
-				if(indexs != 0)
-				    data.index = indexs;
+				if(indicators != 0)
+				    data.index = indicators;
 				//获取报数据数据
 				$.ajax({
 					type: "post",
@@ -299,16 +278,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					dataType: "json",
 					success: function(re) {
 						if(re.data.length > 0){
-							var year = "";
-							for(var i=0; i<keys.length; i++){
-								if(keys[i].indexOf("survey_year") > -1){
-									year = values[keys[i].indexOf("survey_year")] + "年 ";
-								}
-							}
-							if(indexs != 0){
-                                $("#title").text(year+"调查"+$("#dataIndex option:selected").text()+"统计表 （"+re.data[0].unit[0]+"）");
+
+							if(indicators != 0){
+                                $("#title").text( $("#dataIndex option:selected").text()+"统计表 （"+re.data[0].unit[0]+"）");
 							}else{
-                                $("#title").text(year+"${pageTitle} （"+re.data[0].unit[0]+"）");
+                                $("#title").text("${pageTitle} （"+re.data[0].unit[0]+"）");
 							}
 							//1.显示查询条件
 							$("thead").empty();
@@ -316,16 +290,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$("#report_Id").val(re.data[0].blockInfo.report_Id);
 							$("#block_Id").val(re.data[0].blockInfo.block_Id);
 							$("#filter").empty();
+
 							for(var i=0; i<re.data[0].dimHeader.length; i++){
 								if(re.data[0].dimHeader[i] != "sub_nm"){
-									var hf = '<label class="control-label lab">'+filterNm[re.data[0].dimHeader[i]]+'：</label>'+
+									var hf = '' +
+											' <label class="control-label lab">'+re.data[0].dimHeader[i]+'：</label>'+
 											 '<select class="form-control filters" id="'+re.data[0].dimHeader[i]+'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
+
 									 $("#filter").append(hf);
 
 									 if(re.data[0].dimHeader[i] == "province"){
-									 	getFilterInfo(re.data[0].dimHeader[i], 0);
+										getFilterInfo(re.data[0].dimHeader[i], 0);
 									 }else if(re.data[0].dimHeader[i] == "city"){
 										getFilterInfo(re.data[0].dimHeader[i], id);
 									 }else if(re.data[0].dimHeader[i] == "county"){
@@ -339,7 +316,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							for(var i=0; i<re.data[0].dimField.length; i++){
 								if(re.data[0].dimField[i] != "sub_nm"){
 
-									var hf = '<label class="control-label lab">'+filterNm[re.data[0].dimField[i]]+'：</label>'+
+									var hf = '<label class="control-label lab">'+re.data[0].dimField[i]+'：</label>'+
 											 '<select class="form-control filters" id="'+re.data[0].dimField[i]+'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
@@ -510,7 +487,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$('.selectpicker').selectpicker('val', definaReport);  //为下拉框赋默认值
 							getDataIndex(definaReport[0]);
 						}
-                        loading.stop(index);
+                        loading.stop();
 					},
 					error: function() {
 					}
@@ -540,12 +517,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		 	
 			$('#btnLoadReport').on('click', function () {
-				index = loading.start("#1c6bab");
+				 loading.start("#1c6bab");
 				var reportIdArr = $("#dataSource").val();
 			  	if(reportIdArr == null)
 			  		parent.bootbox.alert("至少选择一项");
 			  	else{
-			  		index = loading.start("#1c6bab");
+			  		loading.start("#1c6bab");
 					if(definaReport.length>1){
 						$("#dataIndex").css("disable", "disable");
 						$("#dataIndex option:first").prop("seleced", "selected");
@@ -628,17 +605,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					success: function(result) {
 						$("#filter"+filterName).empty();
 						$("#filter"+filterName).append("<option value='0'>全部</option>");
-
-						if(filterName == "survey_year"){
-							for (var item in result.data) {
-								$("#"+filterName).append("<option value="+result.data[item]+">"+result.data[item]+"</option>");
-							}
-						}else{
-							for (var item in result.data) {
-								$("#"+filterName).append("<option value="+result.data[item]+">"+item+"</option>");
-							}
+						for (var item in result.data) {
+							$("#"+filterName).append("<option value="+result.data[item]+">"+item+"</option>");
 						}
-					}, 
+					},
 					error: function(error) {
 						//console.log(error)
 					}
