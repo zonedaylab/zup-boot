@@ -131,331 +131,319 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	@Override
 	public  List<Map<String, Object>> getBIPageService(V_ReportData vreportData) throws Exception {
 		//获取一个页面、一个屏幕上的所有div
-		if(vreportData.getBlock_Id() == 0){
-			vreportData.setBlock_Id(null);
-		}
-		List<BI_Block_Info> blockList = biPageBlockService.getPageBlockByPageId(vreportData.getBi_Page_Id(),
-				vreportData.getScreen_Index(), vreportData.getBlock_Id());
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		if(blockList.size() > 0) {
+		List<Map<String, Object>> listReturnData = new ArrayList<Map<String, Object>>();
 
-			BI_REPORT bi_report = biReportService.getReportInfo(blockList.get(0).getReport_Id());
-			if( topicService.getTopicData(bi_report.getTopic_Id())==null){//遇到错误数据
-				biPageBlockService.deleteBlock(blockList.get(0).getBlock_Id());
+		List<BI_REPORT>listBIReport = biReportService.getReportListByPageId(vreportData.getBi_Page_Id(),
+				vreportData.getScreen_Index());
+
+		for (BI_REPORT bi_report : listBIReport) {
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			//获取div上绑定的报表的数据
+			ConditionTransfer conditionTransfer = new ConditionTransfer();
+			conditionTransfer.setDrill_Name(vreportData.getDrill_Name());
+			conditionTransfer.setDrill_Value(vreportData.getDrill_Value());
+			conditionTransfer.setKey(vreportData.getKey());
+			conditionTransfer.setValue(vreportData.getValue());
+			conditionTransfer.setReport_Id(bi_report.getReport_Id());
+			conditionTransfer.setIndex(vreportData.getIndex());
+			conditionTransfer.setBlock_type(vreportData.getBlock_Type());
+
+			//1.从数据库中获取报表数据
+			List<Map<String, Object>> listDataMap = getReportDataFromDB(conditionTransfer);
+
+			//获取维度与指标数据
+			List<BIShowField> dimFieldList = biDimService.getDimFieldList(conditionTransfer);
+			List<BIShowField> topicFieldList = biTopicFieldService.getTopicFieldList(bi_report.getReport_Id());
+
+			List<String> topicList = new ArrayList<String>();
+			List<String> topicNameList = new ArrayList<String>();
+			List<String> topicUnitList = new ArrayList<String>();
+
+			List<String> colDimFields = new ArrayList<String>(); //列维表，包含的维度名字如“省份”，“种类”。 左侧为列维度
+			List<String> rowDimFields = new ArrayList<String>(); //行维表  右上为行维度。 by liuxf
+
+			List<BIDimData> BIColDimDatas = new ArrayList<BIDimData>();//列维数据列表
+			List<BIDimData> BIRowDimDatas = new ArrayList<BIDimData>();//行维数据列表
+
+			List<Map<String, Object>> dimTopicTableHeader = new ArrayList<Map<String, Object>>();
+
+			boolean ub = false; //判断是否切换指标
+			for (BIShowField biShowField : topicFieldList) {
+				if (vreportData.getIndex() == null || vreportData.getIndex().equals(biShowField.getField_Id())) {
+					if (vreportData.getBlock_Type() == 1) {
+						if (ub)
+							continue;
+					}
+					topicList.add(biShowField.getField_Caption().toLowerCase());
+					topicNameList.add(biShowField.getField_Title());
+					topicUnitList.add(biShowField.getField_Unit());
+					ub = true;
+				}
 			}
 
-			for (BI_Block_Info bi_Block_Info : blockList) {
-				Map<String, Object> resultMap = new HashMap<String, Object>();
-				//获取div上绑定的报表的数据
-				ConditionTransfer conditionTransfer = new ConditionTransfer();
-				conditionTransfer.setDrill_Name(vreportData.getDrill_Name());
-				conditionTransfer.setDrill_Value(vreportData.getDrill_Value());
-				conditionTransfer.setKey(vreportData.getKey());
-				conditionTransfer.setValue(vreportData.getValue());
-				conditionTransfer.setReport_Id(bi_Block_Info.getReport_Id());
-				conditionTransfer.setIndex(vreportData.getIndex());
-				conditionTransfer.setBlock_type(vreportData.getBlock_Type());
+			/*2.获取维度对应的数据信息
+			钻取方式：
+			1.NONE
+			2.分段
+			3.路径
+			4. 主题
+			*/
+			for (int i = 0; i < dimFieldList.size(); i++) {
+				BIShowField dimField = dimFieldList.get(i);
 
-				//1.从数据库中获取报表数据
-				List<Map<String, Object>> listDataMap = getReportDataFromDB(conditionTransfer);
-
-				//获取维度与指标数据
-				List<BIShowField> dimFieldList = biDimService.getDimFieldList(conditionTransfer);
-				List<BIShowField> topicFieldList = biTopicFieldService.getTopicFieldList(bi_Block_Info.getReport_Id());
-
-				List<String> topicList = new ArrayList<String>();
-				List<String> topicNameList = new ArrayList<String>();
-				List<String> topicUnitList = new ArrayList<String>();
-
-				List<String> colDimFields = new ArrayList<String>(); //列维表，包含的维度名字如“省份”，“种类”。 左侧为列维度
-				List<String> rowDimFields = new ArrayList<String>(); //行维表  右上为行维度。 by liuxf
-
-				List<BIDimData> BIColDimDatas = new ArrayList<BIDimData>();//列维数据列表
-				List<BIDimData> BIRowDimDatas = new ArrayList<BIDimData>();//行维数据列表
-
-				List<Map<String, Object>> dimTopicTableHeader = new ArrayList<Map<String, Object>>();
-
-				boolean ub = false; //判断是否切换指标
-				for (BIShowField biShowField : topicFieldList) {
-					if (vreportData.getIndex() == null || vreportData.getIndex().equals(biShowField.getField_Id())) {
-						if (vreportData.getBlock_Type() == 1) {
-							if (ub)
-								continue;
-						}
-						topicList.add(biShowField.getField_Caption().toLowerCase());
-						topicNameList.add(biShowField.getField_Title());
-						topicUnitList.add(biShowField.getField_Unit());
-						ub = true;
+				Map<String, Object> dimTopicTableHeaderMap = new HashMap<String, Object>();//表头
+				String dimFieldName = dimField.getField_Name().toLowerCase();
+				if (dimField.getField_Location() == BIConfig.FIELD_TYPE.ROW_DIM) {        //针对行维度,  右侧的为行维度。
+					/*  加入行数据,生成行维度，例如by liuxf
+						dimName=行业种类
+						dimValue= 电力/ 服务/水务等
+						维度横向生成
+					*   电力 服务   水务   。。。。。。
+					 */
+					if (dimField.getDrill_Type() == null) {
+						//加入行维度，加入维度的名字，例如 "行业种类"
+						AddDimFieldToList(dimField,rowDimFields, BIRowDimDatas);
+						continue;
 					}
-				}
-
-				/*2.获取维度对应的数据信息
-				钻取方式：
-				1.NONE
-				2.分段
-				3.路径
-				4. 主题
-				*/
-				for (int i = 0; i < dimFieldList.size(); i++) {
-					BIShowField dimField = dimFieldList.get(i);
-
-					Map<String, Object> dimTopicTableHeaderMap = new HashMap<String, Object>();//表头
-					String dimFieldName = dimField.getField_Name().toLowerCase();
-					if (dimField.getField_Location() == BIConfig.FIELD_TYPE.ROW_DIM) {        //针对行维度,  右侧的为行维度。
-						/*  加入行数据,生成行维度，例如by liuxf
-							dimName=行业种类
-							dimValue= 电力/ 服务/水务等
-							维度横向生成
-						*   电力 服务   水务   。。。。。。
-						 */
-						if (dimField.getDrill_Type() == null) {
-							//加入行维度，加入维度的名字，例如 "行业种类"
-							AddDimFieldToList(dimField,rowDimFields, BIRowDimDatas);
-							continue;
-						}
-						if (dimField.getDrill_Type() != BIConfig.DRILL_TYPE.DRILL_TYPE_PATH) {
+					if (dimField.getDrill_Type() != BIConfig.DRILL_TYPE.DRILL_TYPE_PATH) {
+						AddDimFieldToList(dimField,rowDimFields, BIRowDimDatas);
+					} else {
+						if (vreportData.getDrill_Name() != null) {
+							int lc = (vreportData.getDrill_Value() + "").length() / 2;//如果为6位，则lc=3,表示县级单位，
+							String dimSub=dimField.getDrill_Info().split("-")[lc].toLowerCase();
+							dimField.setField_Name(dimSub);
 							AddDimFieldToList(dimField,rowDimFields, BIRowDimDatas);
 						} else {
-							if (vreportData.getDrill_Name() != null) {
-								int lc = (vreportData.getDrill_Value() + "").length() / 2;//如果为6位，则lc=3,表示县级单位，
-								String dimSub=dimField.getDrill_Info().split("-")[lc].toLowerCase();
-								dimField.setField_Name(dimSub);
-								AddDimFieldToList(dimField,rowDimFields, BIRowDimDatas);
-							} else {
-								String dimSub=dimField.getDrill_Info().split("-")[0].toLowerCase();
-								dimField.setField_Name(dimSub);
-								AddDimFieldToList(dimField,rowDimFields, BIRowDimDatas);
-								rowDimFields.add(dimSub);
-							}
+							String dimSub=dimField.getDrill_Info().split("-")[0].toLowerCase();
+							dimField.setField_Name(dimSub);
+							AddDimFieldToList(dimField,rowDimFields, BIRowDimDatas);
+							rowDimFields.add(dimSub);
 						}
-						//维度名字，维度序号。
-						dimTopicTableHeaderMap.put(dimFieldName, dimFieldList.get(i).getDim_Order());
-						dimTopicTableHeader.add(dimTopicTableHeaderMap);
-					} else if (dimFieldList.get(i).getField_Location() == BIConfig.FIELD_TYPE.COL_DIM) {
-						/*
-						 * 列维度
-						 * 例如 dimName="省份" dimValue=山东省/河南省/....
-						 * 纵向排列：
-						 *
-						 * 山东省
-						 * 河南省
-						 * 河北省
-						 * ......
-						 * */
-						if (dimField.getDrill_Type() == null||
-								dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_NONE||
-								dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_SEG) {
-							AddDimFieldToList(dimField,colDimFields, BIColDimDatas);//列维度
-						}
-						else if(dimField.getDrill_Type()==BIConfig.DRILL_TYPE.DRILL_TYPE_PATH){
-							if (vreportData.getDrill_Name() != null) {
-								int lc = (vreportData.getDrill_Value() + "").length() / 2;
-								dimField.setField_Name(dimField.getDrill_Info().split("-")[lc].toLowerCase());
-								AddDimFieldToList(dimField,colDimFields, BIColDimDatas);
-
-							} else {
-								dimField.setField_Name(dimField.getDrill_Info().split("-")[0].toLowerCase());
-								AddDimFieldToList(dimField,colDimFields, BIColDimDatas);
-							}
-						}
-						else if(dimField.getDrill_Type()==BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC){//主题表
+					}
+					//维度名字，维度序号。
+					dimTopicTableHeaderMap.put(dimFieldName, dimFieldList.get(i).getDim_Order());
+					dimTopicTableHeader.add(dimTopicTableHeaderMap);
+				} else if (dimFieldList.get(i).getField_Location() == BIConfig.FIELD_TYPE.COL_DIM) {
+					/*
+					 * 列维度
+					 * 例如 dimName="省份" dimValue=山东省/河南省/....
+					 * 纵向排列：
+					 *
+					 * 山东省
+					 * 河南省
+					 * 河北省
+					 * ......
+					 * */
+					if (dimField.getDrill_Type() == null||
+							dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_NONE||
+							dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_SEG) {
+						AddDimFieldToList(dimField,colDimFields, BIColDimDatas);//列维度
+					}
+					else if(dimField.getDrill_Type()==BIConfig.DRILL_TYPE.DRILL_TYPE_PATH){
+						if (vreportData.getDrill_Name() != null) {
+							int lc = (vreportData.getDrill_Value() + "").length() / 2;
+							dimField.setField_Name(dimField.getDrill_Info().split("-")[lc].toLowerCase());
 							AddDimFieldToList(dimField,colDimFields, BIColDimDatas);
-							//drill_name 主题表 drill_value 过滤值  形成过滤条件 where dimFieldName=Drill_value
 
+						} else {
+							dimField.setField_Name(dimField.getDrill_Info().split("-")[0].toLowerCase());
+							AddDimFieldToList(dimField,colDimFields, BIColDimDatas);
 						}
+					}
+					else if(dimField.getDrill_Type()==BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC){//主题表
+						AddDimFieldToList(dimField,colDimFields, BIColDimDatas);
+						//drill_name 主题表 drill_value 过滤值  形成过滤条件 where dimFieldName=Drill_value
+
 					}
 				}
-
-				//业务数据转换洗
-				if (vreportData.getBlock_Type() == BIConfig.BLOCK_TYPE.TABLE) {//数据表格
-
-					//--------------4.创建列维度数据集合。-------------------------
-					for (Map<String, Object> map : listDataMap) {
-						for (int i = 0; i < colDimFields.size(); i++) {
-							List<String> listData = BIColDimDatas.get(i).getListData();
-							String value = map.get(colDimFields.get(i)).toString();
-							if (!listData.contains(value))//value表示某个维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
-								listData.add(value);
-						}
-					}
-					//----------5.创建行维度数据集合（一个元素代表一个维度）-------------
-					for (Map<String, Object> map : listDataMap) {
-						for (int i = 0; i < rowDimFields.size(); i++) {
-							List<String> listData = BIRowDimDatas.get(i).getListData();
-							String value = map.get(rowDimFields.get(i)).toString();//
-							if (!listData.contains(value))//value表示该维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
-								listData.add(value);
-						}
-					}
-
-					/*
-					3.创建指标数据
-					数据格式：
-					列维 行维    数据格式  <"2017-集体-云南省", "494">    指标数据
-					*/
-					Map<String, String> mapIndicatorData = new HashMap<String, String>();
-
-					for (Map<String, Object> map : listDataMap) {//获取数据
-
-						String xkey = "", xvalue = "", // 数据格式  <"2017-集体-云南省", "494">
-								rowK = "", //xkey=rowK_colK; 行维度_列维度
-								colK = "",
-								valK = "";
-
-						for (int i = 0; i < colDimFields.size(); i++) {   //判断是否为列
-							if (map.containsKey(colDimFields.get(i)))
-								colK += map.get(colDimFields.get(i)) + ",";
-						}
-						for (int i = 0; i < rowDimFields.size(); i++) { //判断是否为行维
-							if (map.containsKey(rowDimFields.get(i)))
-								rowK += map.get(rowDimFields.get(i)) + ",";
-						}
-						for (int i = 0; i < topicList.size(); i++) { //判断是否为指标
-							if (map.containsKey(topicList.get(i)))
-								valK += map.get(topicList.get(i)) + ",";
-						}
-						xkey = trimComma(colK + "" + rowK,",");
-						xvalue =  trimComma(valK,",");
-						mapIndicatorData.put(xkey, xvalue);  // 数据格式  <"2017-集体-云南省", "494">
-					}
-
-					//---------------------开始创建展示表格-----------------------
-					/*
-					* 6.创建表头。这个应该是我写的，我自己看了半天,需要注释。  liuxf
-					* row1   山东 山东 山东
-					* row2    集体 私有  国家
-					*/
-					List<List<String>> listRowHeader = new ArrayList<List<String>>();
-					int allColsCount = 1;  //需要展示的列数
-					//获取每个维度的数据 如维度1，4个数据；维度2，3个数据，则生成12列数据
-					for (int i = 0; i < BIRowDimDatas.size(); i++) {
-						allColsCount *= BIRowDimDatas.get(i).getListData().size();
-					}
-					int loopCount = allColsCount;//重复次数,表示当前维度每个维度数据包含的列数
-
-					for (int i = 0; i < BIRowDimDatas.size(); i++) {//生成 行表头
-						List<String> listRowCell = new ArrayList<String>();//  表示一行数据，
-
-						loopCount /= BIRowDimDatas.get(i).getListData().size();
-
-
-						int dataIndex = 0; //当前显示列对应的数据索引
-
-						int currentColCnt = 0;
-						while (currentColCnt < allColsCount) {
-							for (int j = 0; j < loopCount; j++) {
-								listRowCell.add(BIRowDimDatas.get(i).getListData().get(dataIndex));
-							}
-							dataIndex++;
-							dataIndex = dataIndex % BIRowDimDatas.get(i).getListData().size();
-							currentColCnt += loopCount;
-						}
-
-						if (i != BIRowDimDatas.size() - 1)
-							Collections.sort(listRowCell);
-						listRowHeader.add(listRowCell);
-					}
-
-
-					//7.创建单元格，填充数据。递归遍历，获取对应的行数据维度。列数据维度。
-					String colsNames = "";
-					List<String> listRows = new ArrayList<String>();
-					GeneTableRows(0, BIColDimDatas, colsNames, BIColDimDatas.size(), listRows);
-
-					String rowsNames = "";
-					List<String> listCols = new ArrayList<String>();  //循环遍历行
-					GeneTableCols(0, BIRowDimDatas, rowsNames, BIRowDimDatas.size(), listCols);
-
-					//8.向生成的单元格里设置业务数据
-					List<List<String>> listRowData = new ArrayList<List<String>>();
-
-					if(listRows.size()==0) {//没有列维度，则不会生成行数.只有一行数据。
-					  listRows.add("");
-					}
-					if(listCols.size()==0){//没有行维度，则只有一列数据
-						listCols.add("");
-					}
-					int[] arrColDataCount=new int[listCols.size()];
-					for (int i = 0; i < listRows.size(); i++) {
-
-						String rowDatas = listRows.get(i);//行数据  维度1，维度2，值1 ，值2 ，值3.........
-						if(rowDatas.length()>0)
-							rowDatas+=",";
-						int rowDataCount=0;//测试本行数据有效条数，如果==0说明没有数据
-						for (int j = 0; j < listCols.size(); j++) {
-							String keyName ="";
-							if(listRows.size()>1)//如果只有一行数据，说明没有列维度
-								keyName+=listRows.get(i);
-							if(listCols.size()>1) {//如果只有一列数据，说明没有行维度
-								keyName+=keyName.length()>0?"," + listCols.get(j):listCols.get(j);
-							}
-
-							if (mapIndicatorData.containsKey(keyName)) {
-								rowDatas += mapIndicatorData.get(keyName);
-								rowDataCount++;
-								arrColDataCount[j]++;
-							} else {
-								rowDatas += "";
-							}
-							rowDatas += ",";
-						}
-						if(rowDataCount>0) {//本行数据有效
-							rowDatas=trimComma(rowDatas,",");
-							List<String> rowValueList = new ArrayList<String>();
-							rowValueList.addAll(Arrays.asList(rowDatas.split(",")));
-							listRowData.add(rowValueList);
-						}
-					}
-					//判断列数据是否有效,无效的进行删除  2020.3.23 by liuxf
-					int row=0;
-					int dimColCount=colDimFields.size();
-					for(int j=arrColDataCount.length-1;j>=0;j--){//删除无效列，一定要从后向前删除
-						if(arrColDataCount[j]==0){
-							//删除header对应的列信息
-							for(row=0;row<listRowHeader.size();row++) {
-								listRowHeader.get(row).remove(j);
-							}
-							//删除数据对应的列信息
-							for(row=0;row<listRowData.size();row++) {
-								int index=j+dimColCount;
-								if(listRowData.get(row).size()-1>=index)
-									listRowData.get(row).remove(index);
-							}
-						}
-					}
-					resultMap.put("tableData", listRowData);
-					resultMap.put("dimFieldHeader", listRowHeader);
-				}else {
-					resultMap.put("data", listDataMap);
-				}
-
-
-
-				//获取报表信息
-				BI_REPORT reportInfo = biReportService.getReportInfo(bi_Block_Info.getReport_Id());
-				JsonConfig jsonConfig = new JsonConfig();
-				jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd HH:mm:ss"));
-				JSONObject jsonArray = JSONObject.fromObject(reportInfo, jsonConfig);
-				resultMap.put("reportInfo", jsonArray);
-
-				resultMap.put("dimHeader", rowDimFields);//行维度
-				resultMap.put("topicField", topicList);
-				colDimFields.removeAll(rowDimFields);
-				resultMap.put("dimField", colDimFields);
-
-				resultMap.put("topicFieldName", topicNameList);
-				resultMap.put("unit", topicUnitList);
-				resultMap.put("flList", dimTopicTableHeader);
-				resultMap.put("blockInfo", bi_Block_Info);
-
-				//下发具体维度信息，便于钻取
-				resultMap.put("BIColDimDatas",BIColDimDatas);
-				resultMap.put("BIRowDimDatas",BIRowDimDatas);
-
-				list.add(resultMap);
 			}
+
+			//业务数据转换洗
+			if (vreportData.getBlock_Type() == BIConfig.BLOCK_TYPE.TABLE) {//数据表格
+
+				//--------------4.创建列维度数据集合。-------------------------
+				for (Map<String, Object> map : listDataMap) {
+					for (int i = 0; i < colDimFields.size(); i++) {
+						List<String> listData = BIColDimDatas.get(i).getListData();
+						String value = map.get(colDimFields.get(i)).toString();
+						if (!listData.contains(value))//value表示某个维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
+							listData.add(value);
+					}
+				}
+				//----------5.创建行维度数据集合（一个元素代表一个维度）-------------
+				for (Map<String, Object> map : listDataMap) {
+					for (int i = 0; i < rowDimFields.size(); i++) {
+						List<String> listData = BIRowDimDatas.get(i).getListData();
+						String value = map.get(rowDimFields.get(i)).toString();//
+						if (!listData.contains(value))//value表示该维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
+							listData.add(value);
+					}
+				}
+
+				/*
+				3.创建指标数据
+				数据格式：
+				列维 行维    数据格式  <"2017-集体-云南省", "494">    指标数据
+				*/
+				Map<String, String> mapIndicatorData = new HashMap<String, String>();
+
+				for (Map<String, Object> map : listDataMap) {//获取数据
+
+					String xkey = "", xvalue = "", // 数据格式  <"2017-集体-云南省", "494">
+							rowK = "", //xkey=rowK_colK; 行维度_列维度
+							colK = "",
+							valK = "";
+
+					for (int i = 0; i < colDimFields.size(); i++) {   //判断是否为列
+						if (map.containsKey(colDimFields.get(i)))
+							colK += map.get(colDimFields.get(i)) + ",";
+					}
+					for (int i = 0; i < rowDimFields.size(); i++) { //判断是否为行维
+						if (map.containsKey(rowDimFields.get(i)))
+							rowK += map.get(rowDimFields.get(i)) + ",";
+					}
+					for (int i = 0; i < topicList.size(); i++) { //判断是否为指标
+						if (map.containsKey(topicList.get(i)))
+							valK += map.get(topicList.get(i)) + ",";
+					}
+					xkey = trimComma(colK + "" + rowK,",");
+					xvalue =  trimComma(valK,",");
+					mapIndicatorData.put(xkey, xvalue);  // 数据格式  <"2017-集体-云南省", "494">
+				}
+
+				//---------------------开始创建展示表格-----------------------
+				/*
+				* 6.创建表头。这个应该是我写的，我自己看了半天,需要注释。  liuxf
+				* row1   山东 山东 山东
+				* row2    集体 私有  国家
+				*/
+				List<List<String>> listRowHeader = new ArrayList<List<String>>();
+				int allColsCount = 1;  //需要展示的列数
+				//获取每个维度的数据 如维度1，4个数据；维度2，3个数据，则生成12列数据
+				for (int i = 0; i < BIRowDimDatas.size(); i++) {
+					allColsCount *= BIRowDimDatas.get(i).getListData().size();
+				}
+				int loopCount = allColsCount;//重复次数,表示当前维度每个维度数据包含的列数
+
+				for (int i = 0; i < BIRowDimDatas.size(); i++) {//生成 行表头
+					List<String> listRowCell = new ArrayList<String>();//  表示一行数据，
+
+					loopCount /= BIRowDimDatas.get(i).getListData().size();
+
+
+					int dataIndex = 0; //当前显示列对应的数据索引
+
+					int currentColCnt = 0;
+					while (currentColCnt < allColsCount) {
+						for (int j = 0; j < loopCount; j++) {
+							listRowCell.add(BIRowDimDatas.get(i).getListData().get(dataIndex));
+						}
+						dataIndex++;
+						dataIndex = dataIndex % BIRowDimDatas.get(i).getListData().size();
+						currentColCnt += loopCount;
+					}
+
+					if (i != BIRowDimDatas.size() - 1)
+						Collections.sort(listRowCell);
+					listRowHeader.add(listRowCell);
+				}
+
+
+				//7.创建单元格，填充数据。递归遍历，获取对应的行数据维度。列数据维度。
+				String colsNames = "";
+				List<String> listRows = new ArrayList<String>();
+				GeneTableRows(0, BIColDimDatas, colsNames, BIColDimDatas.size(), listRows);
+
+				String rowsNames = "";
+				List<String> listCols = new ArrayList<String>();  //循环遍历行
+				GeneTableCols(0, BIRowDimDatas, rowsNames, BIRowDimDatas.size(), listCols);
+
+				//8.向生成的单元格里设置业务数据
+				List<List<String>> listRowData = new ArrayList<List<String>>();
+
+				if(listRows.size()==0) {//没有列维度，则不会生成行数.只有一行数据。
+				  listRows.add("");
+				}
+				if(listCols.size()==0){//没有行维度，则只有一列数据
+					listCols.add("");
+				}
+				int[] arrColDataCount=new int[listCols.size()];
+				for (int i = 0; i < listRows.size(); i++) {
+
+					String rowDatas = listRows.get(i);//行数据  维度1，维度2，值1 ，值2 ，值3.........
+					if(rowDatas.length()>0)
+						rowDatas+=",";
+					int rowDataCount=0;//测试本行数据有效条数，如果==0说明没有数据
+					for (int j = 0; j < listCols.size(); j++) {
+						String keyName ="";
+						if(listRows.size()>1)//如果只有一行数据，说明没有列维度
+							keyName+=listRows.get(i);
+						if(listCols.size()>1) {//如果只有一列数据，说明没有行维度
+							keyName+=keyName.length()>0?"," + listCols.get(j):listCols.get(j);
+						}
+
+						if (mapIndicatorData.containsKey(keyName)) {
+							rowDatas += mapIndicatorData.get(keyName);
+							rowDataCount++;
+							arrColDataCount[j]++;
+						} else {
+							rowDatas += "";
+						}
+						rowDatas += ",";
+					}
+					if(rowDataCount>0) {//本行数据有效
+						rowDatas=trimComma(rowDatas,",");
+						List<String> rowValueList = new ArrayList<String>();
+						rowValueList.addAll(Arrays.asList(rowDatas.split(",")));
+						listRowData.add(rowValueList);
+					}
+				}
+				//判断列数据是否有效,无效的进行删除  2020.3.23 by liuxf
+				int row=0;
+				int dimColCount=colDimFields.size();
+				for(int j=arrColDataCount.length-1;j>=0;j--){//删除无效列，一定要从后向前删除
+					if(arrColDataCount[j]==0){
+						//删除header对应的列信息
+						for(row=0;row<listRowHeader.size();row++) {
+							listRowHeader.get(row).remove(j);
+						}
+						//删除数据对应的列信息
+						for(row=0;row<listRowData.size();row++) {
+							int index=j+dimColCount;
+							if(listRowData.get(row).size()-1>=index)
+								listRowData.get(row).remove(index);
+						}
+					}
+				}
+				resultMap.put("tableData", listRowData);
+				resultMap.put("dimFieldHeader", listRowHeader);
+			}else {
+				resultMap.put("data", listDataMap);
+			}
+
+			//获取报表信息
+			JsonConfig jsonConfig = new JsonConfig();
+			jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd HH:mm:ss"));
+			JSONObject jsonArray = JSONObject.fromObject(bi_report, jsonConfig);
+			resultMap.put("reportInfo", jsonArray);
+
+			resultMap.put("dimHeader", rowDimFields);//行维度
+			resultMap.put("topicField", topicList);
+			colDimFields.removeAll(rowDimFields);
+			resultMap.put("dimField", colDimFields);
+
+			resultMap.put("topicFieldName", topicNameList);
+			resultMap.put("unit", topicUnitList);
+			resultMap.put("flList", dimTopicTableHeader);
+
+			//下发具体维度信息，便于钻取
+			resultMap.put("BIColDimDatas",BIColDimDatas);
+			resultMap.put("BIRowDimDatas",BIRowDimDatas);
+
+			listReturnData.add(resultMap);
 		}
-		return  list;
+
+		return  listReturnData;
 	}
 
 	/*

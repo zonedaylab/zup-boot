@@ -287,8 +287,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							//1.显示查询条件
 							$("thead").empty();
 							$("tbody").empty();
-							$("#report_Id").val(re.data[0].blockInfo.report_Id);
-							$("#block_Id").val(re.data[0].blockInfo.block_Id);
+							$("#report_Id").val(re.data[0].reportInfo.report_Id);
+							//$("#block_Id").val(re.data[0].blockInfo.block_Id);
 							$("#filter").empty();
 
 							for(var i=0; i<re.data[0].dimHeader.length; i++){

@@ -84,6 +84,37 @@ value为汇聚数据
 
 ![image-20200406214659545](img/image-20200406214659545.png)
 
+拼接语句的例子（主题表+维度）
+
+```
+SELECT b.`PROVINCE_CODE_NAME`,c.`name` COUNT(a.`id`) FROM pms_product a  
+JOIN v_dim_province b ON   a.`province_code`=b.`province_code`
+JOIN dd_brand c ON a.`brand_id`=c.`id`
+GROUP BY b.`PROVINCE_CODE_NAME` ,c.`name`
+```
+
+
+
+实际运行结果
+
+```
+SELECT 
+dd_product_category.name AS product_category_id,
+v_dim_province.PROVINCE_CODE_NAME AS province_code,
+dd_brand.name AS brand_id, 
+COUNT(pms_product.id) AS id 
+
+FROM pms_product   
+JOIN dd_product_category 
+		ON pms_product.product_category_id = dd_product_category.id
+JOIN v_dim_province ON pms_product.province_code = v_dim_province.province_code
+JOIN dd_brand ON pms_product.brand_id = dd_brand.id WHERE 1=1 
+
+GROUP BY product_category_id,province_code,brand_id;
+```
+
+
+
 ##### 2.2 开发思路
 
 1. 行维度、列维度只取其一能够展示.ok
