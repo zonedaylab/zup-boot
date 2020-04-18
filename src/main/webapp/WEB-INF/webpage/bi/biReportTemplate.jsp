@@ -149,7 +149,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				getList(0);
 			});
 
-			//获取指定报表的指标字段  report_id报表Id  by liuxf
+			//获取报表的指标字段
+			// param:  report_id报表Id  by liuxf
 			function getDataIndex(report_id){
                 $.ajax({
                     type: "get",
@@ -408,8 +409,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$("thead").append(theadTr);
 							//4.准备业务数据内容
 							for (var z = 0; z < re.data.length; z++) {
-								definaReport.push(re.data[z].reportInfo.report_Id); 
+								definaReport.push(re.data[z].reportInfo.report_Id);
+
 								var smallTotal = new Array(), reSmallTotal = new Array();
+
 								//dimField---->colDimFields
 								//allDataCols  是所有的列数据，包括列维度个数+ 业务数据的列数 by liuxf
 								var allDataCols = re.data[z].dimField.length ;//列维度个数 一个列维度占据一列
@@ -417,9 +420,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									allDataCols+= re.data[z].dimFieldHeader[re.data[z].dimFieldHeader.length-1].length;
 								else
 									allDataCols+=1;//只有一列数据
+
+								// add by liuxf 数据统计列，
+								for (var index=0; index<allDataCols- re.data[z].dimField.length;index++){
+									smallTotal.push(0);  //汇总数据
+								}
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
 									var tr = "<tr>";  //总
 									var heji = 0, flag = 0;
+
 									for(var j = 0; j < allDataCols; j++){ //数据
 										if(typeof(re.data[z].tableData[i][j]) === "undefined"){
 											tr += "<td></td>";
@@ -445,17 +454,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                                         }else{
                                                             heji += parseFloat(tdCon);
                                                         }
-														if(i == 0){  //小计计算
-															smallTotal.push(Number(tdCon));
-														}else{
-															smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
-														}
+														smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
 													}else{
-														if(i == 0){
-															smallTotal.push(0);
-														}else{
-															smallTotal[j-dl] = smallTotal[j-dl]+0;
-														}
+														smallTotal[j-dl] = smallTotal[j-dl]+0;
 													}
 													flag = 1;
 												}
