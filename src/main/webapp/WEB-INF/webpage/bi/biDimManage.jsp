@@ -27,7 +27,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<button class="btn btn-primary btn-sm" id="btnAdd">添加</button>
 				<button class="btn btn-primary btn-sm" id="btnEdit">编辑</button>
 				<button class="btn btn-primary btn-sm" id="btnDelete">删除</button>
-				数据源：<select id="ds" style="width: 100px;"></select>
+				<%--数据源：<select id="ds" style="width: 100px;"></select>--%>
 			</div>
 			<div class="col-md-7"></div>
 		</div>
@@ -77,10 +77,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 					<form class="form-horizontal" role="form">
-						<div class="form-group row">
+						<%--<div class="form-group row">
 							<strong class="control-label" style="text-align: left; float:left; width:98px;">数据源：</strong>
 							<select class="form-control" id="ds_Id" style="width:180px; float:left;"></select>
-						</div>
+						</div>--%>
 						<div class="form-group row">
 							<strong class="control-label" style="text-align: left; float:left; width:98px;" >维表名称：</strong>
 							<input class="form-control" id="dim_Name" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
@@ -109,7 +109,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</select>
 							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
-						<div class="form-group row" id="drill">
+						<div class="form-group row" id="drill" >
 							<strong class="control-label" style="text-align: left; float:left; width:98px;">钻取信息：</strong>
 							<input class="form-control" id="drill_Info" type="text" style="width:180px; float:left;"/>
 							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
@@ -135,13 +135,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   langData = data;
 		   }
 		});
+
    		$(document).ready(function(){
+
+   			//添加-->维表设置-->钻取信息：默认不显示
+			$("#drill").css("display", "none");
+
+
+			//加载主页数据源
+			// loadMainDsList();
+			//加载表格数据
    			loadGrid();
-			loadDsList();
-			loadTableName();
+			// loadDsList();
+			// loadTableName();
    		});
 
-   		function loadDsList(){
+   		//加载主页数据源
+		function loadMainDsList(){
+			$.ajax({
+				url: "rest/bi/BIDatasourceController/getDsList",
+				async: true,
+				type: "GET",//请求方式为get
+				dataType: "json", //返回数据格式为json
+				success: function(data) {//请求成功完成后要执行的方法
+					$("#ds").empty();
+					$("#ds").append("<option value='0'>全部</option>");
+					for (var i = 0; i < data.data.length; i++) {
+						$("#ds").append("<option value='"+data.data[i].id+"'>"+data.data[i].ds_name+"</option>");
+					}
+				}
+			});
+		}
+
+		//加载编辑或添加时的数据源
+   		function loadDsList(dsId){
 			$.ajax({
 				url: "rest/bi/BIDatasourceController/getDsList",
 				async: true,
@@ -149,12 +176,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				dataType: "json", //返回数据格式为json
 				success: function(data) {//请求成功完成后要执行的方法
 					$("#ds_Id").empty();
-					$("#ds").empty();
-					$("#ds").append("<option value='0'>全部</option>");
+					$("#ds_Id").append("<option value='0'>全部</option>");
 					for (var i = 0; i < data.data.length; i++) {
 						$("#ds_Id").append("<option value='"+data.data[i].id+"'>"+data.data[i].ds_name+"</option>");
-						$("#ds").append("<option value='"+data.data[i].id+"'>"+data.data[i].ds_name+"</option>");
 					}
+
+					$("#ds_Id").val(dsId);//回显数据
 				}
 			});
 		}
@@ -162,7 +189,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("#ds").change(function () {
 			loadGrid();
 		});
-   
+
+		//加载表格数据
    		function loadGrid(){
    			var param = {};
    			//提示信息
@@ -298,34 +326,62 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		//增删改按钮命令
 		$("#btnAdd").on("click", function(e){
+			//加载编辑或添加时的数据源
+			// loadDsList();
+
+			//加载表名
+			loadTableName();
+
 			msgDialog(e, 1);
 		});
+
+		//编辑维度
 		$("#btnEdit").on("click", function(e){
-			$.ajax({
-				type: "GET",
-				url: "rest/bi/BIDimController/getDim",
-				cache: false,  //禁用缓存
-				data: "dimId="+$("#dim_Id:checked").val(),  //传入组装的参数
-				dataType: "json",
-				success: function (result) {
-					$("#dim_Name").val(result.data.dim_Name);
-					$("#biz_Table_Name").val(result.data.biz_Table_Name);
-					$("#text_Field").val(result.data.text_Field);
-					$("#id_Field").val(result.data.id_Field);
-					$("#drill_Type").val(result.data.drill_Type);
-					$("#drill_Info").val(result.data.drill_Info);
-					$("#ds_Id").val(result.data.ds_Id);
-					if(result.data.drill_Type == 1){
-						$("#drill").css("display", "none");
-					}else{
-						$("#drill").css("display", "block");
+			//加载编辑或添加时的数据源
+			// loadDsList();
+
+			//加载表名
+			loadTableName();
+
+			//加setTimeout只是为了先让加载加载表名然后加载数据的时候，直接填充就好了
+			setTimeout(function(){
+				$.ajax({
+					type: "GET",
+					url: "rest/bi/BIDimController/getDim",
+					cache: false,  //禁用缓存
+					data: "dimId="+$("#dim_Id:checked").val(),  //传入组装的参数
+					dataType: "json",
+					success: function (result) {
+						$("#dim_Name").val(result.data.dim_Name);
+						$("#biz_Table_Name").val(result.data.biz_Table_Name);
+						$("#drill_Type").val(result.data.drill_Type);
+						$("#drill_Info").val(result.data.drill_Info);
+						$("#ds_Id").val(result.data.ds_Id);
+						//加载编辑或添加时的数据源
+						loadDsList(result.data.ds_Id);
+
+						//加载 维度设置的ID字段和文字字段
+						loadFaild(result.data.id_Field,result.data.text_Field);
+
+
+						if(result.data.drill_Type == 1){
+							$("#drill").css("display", "none");
+						}else{
+							$("#drill").css("display", "block");
+						}
+						msgDialog(e, 2);
+
+
+
+					},
+					error: function(){
+						parent.parent.bootbox.alert("获取失败", function(){});
 					}
-					msgDialog(e, 2);
-				},
-				error: function(){
-					parent.parent.bootbox.alert("获取失败", function(){});
-				}
-			});
+				});
+
+			},100)
+
+
 		});
 
 		$("#btnDetail").on("click", function(){
@@ -480,13 +536,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				success: function(result){
 					if(result.data != "error"){
 						$("#biz_Table_Name").empty("");
+						$("#biz_Table_Name").append("<option value='0'>请选择</option>");
 						for(var i=0; i< result.data.length; i++){
 							var txt = langData.dimManage.tableName[result.data[i]];
 							if(typeof(txt) == "undefined" || txt == "")
 								txt = result.data[i];
 							$("#biz_Table_Name").append("<option value="+result.data[i]+">"+txt+"</option>");
 						}
-						loadDataFaild();
+
+						$("#id_Field").append("<option value=''>请选择数据表</option>");
+						$("#text_Field").append("<option value=''>请选择数据表</option>");
+
+						// loadDataFaild();
 					}else{
 						parent.bootbox.alert("数据表名称加载失败");
 					}
@@ -497,6 +558,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 		}
 
+		//选择数据表
 		$("#biz_Table_Name").change(function(){
 			loadDataFaild();
 		});
@@ -531,6 +593,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			});
 		}
+
+		function loadFaild(i_f,t_f){
+			$.ajax({
+				type: "POST",
+				url: "rest/bi/BIDimController/getTableData",
+				cache: false, //禁用缓存
+				data: "tableName="+$("#biz_Table_Name option:selected").val(),
+				dataType: "json",
+				success: function(result){
+					$('#id_Field').empty();
+					$('#text_Field').empty();
+					if(result.data != "error"){
+						for(var i=0; i< result.data.length; i++){
+							var txt = "";
+							if(typeof(langData.dimManage[$("#biz_Table_Name option:selected").val()]) == "undefined")
+								txt = result.data[i].dim_Field_Name;
+							else
+								txt = langData.dimManage[$("#biz_Table_Name option:selected").val()][result.data[i].dim_Field_Name]
+							$('#id_Field').append("<option value="+result.data[i].dim_Field_Name+">"+txt+"</option>");
+							$('#text_Field').append("<option value="+result.data[i].dim_Field_Name+">"+txt+"</option>");
+						}
+
+						$('#id_Field').val(i_f);
+						$('#text_Field').val(t_f);
+
+					}else{
+						parent.bootbox.alert("表数据加载失败");
+					}
+				},
+				error: function(){
+					parent.bootbox.alert("表数据加载失败");
+				}
+			});
+		}
+
 
 		$("#drill_Type").change(function(){
 			var type = $("#drill_Type option:selected").val();
