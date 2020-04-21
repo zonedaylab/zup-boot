@@ -36,7 +36,14 @@ public class HomeController{
 		UserSession userSession = (UserSession)request.getSession().getAttribute("usersession");
 		List<Menu> menulist = new ArrayList<Menu>();
 		if(userSession != null && userSession.getAccountId() != null){
-			menulist = resourceService.getAccountPermitMenu(userSession.getAccountId(),userSession.getSystemId(),true, 2);
+
+			int systemId=userSession.getSystemId();
+//			String domains[]=request.getServletPath().split("/");
+//			if(domains.length>0) {
+//				DomainSystem domainSystem = resourceService.getDomainSystemByDomain(domains[domains.length - 2]);
+//				systemId=domainSystem.getSystem_Id();
+//			}
+			menulist = resourceService.getAccountPermitMenu(userSession.getAccountId(),systemId,true, 2);
 			JSONObject json = new JSONObject();
 			json.put("parmenulist", menulist);
 			request.setAttribute("parmenulist",menulist);
@@ -111,39 +118,34 @@ public class HomeController{
 		List<MenuView> menuViewlist = new ArrayList<MenuView>();
 		boolean result = false;
 		if(userSession != null && userSession.getAccountId() != null){
-			String domains[]=request.getServletPath().split("/");
-			if(domains.length>0){
-				DomainSystem domainSystem=resourceService.getDomainSystemByDomain(domains[domains.length-2]);
-				if(domainSystem!=null){
-					menulist = resourceService.getAccountPermitMenu(userSession.getAccountId(),domainSystem.getSystem_Id(),true, 2);
-					for (int i=0; i<menulist.size(); i++) {
-						MenuView menuView = new MenuView();
-						menuView.setMenuId(menulist.get(i).getMenuId());
-						menuView.setSystemId(menulist.get(i).getSystemId());
-						menuView.setParentMenuId(menulist.get(i).getParentMenuId());
-						menuView.setMenuName(menulist.get(i).getMenuName());
-						menuView.setOrderCode(menulist.get(i).getOrderCode());
-						menuView.setIconStyle(menulist.get(i).getIconStyle());
-						menuView.setNameSpace(menulist.get(i).getNameSpace());
-						menuView.setUrlAddress(menulist.get(i).getUrlAddress());
-						menuView.setFormAddress(menulist.get(i).getFormAddress());
-						menuView.setFlowId(menulist.get(i).getFlowId());
-						menuView.setMobileFlag(menulist.get(i).getMobileFlag());
-						List<Menu> list = resourceService.getMenuList(menulist.get(i).getMenuId());
-						if(list.size() == 0) {
-							menuView.setMobileFlagConfig(0);
-						}else {
-							menuView.setMobileFlagConfig(1);
-							String subMenu = this.getPermitSubMenu(menulist.get(i).getMenuId(), request);
-							menuView.setSubMenu(subMenu);
-						}
-						menuViewlist.add(menuView);
-					}
-					JSONObject json = new JSONObject();
-					json.put("parmenulist", menulist); 
-					request.setAttribute("parmenulist",menulist);
+			menulist = resourceService.getAccountPermitMenu(userSession.getAccountId(),userSession.getSystemId(),true, 2);
+			for (int i=0; i<menulist.size(); i++) {
+				MenuView menuView = new MenuView();
+				menuView.setMenuId(menulist.get(i).getMenuId());
+				menuView.setSystemId(menulist.get(i).getSystemId());
+				menuView.setParentMenuId(menulist.get(i).getParentMenuId());
+				menuView.setMenuName(menulist.get(i).getMenuName());
+				menuView.setOrderCode(menulist.get(i).getOrderCode());
+				menuView.setIconStyle(menulist.get(i).getIconStyle());
+				menuView.setNameSpace(menulist.get(i).getNameSpace());
+				menuView.setUrlAddress(menulist.get(i).getUrlAddress());
+				menuView.setFormAddress(menulist.get(i).getFormAddress());
+				menuView.setFlowId(menulist.get(i).getFlowId());
+				menuView.setMobileFlag(menulist.get(i).getMobileFlag());
+				List<Menu> list = resourceService.getMenuList(menulist.get(i).getMenuId());
+				if(list.size() == 0) {
+					menuView.setMobileFlagConfig(0);
+				}else {
+					menuView.setMobileFlagConfig(1);
+					String subMenu = this.getPermitSubMenu(menulist.get(i).getMenuId(), request);
+					menuView.setSubMenu(subMenu);
 				}
+				menuViewlist.add(menuView);
 			}
+			JSONObject json = new JSONObject();
+			json.put("parmenulist", menulist);
+			request.setAttribute("parmenulist",menulist);
+
 			 result = true;
 	    }
 		
