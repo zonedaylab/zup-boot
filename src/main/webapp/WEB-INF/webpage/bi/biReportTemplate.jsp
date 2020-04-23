@@ -137,7 +137,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var p1 = "", p2 = 0, c1 = "", c2 = 0, x1 = "", x2 = 0;
 
 			$(document).ready(function() {
-				index = loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
+				loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
 				$('#article').readmore({
    				  speed: 5,
    				  maxHeight: 5
@@ -149,7 +149,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				getList(0);
 			});
 
-			//获取指定报表的指标字段  report_id报表Id  by liuxf
+			//获取报表的指标字段
+			// param:  report_id报表Id  by liuxf
 			function getDataIndex(report_id){
                 $.ajax({
                     type: "get",
@@ -165,56 +166,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 });
 			}
 
-			//选择报表模块
-			function datasourceReload(reportIdArr){
-				var _this = $(this);
-				var param = {};
-				definaReport = new Array();
-				param.block_Id =  $("#block_Id").val();//区块ID
-				param.x_Point = 1;//区块位置
-				param.bi_Page_Id = '${pageId}';
-				param.page_Id = '${pageId}';
-				param.block_Type = 1;
-				param.screen_Index = 1;
-				ajaxfn("rest/bi/biPageBlockController/deleteBlockByPageId");
-				for (var i = 0; i < reportIdArr.length; i++) {
-					param.report_Id = reportIdArr[i];//报表id
-					ajaxfn("rest/bi/biPageBlockController/saveBlock");//保存数据块saveBlock
-				}
 
-				function ajaxfn(url){
-					$.ajax({
-						type: "post",
-						async: false,
-						url: url,
-						data:param,
-						dataType: "json",
-						success: function(result) {
-							if(result.data == "success"){
-								getList(0, $("#dataIndex").val());
-							}
-						}, 
-						error: function(error) {
-							console.log(error)
-						}
-					});
-				}
-			}
-			
-			var filterNm = {
-				survey_year: "调查年份",
-				mine_method_nm: "开采方式",
-				province: "所属省",
-				mine_scale_nm: "矿山规模",
-				city: "所属市",
-				county: "所属县",
-				economic_type_nm: "经济类型",
-				production_status_nm: "生产状态",
-				minerals_type_name: "矿类",
-				minerals_variety_name: "矿种"
-			};
-			
-			var index;
+
 			Array.prototype.remove = function(val) { 
 				var index = this.indexOf(val); 
 				if (index > -1) { 
@@ -222,13 +175,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				} 
 			};
 			var keys = new Array(), values = new Array();  //查询条件
-			//keys.push("survey_year"); //去掉特定过滤语句 by liuxf
-			//values.push(2017);
-			var index = 0;
 			/*
-			* id      表示维度钻取  例如id=3701，id.length=4,表示济南市，
-			* indexs  指标列表*/
-			function getList(id, indexs) {
+			* id 表示维度钻取
+			* 			例如id=3701，id.length=4,表示济南市，
+			* indicators  指标列表
+			* */
+			function getList(id, indicators) {
+
 				var drill_Name, drill_Value;
 				if((id+"").length == 2){
 					drill_Name = "province";
@@ -264,19 +217,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 							keys.push("mine_survey_info."+idn);
 					 		values.push($(this).val());
-						} else {
-							if(idn.indexOf("_nm") > -1){
-								idn = " mine_survey_info."+idn.replace("_nm", "");
-							}
-							keys.push(idn);
-					 		values.push($(this).val());
 						}
-					}else{
-						if(idn.indexOf("_nm") > -1){
-							idn = " mine_survey_info."+idn.replace("_nm", "");
-						}
-						//values.remove(keys.indexOf(idn));
-						//keys.remove(idn);
 					}
 		 		});
 
@@ -290,8 +231,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					drill_Name: drill_Name,
 					drill_Value: drill_Value
 				}
-				if(indexs != 0)
-				    data.index = indexs;
+				if(indicators != 0)
+				    data.index = indicators;
 				//获取报数据数据
 				$.ajax({
 					type: "post",
@@ -302,32 +243,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					dataType: "json",
 					success: function(re) {
 						if(re.data.length > 0){
-							var year = "";
-							for(var i=0; i<keys.length; i++){
-								if(keys[i].indexOf("survey_year") > -1){
-									year = values[keys[i].indexOf("survey_year")] + "年 ";
-								}
-							}
-							if(indexs != 0){
-                                $("#title").text(year+"调查"+$("#dataIndex option:selected").text()+"统计表 （"+re.data[0].unit[0]+"）");
+
+							if(indicators != 0){
+                                $("#title").text( $("#dataIndex option:selected").text()+"统计表 （"+re.data[0].unit[0]+"）");
 							}else{
-                                $("#title").text(year+"${pageTitle} （"+re.data[0].unit[0]+"）");
+                                $("#title").text("${pageTitle} （"+re.data[0].unit[0]+"）");
 							}
 							//1.显示查询条件
 							$("thead").empty();
 							$("tbody").empty();
-							$("#report_Id").val(re.data[0].blockInfo.report_Id);
-							$("#block_Id").val(re.data[0].blockInfo.block_Id);
+							$("#report_Id").val(re.data[0].reportInfo.report_Id);
+							//$("#block_Id").val(re.data[0].blockInfo.block_Id);
 							$("#filter").empty();
+
 							for(var i=0; i<re.data[0].dimHeader.length; i++){
 								if(re.data[0].dimHeader[i] != "sub_nm"){
-									var hf = '<label class="control-label lab">'+filterNm[re.data[0].dimHeader[i]]+'：</label>'+
+									var hf = '' +
+											' <label class="control-label lab">'+re.data[0].dimHeader[i]+'：</label>'+
 											 '<select class="form-control filters" id="'+re.data[0].dimHeader[i]+'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
+
 									 $("#filter").append(hf);
+
 									 if(re.data[0].dimHeader[i] == "province"){
-									 	getFilterInfo(re.data[0].dimHeader[i], 0);
+										getFilterInfo(re.data[0].dimHeader[i], 0);
 									 }else if(re.data[0].dimHeader[i] == "city"){
 										getFilterInfo(re.data[0].dimHeader[i], id);
 									 }else if(re.data[0].dimHeader[i] == "county"){
@@ -341,7 +281,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							for(var i=0; i<re.data[0].dimField.length; i++){
 								if(re.data[0].dimField[i] != "sub_nm"){
 
-									var hf = '<label class="control-label lab">'+filterNm[re.data[0].dimField[i]]+'：</label>'+
+									var hf = '<label class="control-label lab">'+re.data[0].dimField[i]+'：</label>'+
 											 '<select class="form-control filters" id="'+re.data[0].dimField[i]+'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
@@ -378,17 +318,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										var thCon = re.data[0].dimFieldHeader[x][y]+"";
 										if(thCon.indexOf("-") > -1){
 											if((thCon.split("-")[1]+"").length == 6){//表示是县级单位（第三级 长度为6  .xxxxxx.
-                                                let year = 2017;
-                                                if(values.length > 0){
-                                                    if(keys[0] == "survey_year")
-                                                        year = values[0];
-                                                }
 												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county="+thCon.split("-")[1]+"&year="+year+"'>" + thCon.split("-")[0]+"</a></th>";
 											}else{
 												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+thCon.split("-")[1]+")'>"+ thCon.split("-")[0] +"</a></th>";
 											}
-										}else
-											theadTh += "<th title='"+thCon+"'><span class='sla'>"+ thCon +"</span></th>";
+										}
+										else {
+											/*
+											   by liuxf   drill_type=4 按照不同的主题进行钻取
+											   getList (drill_name ,drill_value
+
+										       getList(dim_name - current_topic_index,  dim_data) 生成连接进行钻取。
+											*/
+											if(re.data[0].BIRowDimDatas[x].dill_type==4){
+												param=re.data[0].BIRowDimDatas[x].field_name+'-' +re.data[0].BIRowDimDatas[x].currentTableIndex+","+thCon;
+												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+param+")'>"+ thCon.split("-")[0] +"</a></th>";
+											}
+											else
+												theadTh += "<th title='" + thCon + "'><span class='sla'>" + thCon + "</span></th>";
+										}
 									}
 									titleTh += "<th style='font-size:18px;'>${pageTitle}</th>";
 								}
@@ -403,8 +351,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$("thead").append(theadTr);
 							//4.准备业务数据内容
 							for (var z = 0; z < re.data.length; z++) {
-								definaReport.push(re.data[z].reportInfo.report_Id); 
+								definaReport.push(re.data[z].reportInfo.report_Id);
+
 								var smallTotal = new Array(), reSmallTotal = new Array();
+
 								//dimField---->colDimFields
 								//allDataCols  是所有的列数据，包括列维度个数+ 业务数据的列数 by liuxf
 								var allDataCols = re.data[z].dimField.length ;//列维度个数 一个列维度占据一列
@@ -412,9 +362,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									allDataCols+= re.data[z].dimFieldHeader[re.data[z].dimFieldHeader.length-1].length;
 								else
 									allDataCols+=1;//只有一列数据
+
+								// add by liuxf 数据统计列，
+								for (var ind=0; ind<allDataCols- re.data[z].dimField.length;ind++){
+									smallTotal.push(0);  //汇总数据
+								}
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
 									var tr = "<tr>";  //总
 									var heji = 0, flag = 0;
+
 									for(var j = 0; j < allDataCols; j++){ //数据
 										if(typeof(re.data[z].tableData[i][j]) === "undefined"){
 											tr += "<td></td>";
@@ -422,11 +378,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											var tdCon = re.data[z].tableData[i][j];
 											if(tdCon.indexOf("-") > -1){
 												if((tdCon.split("-")[1]+"").length == 6){
-												    let year = 2017;
-												    if(values.length > 0){
-												        if(keys[0] == "survey_year")
-                                                        	year = values[0];
-													}
 													tr += "<td><a target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county="+tdCon.split("-")[1]+"&year="+year+"'>" + tdCon.split("-")[0]+"</a></td>";
 												}else{
 													tr += "<td><a href='javascript:getList("+tdCon.split("-")[1]+")'>"+ tdCon.split("-")[0] +"</a></td>";
@@ -445,17 +396,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                                         }else{
                                                             heji += parseFloat(tdCon);
                                                         }
-														if(i == 0){  //小计计算
-															smallTotal.push(Number(tdCon));
-														}else{
-															smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
-														}
+														smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
 													}else{
-														if(i == 0){
-															smallTotal.push(0);
-														}else{
-															smallTotal[j-dl] = smallTotal[j-dl]+0;
-														}
+														smallTotal[j-dl] = smallTotal[j-dl]+0;
 													}
 													flag = 1;
 												}
@@ -509,7 +452,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$('.selectpicker').selectpicker('val', definaReport);  //为下拉框赋默认值
 							getDataIndex(definaReport[0]);
 						}
-                        loading.stop(index);
+                        loading.stop();
 					},
 					error: function() {
 					}
@@ -539,18 +482,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		 	
 			$('#btnLoadReport').on('click', function () {
-				index = loading.start("#1c6bab");
 				var reportIdArr = $("#dataSource").val();
 			  	if(reportIdArr == null)
 			  		parent.bootbox.alert("至少选择一项");
 			  	else{
-			  		index = loading.start("#1c6bab");
+			  		loading.start("#1c6bab");
 					if(definaReport.length>1){
 						$("#dataIndex").css("disable", "disable");
 						$("#dataIndex option:first").prop("seleced", "selected");
 					}
-					datasourceReload(reportIdArr);
+					loading.stop();
 			  	}
+
 			});
 
 			//函数说明：合并指定表格（表格id为_w_table_id）指定列（列数为_w_table_colnum）的相同文本的相邻单元格
@@ -627,17 +570,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					success: function(result) {
 						$("#filter"+filterName).empty();
 						$("#filter"+filterName).append("<option value='0'>全部</option>");
-
-						if(filterName == "survey_year"){
-							for (var item in result.data) {
-								$("#"+filterName).append("<option value="+result.data[item]+">"+result.data[item]+"</option>");
-							}
-						}else{
-							for (var item in result.data) {
-								$("#"+filterName).append("<option value="+result.data[item]+">"+item+"</option>");
-							}
+						for (var item in result.data) {
+							$("#"+filterName).append("<option value="+result.data[item]+">"+item+"</option>");
 						}
-					}, 
+					},
 					error: function(error) {
 						//console.log(error)
 					}
