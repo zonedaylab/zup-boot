@@ -204,13 +204,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						   	"sWidth":"20%",
 						   	"data": "topic_Name" // 数据列名
 	                    },
-	                   
-	                    {
-						   	"targets": [5], // 目标列位置，下标从0开始
-						   	"sWidth":"20%",
-						   	"data": "create_Date" // 数据列名
-	                    }
-		            ]
+						{
+							"targets": [5], // 目标列位置，下标从0开始
+							"sWidth":"20%",
+							"data": "create_Date", // 数据列名
+							"render" : function ChangeDateFormat(data, type, full, meta) {
+								var datetime = new Date();
+								datetime.setTime(data);
+								var year = datetime.getFullYear();
+								var month = datetime.getMonth()+1;
+								var date = datetime.getDate();
+								var hour = datetime.getHours();
+								var minute = datetime.getMinutes();
+								var second = datetime.getSeconds();
+								// var msecond = datetime.getMilliseconds();
+								return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+							}
+						}
+
+			]
 		        }).api();
 		        //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
 		    }
