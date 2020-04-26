@@ -82,7 +82,32 @@ public class BIShowPageController {
 		mv.addObject("screen", screenArr);
 		return mv;
 	}
-	
+	/**
+	 * pageid获取对应的页面进行展示，用于进行页面的预览工作。
+	 * by liuxf
+	 * @throws Exception
+	 *
+	 * */
+	@RequestMapping("/BIPageShow")
+	public ModelAndView BIPageShow(Integer pageId) throws Exception{
+		BI_Page biPage = new BI_Page();
+		biPage.setBi_Page_Id(pageId);
+		BI_Page bi_Page = biPageService.getBiPage(biPage);
+		if(bi_Page == null){
+			throw new Exception("BI/BIPageShow:请传入对应的页面id！");
+		}
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName(bi_Page.getPage_Url());
+		mv.addObject("pageType", bi_Page.getPage_Type());
+		mv.addObject("pageTitle", bi_Page.getPage_Title());
+		mv.addObject("pageId", bi_Page.getBi_Page_Id());
+		BI_Screen biScreen = new BI_Screen();
+		biScreen.setPage_Id(bi_Page.getBi_Page_Id());
+		List<BI_Screen> screenList = biScreenService.getBiScreenList(biScreen);
+		JSONArray screenArr = JSONArray.fromObject(screenList);
+		mv.addObject("screen", screenArr);
+		return mv;
+	}
 	/**
 	 * 显示这个页面上的这一屏的报表数据
 	 * @author 谢炎

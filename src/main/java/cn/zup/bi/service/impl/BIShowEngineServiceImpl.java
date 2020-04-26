@@ -176,7 +176,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					}
 					topicList.add(biShowField.getField_Caption().toLowerCase());
 					topicNameList.add(biShowField.getField_Title());
-					topicUnitList.add(biShowField.getField_Unit());
+					topicUnitList.add(biShowField.getField_Unit()); //指标单位
 					ub = true;
 				}
 			}
@@ -318,6 +318,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				* row2    集体 私有  国家
 				*/
 				List<List<String>> listRowHeader = new ArrayList<List<String>>();
+
 				int allColsCount = 1;  //需要展示的列数
 				//获取每个维度的数据 如维度1，4个数据；维度2，3个数据，则生成12列数据
 				for (int i = 0; i < BIRowDimDatas.size(); i++) {
@@ -351,7 +352,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 
 				//7.创建单元格，填充数据。递归遍历，获取对应的行数据维度。列数据维度。
 				String colsNames = "";
-				List<String> listRows = new ArrayList<String>();
+				List<String> listRows = new ArrayList<String>();   //列维度生成行数据
 				GeneTableRows(0, BIColDimDatas, colsNames, BIColDimDatas.size(), listRows);
 
 				String rowsNames = "";
@@ -373,7 +374,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					String rowDatas = listRows.get(i);//行数据  维度1，维度2，值1 ，值2 ，值3.........
 					if(rowDatas.length()>0)
 						rowDatas+=",";
-					int rowDataCount=0;//测试本行数据有效条数，如果==0说明没有数据
+					int rowDataCount=0;//测试本行数据有效条数，如果==0说明没有数据，进行删除。
 					for (int j = 0; j < listCols.size(); j++) {
 						String keyName ="";
 						if(listRows.size()>1)//如果只有一行数据，说明没有列维度
@@ -428,13 +429,12 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 			resultMap.put("reportInfo", jsonArray);
 
 			resultMap.put("dimHeader", rowDimFields);//行维度
+			resultMap.put("dimField", colDimFields);//列维度
 			resultMap.put("topicField", topicList);
-			colDimFields.removeAll(rowDimFields);
-			resultMap.put("dimField", colDimFields);
 
 			resultMap.put("topicFieldName", topicNameList);
-			resultMap.put("unit", topicUnitList);
-			resultMap.put("flList", dimTopicTableHeader);
+			resultMap.put("unit", topicUnitList); //指标数据：单位信息
+			resultMap.put("flList", dimTopicTableHeader); //表头，  <维度名字，维度序号>
 
 			//下发具体维度信息，便于钻取
 			resultMap.put("BIColDimDatas",BIColDimDatas);
