@@ -29,6 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<button class="btn btn-primary btn-sm" id="btnDelete">删除</button>
 				<button class="btn btn-primary btn-sm" id="btnScreenSetting">布局设置</button>
 				<button class="btn btn-primary btn-sm" id="btnReportSetting">元素设置</button>
+				<button class="btn btn-primary btn-sm" id="btnPreview">报表预览</button>
 			</div>
 			<div class="col-md-7"></div>
 		</div>
@@ -343,7 +344,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					});
 				}
 			});
-			
+
+			//布局设置按钮
+			$("#btnPreview").on("click", function(){
+				var Page_Id = 0;
+				if($("#bi_Page_Id:checked").length != 1) {
+					parent.parent.bootbox.alert("只能选择一个表单设置布局", function(){});
+					return;
+				}else{
+					Page_Id = $("#bi_Page_Id:checked").val();
+					window.open("/Bi/BIPageShow?pageId="+Page_Id);
+				}
+			});
 			//选择页面类型
 	    	function loadPageType(){
 	    		$.ajax({

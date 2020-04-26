@@ -93,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="col-lg-12 col-md-12 col-sm-12">
 						<div class="pull-right">
 							<label class="control-label" style="text-align: left; float:left; width:50px; line-height: 30px">报表：</label>
-							<select class="form-control selectpicker" id="dataSource"  multiple data-live-search="true" data-selected-text-format="count">
+							<select class="form-control selectpicker" id="reportList"  multiple data-live-search="true" data-selected-text-format="count">
 							</select>
 							<label class="control-label" style="text-align: center; float:left; width:60px; line-height: 30px">指标：</label>
 							<select class="form-control" id="dataIndex" title="报表只能选择一项才可以" style="width: 120px; float: left;">
@@ -245,7 +245,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						if(re.data.length > 0){
 
 							if(indicators != 0){
-                                $("#title").text( $("#dataIndex option:selected").text()+"统计表 （"+re.data[0].unit[0]+"）");
+                                $("#title").text( $("#dataIndex option:selected").text()+"统计数据 （"+re.data[0].unit[0]+"）");
 							}else{
                                 $("#title").text("${pageTitle} （"+re.data[0].unit[0]+"）");
 							}
@@ -253,7 +253,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$("thead").empty();
 							$("tbody").empty();
 							$("#report_Id").val(re.data[0].reportInfo.report_Id);
-							//$("#block_Id").val(re.data[0].blockInfo.block_Id);
 							$("#filter").empty();
 
 							for(var i=0; i<re.data[0].dimHeader.length; i++){
@@ -263,18 +262,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											 '<select class="form-control filters" id="'+re.data[0].dimHeader[i]+'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
-
 									 $("#filter").append(hf);
-
-									 if(re.data[0].dimHeader[i] == "province"){
-										getFilterInfo(re.data[0].dimHeader[i], 0);
-									 }else if(re.data[0].dimHeader[i] == "city"){
-										getFilterInfo(re.data[0].dimHeader[i], id);
-									 }else if(re.data[0].dimHeader[i] == "county"){
-										getFilterInfo(re.data[0].dimHeader[i], id);
-									 }else{
-										getFilterInfo(re.data[0].dimHeader[i], 0);
-									 }
+									getFilterInfo(re.data[0].dimHeader[i], 0);
 								}
 							}
 							//2.列维度 by liuxf
@@ -286,16 +275,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
 									 $("#filter").append(hf);
+									getFilterInfo(re.data[0].dimField[i], 0);
 
-									 if(re.data[0].dimField[i] == "province"){
-									 	getFilterInfo(re.data[0].dimField[i], 0);
-									 }else if(re.data[0].dimField[i] == "city"){
-										getFilterInfo(re.data[0].dimField[i], id);
-									 }else if(re.data[0].dimField[i] == "county"){
-										getFilterInfo(re.data[0].dimField[i], id);
-									 }else{
-										getFilterInfo(re.data[0].dimField[i], 0);
-									 }
 								}
 							}
 							
@@ -349,6 +330,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 							titleTr +="<tr>"+ titleTh +"</tr>";
 							$("thead").append(theadTr);
+
 							//4.准备业务数据内容
 							for (var z = 0; z < re.data.length; z++) {
 								definaReport.push(re.data[z].reportInfo.report_Id);
@@ -472,7 +454,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					dataType: "json",
 					success: function(result) {
 						for(var i = 0;i<result.data.length;i++){
-							$("#dataSource").append("<option value="+result.data[i].report_Id+">"+result.data[i].report_Name+"</option>");
+							$("#reportList").append("<option value="+result.data[i].report_Id+">"+result.data[i].report_Name+"</option>");
 						}
 					}, 
 					error: function(error) {
@@ -482,7 +464,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		 	
 			$('#btnLoadReport').on('click', function () {
-				var reportIdArr = $("#dataSource").val();
+				var reportIdArr = $("#reportList").val();
 			  	if(reportIdArr == null)
 			  		parent.bootbox.alert("至少选择一项");
 			  	else{
