@@ -84,7 +84,7 @@ public class BIPageController {
 			int b = biPageService.deletePageInfo(bi_Page_Ids[i]);
 			if(b == 0){
 				ids += bi_Page_Ids[i] + ", ";
-				json.put("data", "fial");
+				json.put("data", "fail:"+ids);
 			}else {
 				json.put("data", "success");
 			}
