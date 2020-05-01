@@ -37,7 +37,7 @@
         LEFT JOIN bi_dim bd ON btf.DIM_ID = bd.DIM_ID   <!--LEFT表示可以不配置维度对应表，这里存在大的问题 202002025TODO: liuxf-->
         JOIN bi_topic bt ON btf.TOPIC_ID = bt.TOPIC_ID
         JOIN bi_report_field brf ON btf.FIELD_ID = brf.FIELD_ID
-
+        JOIN bi_report br ON br.TOPIC_ID=btf.TOPIC_ID<!--必须要和bi_report进行联合过滤-->
         WHERE 1=1
         <if test="ids != null">
             AND btf.FIELD_ID IN (${ids})

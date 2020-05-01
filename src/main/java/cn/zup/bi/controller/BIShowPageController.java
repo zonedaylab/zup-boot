@@ -170,55 +170,30 @@ public class BIShowPageController {
 	 * */
 	@RequestMapping(value="/getFilterValue", method=RequestMethod.GET)
 	@ResponseBody
-	public JSONObject getFilterValue(String filterName, Integer areaId) throws ClassNotFoundException, SQLException{
+	public JSONObject getFilterValue(String filterName, Integer areaId) throws  SQLException{
+
 		List<BI_DIM> dimList = biDimService.getDimFilter(filterName);
-		Class.forName(BIConnection.CLASSNAME);
-		Connection conn = DriverManager.getConnection(BIConnection.URL, BIConnection.USERNAME, BIConnection.PASSWORD);
+		Connection conn = BIConnection.OpenConn();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Map<String, Object> map = new HashMap<String, Object>();
-		String sql = "";
-		System.err.println(filterName.indexOf("nm") > -1 || filterName.indexOf("name") > -1);
 
+		String sql = "";
         System.err.println("filterName:"+filterName);
 
-		if(filterName.equals("province") || filterName.equals("city")  || filterName.equals("county")){  //字典表插叙条件
-			String where = "";
-			int len = areaId.toString().length();
-			if(areaId == 0){
-				len = 0;
-			} else {
-				where = " AND LEFT(vd.AREA_NUM, "+len+") = "+areaId;
-			}
-			sql = "SELECT LEFT(vd.AREA_NUM, "+(len+2)+") AREA_ID, vd."+filterName+" from v_dicarea vd WHERE 1=1 "+where+" GROUP BY vd."+filterName;
-			ps = conn.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while(rs.next()){
-				map.put(rs.getString(filterName), rs.getInt("AREA_ID"));
-			}
-		}else if(filterName.equals("year") ){  //调查年份
-			sql = "SELECT "+filterName+" from "+dimList.get(0).getBiz_Table_Name()+" GROUP BY "+filterName;
-			ps = conn.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while(rs.next()){
-				map.put(filterName+"_"+rs.getInt(filterName), rs.getInt(filterName));
-			}
-		}else{
-
-			//此处需要进一步理清，传递过来的filternmae 如果不包含_
-			if(!filterName.contains("_")){
-				String id = filterName.substring(0, filterName.lastIndexOf("_"));
-				if(dimList.size()>0) {//判断是否关联维度表 liuxf
-					sql = "SELECT " + id + "," + filterName + " from " + dimList.get(0).getBiz_Table_Name() + " GROUP BY " + id + "," + filterName;
-					ps = conn.prepareStatement(sql);
-					rs = ps.executeQuery();
-					while (rs.next()) {
-						map.put(rs.getString(filterName), rs.getInt(id));
-					}
+		//此处需要进一步理清，传递过来的filternmae 如果不包含_
+		if(!filterName.contains("_")){
+			String id = filterName.substring(0, filterName.lastIndexOf("_"));
+			if(dimList.size()>0) {//判断是否关联维度表 liuxf
+				sql = "SELECT " + id + "," + filterName + " from " + dimList.get(0).getBiz_Table_Name() + " GROUP BY " + id + "," + filterName;
+				ps = conn.prepareStatement(sql);
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					map.put(rs.getString(filterName), rs.getInt(id));
 				}
 			}
 		}
-		//System.err.println("===>Filter SQL:"+sql);
+		System.err.println("===>Filter SQL:"+sql);
 		JSONObject json = new JSONObject();
 		json.put("data", map);
 		return json;
