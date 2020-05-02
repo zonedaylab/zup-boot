@@ -134,7 +134,7 @@ public interface BIDimService {
 	
 	BI_DIM getDimInfo(int dimId);
 	
-	List<BIShowField> getDimFieldList(ConditionTransfer conditionTransfer);
+	List<BIShowField> getDimFieldList(V_ReportData conditionTransfer,Integer reportId);
 	
 	int getDimCount(Integer report_Id);
 	

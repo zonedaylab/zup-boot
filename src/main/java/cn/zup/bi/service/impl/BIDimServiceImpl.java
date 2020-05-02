@@ -7,7 +7,6 @@ import cn.zup.bi.dao.ReportFieldDao;
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.utils.BIConfig;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -284,10 +283,10 @@ public class BIDimServiceImpl implements BIDimService {
 	}
 
 	@Override
-	public List<BIShowField> getDimFieldList(ConditionTransfer conditionTransfer) {
+	public List<BIShowField> getDimFieldList(V_ReportData conditionTransfer,Integer reportId) {
 		List<String> key = new ArrayList<String>(conditionTransfer.getKey());
 		List<Object> value = new ArrayList<Object>(conditionTransfer.getValue());
-		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(conditionTransfer.getReport_Id());
+		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(reportId);
 		String hdimFieldIds = "";
 		String ldimFieldIds = "";
 		//第一步遍历获取到对应的主题字段，分为维表和指标
@@ -303,7 +302,7 @@ public class BIDimServiceImpl implements BIDimService {
 		dimFieldIds = dimFieldIds.substring(0, dimFieldIds.length()-2);
 
 		//获取维度表，需要处理没有对应维度表的维度。
-		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, conditionTransfer.getReport_Id());
+		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, reportId);
 		
 		//查询的列，无需做不同表进行匹配
 		for (int i = 0; i < biShowDimFieldList.size(); i++) {

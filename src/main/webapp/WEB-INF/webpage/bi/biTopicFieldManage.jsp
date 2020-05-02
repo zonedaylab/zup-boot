@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>BI 主题字段管理 - 积成能源</title>
+    <title>BI 主题字段管理 </title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -479,11 +479,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						$("#dim_Id").val(result.data[0].dim_Id);
 					}else if($("#field_Type").val() == 2){
 						$(".dim_Id").css("display", "none");
-						$(".aggregate_Type").css("display", "block");
-						$("#aggregate_Type").val(result.data[0].aggregate_Type);
+						$(".aggregate_Type").css("display", "none");
 					}else if($("#field_Type").val() == 3){
 						$(".dim_Id").css("display", "none");
-						$(".aggregate_Type").css("display", "none");
+						$(".aggregate_Type").css("display", "block");
+						$("#aggregate_Type").val(result.data[0].aggregate_Type);
 					}
                    	msgDialog(e);
                    },

@@ -61,6 +61,9 @@
     </select>
 
     <delete id="deletePageById" parameterType="java.lang.Integer">
+
+        DELETE  FROM bi_block WHERE bi_page_id= #{bi_Page_Id};
+
         DELETE FROM bi_report_field  WHERE REPORT_ID IN (
             select br.REPORT_ID FROm bi_report br where br.PAGE_ID=(
                 select bp.BI_PAGE_ID FROM bi_page bp where bp.BI_PAGE_ID=#{bi_Page_Id}
