@@ -281,6 +281,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							//3.准备表头
 							var theadTr = "";
 							var titleTr = ""; //表头
+
+							//表头（标题），报表标题生成的表头。
+							for(var x = re.data[0].BIRowDimDatas.length;x<re.data[0].tableHeader.length;x++){
+								var theadTh = "";
+								//判断有多少列标题，准备多少"<th></th>"
+								for(var y = 0;y<re.data[0].colDimFields.length;y++){
+									theadTh += "<th style='white-space: nowrap'></th>";
+								}
+								for(var y = 0;y<re.data[0].tableHeader[x].length;y++) {
+									var thCon = re.data[0].tableHeader[x][y] + "";
+									theadTh += "<th title='" + thCon + "'><span class='sla'>" + thCon + "</span></th>";
+								}
+								var heji = "<th></th>";
+								theadTr +="<tr>"+ theadTh+heji+"</tr>";
+
+							}
+							//表头：维度生成的表头
 							for(var x = 0;x<re.data[0].BIRowDimDatas.length;x++){//x表示一个维度，y表示维度中的每一列数据 by liuxf
 								var theadTh = "";
 								var titleTh = "";
@@ -292,7 +309,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								//获取th  tableHeader  行维度 对应 java listRowHeader
 								for(var y = 0;y<re.data[0].tableHeader[x].length;y++){
 									if(typeof(re.data[0].tableHeader[x][y]) === "undefined")
-										tr += "<th></th>"
+										theadTh += "<th></th>"
 									else{
 										var thCon = re.data[0].tableHeader[x][y]+"";
 										if(re.data[0].BIRowDimDatas[x].dill_type==3) {

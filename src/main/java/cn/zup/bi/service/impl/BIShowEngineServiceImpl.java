@@ -605,7 +605,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					}
 					xkey = trimComma(colKey + "" + rowKey, ",");
 					xvalue = trimComma(measureKey, ",");
-					String []measures;
+					String []measures;//度量值
 					if(mapMeasureData.containsKey(xkey)){
 						measures=mapMeasureData.get(xkey);
 						measures[reportIndex] = xvalue;
@@ -630,12 +630,13 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		 */
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 
-		List<List<String>> listTableHeader = new ArrayList<List<String>>(); //根据行维度生成表头
 		/*
 		*	生成结果： dim1_m1表示维度dim1的成员m1。
 		*   行维度1：  dim1_m1 dim1_m1 dim1_m1  dim1_m2 dim1_m2  dim1_m2
 		*   行维度2：  dim2_m1 dim2_m2 dim2_m3  dim2_m1 dim2_m2  dim2_m3
 		* */
+		List<List<String>> listTableHeader = new ArrayList<List<String>>(); //根据行维度生成表头
+
 		int allColsCount = 1;  //需要展示的列数，如上所示，则为2*3=6列
 		//获取每个维度的数据 如维度1，4个数据；维度2，3个数据，则生成12列数据
 		for (int i = 0; i < BIRowDimDatas.size(); i++) {
@@ -728,6 +729,17 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 			for(int j = 0; j< listTableHeader.size(); j++)
 				listTableHeader.get(j).addAll(listTableHeader.get(j));
 		}
+		List<String>listTableHeaderTitle=new ArrayList<String>();
+		for (int i=0;i<reportCount;i++){
+			for(int j=0;j<allColsCount;j++){
+				listTableHeaderTitle.add(listBIReport.get(i).getReport_Name());
+			}
+		}
+		listTableHeader.add(listTableHeaderTitle);
+
+
+
+
 		//判断列数据是否有效,无效的进行删除  2020.3.23 by liuxf
 		int row=0;
 		int dimColCount=colDimFields.size();
