@@ -106,6 +106,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<option value="1">无层次结构</option>
 								<option value="2">分段信息</option>
 								<option value="3">钻取路径</option>
+								<option value="4">钻取不同主题</option>
+
 							</select>
 							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>

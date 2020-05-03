@@ -283,9 +283,9 @@ public class BIDimServiceImpl implements BIDimService {
 	}
 
 	@Override
-	public List<BIShowField> getDimFieldList(V_ReportData conditionTransfer,Integer reportId) {
-		List<String> key = new ArrayList<String>(conditionTransfer.getKey());
-		List<Object> value = new ArrayList<Object>(conditionTransfer.getValue());
+	public List<BIShowField> getDimFieldList(V_ReportData reportData, Integer reportId) {
+		List<String> key = new ArrayList<String>(reportData.getKey());
+		List<Object> value = new ArrayList<Object>(reportData.getValue());
 		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(reportId);
 		String hdimFieldIds = "";
 		String ldimFieldIds = "";
@@ -307,9 +307,8 @@ public class BIDimServiceImpl implements BIDimService {
 		//查询的列，无需做不同表进行匹配
 		for (int i = 0; i < biShowDimFieldList.size(); i++) {
 
+			BIShowField biShowField=biShowDimFieldList.get(i);
 			if(biShowDimFieldList.get(i).getDrill_Type()==null) {
-
-
 				continue;
 			}
 			//分段信息
@@ -317,19 +316,56 @@ public class BIDimServiceImpl implements BIDimService {
 				case BIConfig.DRILL_TYPE.DRILL_TYPE_PATH:
 					System.err.println("钻取");
 					String[] areas = biShowDimFieldList.get(i).getDrill_Info().split("-");
-					if(conditionTransfer.getDrill_Name() != null){
+					if(reportData.getDrill_Name() != null){
 						for (int j2 = 0; j2 < areas.length; j2++) {
-							if(conditionTransfer.getDrill_Name().equals(areas[j2].toLowerCase())){
-								int x = (conditionTransfer.getDrill_Value()+"").length()/2;
+							if(reportData.getDrill_Name().equals(areas[j2].toLowerCase())){
+								int x = (reportData.getDrill_Value()+"").length()/2;
 								biShowDimFieldList.get(i).setText_Field(areas[x]);
 								break;
 							}
 						}
 					}
 					break;
+				case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC:
+
+					/*
+					 drill_name= 维度名称:主题表索引index； 表示要钻取的维度；主题表索引index=1表示第一个主题表；index=2表示第二个主题表
+					 drill_value= 该维度对应的值；
+					 后台接收后，构建查询语句 例如
+					 drill_name="organ_code-1"
+					 drill_value="山东省"
+
+					 维度配置(BI_DIM):
+					 drill_info :     topicTable1,filterField1  -  topicTable2,filterField2-topicTable3,filterField3........
+					 NextTopicTableIndex=currentTopicTableIndex+1
+					 通过dill_info ,NextTopicTableIndex获取  nextTopicTableName,nextFilterFied
+					 过滤条件  filter_condition =drill_value=山东省
+					 构建子主题查询：
+					  select * from  [nextTopicTableName] where  [nextFilterFied]=[filter_condition]
+
+					  例如：
+					  select * from  [view_city] where  [parent_provice]=[filter_condition]
+					*/
+					String[] topoicTables = biShowField.getDrill_Info().split("-");
+					if(reportData.getDrill_Name()==null){
+						break;
+					}
+					String []arrDrillName=reportData.getDrill_Name().split("-");
+					if(arrDrillName.length<=1)
+						break;
+					String drillDimName=arrDrillName[0];
+					int topicTableIndex=Integer.parseInt(arrDrillName[1])+1;//报表索引
+					//biShowField.
+					if(drillDimName == biShowField.getField_Name() ) {
+						String []arrtopicTable=topoicTables[topicTableIndex].split(",");
+
+						//topicTableName=arrtopicTable[0];
+						//String filterName=arrtopicTable[1];
+
+					}
+					break;
 			}
 		}
-		
 		return biShowDimFieldList;
 	}
 

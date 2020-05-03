@@ -1,7 +1,11 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"%>
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "";
+	pageContext.setAttribute("basePath",basePath);
 %>
 
 <!DOCTYPE html>
@@ -250,6 +254,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							//1.显示查询条件
 							$("thead").empty();
 							$("tbody").empty();
+
 							$("#report_Id").val(re.data[0].reportInfo.report_Id);
 							$("#filter").empty();
 
@@ -264,16 +269,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									getFilterInfo(re.data[0].BIRowDimDatas[i].field_Name, 0);
 								}
 							}
-							//2.列维度 by liuxf
-							for(var i=0; i<re.data[0].colDimFields.length; i++){
-								if(re.data[0].colDimFields[i] != "sub_nm"){
 
-									var hf = '<label class="control-label lab">'+re.data[0].colDimFields[i]+'：</label>'+
-											 '<select class="form-control filters" id="'+re.data[0].colDimFields[i]+'" style="width:160px; float:left;">'+
+							//2.列维度 by liuxf
+							for(var i=0; i<re.data[0].BIColDimDatas.length; i++){
+								if(re.data[0].BIColDimDatas[i].field_Name != "sub_nm"){
+
+									var hf =
+											'<label class="control-label lab">'+re.data[0].BIColDimDatas[i].field_Name +'：</label>'+
+											 '<select class="form-control filters" id="'+re.data[0].BIColDimDatas[i].field_Name +'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
 									 $("#filter").append(hf);
-									getFilterInfo(re.data[0].colDimFields[i], 0);
+									getFilterInfo(re.data[0].BIColDimDatas[i].field_Name , 0);
 
 								}
 							}
@@ -286,7 +293,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							for(var x = re.data[0].BIRowDimDatas.length;x<re.data[0].tableHeader.length;x++){
 								var theadTh = "";
 								//判断有多少列标题，准备多少"<th></th>"
-								for(var y = 0;y<re.data[0].colDimFields.length;y++){
+								for(var y = 0;y<re.data[0].BIColDimDatas.length;y++){
 									theadTh += "<th style='white-space: nowrap'></th>";
 								}
 								for(var y = 0;y<re.data[0].tableHeader[x].length;y++) {
@@ -302,7 +309,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								var theadTh = "";
 								var titleTh = "";
 								//判断有多少列标题，准备多少"<th></th>"
-								for(var y = 0;y<re.data[0].colDimFields.length;y++){
+								for(var y = 0;y<re.data[0].BIColDimDatas.length;y++){
 									theadTh += "<th style='white-space: nowrap'></th>";
 									titleTh += "<th style='font-size:18px;'>${pageTitle}</th>";
 								}
@@ -321,7 +328,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 												}
 											}
 										}
-										else if(re.data[0].BIRowDimDatas[x].dill_type==4){
+										else if(re.data[0].BIRowDimDatas[x].dill_type==4){//不同主题的钻取
 											/*
 											   by liuxf   drill_type=4 按照不同的主题进行钻取
 											   getList (drill_name ,drill_value
@@ -354,16 +361,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 								var smallTotal = new Array(), reSmallTotal = new Array();
 
-								//colDimFields： 所有列为度
+								//BIColDimDatas： 所有列维度
 								//allDataCols  是所有的列数据，包括列维度个数+ 业务数据的列数 by liuxf
-								var allDataCols = re.data[z].colDimFields.length ;//列维度个数 一个列维度占据一列
+								var allDataCols = re.data[z].BIColDimDatas.length ;//列维度个数 一个列维度占据一列
 								if (re.data[z].tableHeader!=null &&re.data[z].tableHeader.length>0)//判断表头是否为空，如果为空，则不计算在内
 									allDataCols+= re.data[z].tableHeader[re.data[z].tableHeader.length-1].length;
 								else
 									allDataCols+=1;//只有一列数据
 
 								// add by liuxf 数据统计列，
-								for (var ind=0; ind<allDataCols- re.data[z].colDimFields.length;ind++){
+								for (var ind=0; ind<allDataCols- re.data[z].BIColDimDatas.length;ind++){
 									smallTotal.push(0);  //汇总数据
 								}
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
@@ -382,12 +389,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													tr += "<td><a href='javascript:getList("+tdCon.split("-")[1]+")'>"+ tdCon.split("-")[0] +"</a></td>";
 												}
 											}else{
-												if(j > re.data[z].colDimFields.length-1){
+												if(j > re.data[z].BIColDimDatas.length-1){
+
 													tr += "<td class='txtRight'>"+tdCon+"</td>";
+
 												} else{
 													tr += "<td>"+tdCon+"</td>";
 												}
-												var dl = re.data[z].colDimFields.length;
+
+
+												var dl = re.data[z].BIColDimDatas.length;
 												if(j >= dl){
                                                     if(!isNaN(parseInt(tdCon)) || !isNaN(parseInt(tdCon))){
                                                         if((tdCon+"").indexOf(".")==-1){
@@ -411,8 +422,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								
 								//追加小计dom元素
 								var stTr = "<tr class='smallTotal'>";
-								for(var idim = 0; idim<re.data[z].colDimFields.length; idim++){
-									if(idim == re.data[z].colDimFields.length-1)
+								for(var idim = 0; idim<re.data[z].BIColDimDatas.length; idim++){
+									if(idim == re.data[z].BIColDimDatas.length-1)
 										stTr += "<td>小计("+re.data[z].reportInfo.report_Title+")</td>";
 									else
 										stTr += "<td></td>";
@@ -440,7 +451,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}  //追加表格身体
 							//合并单元格
 							colspan("#myTable thead");
-							for(var x=0; x<re.data[0].colDimFields.length; x++)
+							for(var x=0; x<re.data[0].BIColDimDatas.length; x++)
 								rowspan("#myTable", x);
 						}
 
