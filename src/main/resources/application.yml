@@ -3,6 +3,7 @@ server:
   tomcat:
     uri-encoding: UTF-8   # 配置Tomcat编码,默认为UTF-8
     max-threads: 1000  # 配置最大线程数
+
 spring:
   mvc:
     view:
@@ -77,3 +78,4 @@ pagehelper:
 
 application:
   message: Hello BJ
+
