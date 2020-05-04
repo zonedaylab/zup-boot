@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class BI_REPORT_FIELD implements Serializable {
 	private Integer report_Field_Id;
 	private Integer report_Id; //报表ID
-	private Integer field_Id; //字段位置
+
 	private Integer field_Location;//字段位置
 	private Integer dim_Order; //维度顺序
 	private Integer display; //字段是否显示

@@ -4,7 +4,6 @@
 
     <resultMap id="baseMap" type="cn.zup.bi.entity.BI_REPORT">
         <id property="report_Id" column="REPORT_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
-<!--        <result property="topic_Id" column="TOPIC_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>-->
         <result property="report_Name" column="REPORT_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result property="report_Title" column="REPORT_TITLE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result property="create_Date" column="CREATE_DATE" javaType="java.util.Date" jdbcType="TIMESTAMP"></result>
@@ -16,7 +15,7 @@
 
     <select id="getReportListByPageId" resultMap="baseMap" parameterType="java.lang.Integer">
         SELECT
-            br.REPORT_ID, br.REPORT_NAME,br.PAGE_ID
+            br.REPORT_ID, br.REPORT_NAME,br.PAGE_ID,br.BIZ_TABLE_NAME
         FROM bi_report br
         JOIN bi_page bp ON br.PAGE_ID = bp.BI_PAGE_ID
         JOIN bi_screen bs ON bp.BI_PAGE_ID = bs.PAGE_ID

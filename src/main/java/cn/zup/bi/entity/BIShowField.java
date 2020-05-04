@@ -19,7 +19,6 @@ public class BIShowField {
 
 
 	private String topic_Table;  //主题数据表
-	private String topic_Name;   //主题名称
 	private Integer field_Id;     //字段id
 
 	//这么多？ 必将去之  liuxf
