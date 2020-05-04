@@ -12,7 +12,7 @@ public class BIDimData {
 
 	private String drill_Info;   //钻取信息
 
-	private  Integer currentTableIndex;//当前主题表索引，针对钻取类型4.
+	private  Integer currentReportIndex;//当前主题表索引，针对钻取类型4.
 
 	/**
 	 * 维度对应的数据

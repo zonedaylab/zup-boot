@@ -328,24 +328,6 @@ public class BIDimServiceImpl implements BIDimService {
 					break;
 				case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC:
 
-					/*
-					 drill_name= 维度名称:主题表索引index； 表示要钻取的维度；主题表索引index=1表示第一个主题表；index=2表示第二个主题表
-					 drill_value= 该维度对应的值；
-					 后台接收后，构建查询语句 例如
-					 drill_name="organ_code-1"
-					 drill_value="山东省"
-
-					 维度配置(BI_DIM):
-					 drill_info :     topicTable1,filterField1  -  topicTable2,filterField2-topicTable3,filterField3........
-					 NextTopicTableIndex=currentTopicTableIndex+1
-					 通过dill_info ,NextTopicTableIndex获取  nextTopicTableName,nextFilterFied
-					 过滤条件  filter_condition =drill_value=山东省
-					 构建子主题查询：
-					  select * from  [nextTopicTableName] where  [nextFilterFied]=[filter_condition]
-
-					  例如：
-					  select * from  [view_city] where  [parent_provice]=[filter_condition]
-					*/
 					String[] topoicTables = biShowField.getDrill_Info().split("-");
 					if(reportData.getDrill_Name()==null){
 						break;
@@ -354,14 +336,12 @@ public class BIDimServiceImpl implements BIDimService {
 					if(arrDrillName.length<=1)
 						break;
 					String drillDimName=arrDrillName[0];
-					int topicTableIndex=Integer.parseInt(arrDrillName[1])+1;//报表索引
-					//biShowField.
+					int currentShowReportIndex=Integer.parseInt(arrDrillName[1]);//当前正在展示的报表索引
+					biShowField.setCurrentShowReportIndex(currentShowReportIndex);
 					if(drillDimName == biShowField.getField_Name() ) {
-						String []arrtopicTable=topoicTables[topicTableIndex].split(",");
-
-						//topicTableName=arrtopicTable[0];
-						//String filterName=arrtopicTable[1];
-
+						String []arrtopicTable=topoicTables[currentShowReportIndex+1].split(",");
+						biShowField.setNextTopicTableName(arrtopicTable[0]);
+						biShowField.setNextFilterName(arrtopicTable[1]);
 					}
 					break;
 			}

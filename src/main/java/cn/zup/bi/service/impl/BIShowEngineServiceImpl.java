@@ -182,64 +182,27 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 			BIShowField dimField = m_biDimFieldList.get(i);
 
 			if (dimField.getField_Location() == BIConfig.FIELD_TYPE.ROW_DIM) {        //针对行维度,  右侧的为行维度。
-					/*  加入行数据,生成行维度，例如by liuxf
-						dimName=行业种类
-						dimValue= 电力/ 服务/水务等
-						维度横向生成
-					*   电力 服务   水务   。。。。。。
-					 */
-				if (dimField.getDrill_Type() == null) {
-					//加入行维度，加入维度的名字，例如 "行业种类"
-					AddDimFieldToList(dimField, BIRowDimDatas);
-					continue;
-				}
-				if (dimField.getDrill_Type() != BIConfig.DRILL_TYPE.DRILL_TYPE_PATH) {
-					AddDimFieldToList(dimField, BIRowDimDatas);
-				} else {
-					if (vreportData.getDrill_Name() != null) {
-						int lc = (vreportData.getDrill_Value() + "").length() / 2;//如果为6位，则lc=3,表示县级单位，
-						String dimSub=dimField.getDrill_Info().split("-")[lc].toLowerCase();
-						dimField.setField_Name(dimSub);
-						AddDimFieldToList(dimField,BIRowDimDatas);
-					} else {
-						String dimSub=dimField.getDrill_Info().split("-")[0].toLowerCase();
-						dimField.setField_Name(dimSub);
-						AddDimFieldToList(dimField, BIRowDimDatas);
-					}
-				}
+				/*  加入行数据,生成行维度，例如by liuxf
+					dimName=行业种类
+					dimValue= 电力/ 服务/水务等
+					维度横向生成
+				*   电力 服务   水务   。。。。。。
+				 */
 
-			} else if (m_biDimFieldList.get(i).getField_Location() == BIConfig.FIELD_TYPE.COL_DIM) {
+				AddDimFieldToList(dimField,vreportData, BIRowDimDatas);
+
+			}
+			else if (m_biDimFieldList.get(i).getField_Location() == BIConfig.FIELD_TYPE.COL_DIM) {
 				/*
 				 * 列维度
-				 * 例如 dimName="省份" dimValue=山东省/河南省/....
-				 * 纵向排列：
-				 *
+				 * 例如 dimName="省份" dimValue=山东省/河南省/....     纵向排列：
 				 * 山东省
 				 * 河南省
 				 * 河北省
 				 * ......
 				 * */
-				if (dimField.getDrill_Type() == null||
-						dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_NONE||
-						dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_SEG) {
-					AddDimFieldToList(dimField, BIColDimDatas);//列维度
-				}
-				else if(dimField.getDrill_Type()==BIConfig.DRILL_TYPE.DRILL_TYPE_PATH){
-					if (vreportData.getDrill_Name() != null) {
-						int lc = (vreportData.getDrill_Value() + "").length() / 2;
-						dimField.setField_Name(dimField.getDrill_Info().split("-")[lc].toLowerCase());
-						AddDimFieldToList(dimField, BIColDimDatas);
+				AddDimFieldToList(dimField, vreportData,BIColDimDatas);//列维度
 
-					} else {
-						dimField.setField_Name(dimField.getDrill_Info().split("-")[0].toLowerCase());
-						AddDimFieldToList(dimField, BIColDimDatas);
-					}
-				}
-				else if(dimField.getDrill_Type()==BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC){//主题表
-					AddDimFieldToList(dimField, BIColDimDatas);
-					//drill_name 主题表 drill_value 过滤值  形成过滤条件 where dimFieldName=Drill_value
-
-				}
 			}
 		}
 
@@ -429,9 +392,6 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		}
 		listTableHeader.add(listTableHeaderTitle);
 
-
-
-
 		//判断列数据是否有效,无效的进行删除  2020.3.23 by liuxf
 		int row=0;
 		int dimColCount=BIColDimDatas.size();
@@ -473,12 +433,26 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	List<String> dimFields,  维度列表  行维度列表/列维度列表  用来传送到前端
 	List<BIDimData> BIDimDatas  维度列表 包含了每个维度的具体信息一级对应的数据 ，
 	 */
-	void AddDimFieldToList(BIShowField  dimField,  List<BIDimData> BIDimDatas ){
+	void AddDimFieldToList(BIShowField  dimField, V_ReportData reportData, List<BIDimData> BIDimDatas ){
 		String dimFieldName=dimField.getField_Name().toLowerCase();
 		BIDimData dimData=new BIDimData();
 		dimData.setDrill_Type(dimField.getDrill_Type());
 		dimData.setField_Name(dimFieldName);
 		dimData.setListData(new ArrayList<String>());
+
+		if(dimField.getDrill_Type()!=null) {
+			if (dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_PATH) {
+				if (reportData.getDrill_Name() != null) {
+					int lc = (reportData.getDrill_Value() + "").length() / 2;
+					dimField.setField_Name(dimField.getDrill_Info().split("-")[lc].toLowerCase());
+				} else {
+					dimField.setField_Name(dimField.getDrill_Info().split("-")[0].toLowerCase());
+
+				}
+			} else if (dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC) {//主题表
+				dimData.setCurrentReportIndex(dimData.getCurrentReportIndex() + 1);
+			}
+		}
 		BIDimDatas.add(dimData);
 	}
 	/*
@@ -754,44 +728,12 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					break;
 				case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC://不同主题
 
-
 					showDimFields += biShowField.getDim_Table() + "." + biShowField.getText_Field() +" AS "+ biShowField.getField_Name()+ ",";
-
-					/*
-					 drill_name= 维度名称:主题表索引index； 表示要钻取的维度；主题表索引index=1表示第一个主题表；index=2表示第二个主题表
-					 drill_value= 该维度对应的值；
-					 后台接收后，构建查询语句 例如
-					 drill_name="organ_code-1"
-					 drill_value="山东省"
-
-					 维度配置(BI_DIM):
-					 drill_info :     topicTable1,filterField1  -  topicTable2,filterField2-topicTable3,filterField3........
-					 NextTopicTableIndex=currentTopicTableIndex+1
-					 通过dill_info ,NextTopicTableIndex获取  nextTopicTableName,nextFilterFied
-					 过滤条件  filter_condition =drill_value=山东省
-					 构建子主题查询：
-					  select * from  [nextTopicTableName] where  [nextFilterFied]=[filter_condition]
-
-					  例如：
-					  select * from  [view_city] where  [parent_provice]=[filter_condition]
-					*/
-					String[] topoicTables = biShowField.getDrill_Info().split("-");
-					if(reportData.getDrill_Name()==null){
-						break;
-					}
-					String []arrDrillName=reportData.getDrill_Name().split("-");
-					if(arrDrillName.length<=1)
-						break;
-					String drillDimName=arrDrillName[0];
-					int topicTableIndex=Integer.parseInt(arrDrillName[1])+1;//报表索引
-					if(drillDimName == biShowField.getField_Name() ) {
-						String []arrtopicTable=topoicTables[topicTableIndex].split(",");
-						topicTableName=arrtopicTable[0];
-						String filterName=arrtopicTable[1];
-						//形成过滤语句
-						where += " AND " + topicTableNameTemp + "." + filterName
-								+ "=" + reportData.getDrill_Value();
-					}
+					topicTableName=biShowField.getNextTopicTableName();
+					String filterName=biShowField.getNextFilterName();
+					//形成过滤语句
+					where += " AND " + topicTableNameTemp + "." + filterName
+							+ "=" + reportData.getDrill_Value();
 					break;
 			}
 			if(i == 0){
