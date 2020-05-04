@@ -139,7 +139,7 @@
 			var p1 = "", p2 = 0, c1 = "", c2 = 0, x1 = "", x2 = 0;
 
 			$(document).ready(function() {
-				loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
+				// loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
 				$('#article').readmore({
    				  speed: 5,
    				  maxHeight: 5

@@ -152,18 +152,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 
-						<div class="form-group row">
+						<div class="form-group row unit">
 							<strong class="control-label" style="text-align: left; float:left; width:78px;" >数据单位：</strong>
 							<input class="form-control" id="unit" type="text" style="width:200px; float:left;" value=""/>
 							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 
-						<%--<div class="form-group row dim_Id">
+						<div class="form-group row dim_Id">
 							<strong class="control-label" style="text-align: left; float:left; width:78px;" >对应维表：</strong>
-							<select class="form-control" id="dim_Id" style="width:200px; float:left;">
+							<select class="form-control" id="dimId" style="width:200px; float:left;">
 							</select>
 							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
-						</div>--%>
+						</div>
+
 						<div class="form-group row aggregate_Type">
 							<strong class="control-label" style="text-align: left; float:left; width:78px;" >聚合类型：</strong>
 							<select class="form-control" id="aggregate_Type" style="width:200px; float:left;">
@@ -198,174 +199,175 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		});
 
-    		$(document).ready(function(){
-    			loadGrid();
-    			// loadField();//字段选择
-				getDBField(-1);
-				getDataType();//数据类型
-				getFieldType();//字段类型
-    		});
-    
-    		function loadGrid(){
-    			var param = {};
-    			//提示信息
-		        var lang = {
-		            "sProcessing": "处理中...",
-		            "sLengthMenu": "每页 _MENU_ 项",
-		            "sZeroRecords": "没有匹配结果",
-		            "sInfo": "当前第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
-		            "sInfoEmpty": "当前显示第 0 至 0 项，共 0 项",
-		            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-		            "sInfoPostFix": "",
-		            "sSearch": "搜索:",
-		            "sUrl": "",
-		            "sEmptyTable": "表中数据为空",
-		            "sLoadingRecords": "载入中...",
-		            "sInfoThousands": ",",
-		            "oPaginate": {
-		                "sFirst": "首页",
-		                "sPrevious": "上页",
-		                "sNext": "下页",
-		                "sLast": "末页",
-		                "sJump": "跳转"
-		            },
-		            "oAria": {
-		                "sSortAscending": ": 以升序排列此列",
-		                "sSortDescending": ": 以降序排列此列"
-		            }
-		        };   
-	    		//初始化表格
-	        	var table = $("#postTable").dataTable({
-	        	    "dom": '<t><"col-md-4"i><"col-md-6"p><"col-md-2"l>',    //为表格元素书写css样式<t>为中间表格  在<t>右边就是在表格下边
-	           		language:lang,  //提示信息
-	            	stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
-		            serverSide: true,  //启用服务器端分页
-		            searching: false,  //禁用原生搜索
-		            bAutoWidth:true, //自适应宽度 
-		            bDestroy:true,//重新加载使用
-		            renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
-		            pagingType: "full_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
-		            ordering:false,
-		            ajax: function (data, callback, settings) {
-		                param.rows = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
-		                param.start = data.start;//开始的记录序号
-		                param.page = (data.start / data.length)+1;//当前页码
-		                param.report_Id = "${param.reportId}";
-		                //console.log(param);
-		                //ajax请求数据
-		                $.ajax({
-		                    type: "POST",
-		                    url: "rest/bi/biReportFieldController/getReportFieldList",
-		                    cache: false,  //禁用缓存
-		                    data: param,  //传入组装的参数
-		                    dataType: "json",
-		                    success: function (result) {
-		                        setTimeout(function () {
-		                            //封装返回数据
-		                            var returnData = {};
-		                            returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
-		                            returnData.recordsTotal = result.total;//返回数据全部记录
-		                            returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
-		                            returnData.data = result.data;//返回的数据列表
-		                            callback(returnData);
-		                        }, 200);
-		                    }
-		                });
-	            	},
-	            	columnDefs: [
-	                	{
-					    	"targets": [0], // 目标列位置，下标从0开始
-					        "data": "report_Field_Id", // 数据列名
-					        "orderable":false,
-					        "sWidth":"5%",
-					        "render": function(data, type, full) { // 返回自定义内容
-					       		return "<label><input type='checkbox' class='ace' id='report_Field_Id' value = '" + data + "' /><span class='lbl' id='report_Field_Id' value = '" + data + "'></span></label>";
-					         }
-	                    },
-	                    {
-						  	"targets": [1], // 目标列位置，下标从0开始
-						  	"sWidth":"10%",
-						   	"data": "field_Name"
-	                    },
-	                    {
-						   	"targets": [2], // 目标列位置，下标从0开始
-						   	"sWidth":"10%",
-						   	"data": "field_Location",
-						   	"render": function(data, type, full) { // 返回自定义内容
-						   		var dataname = "";
-						   		switch (data) {
-									case 1:
-										dataname = "行维";
-										break;
-									case 2:
-										dataname = "列维";
-										break;
-									case 3:
-										dataname = "指标";
-										break;
-									default:
-										dataname = "指标";
-										break;
-								}
-						   		return dataname;
-					         }
-	                    },
-	                    {
-						   	"targets": [3], // 目标列位置，下标从0开始
-						   	"sWidth":"10%",
-						   	"data": "dim_Order" // 数据列名
-	                    },
-                        {
-                            "targets": [4], // 目标列位置，下标从0开始
-                            "sWidth":"10%",
-                            "data": "display",
-                            "render": function(data, type, full) { // 返回自定义内容
-                                var dataname = "";
-                                switch (data) {
-                                    case 1:
-                                        dataname = "显示";
-                                        break;
-                                    case 0:
-                                        dataname = "不显示";
-                                        break;
-                                }
-                                return dataname;
-                            }
-                        },
-						{
-							"targets": [5], // 目标列位置，下标从0开始
-							"sWidth":"10%",
-							"data": "field_Caption" // 数据列名
-						},
-						{
-							"targets": [6], // 目标列位置，下标从0开始
-							"sWidth":"10%",
-							"data": "field_Title" // 数据列名
-						},
-						{
-							"targets": [7], // 目标列位置，下标从0开始
-							"sWidth":"10%",
-							"data": "data_Type_Str" // 数据列名
-						},
-						{
-							"targets": [8], // 目标列位置，下标从0开始
-							"sWidth":"10%",
-							"data": "field_Type_Str" // 数据列名
-						},
-						{
-							"targets": [9], // 目标列位置，下标从0开始
-							"sWidth":"10%",
-							"data": "aggregate_Type" // 数据列名
-						},
-						{
-							"targets": [10], // 目标列位置，下标从0开始
-							"sWidth":"10%",
-							"data": "unit" // 数据列名
+		$(document).ready(function(){
+			loadGrid();
+			// loadField();//字段选择
+			getDBField(-1);
+			getDataType();//数据类型
+			getFieldType();//字段类型
+			getBiDimName();//获取维表名称
+		});
+
+		function loadGrid(){
+			var param = {};
+			//提示信息
+			var lang = {
+				"sProcessing": "处理中...",
+				"sLengthMenu": "每页 _MENU_ 项",
+				"sZeroRecords": "没有匹配结果",
+				"sInfo": "当前第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
+				"sInfoEmpty": "当前显示第 0 至 0 项，共 0 项",
+				"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+				"sInfoPostFix": "",
+				"sSearch": "搜索:",
+				"sUrl": "",
+				"sEmptyTable": "表中数据为空",
+				"sLoadingRecords": "载入中...",
+				"sInfoThousands": ",",
+				"oPaginate": {
+					"sFirst": "首页",
+					"sPrevious": "上页",
+					"sNext": "下页",
+					"sLast": "末页",
+					"sJump": "跳转"
+				},
+				"oAria": {
+					"sSortAscending": ": 以升序排列此列",
+					"sSortDescending": ": 以降序排列此列"
+				}
+			};
+			//初始化表格
+			var table = $("#postTable").dataTable({
+				"dom": '<t><"col-md-4"i><"col-md-6"p><"col-md-2"l>',    //为表格元素书写css样式<t>为中间表格  在<t>右边就是在表格下边
+				language:lang,  //提示信息
+				stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+				serverSide: true,  //启用服务器端分页
+				searching: false,  //禁用原生搜索
+				bAutoWidth:true, //自适应宽度
+				bDestroy:true,//重新加载使用
+				renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+				pagingType: "full_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+				ordering:false,
+				ajax: function (data, callback, settings) {
+					param.rows = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+					param.start = data.start;//开始的记录序号
+					param.page = (data.start / data.length)+1;//当前页码
+					param.report_Id = "${param.reportId}";
+					//console.log(param);
+					//ajax请求数据
+					$.ajax({
+						type: "POST",
+						url: "rest/bi/biReportFieldController/getReportFieldList",
+						cache: false,  //禁用缓存
+						data: param,  //传入组装的参数
+						dataType: "json",
+						success: function (result) {
+							setTimeout(function () {
+								//封装返回数据
+								var returnData = {};
+								returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+								returnData.recordsTotal = result.total;//返回数据全部记录
+								returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
+								returnData.data = result.data;//返回的数据列表
+								callback(returnData);
+							}, 200);
 						}
-		            ]
-		        }).api();
-		        //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
-		    }
+					});
+				},
+				columnDefs: [
+					{
+						"targets": [0], // 目标列位置，下标从0开始
+						"data": "report_Field_Id", // 数据列名
+						"orderable":false,
+						"sWidth":"5%",
+						"render": function(data, type, full) { // 返回自定义内容
+							return "<label><input type='checkbox' class='ace' id='report_Field_Id' value = '" + data + "' /><span class='lbl' id='report_Field_Id' value = '" + data + "'></span></label>";
+						 }
+					},
+					{
+						"targets": [1], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "field_Name"
+					},
+					{
+						"targets": [2], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "field_Location",
+						"render": function(data, type, full) { // 返回自定义内容
+							var dataname = "";
+							switch (data) {
+								case 1:
+									dataname = "行维";
+									break;
+								case 2:
+									dataname = "列维";
+									break;
+								case 3:
+									dataname = "指标";
+									break;
+								default:
+									dataname = "指标";
+									break;
+							}
+							return dataname;
+						 }
+					},
+					{
+						"targets": [3], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "dim_Order" // 数据列名
+					},
+					{
+						"targets": [4], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "display",
+						"render": function(data, type, full) { // 返回自定义内容
+							var dataname = "";
+							switch (data) {
+								case 1:
+									dataname = "显示";
+									break;
+								case 0:
+									dataname = "不显示";
+									break;
+							}
+							return dataname;
+						}
+					},
+					{
+						"targets": [5], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "field_Caption" // 数据列名
+					},
+					{
+						"targets": [6], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "field_Title" // 数据列名
+					},
+					{
+						"targets": [7], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "data_Type_Str" // 数据列名
+					},
+					{
+						"targets": [8], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "field_Type_Str" // 数据列名
+					},
+					{
+						"targets": [9], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "aggregate_Type" // 数据列名
+					},
+					{
+						"targets": [10], // 目标列位置，下标从0开始
+						"sWidth":"10%",
+						"data": "unit" // 数据列名
+					}
+				]
+			}).api();
+			//此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
+		}
 		    //复选框全选
 			$("#allCheck").on('click' , function(){
 				var that = this;
@@ -387,9 +389,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 				clearInputValue();//清空输入框的数据
 
+				//获取维表名称
+				getBiDimName();
+
 				msgDialog(e);
+				// getTopicFieldData(e);
+
+				$(".dim_Id").css("display", "none");
+				$(".aggregate_Type").css("display", "none");
+
 			});
-			
+
+			//编辑按钮
 			$("#btnEdit").on("click", function(e){
 				clearInputValue();//清空输入框的数据
 
@@ -399,10 +410,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        	return;
 				}else{
 					par.report_Field_Id = $("#report_Field_Id:checked").val();
-					getReportData(e);
+					getBiDimName();//获取维表名称
+					getReportData(e); //点击编辑时根据主键获取到数据进行填充文本框
+					// getTopicFieldData(e);
 				}
 			});
-			
+
+			//删除按钮
 			$("#btnDelete").on("click", function(e){
 				if($("#report_Field_Id:checked").length <= 0){
 					parent.parent.bootbox.alert("请先选择要删除的报表字段", function(){});
@@ -443,24 +457,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			});
 			
-			//选择主题下拉框  字段选择
-	    	/*function loadField(){
-	    		$.ajax({
-                   type: "POST",
-                   url: "rest/bi/biReportFieldController/getTopicFieldList",
-                   cache: false,  //禁用缓存
-                   data: "reportId=${param.reportId}",  //传入组装的参数
-                   dataType: "json",
-                   success: function (result) {
-                   		$("#field_Id").empty();
-                   		$("#field_Id").append("<option value='0'>请选择字段</option>");
-                   		for(var i=0; i<result.data.length; i++){
-                   			$("#field_Id").append("<option value="+result.data[i].field_Id+">"+result.data[i].field_Title+"</option>");
-                    	}
-                   }
-               });
-	    	}*/
-			
+
 	    	//选择页面下拉框
 	    	function loadPage(){
 	    		$.ajax({
@@ -483,15 +480,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			function getReportData(e){
 				par.report_Id = "${param.reportId}";
 				//ajax请求数据
-                $.ajax({
-                    type: "POST",
-                    url: "rest/bi/biReportFieldController/getReportField",
-                    async: false,
-                    cache: false,  //禁用缓存
-                    data: par,  //传入组装的参数
-                    dataType: "json",
-                    success: function (result) {
-                    	// $("#field_Id").val(result.data.field_Id);
+				$.ajax({
+					type: "POST",
+					url: "rest/bi/biReportFieldController/getReportField",
+					async: false,
+					cache: false,  //禁用缓存
+					data: par,  //传入组装的参数
+					dataType: "json",
+					success: function (result) {
 						$("#field_Location").val(result.data.field_Location);
 						$("#dim_Order").val(result.data.dim_Order);
 						$("#display").val(result.data.display);
@@ -504,19 +500,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						$("#field_Type").val(result.data.field_Type);//字段类型（业务类型）
 						$("#aggregate_Type").val(result.data.aggregate_Type==0?"":result.data.aggregate_Type);//聚合类型
 						$("#unit").val(result.data.unit);//单位
-						$("#dim_Id").val(result.data.dim_Id);//维表ID
+
+						if(result.data.field_Type == 1){//1：关联唯独表
+							$(".dim_Id").css("display", "block");
+							$(".aggregate_Type").css("display", "none");
+							getBiDimName(result.data.dim_Id);
+						}else if(result.data.field_Type == 2){//2：普通字段
+							$(".dim_Id").css("display", "none");
+							$(".aggregate_Type").css("display", "none");
+						}else if(result.data.field_Type == 3){//3：聚合字段
+							$(".dim_Id").css("display", "none");
+							$(".aggregate_Type").css("display", "block");
+							$("#aggregate_Type").val(result.data.aggregate_Type);
+						}
 
 						if($("#field_Location").val() == 3){
 							$("#dim").css("display", "none");
-						}else
+						}else{
 							$("#dim").css("display", "block");
-                    	msgDialog(e);
-                    },
-                    error: function(){
-                    	parent.parent.bootbox.alert("编辑获取数据失败", function(){});
-                    }
-                });
+						}
+						msgDialog(e);
+					}, error: function(){
+						parent.parent.bootbox.alert("编辑获取数据失败", function(){});
+					}
+				});
+
 			}
+
 
 			//数据类型
 			function getDataType(){
@@ -652,7 +662,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								par.field_Type = $("#field_Type").val();//字段类型（业务类型）
 								par.aggregate_Type = $("#aggregate_Type").val()==0?"":$("#aggregate_Type").val();//聚合类型
 								par.unit = $("#unit").val();//单位
-								par.dim_Id = $("#dim_Id").val();//维表ID
+								par.dim_Id = $("#dimId").val();//维表ID
 
 								if(par.thisid == "btnAdd"){
 									addReportData();	
@@ -664,13 +674,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					]
 				});
 			}
-			
+
+			//字段位置
 			$("#field_Location").change(function(){
-				if($("#field_Location").val() == 3){
-					$("#dim").css("display", "none");
-					$("#dim_Order").val(1);
-				}else
+				if($("#field_Location").val() == 1 || $("#field_Location").val() == 2){
 					$("#dim").css("display", "block");
+					$(".unit").css("display", "none");
+					$("#dim_Order").val(1);
+				}else if($("#field_Location").val() == 3){
+					// $("#dim").css("display", "none");
+					$("#dim_Order").val(1);
+					$("#dim").css("display", "none");
+					$(".unit").css("display", "block");
+				}
+
 			});
 
 
@@ -714,21 +731,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			}
 
-
-
-		$("#field_Type").on("change", function(){
-			if($("#field_Type").val() == 1){
-				$(".dim_Id").css("display", "block");
-				$(".aggregate_Type").css("display", "none");
-			}else if($("#field_Type").val() == 3){
-				$(".dim_Id").css("display", "none");
-				$(".aggregate_Type").css("display", "block");
-			}else if($("#field_Type").val() == 2){
-				$(".dim_Id").css("display", "none");
-				$(".aggregate_Type").css("display", "none");
-			}
-		});
-
 		//清空输入框的数据
 		function clearInputValue() {
 			$("#field_Location").val(0);
@@ -741,9 +743,47 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$("#field_Type").val(0);//字段类型（业务类型）
 			$("#aggregate_Type").val(0);//聚合类型
 			$("#unit").val("");//单位
-			$("#dim_Id").val("");//维表ID
+			// $("#dim_Id").val(0);//维表ID
 		}
-			
+
+
+		//字段类型选择
+		$("#field_Type").on("change", function(){
+			if($("#field_Type").val() == 1){
+				$(".dim_Id").css("display", "block");
+				$(".aggregate_Type").css("display", "none");
+			}else if($("#field_Type").val() == 3){
+				$(".dim_Id").css("display", "none");
+				$(".aggregate_Type").css("display", "block");
+			}else if($("#field_Type").val() == 2 || $("#field_Type").val() == 0){
+				$(".dim_Id").css("display", "none");
+				$(".aggregate_Type").css("display", "none");
+			}
+		});
+
+		//获取维表名称
+		function getBiDimName(value){
+			//ajax请求数据
+			$.ajax({
+				type: "POST",
+				url: "rest/bi/BITopicFiledController/getBiDimName",
+				cache: false,  //禁用缓存
+				dataType: "json",
+				success: function (result) {
+					$("#dimId").html()
+					$("#dimId").html("<option value='0'>请选择</option>");
+					for(var i=0; i<result.data.length; i++){
+						$("#dimId").append("<option value='"+result.data[i].dim_Id+"'>"+result.data[i].dim_Name+"</option>");
+					}
+
+					value==null?"":$("#dimId").val(value);
+
+				},
+				error: function(){
+					parent.bootbox.alert("获取失败", function(){});
+				}
+			});
+		}
     </script>
   </body>
 </html>
