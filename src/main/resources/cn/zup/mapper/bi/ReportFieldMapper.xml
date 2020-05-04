@@ -5,7 +5,6 @@
     <resultMap id="baseMap" type="cn.zup.bi.entity.BI_REPORT_FIELD">
         <id property="report_Field_Id" column="REPORT_FIELD_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
         <id property="report_Id" column="REPORT_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
-        <id property="field_Id" column="FIELD_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
         <result property="field_Location" column="FIELD_LOCATION" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
         <result property="dim_Order" column="DIM_ORDER" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
         <result property="display" column="DISPLAY" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
@@ -18,6 +17,7 @@
         <result property="unit" column="UNIT" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result property="data_Type_Str" column="data_Type_Str" javaType="java.lang.String" jdbcType="VARCHAR"></result>
         <result property="field_Type_Str" column="field_Type_Str" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="dim_Id" column="DIM_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
     </resultMap>
 
     <select id="getReportTopicField" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_REPORT_FIELD">
@@ -86,9 +86,6 @@
             <if test="reportField.report_Field_Id != null">
                 AND brf.REPORT_FIELD_ID = #{ reportField.report_Field_Id}
             </if>
-            <if test="reportField.field_Id != null">
-                AND brf.FIELD_ID = #{reportField.field_Id}
-            </if>
         </where>
     </select>
 
@@ -103,7 +100,7 @@
         DELETE FROM bi_report_field WHERE REPORT_FIELD_ID = #{report_Field_Id}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_REPORT_FIELD" useGeneratedKeys="true" keyColumn="FIELD_ID" keyProperty="reportField.field_Id">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_REPORT_FIELD" useGeneratedKeys="true" keyColumn="REPORT_ID" keyProperty="reportField.report_Id">
         INSERT INTO BI_REPORT_FIELD (
             REPORT_ID,
             FIELD_LOCATION,
@@ -152,10 +149,6 @@
             <if test="reportField.display != null">
                 brf.DISPLAY = #{ reportField.display},
             </if>
-
-           <!-- <if test="reportField.field_Id != null">
-                brf.FIELD_ID = #{ reportField.field_Id},
-            </if>-->
             <if test="reportField.field_Name != null">
                 brf.FIELD_NAME = #{ reportField.field_Name},
             </if>

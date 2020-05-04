@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							元素标题
 						</th>
 						<th>
-							关联数据库
+							关联数据表
 						</th>
 					
 						<th>

@@ -616,8 +616,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				for(var i=0; i<result.data.length; i++){
 					$("#dim_Id").append("<option value="+result.data[i].dim_Id+">"+result.data[i].dim_Name+"</option>");
 				}
-			   },
-			   error: function(){
+			   },error: function(){
 				parent.bootbox.alert("获取失败", function(){});
 			   }
 		   });
