@@ -534,34 +534,12 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	* */
 	private List<Map<String, Object>> getReportDataFromDB(V_ReportData reportData,Integer reportId) throws Exception {
 
-
 		//1.获取报表中的字段，判断行维度，列维度，指标字段
-
-
-		String measureFieldIds = "";  //度量字段
-		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(reportId);
-
-		for (int i = 0; i < reportFieldList.size(); i++) {//第一步遍历获取到对应的主题字段，分为维表和指标
-
-			 if(reportFieldList.get(i).getField_Location() == BIConfig.FIELD_TYPE.INDICATOR){
-				measureFieldIds += reportFieldList.get(i).getField_Id()+", ";
-			}
-		}
-
-
-		if(measureFieldIds.indexOf(",") > -1)//指标
-			measureFieldIds = measureFieldIds.substring(0, measureFieldIds.length()-2);
-
-
-
 		List<String> key = new ArrayList<String>(reportData.getKey());
 		List<Object> value = new ArrayList<Object>(reportData.getValue());
 		reportData.setKey(key);
 		reportData.setValue(value);
-
-
-
-		String sql = this.produceSql(reportData, reportId, measureFieldIds);
+		String sql = this.produceSql(reportData, reportId);
 
 		//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
 		PreparedStatement ps = BIConnection.OpenConn().prepareStatement(sql);
@@ -617,7 +595,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	 * @author Andot
 	 * 
 	 * */
-	private String produceSql(V_ReportData reportData, Integer reportId, String topicFieldIds) throws Exception {
+	private String produceSql(V_ReportData reportData, Integer reportId) throws Exception {
 
 
 		String join = " ";
@@ -751,7 +729,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		showDimFields=trimComma(showDimFields,",");
 
 		/*================度量值==============*/
-		List<BIShowField> biMeasureFieldList = biShowEngineDao.getReportTopicInfo(topicFieldIds, reportId);
+		List<BIShowField> biMeasureFieldList = biShowEngineDao.getReportTopicInfo( reportId);
 
 		if(biMeasureFieldList.size()==0) {
 			throw new Exception("当前主题度量字段为空，请检查配置");

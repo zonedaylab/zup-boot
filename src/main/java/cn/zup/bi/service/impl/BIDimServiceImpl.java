@@ -287,22 +287,10 @@ public class BIDimServiceImpl implements BIDimService {
 		List<String> key = new ArrayList<String>(reportData.getKey());
 		List<Object> value = new ArrayList<Object>(reportData.getValue());
 		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(reportId);
-		String hdimFieldIds = "";
-		String ldimFieldIds = "";
-		//第一步遍历获取到对应的主题字段，分为维表和指标
-		for (int i = 0; i < reportFieldList.size(); i++) {
-			//字段位置分为行和列，分别使用   0、指标 1、行维度  2、列维度  by liuxf
-			if(reportFieldList.get(i).getField_Location() == 1){        //行维度 h
-				hdimFieldIds += reportFieldList.get(i).getField_Id()+", ";
-			}else if(reportFieldList.get(i).getField_Location() == 2){  //列维度 l
-				ldimFieldIds += reportFieldList.get(i).getField_Id()+", ";
-			}
-		}
-		String dimFieldIds = hdimFieldIds + ldimFieldIds;
-		dimFieldIds = dimFieldIds.substring(0, dimFieldIds.length()-2);
+
 
 		//获取维度表，需要处理没有对应维度表的维度。
-		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, reportId);
+		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo( reportId);
 		
 		//查询的列，无需做不同表进行匹配
 		for (int i = 0; i < biShowDimFieldList.size(); i++) {

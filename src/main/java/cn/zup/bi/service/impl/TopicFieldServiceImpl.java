@@ -128,18 +128,9 @@ public class TopicFieldServiceImpl implements TopicFieldService {
 	
 	@Override
 	public List<BIShowField> getTopicFieldList(Integer report_Id) {
-		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(report_Id);
-		String topicFieldIds = "";
-		//第一步遍历获取到对应的主题字段，分为维表和指标
-		for (int i = 0; i < reportFieldList.size(); i++) {
-			if(reportFieldList.get(i).getField_Location() == 3){
-				topicFieldIds += reportFieldList.get(i).getField_Id()+", ";
-			}
-		}
-		if(topicFieldIds.indexOf(",") > -1)
-			topicFieldIds = topicFieldIds.substring(0, topicFieldIds.length()-2);
+
 		
-		List<BIShowField> biShowTopicFieldList = biShowEngineDao.getReportTopicInfo(topicFieldIds, report_Id);
+		List<BIShowField> biShowTopicFieldList = biShowEngineDao.getReportTopicInfo( report_Id);
 		return biShowTopicFieldList;
 	}
 }

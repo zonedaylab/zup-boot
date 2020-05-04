@@ -53,8 +53,10 @@
 
     <select id="getTopictopicFieldPagingList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_TOPIC_FIELD">
         select
-            dtCon.SUBNAME as data_Type_Str, nullCon.SUBNAME AS field_Null_Str,
-            wyCon.SUBNAME as field_Identity_Str, ftCon.SUBNAME AS field_Type_Str,
+            dtCon.SUBNAME as data_Type_Str,
+            nullCon.SUBNAME AS field_Null_Str,
+            wyCon.SUBNAME as field_Identity_Str,
+            ftCon.SUBNAME AS field_Type_Str,
         AGGREGATE_TYPE, FIELD_ID, TOPIC_ID, FIELD_TYPE, FIELD_LENGTH, FIELD_DECIMAL,
         FIELD_NULL, FIELD_IDENTITY, FIELD_NAME, FIELD_CAPTION,
         FIELD_TITLE, bi_topic_field.DIM_ID , bd.DIM_NAME, FIELD_UNIT

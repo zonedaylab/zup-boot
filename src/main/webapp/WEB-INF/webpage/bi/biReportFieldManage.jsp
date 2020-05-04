@@ -41,7 +41,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 						</th>
 						<th>
-							元素字段名称
+							字段名称
 						</th>
 						<th>
 							字段位置
@@ -51,6 +51,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</th>
 						<th>
 							可见性
+						</th>
+						<%--新加--%>
+						<th>
+							字段别名
+						</th>
+						<th>
+							字段标题
+						</th>
+						<th>
+							数据类型
+						</th>
+						<th>
+							字段类型
+						</th>
+						<th>
+							聚合类型
+						</th>
+						<th>
+							单位
 						</th>
 					</tr>
 				</thead>
@@ -65,37 +84,101 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div id="fromEdit" class="hide">
     	<div class="container">
 			<div class="row clearfix">
-				<div class="col-md-12 column">
+				<div class="col-md-6 column">
+					<form class="form-horizontal" role="form">
+						<%--<div class="form-group row">
+    						 <strong class="control-label" style="text-align: left; float:left; width:78px;" >字段选择：</strong>
+							 <select class="form-control" id="field_Id" style="width:200px; float:left;"></select>
+							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div> --%>
+						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >字段名称：</strong>
+							<select class="form-control" id="field_Name" type="text" style="width:200px; float:left;">
+							</select>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >字段别名：</strong>
+							<input class="form-control" id="field_Caption" type="text" style="width:200px; float:left;"/>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >字段标题：</strong>
+							<input class="form-control" id="field_Title" type="text" style="width:200px; float:left;"/>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+
+						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >数据类型：</strong>
+							<select class="form-control" id="data_Type" style="width:200px; float:left;">
+							</select>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+
+						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >字段类型：</strong>
+							<select class="form-control" id="field_Type" style="width:200px; float:left;">
+							</select>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+
+
+
+        			</form>
+				</div>
+				<div class="col-md-6 column">
 					<form class="form-horizontal" role="form">
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >字段选择：</strong>
-							 <select class="form-control" id="field_Id" style="width:180px; float:left;"></select>
-							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
-						</div> 
-						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >字段位置：</strong>
-							 <select class="form-control" id="field_Location" style="width:180px; float:left;">
-							 	<option value="1">行维</option>
-							 	<option value="2">列维</option>
-							 	<option value="3">指标</option>
-							 </select>
-							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >字段位置：</strong>
+							<select class="form-control" id="field_Location" style="width:200px; float:left;">
+								<option value="1">行维</option>
+								<option value="2">列维</option>
+								<option value="3">指标</option>
+							</select>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
+
 						<div class="form-group row" id="dim">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">维度顺序：</strong>
-							 <input class="form-control" id="dim_Order" style="width:180px; float:left;" type="number" />
-							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+							<strong class="control-label" style="text-align: left; float:left; width:78px;">维度顺序：</strong>
+							<input class="form-control" id="dim_Order" style="width:200px; float:left;" type="number" />
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
-							<strong class="control-label" style="text-align: left; float:left; width:98px;" >可见性：</strong>
-							<select class="form-control" id="display" style="width:180px; float:left;">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >可见性：</strong>
+							<select class="form-control" id="display" style="width:200px; float:left;">
 								<option value="1">显示</option>
 								<option value="0">不显示</option>
 							</select>
 							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
-        			</form>
-				</div> 
+
+						<div class="form-group row">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >数据单位：</strong>
+							<input class="form-control" id="unit" type="text" style="width:200px; float:left;" value=""/>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+
+						<%--<div class="form-group row dim_Id">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >对应维表：</strong>
+							<select class="form-control" id="dim_Id" style="width:200px; float:left;">
+							</select>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>--%>
+						<div class="form-group row aggregate_Type">
+							<strong class="control-label" style="text-align: left; float:left; width:78px;" >聚合类型：</strong>
+							<select class="form-control" id="aggregate_Type" style="width:200px; float:left;">
+								<option value="0">请选择</option>
+								<option value='AVG_'>AVG</option>
+								<option value='COUNT_'>COUNT</option>
+								<option value='MAX_'>MAX</option>
+								<option value='MIN_'>MIN</option>
+								<option value='SUM_'>SUM</option>
+							</select>
+							<font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
+						</div>
+					</form>
+				</div>
+
 			</div>
 		</div> 
 	</div>
@@ -104,9 +187,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <jsp:include page="../include/mainFooter.jsp"></jsp:include>
     
     <script type="text/javascript">
+		var langData;
+		$.ajax({
+			url: "plug-in/ace/adIcon/lang/zh-cn.json",//json文件位置
+			async: false,
+			type: "GET",//请求方式为get
+			dataType: "json", //返回数据格式为json
+			success: function(data) {//请求成功完成后要执行的方法
+				langData = data;
+			}
+		});
+
     		$(document).ready(function(){
     			loadGrid();
-    			loadField();
+    			// loadField();//字段选择
+				getDBField(-1);
+				getDataType();//数据类型
+				getFieldType();//字段类型
     		});
     
     		function loadGrid(){
@@ -180,19 +277,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					    	"targets": [0], // 目标列位置，下标从0开始
 					        "data": "report_Field_Id", // 数据列名
 					        "orderable":false,
-					        "sWidth":"15px",
+					        "sWidth":"5%",
 					        "render": function(data, type, full) { // 返回自定义内容
 					       		return "<label><input type='checkbox' class='ace' id='report_Field_Id' value = '" + data + "' /><span class='lbl' id='report_Field_Id' value = '" + data + "'></span></label>";
 					         }
 	                    },
 	                    {
 						  	"targets": [1], // 目标列位置，下标从0开始
-						  	"sWidth":"30%",
+						  	"sWidth":"10%",
 						   	"data": "field_Name"
 	                    },
 	                    {
 						   	"targets": [2], // 目标列位置，下标从0开始
-						   	"sWidth":"20%",
+						   	"sWidth":"10%",
 						   	"data": "field_Location",
 						   	"render": function(data, type, full) { // 返回自定义内容
 						   		var dataname = "";
@@ -215,12 +312,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    },
 	                    {
 						   	"targets": [3], // 目标列位置，下标从0开始
-						   	"sWidth":"20%",
+						   	"sWidth":"10%",
 						   	"data": "dim_Order" // 数据列名
 	                    },
                         {
                             "targets": [4], // 目标列位置，下标从0开始
-                            "sWidth":"20%",
+                            "sWidth":"10%",
                             "data": "display",
                             "render": function(data, type, full) { // 返回自定义内容
                                 var dataname = "";
@@ -234,7 +331,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 }
                                 return dataname;
                             }
-                        }
+                        },
+						{
+							"targets": [5], // 目标列位置，下标从0开始
+							"sWidth":"10%",
+							"data": "field_Caption" // 数据列名
+						},
+						{
+							"targets": [6], // 目标列位置，下标从0开始
+							"sWidth":"10%",
+							"data": "field_Title" // 数据列名
+						},
+						{
+							"targets": [7], // 目标列位置，下标从0开始
+							"sWidth":"10%",
+							"data": "data_Type_Str" // 数据列名
+						},
+						{
+							"targets": [8], // 目标列位置，下标从0开始
+							"sWidth":"10%",
+							"data": "field_Type_Str" // 数据列名
+						},
+						{
+							"targets": [9], // 目标列位置，下标从0开始
+							"sWidth":"10%",
+							"data": "aggregate_Type" // 数据列名
+						},
+						{
+							"targets": [10], // 目标列位置，下标从0开始
+							"sWidth":"10%",
+							"data": "unit" // 数据列名
+						}
 		            ]
 		        }).api();
 		        //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
@@ -257,10 +384,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				$("#field_Location").val(1);
 				$("#dim_Order").val(1);
 				$("#dim").css("display", "block");
+
+				clearInputValue();//清空输入框的数据
+
 				msgDialog(e);
 			});
 			
 			$("#btnEdit").on("click", function(e){
+				clearInputValue();//清空输入框的数据
+
 				par.thisid = this.id;
 				if($("#report_Field_Id:checked").length != 1) {
 					parent.parent.bootbox.alert("只能选择一个报表字段进行编辑", function(){});
@@ -311,8 +443,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			});
 			
-			//选择主题下拉框
-	    	function loadField(){
+			//选择主题下拉框  字段选择
+	    	/*function loadField(){
 	    		$.ajax({
                    type: "POST",
                    url: "rest/bi/biReportFieldController/getTopicFieldList",
@@ -327,7 +459,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	}
                    }
                });
-	    	}
+	    	}*/
 			
 	    	//选择页面下拉框
 	    	function loadPage(){
@@ -359,10 +491,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     data: par,  //传入组装的参数
                     dataType: "json",
                     success: function (result) {
-                    	$("#field_Id").val(result.data.field_Id);
+                    	// $("#field_Id").val(result.data.field_Id);
 						$("#field_Location").val(result.data.field_Location);
 						$("#dim_Order").val(result.data.dim_Order);
 						$("#display").val(result.data.display);
+
+
+						$("#field_Name").val(result.data.field_Name);//字段名称
+						$("#field_Caption").val(result.data.field_Caption);//字段别名
+						$("#field_Title").val(result.data.field_Title);//字段标题
+						$("#data_Type").val(result.data.data_Type);//数据类型（数据库类型）
+						$("#field_Type").val(result.data.field_Type);//字段类型（业务类型）
+						$("#aggregate_Type").val(result.data.aggregate_Type==0?"":result.data.aggregate_Type);//聚合类型
+						$("#unit").val(result.data.unit);//单位
+						$("#dim_Id").val(result.data.dim_Id);//维表ID
+
 						if($("#field_Location").val() == 3){
 							$("#dim").css("display", "none");
 						}else
@@ -373,6 +516,48 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	parent.parent.bootbox.alert("编辑获取数据失败", function(){});
                     }
                 });
+			}
+
+			//数据类型
+			function getDataType(){
+				$.ajax({
+					type: "POST",
+					url: "rest/bi/BITopicFiledController/getDataType",
+					cache: false,  //禁用缓存
+					dataType: "json",
+					success: function (result) {
+						$("#data_Type").empty();
+						$("#data_Type").append("<option value='0'>请选择</option>");
+						for(var i=0; i<result.data.length; i++){
+							$("#data_Type").append("<option value="+result.data[i].subid+">"+result.data[i].subname+"</option>");
+						}
+						// $("#data_Type").val(5);
+					},
+					error: function(){
+						parent.bootbox.alert("字段获取数据失败", function(){});
+					}
+				});
+			}
+
+			//字段类型
+			function getFieldType(){
+				$.ajax({
+					type: "POST",
+					url: "rest/bi/BITopicFiledController/getFieldType",
+					cache: false,  //禁用缓存
+					dataType: "json",
+					success: function (result) {
+						$("#field_Type").empty();
+						$("#field_Type").append("<option value='0'>请选择</option>");
+						for(var i=0; i<result.data.length; i++){
+							$("#field_Type").append("<option value="+result.data[i].subid+">"+result.data[i].subname+"</option>");
+						}
+						// $("#field_Type").val(2);
+					},
+					error: function(){
+						parent.bootbox.alert("字段获取数据失败", function(){});
+					}
+				});
 			}
 			
 			//点击添加
@@ -438,7 +623,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				e.preventDefault();
 				var dialog = $( "#fromEdit" ).removeClass('hide').dialog({
 					modal: true,
-					width:325,
+					width:680,
 					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='icon-ok'></i>报表字段设置</h4></div>",
 					title_html: true,
 					buttons: [ 
@@ -453,11 +638,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							text: "保存",
 							"class" : "btn btn-primary btn-xs",
 							click: function() {
-								par.field_Id = $("#field_Id").val();
+								// par.field_Id = $("#field_Id").val();
 								par.field_Location = $("#field_Location").val();
 								par.dim_Order = $("#dim_Order").val();
                                 par.display = $("#display").val();
 								par.report_Id = "${param.reportId}";
+
+								//新加
+								par.field_Name = $("#field_Name").val();//字段名称
+								par.field_Caption = $("#field_Caption").val();//字段别名
+								par.field_Title = $("#field_Title").val();//字段标题
+								par.data_Type = $("#data_Type").val();//数据类型（数据库类型）
+								par.field_Type = $("#field_Type").val();//字段类型（业务类型）
+								par.aggregate_Type = $("#aggregate_Type").val()==0?"":$("#aggregate_Type").val();//聚合类型
+								par.unit = $("#unit").val();//单位
+								par.dim_Id = $("#dim_Id").val();//维表ID
+
 								if(par.thisid == "btnAdd"){
 									addReportData();	
 								}else if(par.thisid == "btnEdit"){
@@ -476,6 +672,77 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}else
 					$("#dim").css("display", "block");
 			});
+
+
+
+			//加载数据库的表名字
+			var json = {};   //设置保存字段名称和字段描述的全局变量中
+			function getDBField(value){
+				//根据选中的数据表名称加载数据字段
+				var fn = "${param.tabName}";
+				$.ajax({
+					type: "POST",
+					url: "rest/bi/BIDimController/getTableData",
+					cache: false, //禁用缓存
+					data: "tableName="+fn,
+					dataType: "json",
+					success: function (result) {
+
+						json = result;
+						$("#field_Name").html("<option value='0'>请选择</option>");
+						for(var i=0; i<result.data.length; i++){
+							var txtt = langData.dimManage[fn];
+							var txt = "";
+							if(typeof(txtt) == "undefined" || txtt == "")
+								txt = result.data[i].dim_Field_Name;
+							else{
+								txt = txtt[result.data[i].dim_Field_Name];
+								if(typeof(txt) == "undefined" || txt == "")
+									txt = result.data[i].dim_Field_Name;
+							}
+							if(value == result.data[i].dim_Field_Name){
+								$("#field_Name").append("<option selected='selected' value="+result.data[i].dim_Field_Name+">"+txt+"</option>");
+							}else{
+								console.log()
+								$("#field_Name").append("<option value="+result.data[i].dim_Field_Name+">"+txt+"</option>");
+							}
+						}
+					},
+					error: function(){
+						parent.bootbox.alert("字段获取数据失败", function(){});
+					}
+				});
+			}
+
+
+
+		$("#field_Type").on("change", function(){
+			if($("#field_Type").val() == 1){
+				$(".dim_Id").css("display", "block");
+				$(".aggregate_Type").css("display", "none");
+			}else if($("#field_Type").val() == 3){
+				$(".dim_Id").css("display", "none");
+				$(".aggregate_Type").css("display", "block");
+			}else if($("#field_Type").val() == 2){
+				$(".dim_Id").css("display", "none");
+				$(".aggregate_Type").css("display", "none");
+			}
+		});
+
+		//清空输入框的数据
+		function clearInputValue() {
+			$("#field_Location").val(0);
+			$("#dim_Order").val(1);
+			$("#display").val(0);
+			$("#field_Name").val(0);//字段名称
+			$("#field_Caption").val("");//字段别名
+			$("#field_Title").val("");//字段标题
+			$("#data_Type").val(0);//数据类型（数据库类型）
+			$("#field_Type").val(0);//字段类型（业务类型）
+			$("#aggregate_Type").val(0);//聚合类型
+			$("#unit").val("");//单位
+			$("#dim_Id").val("");//维表ID
+		}
 			
     </script>
   </body>
