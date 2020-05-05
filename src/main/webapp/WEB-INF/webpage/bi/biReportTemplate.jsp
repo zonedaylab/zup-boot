@@ -67,7 +67,7 @@
 			    text-overflow: ellipsis !important;
 			    white-space: nowrap !important;
 			    display: block !important;
-			    width: 60px !important;
+			    /*width: 60px !important;*/
 			}
 		</style>
 	</head>
@@ -139,7 +139,7 @@
 			var p1 = "", p2 = 0, c1 = "", c2 = 0, x1 = "", x2 = 0;
 
 			$(document).ready(function() {
-				// loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
+				loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
 				$('#article').readmore({
    				  speed: 5,
    				  maxHeight: 5
@@ -535,8 +535,9 @@
 			}
 			//函数说明：合并指定表格（表格id为_w_table_id）
 			function colspan(_w_table_id) {
-				_w_table_firsttd = "";
-				_w_table_currenttd = "";
+				console.log("_w_table_id="+_w_table_id)
+				_w_table_firsttd = "";//first  td 开头的
+				_w_table_currenttd = "";//current td  现在的
 				_w_table_SpanNum = 0;
 				$(_w_table_id + " tr").each(function(i) {
 					_w_table_Obj = $(this).children();
@@ -548,7 +549,8 @@
 							_w_table_currenttd = $(this);
 							if(_w_table_firsttd.text() == _w_table_currenttd.text()) {
 								_w_table_SpanNum++;
-								_w_table_currenttd.hide(); //remove();
+								// _w_table_currenttd.hide(); //remove();
+								_w_table_currenttd.remove();
 								_w_table_firsttd.attr("colSpan", _w_table_SpanNum);
 							} else {
 								_w_table_firsttd = $(this);
