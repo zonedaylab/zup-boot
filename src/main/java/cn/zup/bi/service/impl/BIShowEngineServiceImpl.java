@@ -156,7 +156,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		List<BIShowField> measureFieldList = biTopicFieldService.getTopicFieldList(reportID);
 
 
-		List<Map<String, Object>> listDataMap = getReportDataFromDB(vreportData,reportID);//1.从数据库中获取报表数
+		List<Map<String, Object>> listDataMap = getReportDataFromDB(vreportData,listBIReport.get(0));//1.从数据库中获取报表数
 
 		if(listDataMap.size()==0)
 			throw new Exception("报表数据为空，请检查配置,bi_page_id="+vreportData.getBi_Page_Id()+";reportID="+reportID);
@@ -235,7 +235,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		for (int reportIndex=0;reportIndex<listBIReport.size();reportIndex++) {
 
 			BI_REPORT bi_report =listBIReport.get(reportIndex);
-			List<Map<String, Object>> listDataMapTemp = getReportDataFromDB(vreportData, bi_report.getReport_Id());//1.从数据库中获取报表数据
+			List<Map<String, Object>> listDataMapTemp = getReportDataFromDB(vreportData, bi_report);//1.从数据库中获取报表数据
 
 			if (vreportData.getBlock_Type() == BIConfig.BLOCK_TYPE.TABLE) {//数据表格
 
@@ -362,9 +362,10 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					if (mapMeasureData.containsKey(keyName)) {
 						String strValue =  mapMeasureData.get(keyName)[reportIndex];
 						rowDatas += strValue;
-
-						rowDataCount++;
-						arrColDataCount[reportIndex*listCols.size()+j]++;
+                        if(!strValue.equals("")) {
+                            rowDataCount++;
+                            arrColDataCount[reportIndex * listCols.size() + j]++;
+                        }
 					} else {
 						rowDatas += "";
 					}
@@ -532,14 +533,15 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	/*
 	* map 为一条数据记录。格式 字段1：value1；字段2：value2....
 	* */
-	private List<Map<String, Object>> getReportDataFromDB(V_ReportData reportData,Integer reportId) throws Exception {
+	private List<Map<String, Object>> getReportDataFromDB(V_ReportData reportData,BI_REPORT biReport)  throws Exception {
 
 		//1.获取报表中的字段，判断行维度，列维度，指标字段
 		List<String> key = new ArrayList<String>(reportData.getKey());
 		List<Object> value = new ArrayList<Object>(reportData.getValue());
 		reportData.setKey(key);
 		reportData.setValue(value);
-		String sql = this.produceSql(reportData, reportId);
+
+		String sql = this.produceSql(reportData, biReport);
 
 		//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
 		PreparedStatement ps = BIConnection.OpenConn().prepareStatement(sql);
@@ -595,7 +597,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	 * @author Andot
 	 * 
 	 * */
-	private String produceSql(V_ReportData reportData, Integer reportId) throws Exception {
+	private String produceSql(V_ReportData reportData, BI_REPORT biReport ) throws Exception {
 
 
 		String join = " ";
@@ -606,10 +608,10 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		String showMeasureFields = "" ;//显示的指标字段
 		String showDimFields = ""; //需要显示的维度字段
 
-		String topicTableName="";  //主题表的名字
-		String topicTableNameTemp="?";
+		String topicTableName=biReport.getBiz_Table_Name();  //主题表的名字
+		String topicTableNamePlaceholder="?";
 
-		m_biDimFieldList = biDimService.getDimFieldList(reportData,reportId);
+		m_biDimFieldList = biDimService.getDimFieldList(reportData,biReport.getReport_Id());
 		/*================获取维度字段===============*/
 
 		String lastDimTable=null;
@@ -621,9 +623,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 			Integer drillType=biShowField.getDrill_Type();
 			groupby+=biShowField.getField_Name()+",";
 
-			if(drillType==null||drillType==0){//如果没有对应的维度表，则直接获取主题表中的维度字段
+			if(drillType==null||drillType==0){//没有对应维度表，则直接获取主题表中的维度字段
 
-				showDimFields += biShowField.getTopic_Table() + "." + biShowField.getField_Name() + ",";
+				showDimFields += topicTableNamePlaceholder + "." + biShowField.getField_Name() + ",";
 				continue;
 			}
 
@@ -687,13 +689,13 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 
 								//例如dd_area.city,biz_table.city as areaId,
 								showDimFields += biShowField.getDim_Table() + "." + areas[x] + ", " +
-										biShowField.getTopic_Table() + "." + areas[x] + " AS areaId,";
+										topicTableNamePlaceholder+ "." + areas[x] + " AS areaId,";
 								// biz_table.city in( 3701)
 								if(reportData.getDrill_Value().toString().indexOf(",") > -1){
-									where += " AND " + biShowField.getTopic_Table() + "." + reportData.getDrill_Name() +
+									where += " AND " + topicTableNamePlaceholder + "." + reportData.getDrill_Name() +
 											" IN (" + reportData.getDrill_Value()+")";
 								}else{
-									where += " AND " + biShowField.getTopic_Table() + "." + reportData.getDrill_Name()
+									where += " AND " + topicTableNamePlaceholder + "." + reportData.getDrill_Name()
 											+ "=" + reportData.getDrill_Value();
 								}
 								break;
@@ -701,7 +703,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 						}
 					}else{
 						//表示字段从第一个开始 ，例如 province-city-country ； 取第一个。 dd_area.province, topictale.province
-						showDimFields += biShowField.getDim_Table() + "." + areas[0] + ", " + biShowField.getTopic_Table() + "." + areas[0] + " AS areaId,";
+						showDimFields += biShowField.getDim_Table() + "." + areas[0] + ", " +topicTableNamePlaceholder+ "." + areas[0] + " AS areaId,";
 					}
 					break;
 				case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC://不同主题
@@ -710,17 +712,17 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					topicTableName=biShowField.getNextTopicTableName();
 					String filterName=biShowField.getNextFilterName();
 					//形成过滤语句
-					where += " AND " + topicTableNameTemp + "." + filterName
+					where += " AND " + topicTableNamePlaceholder + "." + filterName
 							+ "=" + reportData.getDrill_Value();
 					break;
 			}
 			if(i == 0){
 				join += " JOIN " + biShowField.getDim_Table() + " ON " +
-						biShowField.getTopic_Table() + "." + biShowField.getField_Name() + " = " +
+						topicTableNamePlaceholder + "." + biShowField.getField_Name() + " = " +
 						biShowField.getDim_Table()+ "." + biShowField.getId_Field();
 			}else if(lastDimTable==null|| !lastDimTable.equals(biShowField.getDim_Table())){//不是同一个DIM数据表
 				join += "\n JOIN " + biShowField.getDim_Table() + " ON " +
-						biShowField.getTopic_Table() + "." + biShowField.getField_Name() + " = " +
+						topicTableNamePlaceholder + "." + biShowField.getField_Name() + " = " +
 						biShowField.getDim_Table()+ "." + biShowField.getId_Field();
 			}
 			lastDimTable=biShowField.getDim_Table();
@@ -729,7 +731,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		showDimFields=trimComma(showDimFields,",");
 
 		/*================度量值==============*/
-		List<BIShowField> biMeasureFieldList = biShowEngineDao.getReportTopicInfo( reportId);
+		List<BIShowField> biMeasureFieldList = biShowEngineDao.getReportTopicInfo( biReport.getReport_Id());
 
 		if(biMeasureFieldList.size()==0) {
 			throw new Exception("当前主题度量字段为空，请检查配置");
@@ -746,7 +748,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				if(biMeasureField.getAggregate_Type()==null||biMeasureField.getAggregate_Type().length()<3)
 					throw new  Exception(String.format("biMeasureField 度量值 %s 没有设置聚合字符，如count sum 等",biMeasureField.getField_Name()));
 				String AggregateType=trimComma(biMeasureField.getAggregate_Type(),"_"); //
-				showMeasureFields +=  AggregateType + "("+ biMeasureField.getTopic_Table() + "." +
+				showMeasureFields +=  AggregateType + "("+ topicTableNamePlaceholder + "." +
 									biMeasureField.getField_Name() +") AS "+ biMeasureField.getField_Caption() +", ";
 				if(biMeasureField.getAggregate_Type()==null){
 					throw new Exception("显示字段Aggregate_Type为空，请检查配置,语句:<!--"+showMeasureFields+"-->");
@@ -754,7 +756,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				b = true;
 			}
 			if(i == 0){
-				from += biMeasureField.getTopic_Table() + " ";//此处需要修改
+				from += topicTableNamePlaceholder + " ";//此处需要修改
 			}
 		}
 		showMeasureFields=trimComma(showMeasureFields,",");
@@ -765,9 +767,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		String showFields = showDimFields + ", " + showMeasureFields; //维度  +  指标
 
 		String sql = "select "+ showFields+ from + join + where + groupby +";";
-		if(topicTableName!=""){
-			sql=sql.replace("？",topicTableName);
-		}
+
+		sql=sql.replace(topicTableNamePlaceholder,topicTableName);
+
 		System.err.println(sql);
 		return sql;
 	}
