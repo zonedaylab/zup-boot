@@ -22,9 +22,7 @@ import java.util.*;
 
 @Service("biShowEngineService")
 public class BIShowEngineServiceImpl implements BIShowEngineService {
-	
-	@Autowired
-	private ReportFieldDao reportFieldDao;
+
 	@Autowired
 	private BIShowEngineDao biShowEngineDao;
 	@Autowired
@@ -35,6 +33,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	private TopicFieldService biTopicFieldService;
 	@Resource
 	private ReportService biReportService;
+	@Resource
+	private BIPageService biPageService;
 
 
 	List<BIShowField> m_biDimFieldList;
@@ -137,6 +137,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		*
 		* 需要修改：获取Biz_Table_Name
 		* */
+
 		List<BI_REPORT>listBIReport = biReportService.getReportListByPageId(vreportData.getBi_Page_Id(),
 				vreportData.getScreen_Index());
 		if(listBIReport.size()==0)
