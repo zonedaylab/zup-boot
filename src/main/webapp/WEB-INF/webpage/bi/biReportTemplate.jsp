@@ -247,7 +247,7 @@
 						if(re.data.length > 0){
 
 							if(indicators != 0){
-                                $("#title").text( $("#dataIndex option:selected").text()+"统计数据 （"+re.data[0].unit[0]+"）");
+                                $("#title").text( $("#dataIndex option:selected").text()+ re.data[0].reportInfo.page_Name +"（"+re.data[0].unit[0]+"）");
 							}else{
                                 $("#title").text("${pageTitle} （"+re.data[0].unit[0]+"）");
 							}
@@ -300,8 +300,8 @@
 									var thCon = re.data[0].tableHeader[x][y] + "";
 									theadTh += "<th title='" + thCon + "'><span class='sla'>" + thCon + "</span></th>";
 								}
-								var heji = "<th></th>";
-								theadTr +="<tr>"+ theadTh+heji+"</tr>";
+
+								theadTr +="<tr>"+ theadTh+"</tr>";
 
 							}
 							//表头：维度生成的表头
@@ -343,16 +343,10 @@
 									}
 									titleTh += "<th style='font-size:18px;'>${pageTitle}</th>";
 								}
-								var heji = "";
-								if(x == 0)
-									heji = "<th>合计</th>";
-								else
-									heji = "<th></th>";
-								theadTr +="<tr>"+ theadTh+heji+"</tr>";
+
+								theadTr +="<tr>"+ theadTh+"</tr>";
 							}
 							titleTr +="<tr>"+ titleTh +"</tr>";
-
-
 							$("thead").append(theadTr);
 
 							//4.准备业务数据内容
@@ -375,7 +369,6 @@
 								}
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
 									var tr = "<tr>";  //总
-									var heji = 0, flag = 0;
 
 									for(var j = 0; j < allDataCols; j++){ //数据
 										if(typeof(re.data[z].tableData[i][j]) === "undefined"){
@@ -401,22 +394,17 @@
 												var dl = re.data[z].BIColDimDatas.length;
 												if(j >= dl){
                                                     if(!isNaN(parseInt(tdCon)) || !isNaN(parseInt(tdCon))){
-                                                        if((tdCon+"").indexOf(".")==-1){
-                                                            heji += parseInt(tdCon);
-                                                        }else{
-                                                            heji += parseFloat(tdCon);
-                                                        }
+
 														smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
 													}else{
 														smallTotal[j-dl] = smallTotal[j-dl]+0;
 													}
-													flag = 1;
+
 												}
 											} //else -
 										}  //undefinal else
 									} //for 数据
-									if(flag == 1)
-										tr += "<td class='txtRight'>"+heji+"</td>";
+
 									$("tbody").append(tr);
 								}
 								
@@ -424,7 +412,7 @@
 								var stTr = "<tr class='smallTotal'>";
 								for(var idim = 0; idim<re.data[z].BIColDimDatas.length; idim++){
 									if(idim == re.data[z].BIColDimDatas.length-1)
-										stTr += "<td>小计("+re.data[z].reportInfo.report_Title+")</td>";
+										stTr += "<td>小计</td>";
 									else
 										stTr += "<td></td>";
 								}
@@ -445,7 +433,7 @@
 								}
 								if(String(smallTotal[ii]).indexOf('.')>-1)
 									stotal = stotal.toFixed(6);
-								stTr += "<td class='txtRight'>"+stotal+"</td>";  //小计的合计
+
 								stTr += "</tr>";
 								$("tbody").append(stTr);
 							}  //追加表格身体
