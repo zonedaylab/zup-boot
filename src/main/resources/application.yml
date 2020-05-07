@@ -13,26 +13,27 @@ spring:
     cache: false
     enabled: false
   datasource:
-    name: druid
-    url: jdbc:mysql://localhost:3306/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      initialSize: 5
-      minIdle: 15
-      maxActive: 60
-      maxWait: 60000
-      timeBetweenEvictionRunsMillis: 60000
-      minEvictableIdleTimeMillis: 300000
-      validationQuery: SELECT 'x'
-      testWhileIdle: true
-      testOnBorrow: true
-      testOnReturn: true
-      poolPreparedStatements: true
-      maxPoolPreparedStatementPerConnectionSize: 20
-      filters: stat
+    bi:
+      name: druid
+      url: jdbc:mysql://172.18.36.215:3306/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        initialSize: 5
+        minIdle: 15
+        maxActive: 60
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 'x'
+        testWhileIdle: true
+        testOnBorrow: true
+        testOnReturn: true
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat
   devtools:
     restart: #热部署生效
        enabled: true
@@ -66,7 +67,6 @@ mybatis:
     map-underscore-to-camel-case: true
     use-generated-keys: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:cn/zup/mapper/*/*Mapper.xml
 # 分页器
 pagehelper:
   helper-dialect: mysql
