@@ -483,5 +483,13 @@ import java.util.Map.Entry;
 		return organDao.getSubOrganByUsedList(parentOrganId,usedStr);
 	}
 
+    /**
+     * 获取全部组织列表
+     *
+     * @return
+     */
+    public List<Organ> getOrganList(Organ organ){
+        return organDao.listByHiber(organ);
+    }
 	
 }
