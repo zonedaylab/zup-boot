@@ -1,4 +1,4 @@
-package cn.zup.bi.datasource;
+package cn.zup.rbacmap.datasource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -6,28 +6,28 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
-public interface BaseRbacDataSource {
+public interface BaseRbacMapDataSource {
 	/**
 	 * 创建数据源
 	 * 
 	 * */
-	DataSource baseBIDataSource();
+	DataSource baseRbacDataSource();
 	
 	/**
 	 * 创建sqlsession工程
 	 * 
 	 * */
-	SqlSessionFactory baseBISqlSessionFactory(DataSource baseDataSource);
+	SqlSessionFactory baseRbacSqlSessionFactory(DataSource baseDataSource);
 	
 	/**
 	 * 创建数据源事务
 	 * 
 	 * */
-	DataSourceTransactionManager baseBIDataSourceTransactionManager(DataSource baseDataSource);
+	DataSourceTransactionManager baseRbacDataSourceTransactionManager(DataSource baseDataSource);
 	
 	/**
 	 * 创建SqlSession工程的SqlSession模板
 	 * 
 	 * */
-	SqlSessionTemplate baseBISqlSessionTemplate(SqlSessionFactory baseSqlSessionFactory);
+	SqlSessionTemplate baseRbacSqlSessionTemplate(SqlSessionFactory baseSqlSessionFactory);
 }

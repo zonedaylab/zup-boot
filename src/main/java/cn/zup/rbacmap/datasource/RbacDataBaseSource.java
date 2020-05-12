@@ -1,4 +1,4 @@
-package cn.zup.bi.datasource;
+package cn.zup.rbacmap.datasource;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -18,25 +18,25 @@ import java.io.IOException;
 
 @Configuration
 @MapperScan(
-		basePackages = {"cn.zup.bi.dao"},
-		sqlSessionFactoryRef="biSqlSessionFactory",
-		sqlSessionTemplateRef="biSqlSessionTemplate")
+		basePackages = {"cn.zup.rbacmap.dao"},
+		sqlSessionFactoryRef="rbacmapSqlSessionFactory",
+		sqlSessionTemplateRef="rbacmapSqlSessionTemplate")
 @Slf4j()
-public class BIDataBaseSource implements BaseRbacDataSource {
+public class RbacDataBaseSource implements BaseRbacMapDataSource {
 
-	@Bean("biDataSource")
-	@ConfigurationProperties(prefix="spring.datasource.bi")
+	@Bean("rbacmapDataSource")
+	@ConfigurationProperties(prefix="spring.datasource.rbacmap")
 	@Override
-	public DataSource baseBIDataSource() {
+	public DataSource baseRbacDataSource() {
 		return DataSourceBuilder.create().build();
 	}
 
-	@Bean("biSqlSessionFactory")
+	@Bean("rbacmapSqlSessionFactory")
 	@Override
-	public SqlSessionFactory baseBISqlSessionFactory(@Qualifier("biDataSource") DataSource baseDataSource) {
+	public SqlSessionFactory baseRbacSqlSessionFactory(@Qualifier("rbacmapDataSource") DataSource baseDataSource) {
 		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 		try {
-			bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:cn/zup/mapper/bi/*Mapper.xml"));
+			bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:cn/zup/mapper/rbacmap/*Mapper.xml"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -50,15 +50,15 @@ public class BIDataBaseSource implements BaseRbacDataSource {
 		return sqlSessionFactory;
 	}
 
-	@Bean("biDataSourceTransactionManager")
+	@Bean("rbacmapDataSourceTransactionManager")
 	@Override
-	public DataSourceTransactionManager baseBIDataSourceTransactionManager(@Qualifier("biDataSource") DataSource baseDataSource) {
+	public DataSourceTransactionManager baseRbacDataSourceTransactionManager(@Qualifier("rbacmapDataSource") DataSource baseDataSource) {
 		return new DataSourceTransactionManager(baseDataSource);
 	}
 
-	@Bean("biSqlSessionTemplate")
+	@Bean("rbacmapSqlSessionTemplate")
 	@Override
-	public SqlSessionTemplate baseBISqlSessionTemplate(@Qualifier("biSqlSessionFactory") SqlSessionFactory baseSqlSessionFactory) {
+	public SqlSessionTemplate baseRbacSqlSessionTemplate(@Qualifier("rbacmapSqlSessionFactory") SqlSessionFactory baseSqlSessionFactory) {
 		return new SqlSessionTemplate(baseSqlSessionFactory);
 	}
 }
