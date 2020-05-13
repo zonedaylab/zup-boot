@@ -7,7 +7,6 @@ import cn.zup.bi.dao.ReportFieldDao;
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.utils.BIConfig;
-import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -284,33 +283,20 @@ public class BIDimServiceImpl implements BIDimService {
 	}
 
 	@Override
-	public List<BIShowField> getDimFieldList(ConditionTransfer conditionTransfer) {
-		List<String> key = new ArrayList<String>(conditionTransfer.getKey());
-		List<Object> value = new ArrayList<Object>(conditionTransfer.getValue());
-		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(conditionTransfer.getReport_Id());
-		String hdimFieldIds = "";
-		String ldimFieldIds = "";
-		//第一步遍历获取到对应的主题字段，分为维表和指标
-		for (int i = 0; i < reportFieldList.size(); i++) {
-			//字段位置分为行和列，分别使用   0、指标 1、行维度  2、列维度  by liuxf
-			if(reportFieldList.get(i).getField_Location() == 1){        //行维度 h
-				hdimFieldIds += reportFieldList.get(i).getField_Id()+", ";
-			}else if(reportFieldList.get(i).getField_Location() == 2){  //列维度 l
-				ldimFieldIds += reportFieldList.get(i).getField_Id()+", ";
-			}
-		}
-		String dimFieldIds = hdimFieldIds + ldimFieldIds;
-		dimFieldIds = dimFieldIds.substring(0, dimFieldIds.length()-2);
+	public List<BIShowField> getDimFieldList(V_ReportData reportData, Integer reportId) {
+		List<String> key = new ArrayList<String>(reportData.getKey());
+		List<Object> value = new ArrayList<Object>(reportData.getValue());
+		List<BI_REPORT_FIELD> reportFieldList = reportFieldDao.getReportFieldByReportId(reportId);
+
 
 		//获取维度表，需要处理没有对应维度表的维度。
-		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo(dimFieldIds, conditionTransfer.getReport_Id());
+		List<BIShowField> biShowDimFieldList = biShowEngineDao.getReportDimInfo( reportId);
 		
 		//查询的列，无需做不同表进行匹配
 		for (int i = 0; i < biShowDimFieldList.size(); i++) {
 
+			BIShowField biShowField=biShowDimFieldList.get(i);
 			if(biShowDimFieldList.get(i).getDrill_Type()==null) {
-
-
 				continue;
 			}
 			//分段信息
@@ -318,19 +304,36 @@ public class BIDimServiceImpl implements BIDimService {
 				case BIConfig.DRILL_TYPE.DRILL_TYPE_PATH:
 					System.err.println("钻取");
 					String[] areas = biShowDimFieldList.get(i).getDrill_Info().split("-");
-					if(conditionTransfer.getDrill_Name() != null){
+					if(reportData.getDrill_Name() != null){
 						for (int j2 = 0; j2 < areas.length; j2++) {
-							if(conditionTransfer.getDrill_Name().equals(areas[j2].toLowerCase())){
-								int x = (conditionTransfer.getDrill_Value()+"").length()/2;
+							if(reportData.getDrill_Name().equals(areas[j2].toLowerCase())){
+								int x = (reportData.getDrill_Value()+"").length()/2;
 								biShowDimFieldList.get(i).setText_Field(areas[x]);
 								break;
 							}
 						}
 					}
 					break;
+				case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC:
+
+					String[] topoicTables = biShowField.getDrill_Info().split("-");
+					if(reportData.getDrill_Name()==null){
+						break;
+					}
+					String []arrDrillName=reportData.getDrill_Name().split("-");
+					if(arrDrillName.length<=1)
+						break;
+					String drillDimName=arrDrillName[0];
+					int currentShowReportIndex=Integer.parseInt(arrDrillName[1]);//当前正在展示的报表索引
+					biShowField.setCurrentShowReportIndex(currentShowReportIndex);
+					if(drillDimName == biShowField.getField_Name() ) {
+						String []arrtopicTable=topoicTables[currentShowReportIndex+1].split(",");
+						biShowField.setNextTopicTableName(arrtopicTable[0]);
+						biShowField.setNextFilterName(arrtopicTable[1]);
+					}
+					break;
 			}
 		}
-		
 		return biShowDimFieldList;
 	}
 

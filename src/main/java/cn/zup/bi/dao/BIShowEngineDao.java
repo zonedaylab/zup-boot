@@ -13,17 +13,16 @@ import java.util.List;
 public interface BIShowEngineDao{
 
 	/**
-	 * @param ids
 	 * @param report_Id
 	 * @return
 	 */
-	List<BIShowField> getReportDimInfo(@Param("ids") String ids, @Param("report_Id") Integer report_Id);
+	List<BIShowField> getReportDimInfo( @Param("report_Id") Integer report_Id);
 
 	/**
-	 * @param ids
+
 	 * @param report_Id
 	 * @return
 	 */
-	List<BIShowField> getReportTopicInfo(@Param("ids") String ids, @Param("report_Id") Integer report_Id);
+	List<BIShowField> getReportTopicInfo( @Param("report_Id") Integer report_Id);
 	
 }

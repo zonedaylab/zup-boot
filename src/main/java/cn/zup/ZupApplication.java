@@ -1,6 +1,5 @@
 package cn.zup;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -8,7 +7,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
-
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
@@ -18,7 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @ImportResource("classpath:zup-*.xml")
 @ComponentScan({"cn.zup.*"})
-@MapperScan({"cn.zup.bi.dao","cn.zup.rbacmap.dao"})
+//@MapperScan({"cn.zup.bi.dao","cn.zup.rbacmap.dao"})
 @ServletComponentScan
 @EnableSwagger2
 public class ZupApplication extends SpringBootServletInitializer {

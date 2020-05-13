@@ -51,11 +51,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							元素标题
 						</th>
 						<th>
-							关联主题
+							关联数据表
 						</th>
 					
 						<th>
-							创建时间
+							最后一次修改时间
 						</th>
 					</tr>
 				</thead>
@@ -73,16 +73,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<div class="col-md-12 column">
 					<form class="form-horizontal" role="form">
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >元素名称：</strong>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >报表名称：</strong>
 							 <input class="form-control" id="report_Name" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div> 
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >元素标题：</strong>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;" >报表标题：</strong>
 							 <input class="form-control" id="report_Title" type="text" style="width:180px; float:left;"/><font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
-    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">选择主题：</strong>
-							 <select class="form-control" id="topic_Id" style="width:180px; float:left;"></select>
+    						 <strong class="control-label" style="text-align: left; float:left; width:98px;">关联数据表：</strong>
+							 <select class="form-control" id="biz_Table_Name" style="width:180px; float:left;"></select>
 							 <font style="float:left; font-size:20px; margin-left:5px;" color=red>*</font>
 						</div>
 						<div class="form-group row">
@@ -100,16 +100,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <jsp:include page="../include/mainFooter.jsp"></jsp:include>
     
     <script type="text/javascript">
-    		var pageID=null;
-    		$(document).ready(function(){
-    			pageID="${pageId}";
-    			loadGrid();
-    			loadTheme();
-				loadPage();
-    		});
-    
+		var langData;
+		$.ajax({
+			url: "plug-in/ace/adIcon/lang/zh-cn.json",//json文件位置
+			async: false,
+			type: "GET",//请求方式为get
+			dataType: "json", //返回数据格式为json
+			success: function(data) {//请求成功完成后要执行的方法
+				langData = data;
+			}
+		});
+
+		var pageID=null;
+		$(document).ready(function(){
+			pageID="${pageId}";
+			loadGrid();  //报表数据
+			loadTableName(-1);//加载数据表名
+			loadPage(); //报表下拉框
+		});
+
+
+			var table=null;
+			//加载报表数据
     		function loadGrid(){
-    			var param = {};
+    			var param = {};//数据封装
+
     			//提示信息
 		        var lang = {
 		            "sProcessing": "处理中...",
@@ -135,9 +150,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                "sSortAscending": ": 以升序排列此列",
 		                "sSortDescending": ": 以降序排列此列"
 		            }
-		        };   
+		        };
+
+
 	    		//初始化表格
-	        	var table = $("#postTable").dataTable({
+	        	table = $("#postTable").dataTable({
 	        	    "dom": '<t><"col-md-4"i><"col-md-6"p><"col-md-2"l>',    //为表格元素书写css样式<t>为中间表格  在<t>右边就是在表格下边
 	           		language:lang,  //提示信息
 	            	stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
@@ -202,15 +219,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                    {
 						   	"targets": [4], // 目标列位置，下标从0开始
 						   	"sWidth":"20%",
-						   	"data": "topic_Name" // 数据列名
+						   	"data": "biz_Table_Name" // 数据列名
 	                    },
-	                   
-	                    {
-						   	"targets": [5], // 目标列位置，下标从0开始
-						   	"sWidth":"20%",
-						   	"data": "create_Date" // 数据列名
-	                    }
-		            ]
+						{
+							"targets": [5], // 目标列位置，下标从0开始
+							"sWidth":"20%",
+							"data": "create_Date", // 数据列名
+							"render" : function ChangeDateFormat(data, type, full, meta) {
+								var datetime = new Date();
+								datetime.setTime(data);
+								var year = datetime.getFullYear();
+								var month = datetime.getMonth()+1;
+								var date = datetime.getDate();
+								var hour = datetime.getHours();
+								var minute = datetime.getMinutes();
+								var second = datetime.getSeconds();
+								// var msecond = datetime.getMilliseconds();
+								return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+							}
+						}
+
+			]
 		        }).api();
 		        //此处需调用api()方法,否则返回的是JQuery对象而不是DataTables的API对象
 		    }
@@ -228,16 +257,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			//增删改按钮命令
 			$("#btnAdd").on("click", function(e){
 				par.thisid = this.id;
-				
-			
+
 				if(pageID==null ||pageID=="" )
 					$("#bi_Page").val(0);
 				else{
 					$("#bi_Page").val(pageID);
-				
-					
-					}
+				}
 				msgDialog(e);
+				loadTableName(-1);
+
 			});
 			
 			$("#btnEdit").on("click", function(e){
@@ -291,24 +319,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					});
 				}
 			});
-			
-			//选择主题下拉框
-	    	function loadTheme(){
-	    		$.ajax({
-                   type: "POST",
-                   url: "rest/bi/BITopicController/girdTopicList",
-                   cache: false,  //禁用缓存
-                   data: "rows=9999&page=1",  //传入组装的参数
-                   dataType: "json",
-                   success: function (result) {
-                   		$("#topic_Id").empty();
-                   		$("#topic_Id").append("<option value='0'>请选择主题</option>");
-                   		for(var i=0; i<result.data.length; i++){
-                   			$("#topic_Id").append("<option value="+result.data[i].topic_Id+">"+result.data[i].topic_Name+"</option>");
-                    	}
-                   }
-               });
-	    	}
+
+			//加载数据库表名
+			function loadTableName(value){
+				$.ajax({
+					type: "POST",
+					url: "rest/bi/BIDimController/getDatabaseTableName",
+					cache: false, //禁用缓存
+					data: "",
+					dataType: "json",
+					success: function(result){
+						if(result.data != "error"){
+							$("#biz_Table_Name").html("");
+							$("#biz_Table_Name").append("<option value='0'>请选择</option>");
+							for(var i=0; i< result.data.length; i++){
+								var txt = langData.dimManage.tableName[result.data[i]];
+								if(typeof(txt) == "undefined" || txt == "")
+									txt = result.data[i];
+								if(value == result.data[i]){
+									$("#biz_Table_Name").append("<option selected='selected' value="+result.data[i]+">"+txt+"</option>");
+								}else{
+									$("#biz_Table_Name").append("<option value="+result.data[i]+">"+txt+"</option>");
+								}
+							}
+						}else{
+							parent.parent.bootbox.alert("数据表名称加载失败");
+						}
+					},
+					error: function(){
+						parent.parent.bootbox.alert("数据表名称加载失败");
+					}
+				});
+			}
+
+
+
 			
 	    	//选择页面下拉框
 	    	function loadPage(){
@@ -339,7 +384,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     success: function (result) {
                     	$("#report_Name").val(result.data.report_Name);
 						$("#report_Title").val(result.data.report_Title);
-						$("#topic_Id").val(result.data.topic_Id);
+						// $("#topic_Id").val(result.data.topic_Id);
+
+						$("#biz_Table_Name").val(result.data.biz_Table_Name);//所关联的数据库
+
+						// $("#biz_Table_Name").html("");//清空之前的
+						// $("#biz_Table_Name").append("<option value="+result.data.biz_Table_Name+">"+result.data.biz_Table_Name+"</option>");//填充编辑的
+						// $("#biz_Table_Name").attr("disabled","disabled");//禁止编辑
+
 						$("#bi_Page").val(result.data.page_Id);
                     	msgDialog(e);
                     },
@@ -428,7 +480,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							click: function() {
 								par.report_Name = $("#report_Name").val();
 								par.report_Title = $("#report_Title").val();
-								par.topic_Id = $("#topic_Id").val();
+								par.biz_Table_Name = $("#biz_Table_Name").val();
 								par.page_Id = $("#bi_Page").val();
 								if(par.thisid == "btnAdd"){
 									addReportData();	
@@ -450,9 +502,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        	return;
 				}else{
 					report_Id = $("#report_Id:checked").val();
-					window.open("rest/bi/biReportFieldController?reportId="+report_Id, '报表字段设置', 'height=650,width=1200,top=200,left=50,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+
+					//获取选中行的表名列
+					var table = $('#postTable').DataTable();
+					var data = table.rows().data();
+					var tabName = "";
+					for (var i = 0; i < data.length; i++) {
+						if(data[i]["report_Id"] == report_Id){
+							tabName = data[i]["biz_Table_Name"];
+						}
+					}
+					window.open("rest/bi/biReportFieldController?reportId="+report_Id+"&tabName="+tabName, '报表字段设置', 'height=650,width=1200,top=200,left=50,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
 				}
 			});
+
+
+
 			
     </script>
   </body>

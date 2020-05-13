@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>BI 主题字段管理 - 积成能源</title>
+    <title>BI 主题字段管理 </title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -194,9 +194,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   }
 		});
    		$(document).ready(function(){
-   			loadGrid();
-   			getDataType(); 
-			getFieldType();
+   			loadGrid(); //加载数据
+   			getDataType(); //加载数据类型
+			getFieldType(); //加载字段类型
 		    getSF();
 		    getBiDimName();
    		});
@@ -479,11 +479,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						$("#dim_Id").val(result.data[0].dim_Id);
 					}else if($("#field_Type").val() == 2){
 						$(".dim_Id").css("display", "none");
-						$(".aggregate_Type").css("display", "block");
-						$("#aggregate_Type").val(result.data[0].aggregate_Type);
+						$(".aggregate_Type").css("display", "none");
 					}else if($("#field_Type").val() == 3){
 						$(".dim_Id").css("display", "none");
-						$(".aggregate_Type").css("display", "none");
+						$(".aggregate_Type").css("display", "block");
+						$("#aggregate_Type").val(result.data[0].aggregate_Type);
 					}
                    	msgDialog(e);
                    },
@@ -606,21 +606,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		//获取维表名称
 		function getBiDimName(){
 			//ajax请求数据
-               $.ajax({
-                   type: "POST",
-                   url: "rest/bi/BITopicFiledController/getBiDimName",
-                   cache: false,  //禁用缓存
-                   dataType: "json",
-                   success: function (result) {
-                   	$("#dim_Id").html("<option value='0'>请选择</option>");
-                   	for(var i=0; i<result.data.length; i++){
-                   		$("#dim_Id").append("<option value="+result.data[i].dim_Id+">"+result.data[i].dim_Name+"</option>");
-                   	}
-                   },
-                   error: function(){
-                   	parent.bootbox.alert("获取失败", function(){});
-                   }
-               });
+		   $.ajax({
+			   type: "POST",
+			   url: "rest/bi/BITopicFiledController/getBiDimName",
+			   cache: false,  //禁用缓存
+			   dataType: "json",
+			   success: function (result) {
+				$("#dim_Id").html("<option value='0'>请选择</option>");
+				for(var i=0; i<result.data.length; i++){
+					$("#dim_Id").append("<option value="+result.data[i].dim_Id+">"+result.data[i].dim_Name+"</option>");
+				}
+			   },error: function(){
+				parent.bootbox.alert("获取失败", function(){});
+			   }
+		   });
 		}
 		
 		var json = {};   //设置保存字段名称和字段描述的全局变量中  

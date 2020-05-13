@@ -1,8 +1,11 @@
 package cn.zup.rbac.service;
 
-import java.util.List;
+import cn.zup.rbac.entity.Organ;
+import cn.zup.rbac.entity.Post;
+import cn.zup.rbac.entity.UserInfo;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
-import cn.zup.rbac.entity.*;
+
+import java.util.List;
 /**
  * OrganPostService接口
  * @author 李欣
@@ -224,5 +227,12 @@ public interface OrganPostService {
 	 * @return
 	 */
 	List<Organ> getSubOrganByUsedList(int parentOrganId, String usedStr);
+
+	/***
+	 * 获取organ列表
+	 * @param organ
+	 * @return
+	 */
+	public List<Organ> getOrganList(Organ organ);
 	
 }

@@ -1,7 +1,11 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"%>
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "";
+	pageContext.setAttribute("basePath",basePath);
 %>
 
 <!DOCTYPE html>
@@ -63,21 +67,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    text-overflow: ellipsis !important;
 			    white-space: nowrap !important;
 			    display: block !important;
-			    width: 60px !important;
+			    /*width: 60px !important;*/
 			}
 		</style>
 	</head>
 
 	<body>
 		<body>
-			<input id="block_Id" type="hidden">
 			<input id="report_Id" type="hidden">
 			<div class="container-fluid">
 				<div class="row" style="height:50px; padding:5px;" id="article">
 					<div class="col-lg-10 col-md-10 col-sm-8">
 						<div class="form-group">
 							 <div class="form-group" id="filter">
-		 					 	
 							 </div>
 						</div>
 					</div>
@@ -93,7 +95,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<div class="col-lg-12 col-md-12 col-sm-12">
 						<div class="pull-right">
 							<label class="control-label" style="text-align: left; float:left; width:50px; line-height: 30px">报表：</label>
-							<select class="form-control selectpicker" id="dataSource"  multiple data-live-search="true" data-selected-text-format="count">
+							<select class="form-control selectpicker" id="reportList"  multiple data-live-search="true" data-selected-text-format="count">
 							</select>
 							<label class="control-label" style="text-align: center; float:left; width:60px; line-height: 30px">指标：</label>
 							<select class="form-control" id="dataIndex" title="报表只能选择一项才可以" style="width: 120px; float: left;">
@@ -128,7 +130,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script src="plug-in/layer/layer.js" type="text/javascript" charset="utf-8"></script><!-- layer弹窗 -->
 		<script src='plug-in/ace/bi/js/loading.js'></script>
 		<!-- 折叠插件 -->
-		<script type="text/javascript" src="plug-in\ace\js\readmore\readmore.min.js"></script>
+		<script type="text/javascript" src="plug-in/ace/js/readmore/readmore.min.js"></script>
 		<script>
 			var pageid=0, screenIndex=0;
 			var definaReport = new Array(); //默认选中报表下拉框
@@ -137,7 +139,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var p1 = "", p2 = 0, c1 = "", c2 = 0, x1 = "", x2 = 0;
 
 			$(document).ready(function() {
-				index = loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
+				loading.start("#1c6bab"); //#1c6bab  如果不填写显示白色，填入颜色值，就显示对应颜色
 				$('#article').readmore({
    				  speed: 5,
    				  maxHeight: 5
@@ -149,7 +151,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				getList(0);
 			});
 
-			//获取指定报表的指标字段  report_id报表Id  by liuxf
+			//获取报表的指标字段
+			// param:  report_id报表Id  by liuxf
 			function getDataIndex(report_id){
                 $.ajax({
                     type: "get",
@@ -165,56 +168,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 });
 			}
 
-			//选择报表模块
-			function datasourceReload(reportIdArr){
-				var _this = $(this);
-				var param = {};
-				definaReport = new Array();
-				param.block_Id =  $("#block_Id").val();//区块ID
-				param.x_Point = 1;//区块位置
-				param.bi_Page_Id = '${pageId}';
-				param.page_Id = '${pageId}';
-				param.block_Type = 1;
-				param.screen_Index = 1;
-				ajaxfn("rest/bi/biPageBlockController/deleteBlockByPageId");
-				for (var i = 0; i < reportIdArr.length; i++) {
-					param.report_Id = reportIdArr[i];//报表id
-					ajaxfn("rest/bi/biPageBlockController/saveBlock");//保存数据块saveBlock
-				}
 
-				function ajaxfn(url){
-					$.ajax({
-						type: "post",
-						async: false,
-						url: url,
-						data:param,
-						dataType: "json",
-						success: function(result) {
-							if(result.data == "success"){
-								getList(0, $("#dataIndex").val());
-							}
-						}, 
-						error: function(error) {
-							console.log(error)
-						}
-					});
-				}
-			}
-			
-			var filterNm = {
-				survey_year: "调查年份",
-				mine_method_nm: "开采方式",
-				province: "所属省",
-				mine_scale_nm: "矿山规模",
-				city: "所属市",
-				county: "所属县",
-				economic_type_nm: "经济类型",
-				production_status_nm: "生产状态",
-				minerals_type_name: "矿类",
-				minerals_variety_name: "矿种"
-			};
-			
-			var index;
+
 			Array.prototype.remove = function(val) { 
 				var index = this.indexOf(val); 
 				if (index > -1) { 
@@ -222,11 +177,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				} 
 			};
 			var keys = new Array(), values = new Array();  //查询条件
-			var index = 0;
 			/*
-			* id      表示维度钻取  例如id=3701，id.length=4,表示济南市，
-			* indexs  指标列表*/
-			function getList(id, indexs) {
+			* id 表示维度钻取
+			* 			例如id=3701，id.length=4,表示济南市，
+			* indicators  指标列表
+			* */
+			function getList(id, indicators) {
+
 				var drill_Name, drill_Value;
 				if((id+"").length == 2){
 					drill_Name = "province";
@@ -262,16 +219,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 							keys.push("mine_survey_info."+idn);
 					 		values.push($(this).val());
-						} else {
-							if(idn.indexOf("_nm") > -1){
-								idn = " mine_survey_info."+idn.replace("_nm", "");
-							}
-							keys.push(idn);
-					 		values.push($(this).val());
-						}
-					}else{
-						if(idn.indexOf("_nm") > -1){
-							idn = " mine_survey_info."+idn.replace("_nm", "");
 						}
 					}
 		 		});
@@ -286,8 +233,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					drill_Name: drill_Name,
 					drill_Value: drill_Value
 				}
-				if(indexs != 0)
-				    data.index = indexs;
+				if(indicators != 0)
+				    data.index = indicators;
 				//获取报数据数据
 				$.ajax({
 					type: "post",
@@ -298,128 +245,131 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					dataType: "json",
 					success: function(re) {
 						if(re.data.length > 0){
-							var year = "";
-							for(var i=0; i<keys.length; i++){
-								if(keys[i].indexOf("survey_year") > -1){
-									year = values[keys[i].indexOf("survey_year")] + "年 ";
-								}
-							}
-							if(indexs != 0){
-                                $("#title").text(year+"调查"+$("#dataIndex option:selected").text()+"统计表 （"+re.data[0].unit[0]+"）");
+
+							if(indicators != 0){
+                                $("#title").text( $("#dataIndex option:selected").text()+ re.data[0].reportInfo.page_Name +"（"+re.data[0].unit[0]+"）");
 							}else{
-                                $("#title").text(year+"${pageTitle} （"+re.data[0].unit[0]+"）");
+                                $("#title").text("${pageTitle} （"+re.data[0].unit[0]+"）");
 							}
 							//1.显示查询条件
 							$("thead").empty();
 							$("tbody").empty();
-							$("#report_Id").val(re.data[0].blockInfo.report_Id);
-							$("#block_Id").val(re.data[0].blockInfo.block_Id);
+
+							$("#report_Id").val(re.data[0].reportInfo.report_Id);
 							$("#filter").empty();
-							for(var i=0; i<re.data[0].dimHeader.length; i++){
-								if(re.data[0].dimHeader[i] != "sub_nm"){
-									var hf = '<label class="control-label lab">'+filterNm[re.data[0].dimHeader[i]]+'：</label>'+
-											 '<select class="form-control filters" id="'+re.data[0].dimHeader[i]+'" style="width:160px; float:left;">'+
+
+							for(var i=0; i<re.data[0].BIRowDimDatas.length; i++){
+								if(re.data[0].BIRowDimDatas[i].field_Name!= "sub_nm"){
+									var hf = '' +
+											' <label class="control-label lab">'+re.data[0].BIRowDimDatas[i].field_Name+'：</label>'+
+											 '<select class="form-control filters" id="'+re.data[0].BIRowDimDatas[i].field_Name+'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
 									 $("#filter").append(hf);
-
-									 if(re.data[0].dimHeader[i] == "province"){
-									 	getFilterInfo(re.data[0].dimHeader[i], 0);
-									 }else if(re.data[0].dimHeader[i] == "city"){
-										getFilterInfo(re.data[0].dimHeader[i], id);
-									 }else if(re.data[0].dimHeader[i] == "county"){
-										getFilterInfo(re.data[0].dimHeader[i], id);
-									 }else{
-										getFilterInfo(re.data[0].dimHeader[i], 0);
-									 }
+									getFilterInfo(re.data[0].BIRowDimDatas[i].field_Name, 0);
 								}
 							}
-							//2.列维度 by liuxf
-							for(var i=0; i<re.data[0].dimField.length; i++){
-								if(re.data[0].dimField[i] != "sub_nm"){
 
-									var hf = '<label class="control-label lab">'+filterNm[re.data[0].dimField[i]]+'：</label>'+
-											 '<select class="form-control filters" id="'+re.data[0].dimField[i]+'" style="width:160px; float:left;">'+
+							//2.列维度 by liuxf
+							for(var i=0; i<re.data[0].BIColDimDatas.length; i++){
+								if(re.data[0].BIColDimDatas[i].field_Name != "sub_nm"){
+
+									var hf =
+											'<label class="control-label lab">'+re.data[0].BIColDimDatas[i].field_Name +'：</label>'+
+											 '<select class="form-control filters" id="'+re.data[0].BIColDimDatas[i].field_Name +'" style="width:160px; float:left;">'+
 											 	 '<option value="0">全部</option>'+
 											 '</select>';
 									 $("#filter").append(hf);
+									getFilterInfo(re.data[0].BIColDimDatas[i].field_Name , 0);
 
-									 if(re.data[0].dimField[i] == "province"){
-									 	getFilterInfo(re.data[0].dimField[i], 0);
-									 }else if(re.data[0].dimField[i] == "city"){
-										getFilterInfo(re.data[0].dimField[i], id);
-									 }else if(re.data[0].dimField[i] == "county"){
-										getFilterInfo(re.data[0].dimField[i], id);
-									 }else{
-										getFilterInfo(re.data[0].dimField[i], 0);
-									 }
 								}
 							}
 							
 							//3.准备表头
 							var theadTr = "";
-							var titleTr = "";
-							for(var x = 0;x<re.data[0].dimHeader.length;x++){//x表示一个维度，y表示维度中的每一列数据 by liuxf
+							var titleTr = ""; //表头
+
+							//表头（标题），报表标题生成的表头。
+							for(var x = re.data[0].BIRowDimDatas.length;x<re.data[0].tableHeader.length;x++){
+								var theadTh = "";
+								//判断有多少列标题，准备多少"<th></th>"
+								for(var y = 0;y<re.data[0].BIColDimDatas.length;y++){
+									theadTh += "<th style='white-space: nowrap'></th>";
+								}
+								for(var y = 0;y<re.data[0].tableHeader[x].length;y++) {
+									var thCon = re.data[0].tableHeader[x][y] + "";
+									theadTh += "<th title='" + thCon + "'><span class='sla'>" + thCon + "</span></th>";
+								}
+
+								theadTr +="<tr>"+ theadTh+"</tr>";
+
+							}
+							//表头：维度生成的表头
+							for(var x = 0;x<re.data[0].BIRowDimDatas.length;x++){//x表示一个维度，y表示维度中的每一列数据 by liuxf
 								var theadTh = "";
 								var titleTh = "";
 								//判断有多少列标题，准备多少"<th></th>"
-								for(var y = 0;y<re.data[0].dimField.length;y++){
+								for(var y = 0;y<re.data[0].BIColDimDatas.length;y++){
 									theadTh += "<th style='white-space: nowrap'></th>";
 									titleTh += "<th style='font-size:18px;'>${pageTitle}</th>";
 								}
-								//获取th  dimFieldHeader  行维度 对应 java listRowHeader
-								for(var y = 0;y<re.data[0].dimFieldHeader[x].length;y++){
-									if(typeof(re.data[0].dimFieldHeader[x][y]) === "undefined")
-										tr += "<th></th>"
+								//获取th  tableHeader  行维度 对应 java listRowHeader
+								for(var y = 0;y<re.data[0].tableHeader[x].length;y++){
+									if(typeof(re.data[0].tableHeader[x][y]) === "undefined")
+										theadTh += "<th></th>"
 									else{
-										var thCon = re.data[0].dimFieldHeader[x][y]+"";
-										if(thCon.indexOf("-") > -1){
-											if((thCon.split("-")[1]+"").length == 6){//表示是县级单位（第三级 长度为6  .xxxxxx.
-												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county="+thCon.split("-")[1]+"&year="+year+"'>" + thCon.split("-")[0]+"</a></th>";
-											}else{
-												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+thCon.split("-")[1]+")'>"+ thCon.split("-")[0] +"</a></th>";
+										var thCon = re.data[0].tableHeader[x][y]+"";
+										if(re.data[0].BIRowDimDatas[x].dill_type==3) {
+											if (thCon.indexOf("-") > -1) {
+												if ((thCon.split("-")[1] + "").length == 6) {//表示是县级单位（第三级 长度为6  .xxxxxx.
+													theadTh += "<th title='" + thCon.split("-")[0] + "'><a class='sla' target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county=" + thCon.split("-")[1] + "&year=" + year + "'>" + thCon.split("-")[0] + "</a></th>";
+												} else {
+													theadTh += "<th title='" + thCon.split("-")[0] + "'><a class='sla' href='javascript:getList(" + thCon.split("-")[1] + ")'>" + thCon.split("-")[0] + "</a></th>";
+												}
 											}
 										}
-										else {
+										else if(re.data[0].BIRowDimDatas[x].dill_type==4){//不同主题的钻取
 											/*
 											   by liuxf   drill_type=4 按照不同的主题进行钻取
 											   getList (drill_name ,drill_value
-
-										       getList(dim_name - current_topic_index,  dim_data) 生成连接进行钻取。
+											   getList(dim_name - current_topic_index,  dim_data) 生成连接进行钻取。
 											*/
-											if(re.data[0].BIRowDimDatas[x].dill_type==4){
-												param=re.data[0].BIRowDimDatas[x].field_name+'-' +re.data[0].BIRowDimDatas[x].currentTableIndex+","+thCon;
-												theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+param+")'>"+ thCon.split("-")[0] +"</a></th>";
-											}
-											else
-												theadTh += "<th title='" + thCon + "'><span class='sla'>" + thCon + "</span></th>";
+											param=re.data[0].BIRowDimDatas[x].field_name+'-' +re.data[0].BIRowDimDatas[x].currentTableIndex+","+thCon;
+											theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+param+")'>"+ thCon.split("-")[0] +"</a></th>";
 										}
+										else
+											theadTh += "<th title='" + thCon + "'><span class='sla'>" + thCon + "</span></th>";
+
 									}
 									titleTh += "<th style='font-size:18px;'>${pageTitle}</th>";
 								}
-								var heji = "";
-								if(x == 0)
-									heji = "<th>合计</th>";
-								else
-									heji = "<th></th>";
-								theadTr +="<tr>"+ theadTh+heji+"</tr>";
+
+								theadTr +="<tr>"+ theadTh+"</tr>";
 							}
 							titleTr +="<tr>"+ titleTh +"</tr>";
 							$("thead").append(theadTr);
+
 							//4.准备业务数据内容
 							for (var z = 0; z < re.data.length; z++) {
-								definaReport.push(re.data[z].reportInfo.report_Id); 
+								definaReport.push(re.data[z].reportInfo.report_Id);
+
 								var smallTotal = new Array(), reSmallTotal = new Array();
-								//dimField---->colDimFields
+
+								//BIColDimDatas： 所有列维度
 								//allDataCols  是所有的列数据，包括列维度个数+ 业务数据的列数 by liuxf
-								var allDataCols = re.data[z].dimField.length ;//列维度个数 一个列维度占据一列
-								if (re.data[z].dimFieldHeader!=null &&re.data[z].dimFieldHeader.length>0)//判断表头是否为空，如果为空，则不计算在内
-									allDataCols+= re.data[z].dimFieldHeader[re.data[z].dimFieldHeader.length-1].length;
+								var allDataCols = re.data[z].BIColDimDatas.length ;//列维度个数 一个列维度占据一列
+								if (re.data[z].tableHeader!=null &&re.data[z].tableHeader.length>0)//判断表头是否为空，如果为空，则不计算在内
+									allDataCols+= re.data[z].tableHeader[re.data[z].tableHeader.length-1].length;
 								else
 									allDataCols+=1;//只有一列数据
+
+								// add by liuxf 数据统计列，
+								for (var ind=0; ind<allDataCols- re.data[z].BIColDimDatas.length;ind++){
+									smallTotal.push(0);  //汇总数据
+								}
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
 									var tr = "<tr>";  //总
-									var heji = 0, flag = 0;
+
 									for(var j = 0; j < allDataCols; j++){ //数据
 										if(typeof(re.data[z].tableData[i][j]) === "undefined"){
 											tr += "<td></td>";
@@ -432,46 +382,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													tr += "<td><a href='javascript:getList("+tdCon.split("-")[1]+")'>"+ tdCon.split("-")[0] +"</a></td>";
 												}
 											}else{
-												if(j > re.data[z].dimField.length-1){
+												if(j > re.data[z].BIColDimDatas.length-1){
+
 													tr += "<td class='txtRight'>"+tdCon+"</td>";
+
 												} else{
 													tr += "<td>"+tdCon+"</td>";
 												}
-												var dl = re.data[z].dimField.length;
+
+
+												var dl = re.data[z].BIColDimDatas.length;
 												if(j >= dl){
                                                     if(!isNaN(parseInt(tdCon)) || !isNaN(parseInt(tdCon))){
-                                                        if((tdCon+"").indexOf(".")==-1){
-                                                            heji += parseInt(tdCon);
-                                                        }else{
-                                                            heji += parseFloat(tdCon);
-                                                        }
-														if(i == 0){  //小计计算
-															smallTotal.push(Number(tdCon));
-														}else{
-															smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
-														}
+
+														smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
 													}else{
-														if(i == 0){
-															smallTotal.push(0);
-														}else{
-															smallTotal[j-dl] = smallTotal[j-dl]+0;
-														}
+														smallTotal[j-dl] = smallTotal[j-dl]+0;
 													}
-													flag = 1;
+
 												}
 											} //else -
 										}  //undefinal else
 									} //for 数据
-									if(flag == 1)
-										tr += "<td class='txtRight'>"+heji+"</td>";
+
 									$("tbody").append(tr);
 								}
 								
 								//追加小计dom元素
 								var stTr = "<tr class='smallTotal'>";
-								for(var idim = 0; idim<re.data[z].dimField.length; idim++){
-									if(idim == re.data[z].dimField.length-1)
-										stTr += "<td>小计("+re.data[z].reportInfo.report_Title+")</td>";
+								for(var idim = 0; idim<re.data[z].BIColDimDatas.length; idim++){
+									if(idim == re.data[z].BIColDimDatas.length-1)
+										stTr += "<td>小计</td>";
 									else
 										stTr += "<td></td>";
 								}
@@ -492,13 +433,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								}
 								if(String(smallTotal[ii]).indexOf('.')>-1)
 									stotal = stotal.toFixed(6);
-								stTr += "<td class='txtRight'>"+stotal+"</td>";  //小计的合计
+
 								stTr += "</tr>";
 								$("tbody").append(stTr);
 							}  //追加表格身体
 							//合并单元格
 							colspan("#myTable thead");
-							for(var x=0; x<re.data[0].dimField.length; x++)
+							for(var x=0; x<re.data[0].BIColDimDatas.length; x++)
 								rowspan("#myTable", x);
 						}
 
@@ -509,7 +450,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							$('.selectpicker').selectpicker('val', definaReport);  //为下拉框赋默认值
 							getDataIndex(definaReport[0]);
 						}
-                        loading.stop(index);
+                        loading.stop();
 					},
 					error: function() {
 					}
@@ -529,7 +470,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					dataType: "json",
 					success: function(result) {
 						for(var i = 0;i<result.data.length;i++){
-							$("#dataSource").append("<option value="+result.data[i].report_Id+">"+result.data[i].report_Name+"</option>");
+							$("#reportList").append("<option value="+result.data[i].report_Id+">"+result.data[i].report_Name+"</option>");
 						}
 					}, 
 					error: function(error) {
@@ -539,18 +480,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		 	
 			$('#btnLoadReport').on('click', function () {
-				index = loading.start("#1c6bab");
-				var reportIdArr = $("#dataSource").val();
+				var reportIdArr = $("#reportList").val();
 			  	if(reportIdArr == null)
 			  		parent.bootbox.alert("至少选择一项");
 			  	else{
-			  		index = loading.start("#1c6bab");
+			  		loading.start("#1c6bab");
 					if(definaReport.length>1){
 						$("#dataIndex").css("disable", "disable");
 						$("#dataIndex option:first").prop("seleced", "selected");
 					}
-					datasourceReload(reportIdArr);
+					loading.stop();
 			  	}
+
 			});
 
 			//函数说明：合并指定表格（表格id为_w_table_id）指定列（列数为_w_table_colnum）的相同文本的相邻单元格
@@ -582,8 +523,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 			//函数说明：合并指定表格（表格id为_w_table_id）
 			function colspan(_w_table_id) {
-				_w_table_firsttd = "";
-				_w_table_currenttd = "";
+				console.log("_w_table_id="+_w_table_id)
+				_w_table_firsttd = "";//first  td 开头的
+				_w_table_currenttd = "";//current td  现在的
 				_w_table_SpanNum = 0;
 				$(_w_table_id + " tr").each(function(i) {
 					_w_table_Obj = $(this).children();
@@ -595,7 +537,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							_w_table_currenttd = $(this);
 							if(_w_table_firsttd.text() == _w_table_currenttd.text()) {
 								_w_table_SpanNum++;
-								_w_table_currenttd.hide(); //remove();
+								// _w_table_currenttd.hide(); //remove();
+								_w_table_currenttd.remove();
 								_w_table_firsttd.attr("colSpan", _w_table_SpanNum);
 							} else {
 								_w_table_firsttd = $(this);
@@ -627,17 +570,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					success: function(result) {
 						$("#filter"+filterName).empty();
 						$("#filter"+filterName).append("<option value='0'>全部</option>");
-
-						if(filterName == "survey_year"){
-							for (var item in result.data) {
-								$("#"+filterName).append("<option value="+result.data[item]+">"+result.data[item]+"</option>");
-							}
-						}else{
-							for (var item in result.data) {
-								$("#"+filterName).append("<option value="+result.data[item]+">"+item+"</option>");
-							}
+						for (var item in result.data) {
+							$("#"+filterName).append("<option value="+result.data[item]+">"+item+"</option>");
 						}
-					}, 
+					},
 					error: function(error) {
 						//console.log(error)
 					}

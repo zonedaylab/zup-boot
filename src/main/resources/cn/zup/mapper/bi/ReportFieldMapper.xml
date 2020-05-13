@@ -5,11 +5,19 @@
     <resultMap id="baseMap" type="cn.zup.bi.entity.BI_REPORT_FIELD">
         <id property="report_Field_Id" column="REPORT_FIELD_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
         <id property="report_Id" column="REPORT_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
-        <id property="field_Id" column="FIELD_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></id>
         <result property="field_Location" column="FIELD_LOCATION" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
         <result property="dim_Order" column="DIM_ORDER" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
         <result property="display" column="DISPLAY" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
         <result property="field_Name" column="FIELD_NAME" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="field_Title" column="FIELD_TITLE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="field_Caption" column="FIELD_CAPTION" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="data_Type" column="DATA_TYPE" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="field_Type" column="FIELD_TYPE" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
+        <result property="aggregate_Type" column="AGGREGATE_TYPE" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="unit" column="UNIT" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="data_Type_Str" column="data_Type_Str" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="field_Type_Str" column="field_Type_Str" javaType="java.lang.String" jdbcType="VARCHAR"></result>
+        <result property="dim_Id" column="DIM_ID" javaType="java.lang.Integer" jdbcType="INTEGER"></result>
     </resultMap>
 
     <select id="getReportTopicField" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_REPORT_FIELD">
@@ -25,9 +33,25 @@
     </select>
 
     <select id="getReportFieldList" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_REPORT_FIELD">
-        SELECT brf.REPORT_FIELD_ID, brf.REPORT_ID, brf.FIELD_LOCATION, brf.DIM_ORDER, btf.FIELD_TITLE  FIELD_NAME, brf.FIELD_ID, brf.DISPLAY
+        SELECT
+        brf.REPORT_FIELD_ID,
+        brf.REPORT_ID,
+        brf.FIELD_LOCATION,
+        brf.DIM_ORDER,
+        brf.FIELD_TITLE,
+        brf.FIELD_NAME,
+        brf.DISPLAY,
+        brf.FIELD_CAPTION,
+        brf.DATA_TYPE,
+        brf.FIELD_TYPE,
+        brf.AGGREGATE_TYPE,
+        brf.UNIT,
+        dtCon.SUBNAME as data_Type_Str,
+        ftCon.SUBNAME AS field_Type_Str
         FROM bi_report_field brf
-        JOIN bi_topic_field btf ON brf.FIELD_ID = btf.FIELD_ID
+        LEFT JOIN config dtCon ON dtCon.SUBID = brf.DATA_TYPE AND dtCon.CONFIGID = 77
+        LEFT JOIN config ftCon ON ftCon.SUBID = brf.FIELD_TYPE AND ftCon.CONFIGID = 79
+
         <where>
             <if test="reportField.report_Id != null">
                 AND brf.REPORT_ID = #{ reportField.report_Id}
@@ -36,7 +60,7 @@
                 AND brf.FIELD_LOCATION = #{ reportField.field_Location}
             </if>
         </where>
-        ORDER BY FIELD_ID DESC
+        ORDER BY REPORT_FIELD_ID DESC
     </select>
 
     <select id="getReportFieldByReportId" resultMap="baseMap" parameterType="cn.zup.bi.entity.BI_REPORT_FIELD">
@@ -62,9 +86,6 @@
             <if test="reportField.report_Field_Id != null">
                 AND brf.REPORT_FIELD_ID = #{ reportField.report_Field_Id}
             </if>
-            <if test="reportField.field_Id != null">
-                AND brf.FIELD_ID = #{reportField.field_Id}
-            </if>
         </where>
     </select>
 
@@ -79,20 +100,38 @@
         DELETE FROM bi_report_field WHERE REPORT_FIELD_ID = #{report_Field_Id}
     </delete>
 
-    <insert id="save" parameterType="cn.zup.bi.entity.BI_REPORT_FIELD" useGeneratedKeys="true" keyColumn="FIELD_ID" keyProperty="reportField.field_Id">
+    <insert id="save" parameterType="cn.zup.bi.entity.BI_REPORT_FIELD" useGeneratedKeys="true" keyColumn="REPORT_ID" keyProperty="reportField.report_Id">
         INSERT INTO BI_REPORT_FIELD (
             REPORT_ID,
-            FIELD_ID,
             FIELD_LOCATION,
             DIM_ORDER,
-            DISPLAY
+            DISPLAY,
+
+            FIELD_NAME,
+            FIELD_CAPTION,
+            FIELD_TITLE,
+            DATA_TYPE,
+            FIELD_TYPE,
+            AGGREGATE_TYPE,
+            UNIT,
+            DIM_ID
+
         ) VALUES
         (
             #{reportField.report_Id},
-            #{reportField.field_Id},
             #{reportField.field_Location},
             #{reportField.dim_Order},
-            #{reportField.display}
+            #{reportField.display},
+
+            #{reportField.field_Name},
+            #{reportField.field_Caption},
+            #{reportField.field_Title},
+            #{reportField.data_Type},
+            #{reportField.field_Type},
+            #{reportField.aggregate_Type},
+            #{reportField.unit},
+            #{reportField.dim_Id}
+
         );
     </insert>
 
@@ -110,11 +149,34 @@
             <if test="reportField.display != null">
                 brf.DISPLAY = #{ reportField.display},
             </if>
-
-            <if test="reportField.field_Id != null">
-                brf.FIELD_ID = #{ reportField.field_Id},
+            <if test="reportField.field_Name != null">
+                brf.FIELD_NAME = #{ reportField.field_Name},
             </if>
+
+            <if test="reportField.field_Caption != null">
+                brf.FIELD_CAPTION = #{ reportField.field_Caption},
+            </if>
+            <if test="reportField.field_Title != null">
+                brf.FIELD_TITLE = #{ reportField.field_Title},
+            </if>
+            <if test="reportField.data_Type != null">
+                brf.DATA_TYPE = #{ reportField.data_Type},
+            </if>
+            <if test="reportField.field_Type != null">
+                brf.FIELD_TYPE = #{ reportField.field_Type},
+            </if>
+            <if test="reportField.aggregate_Type != null">
+                brf.AGGREGATE_TYPE = #{ reportField.aggregate_Type},
+            </if>
+            <if test="reportField.unit != null">
+                brf.UNIT = #{ reportField.unit},
+            </if>
+            <if test="reportField.dim_Id != null">
+                brf.DIM_ID = #{ reportField.dim_Id},
+            </if>
+
         </trim>
+
         WHERE brf.REPORT_FIELD_ID = #{ reportField.report_Field_Id}
         AND brf.REPORT_ID = #{ reportField.report_Id}
     </update>
