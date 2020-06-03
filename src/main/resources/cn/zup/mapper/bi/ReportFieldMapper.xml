@@ -59,6 +59,10 @@
             <if test="reportField.field_Location != null">
                 AND brf.FIELD_LOCATION = #{ reportField.field_Location}
             </if>
+
+            <if test="reportField.dim_Id_Str != null and reportField.dim_Id_Str!=''">
+                AND brf.DIM_ID = #{ reportField.dim_Id_Str}
+            </if>
         </where>
         ORDER BY REPORT_FIELD_ID DESC
     </select>

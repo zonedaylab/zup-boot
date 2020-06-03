@@ -412,7 +412,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    	            type: 'POST',
 		    	            dataType: 'json',
 		    	            success: function (result) {
-		    	                if(result.data == "success"){
+		    	               /* if(result.data == "success"){
 		    	                	if(result.mes=="")
 
 		    	                	parent.parent.bootbox.alert("删除成功", function(){});
@@ -429,7 +429,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 									parent.parent.bootbox.alert("该维度已经关联主题，请先删除主题后再进行删除！", function(){});
 
-		   	                	}
+		   	                	}*/
+
+								if(result.data == "success"){
+										parent.parent.bootbox.alert("删除成功", function(){});
+										loadGrid();
+								}else{
+									parent.parent.bootbox.alert("删除失败，该维度已经关联某报表，请先删除报表后再进行删除！", function(){});
+								}
+
+
 		    	            },
 		    	            error: function(){
 		    	            	parent.parent.bootbox.alert("删除失败", function(){});

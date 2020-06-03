@@ -2,9 +2,9 @@ package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.BI_DIM;
 import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
-import cn.zup.bi.entity.BI_TOPIC_FIELD;
+import cn.zup.bi.entity.BI_REPORT_FIELD;
 import cn.zup.bi.service.BIDimService;
-import cn.zup.bi.service.TopicFieldService;
+import cn.zup.bi.service.ReportFieldService;
 import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONArray;
@@ -28,8 +28,10 @@ public class BIDimController {
 	
 	@Resource
 	BIDimService biDimService;
+
 	@Resource
-	TopicFieldService topicFieldService;
+	ReportFieldService reportFieldService;
+
 	/**
 	 * 维表设计首页
 	 * @author antsdot
@@ -274,44 +276,101 @@ public class BIDimController {
 	 * @author 张朝阳
 	 * @date 2019
 	 */
+//	@RequestMapping("/deleteDimData１")
+//	@ResponseBody
+//	public String deleteDimData(@RequestParam("dim_Ids[]") Integer[] dimIds, HttpServletRequest request) {
+//		JSONObject json = new JSONObject();
+//		String errorId = "";
+//		String tipstr="";
+//		List<BI_TOPIC_FIELD> fieldList=null;
+//		BI_TOPIC_FIELD field= new BI_TOPIC_FIELD();
+//		List<BI_DIM_ATTRIBUTE> dimAttributeList=null;
+//		for (int i = 0; i < dimIds.length; i++) {
+//			try{
+//
+//				field.setDim_Id(dimIds[i]);
+//				//先去查詢bi_report_field表是否存在绑定的
+//				BI_REPORT_FIELD bi_report_field = new BI_REPORT_FIELD();
+//
+//				bi_report_field.setDim_Id(dimIds[0]);//如果是删除
+//
+//				//这里分页在service层和dao层没有真正的用到，不知道为啥要加
+//				reportFieldService.getReportFieldList(bi_report_field,0,0);
+//
+//				//郑晖２０２０年０６月０３日１８：３０：３１删除
+////				fieldList=topicFieldService.getTopicFieldList(field);
+////				if(fieldList!=null&&fieldList.size()!=0) {
+////					tipstr += dimIds[i] + ",";
+////				} else {
+//				dimAttributeList=biDimService.getDimInInfo(dimIds[i]);
+//				if(dimAttributeList!=null&&dimAttributeList.size()!=0)	{
+//					for (BI_DIM_ATTRIBUTE o :dimAttributeList)
+//						biDimService.deleteDimAttribute(o);
+//					dimAttributeList.clear();
+//				}
+//				biDimService.deleteDimData(dimIds[i]);
+//				errorId = "success";
+////				}
+//			}catch(Exception e){
+//				if(i == dimIds.length-1){
+//					errorId += dimIds[i];
+//				}else{
+//					errorId += dimIds[i]+",";
+//				}
+//				errorId=errorId+" error:"+e.getMessage();
+//			}
+//		}
+//		json.put("data", errorId);
+//		json.put("mes",tipstr);
+//		return json.toString();
+//	}
+
+
+	/**
+	 * 郑晖改：根据唯独id删除维度表数据
+	 * ２０２０－０６－０３　１８：４８：５２
+	 * @param dimIds
+	 * @return
+	 */
 	@RequestMapping("/deleteDimData")
 	@ResponseBody
-	public String deleteDimData(@RequestParam("dim_Ids[]") Integer[] dimIds, HttpServletRequest request) {
+	public String deleteDimDataById(@RequestParam("dim_Ids[]") Integer[] dimIds) {
 		JSONObject json = new JSONObject();
-		String errorId = "";
+		String error = "";
 		String tipstr="";
-		List<BI_TOPIC_FIELD> fieldList=null;
-		BI_TOPIC_FIELD field= new BI_TOPIC_FIELD();
-		List<BI_DIM_ATTRIBUTE> dimAttributeList=null;
+
+		//组合多个id
+		String dimIdStr="";
 		for (int i = 0; i < dimIds.length; i++) {
-			try{
-
-				field.setDim_Id(dimIds[i]);
-				fieldList=topicFieldService.getTopicFieldList(field);
-				if(fieldList!=null&&fieldList.size()!=0) {
-					tipstr += dimIds[i] + ",";
-
-				} else {
-				dimAttributeList=biDimService.getDimInInfo(dimIds[i]);
-				if(dimAttributeList!=null&&dimAttributeList.size()!=0)	{
-					for (BI_DIM_ATTRIBUTE o :dimAttributeList)
-						biDimService.deleteDimAttribute(o);
-					dimAttributeList.clear();
-				}
-				biDimService.deleteDimData(dimIds[i]);
-				errorId = "success";
-				}
-			}catch(Exception e){
-				if(i == dimIds.length-1){
-					errorId += dimIds[i];
-				}else{
-					errorId += dimIds[i]+",";
-				}
-				errorId=errorId+" error:"+e.getMessage();
-			}
+			dimIdStr = dimIdStr+dimIds[i]+",";
 		}
-		json.put("data", errorId);
+		dimIdStr=dimIdStr.substring(0,dimIdStr.length());
+
+		//先去查詢bi_report_field表是否存在绑定的
+		BI_REPORT_FIELD bi_report_field = new BI_REPORT_FIELD();
+		bi_report_field.setDim_Id_Str(dimIdStr);
+
+		//查询数据库是否存在绑定了报表
+		List<BI_REPORT_FIELD> reportFieldList = reportFieldService.getReportFieldList(bi_report_field,0,0);
+
+
+		//如果没有绑定的就删除
+		if(reportFieldList.size()==0 || reportFieldList==null){
+			try {
+				for (int i = 0; i < dimIds.length ; i++) {
+					biDimService.deleteDimData(dimIds[i]);
+				}
+				error = "success";
+			}catch (Exception e){
+
+			}
+
+		}
+
+		json.put("data", error);
 		json.put("mes",tipstr);
 		return json.toString();
 	}
+
+
 }

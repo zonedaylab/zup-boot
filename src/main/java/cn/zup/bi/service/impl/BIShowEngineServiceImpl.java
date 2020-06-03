@@ -30,11 +30,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	@Resource
 	private BIDimService biDimService;
 	@Resource
-	private TopicFieldService biTopicFieldService;
-	@Resource
 	private ReportService biReportService;
-	@Resource
-	private BIPageService biPageService;
+
 
 
 	List<BIShowField> m_biDimFieldList;
@@ -154,8 +151,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		//获取维度与指标数据
 		m_biDimFieldList = biDimService.getDimFieldList(vreportData,reportID);
 
-		List<BIShowField> measureFieldList = biTopicFieldService.getTopicFieldList(reportID);
+//		List<BIShowField> measureFieldList = biTopicFieldService.getTopicFieldList(reportID);
 
+		List<BIShowField> measureFieldList = biShowEngineDao.getReportTopicInfo(reportID);
 
 		List<Map<String, Object>> listDataMap = getReportDataFromDB(vreportData,listBIReport.get(0));//1.从数据库中获取报表数
 

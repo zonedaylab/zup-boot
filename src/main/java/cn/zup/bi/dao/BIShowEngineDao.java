@@ -24,5 +24,5 @@ public interface BIShowEngineDao{
 	 * @return
 	 */
 	List<BIShowField> getReportTopicInfo( @Param("report_Id") Integer report_Id);
-	
+
 }

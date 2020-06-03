@@ -532,7 +532,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			function getDataType(){
 				$.ajax({
 					type: "POST",
-					url: "rest/bi/BITopicFiledController/getDataType",
+					url: "rest/bi/biReportFieldController/getDataType",
 					cache: false,  //禁用缓存
 					dataType: "json",
 					success: function (result) {
@@ -553,7 +553,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			function getFieldType(){
 				$.ajax({
 					type: "POST",
-					url: "rest/bi/BITopicFiledController/getFieldType",
+					url: "rest/bi/biReportFieldController/getFieldType",
 					cache: false,  //禁用缓存
 					dataType: "json",
 					success: function (result) {
@@ -766,7 +766,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			//ajax请求数据
 			$.ajax({
 				type: "POST",
-				url: "rest/bi/BITopicFiledController/getBiDimName",
+				url: "rest/bi/biReportFieldController/getBiDimName",
 				cache: false,  //禁用缓存
 				dataType: "json",
 				success: function (result) {

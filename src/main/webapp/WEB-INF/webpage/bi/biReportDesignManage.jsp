@@ -267,23 +267,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	     	});
 	    	//获取主题字段信息
 	    	function loadThemeField(){
+	    		alert("获取主题字段信息");
+
                 //ajax请求数据
-                $.ajax({
-                    type: "POST",
-                    url: "rest/bi/biReportDesignController/getFieldData",
-                    cache: false,  //禁用缓存
-                    data: param,  //传入组装的参数
-                    dataType: "json",
-                    success: function (result) {
-                    	$("#yuan").html("");
-						for(var i=0; i<result.data.length; i++){
-							$("#yuan").append("<div style='white-space:nowrap;'><div style='display:none; margin-left:15px;'>"+result.data[i].field.title_Field_Id+"</div><div class='lie' title='"+result.data[i].field.title_Field_Name+":"+result.data[i].field.field_Caption+"'>"+result.data[i].field.title_Field_Name+"</div><div>"+result.data[i].field.field_Type+"</div><div style='display:none;'>"+result.data[i].drill_Type+"</div><div style='display:none;'></div><div style='display:none;'>"+result.data[i].field.field_Caption+"</div><div>"+result.data[i].field.field_Title+"</div><div>"+result.data[i].field.dim_Name+"</div><div>"+result.data[i].field.field_Length+"</div><div>"+result.data[i].field.field_Decimal+"</div><div>"+result.data[i].field.null_Permit+"</div><div>"+result.data[i].field.field_Identity+"</div></div>");
-                    	}
-						iframe.setAttribute("height", document.body.scrollHeight+"px");
-						$("#yuan").css("width", "100%");
-                    	$(".container").shapeshift();
-                    }
-                });
+                // $.ajax({
+                //     type: "POST",
+                //     url: "rest/bi/biReportDesignController/getFieldData",
+                //     cache: false,  //禁用缓存
+                //     data: param,  //传入组装的参数
+                //     dataType: "json",
+                //     success: function (result) {
+                //     	$("#yuan").html("");
+				// 		for(var i=0; i<result.data.length; i++){
+				// 			$("#yuan").append("<div style='white-space:nowrap;'><div style='display:none; margin-left:15px;'>"+result.data[i].field.title_Field_Id+"</div><div class='lie' title='"+result.data[i].field.title_Field_Name+":"+result.data[i].field.field_Caption+"'>"+result.data[i].field.title_Field_Name+"</div><div>"+result.data[i].field.field_Type+"</div><div style='display:none;'>"+result.data[i].drill_Type+"</div><div style='display:none;'></div><div style='display:none;'>"+result.data[i].field.field_Caption+"</div><div>"+result.data[i].field.field_Title+"</div><div>"+result.data[i].field.dim_Name+"</div><div>"+result.data[i].field.field_Length+"</div><div>"+result.data[i].field.field_Decimal+"</div><div>"+result.data[i].field.null_Permit+"</div><div>"+result.data[i].field.field_Identity+"</div></div>");
+                //     	}
+				// 		iframe.setAttribute("height", document.body.scrollHeight+"px");
+				// 		$("#yuan").css("width", "100%");
+                //     	$(".container").shapeshift();
+                //     }
+                // });
 	    	}
 	    	
 	    	//加载主题下拉框

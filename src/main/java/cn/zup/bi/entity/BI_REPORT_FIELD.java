@@ -27,5 +27,6 @@ public class BI_REPORT_FIELD implements Serializable {
 
 	private String data_Type_Str;
 	private String field_Type_Str;
+	private String dim_Id_Str;//维表ID
 
 }

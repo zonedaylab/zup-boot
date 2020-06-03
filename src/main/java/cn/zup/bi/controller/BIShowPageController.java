@@ -28,10 +28,8 @@ public class BIShowPageController {
 	private BIShowEngineService biShowEngineService;
 	@Resource
 	private BIDimService biDimService;
-	@Resource
-	private TopicFieldService biTopicFieldService;
-	@Resource
-	private TopicService topicService;
+//	@Resource
+//	private TopicFieldService biTopicFieldService;
 	@Resource
 	private ReportService biReportService;
 	@Resource
