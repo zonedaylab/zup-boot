@@ -1,8 +1,9 @@
 package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.BI_REPORT;
+import cn.zup.bi.entity.BI_REPORT_FIELD;
+import cn.zup.bi.service.ReportFieldService;
 import cn.zup.bi.service.ReportService;
-//import cn.zup.bi.service.TopicFieldService;
 import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author gavin
@@ -22,10 +25,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/rest/bi/biReportController")
 public class BIReportController {
-//	@Resource
-//	private TopicFieldService topicFieldService;
 	@Resource
 	private ReportService reportService;
+
+	@Resource
+	private ReportFieldService reportFieldService;
 
 	/**
 	 * 返回首页
@@ -160,4 +164,48 @@ public class BIReportController {
 		json.put("msg", "success");
 		return json.toString();
 	}
+
+
+	/**
+	 * 获取报表列表
+	 * @author 段延玉  郑晖改
+	 * */
+	@RequestMapping("/getTableName")
+	@ResponseBody
+	public String getTableName(BI_REPORT report){
+		List<BI_REPORT> biReports = reportService.getReportPagingList(report);
+
+		Map<String,List<BI_REPORT_FIELD>> maps = new HashMap<>();
+
+		Map<String,Map<String,String>> mapMap = new HashMap<>();
+
+		biReports.stream().forEach(br -> {
+
+			BI_REPORT_FIELD reportField = new BI_REPORT_FIELD();
+			reportField.setReport_Id(br.getReport_Id());
+
+			List<BI_REPORT_FIELD> biReportFields = reportFieldService.getReportFieldList(reportField, 0, 0);
+			Map<String,String> m = new HashMap<>();
+
+			biReportFields.stream().forEach(brf->{
+				m.put(brf.getField_Name(),brf.getField_Name());
+			});
+
+			//用于前台过滤比较
+			mapMap.put(br.getReport_Id()+"",m);
+
+			//每一个key都是Report_Id
+			maps.put(br.getReport_Id()+"",biReportFields);
+
+		});
+
+
+		JSONObject json = new JSONObject();
+		json.put("biReportLists", biReports);
+		json.put("biReportFieldMaps", maps);
+		json.put("mapMap", mapMap);
+
+		return json.toString();
+	}
+
 }

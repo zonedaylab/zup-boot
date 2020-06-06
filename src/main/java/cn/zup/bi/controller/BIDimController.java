@@ -109,7 +109,10 @@ public class BIDimController {
 		}
 		return json.toString();
 	}
-	
+
+
+
+
 	/**
 	 * 
 	 * 保存设计的维表名称

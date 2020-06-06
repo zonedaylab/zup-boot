@@ -5,7 +5,6 @@ import cn.zup.bi.entity.BI_REPORT_FIELD;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.ReportFieldService;
 import cn.zup.bi.service.ReportService;
-//import cn.zup.bi.service.TopicFieldService;
 import cn.zup.bi.service.settings.MgeidsConfig;
 import cn.zup.framework.common.vo.CommonResult;
 import cn.zup.rbac.service.ConfigurationService;
@@ -24,8 +23,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/rest/bi/biReportFieldController")
 public class BIReportFieldController {
-//	@Resource
-//	private TopicFieldService topicFieldService;
 	@Resource
 	private ReportService reportService;
 	@Resource
