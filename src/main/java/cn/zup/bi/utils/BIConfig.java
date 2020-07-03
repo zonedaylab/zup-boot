@@ -1,5 +1,6 @@
 package cn.zup.bi.utils;
 
+
 public class BIConfig {
 
     /***************************************************************

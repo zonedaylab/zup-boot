@@ -16,5 +16,4 @@ public class V_ReportData {
 	private List<String> key;
 	private List<Object> value;
 	private Integer block_Type;
-	private Integer index;
 }

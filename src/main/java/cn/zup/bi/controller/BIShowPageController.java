@@ -131,6 +131,7 @@ public class BIShowPageController {
 	 * 获取报表的筛选字段
 	 * @author 谢炎
 	 * */
+
 	@RequestMapping("/getDimData")
 	@ResponseBody
 	public JSONObject getDimData(Integer reportId) throws SQLException, ClassNotFoundException{

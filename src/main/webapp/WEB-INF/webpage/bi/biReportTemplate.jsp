@@ -148,7 +148,7 @@
 				pageid=${pageId};
 				screenIndex=screen[0].screen_Index;
 				getReportListByPageId();//获取数据源
-				getList(0);
+				getList();
 			});
 
 			//获取报表的指标字段
@@ -222,6 +222,8 @@
 						}
 					}
 		 		});
+				drill_Name=id;
+				drill_Value=indicators;
 
 				var data={
 					bi_Page_Id: pageid,
@@ -233,8 +235,6 @@
 					drill_Name: drill_Name,
 					drill_Value: drill_Value
 				}
-				if(indicators != 0)
-				    data.index = indicators;
 				//获取报数据数据
 				$.ajax({
 					type: "post",
@@ -319,7 +319,7 @@
 										theadTh += "<th></th>"
 									else{
 										var thCon = re.data[0].tableHeader[x][y]+"";
-										if(re.data[0].BIRowDimDatas[x].dill_type==3) {
+										if(re.data[0].BIRowDimDatas[x].drill_Type==3) {
 											if (thCon.indexOf("-") > -1) {
 												if ((thCon.split("-")[1] + "").length == 6) {//表示是县级单位（第三级 长度为6  .xxxxxx.
 													theadTh += "<th title='" + thCon.split("-")[0] + "'><a class='sla' target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county=" + thCon.split("-")[1] + "&year=" + year + "'>" + thCon.split("-")[0] + "</a></th>";
@@ -328,14 +328,14 @@
 												}
 											}
 										}
-										else if(re.data[0].BIRowDimDatas[x].dill_type==4){//不同主题的钻取
+										else if(re.data[0].BIRowDimDatas[x].drill_Type==4){//不同主题的钻取
 											/*
 											   by liuxf   drill_type=4 按照不同的主题进行钻取
 											   getList (drill_name ,drill_value
 											   getList(dim_name - current_topic_index,  dim_data) 生成连接进行钻取。
 											*/
-											param=re.data[0].BIRowDimDatas[x].field_name+'-' +re.data[0].BIRowDimDatas[x].currentTableIndex+","+thCon;
-											theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+param+")'>"+ thCon.split("-")[0] +"</a></th>";
+											param=re.data[0].BIRowDimDatas[x].field_Name+'-' +re.data[0].BIRowDimDatas[x].currentReportIndex+","+thCon;
+											theadTh += "<th title='"+thCon.split("-")[0]+"'><a class='sla' href='javascript:getList("+param+")'>"+ thCon +"</a></th>";
 										}
 										else
 											theadTh += "<th title='" + thCon + "'><span class='sla'>" + thCon + "</span></th>";
@@ -369,40 +369,60 @@
 								}
 								for(var i = 0; i < re.data[z].tableData.length; i++){ //数据
 									var tr = "<tr>";  //总
+									//针对维度的处理
+									for(j=0;j< re.data[z].BIColDimDatas.length;j++){
+										var tdCon = re.data[z].tableData[i][j];
 
-									for(var j = 0; j < allDataCols; j++){ //数据
+										if(re.data[z].BIColDimDatas[j].drill_Type==3) {
+											if (tdCon.indexOf("-") > -1) {
+													if ((tdCon.split("-")[1] + "").length == 6) {//表示是县级单位（第三级 长度为6  .xxxxxx.
+														tr += "<th title='" + tdCon.split("-")[0] + "'><a class='sla' target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county=" + tdCon.split("-")[1] + "&year=" + year + "'>" + tdCon.split("-")[0] + "</a></th>";
+													} else {
+														tr += "<th title='" + tdCon.split("-")[0] + "'><a class='sla' href='javascript:getList(" + tdCon.split("-")[1] + ")'>" + tdCon.split("-")[0] + "</a></th>";
+													}
+											}
+										}
+										else if(re.data[z].BIColDimDatas[j].drill_Type==4){//不同主题的钻取
+											/*
+											   by liuxf   drill_type=4 按照不同的主题进行钻取
+											   getList (drill_name ,drill_value) 通用含义
+											   在本节的含义：
+											   dim_name  钻取的字段 field_name,
+											   current_topic_index当前主题，
+											   dim_data  对应的字段数据 。
+											   如field_name = organ_code ; dim_data='330'(例如济南）
+											   getList(dim_name - current_topic_index,  dim_data) 生成连接进行钻取。
+											*/
+											param="\""+re.data[z].BIColDimDatas[j].field_Name+'-' +
+													re.data[z].BIColDimDatas[j].currentReportIndex+"\","+
+													re.data[z].BIColDimDatas[j].listDataCode[i];
+											tr += "<th title='"+tdCon+"'><a class='sla' href='javascript:getList("+param+")'>"+ tdCon +"</a></th>";
+										}
+										else
+											tr += "<th title='" + tdCon + "'><span class='sla'>" + tdCon + "</span></th>";
+									}
+
+									//针对业务数据的处理
+									for(var j = re.data[z].BIColDimDatas.length; j < allDataCols; j++){
 										if(typeof(re.data[z].tableData[i][j]) === "undefined"){
 											tr += "<td></td>";
 										} else {
 											var tdCon = re.data[z].tableData[i][j];
-											if(tdCon.indexOf("-") > -1){
-												if((tdCon.split("-")[1]+"").length == 6){
-													tr += "<td><a target='_blank' href='rest/mgeids/mgeidsMineInfoListController?county="+tdCon.split("-")[1]+"&year="+year+"'>" + tdCon.split("-")[0]+"</a></td>";
-												}else{
-													tr += "<td><a href='javascript:getList("+tdCon.split("-")[1]+")'>"+ tdCon.split("-")[0] +"</a></td>";
-												}
+
+											if(j > re.data[z].BIColDimDatas.length-1){
+												tr += "<td class='txtRight'>"+tdCon+"</td>";
+											} else{
+												tr += "<td>"+tdCon+"</td>";
+											}
+
+											var dl = re.data[z].BIColDimDatas.length;//列维度的数量 by liuxf
+											if(!isNaN(parseInt(tdCon)) || !isNaN(parseInt(tdCon))){
+												smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
 											}else{
-												if(j > re.data[z].BIColDimDatas.length-1){
+												smallTotal[j-dl] = smallTotal[j-dl]+0;
+											}
 
-													tr += "<td class='txtRight'>"+tdCon+"</td>";
-
-												} else{
-													tr += "<td>"+tdCon+"</td>";
-												}
-
-
-												var dl = re.data[z].BIColDimDatas.length;
-												if(j >= dl){
-                                                    if(!isNaN(parseInt(tdCon)) || !isNaN(parseInt(tdCon))){
-
-														smallTotal[j-dl] = smallTotal[j-dl]+parseInt(tdCon);
-													}else{
-														smallTotal[j-dl] = smallTotal[j-dl]+0;
-													}
-
-												}
-											} //else -
-										}  //undefinal else
+										}  //undefined else
 									} //for 数据
 
 									$("tbody").append(tr);

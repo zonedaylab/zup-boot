@@ -1,5 +1,8 @@
 package cn.zup.bi.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -17,10 +20,14 @@ public final class BIConnection {
 	public static String PASSWORD;
 	public static String CLASSNAME;
 
+
+
 	static {
 		Properties prop = new Properties();
 		InputStream in = BIConnection.class.getResourceAsStream("/dbconfig.properties");
 		try {
+
+
 			prop.load(in);
 			URL = prop.getProperty("jdbc.url.mysql.bi").trim();
 			USERNAME = prop.getProperty("jdbc.username.mysql.bi").trim();   //toLowerCase();

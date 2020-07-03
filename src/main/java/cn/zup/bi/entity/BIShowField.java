@@ -36,6 +36,16 @@ public class BIShowField {
 	private Integer dim_Order;      //第几列
 
 
+	//字段对应的中文别名，用于与维度连接后的字段名称
+	public String getFieldNameChinese(){
+		return  field_Name+"chinese";
+	}
+	//用于维度连接后的英文字段名称（编码）
+	public String getFieldNameCode(){
+		return  field_Name+"code";
+	}
+
+
 	//针对dtrill_type=4 不同的主题 by liuxf
 	/*
 	 drill_name= 维度名称:主题表索引index； 表示要钻取的维度；主题表索引index=1表示第一个主题表；index=2表示第二个主题表
@@ -57,6 +67,7 @@ public class BIShowField {
 	*/
 
 	private Integer currentShowReportIndex;
+
 	private String nextTopicTableName;//下一个主题表的名字
 	private String nextFilterName; //过滤字段
 }

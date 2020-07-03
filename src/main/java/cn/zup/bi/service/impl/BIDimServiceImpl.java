@@ -315,19 +315,25 @@ public class BIDimServiceImpl implements BIDimService {
 					}
 					break;
 				case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC:
-
+					System.err.println("钻取：DRILL_TYPE_DIFF_TOPIC");
 					String[] topoicTables = biShowField.getDrill_Info().split("-");
+					int currentShowTopicIndex=-1;//当前正在展示的主题，-1表示没有主题展示。
 					if(reportData.getDrill_Name()==null){
+
+						biShowField.setCurrentShowReportIndex(currentShowTopicIndex);
+						String []arrtopicTable=topoicTables[currentShowTopicIndex+1].split(",");//+1表示下一个需要展示的主题。
+						biShowField.setNextTopicTableName(arrtopicTable[0]);
+						biShowField.setNextFilterName(arrtopicTable[1]);
 						break;
 					}
 					String []arrDrillName=reportData.getDrill_Name().split("-");
 					if(arrDrillName.length<=1)
 						break;
 					String drillDimName=arrDrillName[0];
-					int currentShowReportIndex=Integer.parseInt(arrDrillName[1]);//当前正在展示的报表索引
-					biShowField.setCurrentShowReportIndex(currentShowReportIndex);
-					if(drillDimName == biShowField.getField_Name() ) {
-						String []arrtopicTable=topoicTables[currentShowReportIndex+1].split(",");
+					currentShowTopicIndex=Integer.parseInt(arrDrillName[1]);//当前正在展示的报表索引
+					biShowField.setCurrentShowReportIndex(currentShowTopicIndex);
+					if(drillDimName.equals(biShowField.getField_Name())) {
+						String []arrtopicTable=topoicTables[currentShowTopicIndex+1].split(",");
 						biShowField.setNextTopicTableName(arrtopicTable[0]);
 						biShowField.setNextFilterName(arrtopicTable[1]);
 					}
