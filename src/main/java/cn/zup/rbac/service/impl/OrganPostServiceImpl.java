@@ -3,16 +3,14 @@ package cn.zup.rbac.service.impl;
 import cn.zup.rbac.dao.OrganDao;
 import cn.zup.rbac.dao.PostDao;
 import cn.zup.rbac.dao.UserDao;
-import cn.zup.rbac.entity.Account;
-import cn.zup.rbac.entity.Organ;
-import cn.zup.rbac.entity.Post;
-import cn.zup.rbac.entity.UserInfo;
+import cn.zup.rbac.entity.*;
 import cn.zup.rbac.service.OrganPostService;
 import cn.zup.rbac.service.settings.ConfigSetting;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.System;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -490,6 +488,88 @@ import java.util.Map.Entry;
      */
     public List<Organ> getOrganList(Organ organ){
         return organDao.listByHiber(organ);
+    }
+	/**
+	 * 获取组织所有子节点 返回值Map
+	 *
+	 * @return
+	 */
+    public HashMap<Long, List<Integer>> getOrganSubNodeList(Integer organId){
+		//获取所有组织
+
+		List<Organ> listOrgan = getOrganList();
+		Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+		for (Organ organ : listOrgan) {
+			map.put(organ.getOrganId(), organ.getParentOrganId());
+		}
+		OrganSubNode root = new OrganSubNode();
+		root.setOrganId(organId.longValue());
+		initEntity(map,root);
+
+		HashMap<Long, List<Integer>> mapRoot = new HashMap<>();
+		HashMap<Long, List<Integer>> mapLeaf = new HashMap<>();
+		preOrder(root,mapRoot,mapLeaf);
+		mapRoot.putAll(mapLeaf);
+    	return mapRoot;
+	}
+	private void preOrder(OrganSubNode root,HashMap<Long, List<Integer>> map,HashMap<Long, List<Integer>> mapLeaf) {
+		if(root != null){
+			if(root.getChildren() != null){
+				List<Integer> list = new ArrayList<>();
+				for (int i = 0; i < root.getChildren().size(); i++) {
+					preOrder(root.getChildren().get(i),map,mapLeaf);
+					System.out.print(root.getChildren().get(i).getOrganId() + " ");
+					list.add(root.getChildren().get(i).getOrganId().intValue());
+					if(map.get(root.getChildren().get(i).getOrganId())!=null){
+						list.addAll(map.get(root.getChildren().get(i).getOrganId()));
+					}
+				}
+				map.put(root.getOrganId(),list);
+			}
+			else{
+				mapLeaf.put(root.getOrganId(),null);
+			}
+		}
+	}
+
+	private void initEntity(Map map,OrganSubNode entity){
+		ArrayList<Integer> re1 = getKey(map, entity.getOrganId().intValue());
+		for (Integer organId : re1) {
+			List<OrganSubNode> children = new ArrayList<OrganSubNode>();
+			OrganSubNode child = new OrganSubNode();
+			child.setOrganId(organId.longValue());
+			children.add(child);
+			if(entity.getChildren()==null){
+				entity.setChildren(children);
+			}
+			else
+			{
+				children.addAll(entity.getChildren());
+				entity.setChildren(children);
+			}
+		}
+		if(entity.getChildren()!=null){
+			for (int i = 0; i < entity.getChildren().size(); i++) {
+				initEntity(map,entity.getChildren().get(i));
+			}
+		}
+	}
+
+    public String getMySubOrganIds(int organId) {
+        //获取所有organ 放置map中
+        List<Organ> organList = getOrganList();
+        Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+        for (Organ organ : organList) {
+            if(organ.getParentOrganId()!=null)
+                map.put(organ.getOrganId(), organ.getParentOrganId());
+            else
+                map.put(organ.getOrganId(), 0);
+        }
+        String organIds="";
+        organIds = getOrganIds(map,organId,organIds);
+        if(organIds.indexOf(",")>0)
+            organIds=organIds.substring(0,organIds.length()-1);
+        return organIds;
     }
 	
 }
