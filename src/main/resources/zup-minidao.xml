@@ -13,14 +13,14 @@
 	<aop:aspectj-autoproxy />
 
 	<context:component-scan base-package="cn.zup.*" />
-	<!-- 引入属性文件 -->
-	<context:property-placeholder location="classpath:dbconfig.properties" />
 	<!-- 配置数据源 -->
 	<bean name="dataSource_jeecg" class="com.alibaba.druid.pool.DruidDataSource"
 		init-method="init" destroy-method="close">
-		<property name="url" value="${jdbc.url.jeecg}" />
-		<property name="username" value="${jdbc.username.jeecg}" />
-		<property name="password" value="${jdbc.password.jeecg}" />
+
+		<property name="url" value="${spring.datasource.zuprbac.url}" />
+		<property name="username" value="${spring.datasource.zuprbac.username}" />
+		<property name="password" value="${spring.datasource.zuprbac.password}" />
+
 		<!-- 初始化连接大小 -->
 		<property name="initialSize" value="0" />
 		<!-- 连接池最大使用连接数量 -->
@@ -31,7 +31,7 @@
 		<property name="minIdle" value="0" />
 		<!-- 获取连接最大等待时间 -->
 		<property name="maxWait" value="60000" />
-		<property name="validationQuery" value="${validationQuery.sqlserver}" />
+		<property name="validationQuery" value="${spring.datasource.zuprbac.validationQuery}" />
 		<property name="testOnBorrow" value="false" />
 		<property name="testOnReturn" value="false" />
 		<property name="testWhileIdle" value="true" />
@@ -69,8 +69,8 @@
 		<property name="hibernateProperties">
 			<props>
 				<!-- <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> -->
-				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
-				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.dialect">${spring.hibernate.dialect}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${spring.hibernate.hbm2ddl.auto}</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
@@ -137,7 +137,7 @@
 		<!-- 输出sql -->
 		<property name="showSql" value="true"></property>
 		<!-- 数据库类型 -->
-		<property name="dbType" value="${jdbc.dbType}"></property>
+		<property name="dbType" value="mysql"></property>
 		<!-- dao地址,配置符合spring方式 -->
 		<property name="basePackage" value="cn.zup.**.dao"></property>
 		<!-- 使用的注解,默认是Minidao,推荐 Repository -->

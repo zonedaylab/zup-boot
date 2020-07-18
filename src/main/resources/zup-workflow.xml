@@ -17,22 +17,20 @@
        http://www.springframework.org/schema/aop/spring-aop-3.2.xsd"
        default-autowire="byName"  >
        
-       <!-- 配置数据库连接基本信息 -->
-       <!-- 引入属性文件 -->
-		<context:property-placeholder location="classpath:dbconfig.properties" />
-		<!-- 配置数据源 -->
+      	<!-- 配置数据源 -->
 		<bean name="dataSource_workflow" class="com.alibaba.druid.pool.DruidDataSource"
 			init-method="init" destroy-method="close">
-			<property name="url" value="${jdbc.url.zupwf}" />
-			<property name="username" value="${jdbc.username.zupwf}" />
-			<property name="password" value="${jdbc.password.zupwf}" />
-	        <!-- 连接池最大使用连接数量 -->
+			<property name="url" value="${spring.datasource.zupwf.url}" />
+			<property name="username" value="${spring.datasource.zupwf.username}" />
+			<property name="password" value="${spring.datasource.zupwf.password}" />
+
+			<!-- 连接池最大使用连接数量 -->
 			<property name="maxActive" value="20" />
 			<!-- 连接池最小空闲 -->
 			<property name="minIdle" value="0" />
 	        <property name="maxWait" value="50"></property>  
 	        <property name="defaultAutoCommit" value="true"></property>
-	        <property name="validationQuery" value="${validationQuery.zupwf}" />
+	        <property name="validationQuery" value="${spring.datasource.zupwf.validationQuery}" />
 	        <property name="removeAbandoned" value="true" /> <!-- 打开removeAbandoned功能 -->
 		  	<property name="removeAbandonedTimeout" value="180" /> <!-- 1800秒，也就是30分钟 -->
 		  	<property name="logAbandoned" value="true" /> <!-- 关闭abanded连接时输出错误日志 -->

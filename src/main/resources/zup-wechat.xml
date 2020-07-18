@@ -17,16 +17,15 @@
        http://www.springframework.org/schema/aop/spring-aop-3.2.xsd"
        default-autowire="byName"  >
        
-       <!-- 引入属性文件 -->
-       <context:property-placeholder location="classpath:dbconfig.properties"/>
-       
+
        <!-- 配置数据库连接基本信息 -->
        <bean id="dataSource_wechat" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
-	        <property name="driverClassName" value="${jdbc.driverClassName.wechat}"></property>  
-	        <property name="url" value="${jdbc.url.wechat}"></property>  
-	        <property name="username" value="${jdbc.username.wechat}"></property>  
-	        <property name="password" value="${jdbc.password.wechat}"></property>  
-	        <!-- 连接池最大使用连接数量 -->
+
+		   <property name="url" value="${spring.datasource.zuprbac.url}" />
+		   <property name="username" value="${spring.datasource.zuprbac.username}" />
+		   <property name="password" value="${spring.datasource.zuprbac.password}" />
+
+		   <!-- 连接池最大使用连接数量 -->
 			<property name="maxActive" value="20" />
 			<!-- 连接池最小空闲 -->
 			<property name="minIdle" value="0" />
