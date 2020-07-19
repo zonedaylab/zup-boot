@@ -7,6 +7,8 @@ server:
     max-threads: 1000  # 配置最大线程数
 
 spring:
+  system_config:
+    name: fundhomeController  #用来配置当前启动的系统
   mvc:
     view:
       prefix: /WEB-INF/webpage/  

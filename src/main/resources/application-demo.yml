@@ -7,6 +7,9 @@ server:
     max-threads: 1000  # 配置最大线程数
 
 spring:
+  system_config:
+    name: homeController  #用来配置当前启动的系统
+
   mvc:
     view:
       prefix: /WEB-INF/webpage/  
@@ -21,7 +24,7 @@ spring:
   datasource:
     zuprbac:   #bi配置库
       name: druid
-      url: jdbc:mysql://localhost:3310/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      url: jdbc:mysql://localhost:3307/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
