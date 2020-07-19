@@ -1,0 +1,173 @@
+
+
+server:
+  port: 8093
+  tomcat:
+    uri-encoding: UTF-8   # 配置Tomcat编码,默认为UTF-8
+    max-threads: 1000  # 配置最大线程数
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/webpage/  
+      suffix: .jsp
+  thymeleaf: #关闭默认模板引擎
+    cache: false
+    enabled: false
+  hibernate:
+    dialect: org.hibernate.dialect.MySQLDialect
+    hbm2ddl:
+      auto: none
+  datasource:
+    zuprbac:   #bi配置库
+      name: druid
+      url: jdbc:mysql://localhost:3310/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      validationQuery: SELECT 1
+      druid:
+        initialSize: 5
+        minIdle: 15
+        maxActive: 60
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 'x'
+        testWhileIdle: true
+        testOnBorrow: true
+        testOnReturn: true
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat
+    zupwf:   #bi配置库
+      name: druid
+      url: jdbc:mysql://localhost:3310/zupwf?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      validationQuery: SELECT 1
+      druid:
+        initialSize: 5
+        minIdle: 15
+        maxActive: 60
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 'x'
+        testWhileIdle: true
+        testOnBorrow: true
+        testOnReturn: true
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat
+    bi:   #bi配置库
+      name: druid
+      url: jdbc:mysql://localhost:3310/zup?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        initialSize: 5
+        minIdle: 15
+        maxActive: 60
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 'x'
+        testWhileIdle: true
+        testOnBorrow: true
+        testOnReturn: true
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat
+    bi_data:   #连接BI业务数据库
+      name: druid
+      url: jdbc:mysql://localhost:3310/bi-demo?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        initialSize: 5
+        minIdle: 15
+        maxActive: 60
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 'x'
+        testWhileIdle: true
+        testOnBorrow: true
+        testOnReturn: true
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat
+    rbacmap:
+      name: druid
+      url: jdbc:mysql://localhost:3310/pmsfund?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        initialSize: 5
+        minIdle: 15
+        maxActive: 60
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 'x'
+        testWhileIdle: true
+        testOnBorrow: true
+        testOnReturn: true
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat
+  devtools:
+    restart: #热部署生效
+       enabled: true
+       #additional-paths: src/main/java   #设置重启的目录
+       #classpath   #目录下的WEB-INF文件夹内容修改不重启
+       exclude: WEB-INF/**
+  aop:
+    auto: true
+#  redis:
+#    database: 0
+#    host: 127.0.0.1
+#    port: 6379
+#    password:
+#    pool:
+#      max-active: 8
+#      max-wait: -1
+#      max-idle: 8
+#      min-idle: 0
+#
+  session:
+    store-type: none
+  cache:
+    type: none
+    cache-names: cache-name1,cache-name2
+
+# Mybatis 配置
+mybatis:
+  configuration:
+    cache-enabled: true
+    default-statement-timeout: 3000
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+# 分页器
+pagehelper:
+  helper-dialect: mysql
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  page-size-zero: false
+  reasonable: true
+
+
+application:
+  message: Hello BJ
+
