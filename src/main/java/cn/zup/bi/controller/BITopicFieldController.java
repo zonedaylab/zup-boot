@@ -182,13 +182,11 @@ public class BITopicFieldController {
 	 * */
 	@RequestMapping("/getAggregateField")
 	@ResponseBody
-	public String getAggreField(Integer topic_Id) throws SQLException{
+	public String getAggreField(Integer topic_Id) throws Exception{
 		JSONObject json = new JSONObject();
-		Connection conn = BIConnection.OpenConn();
 		BI_TOPIC topic = topicService.getTopicData(topic_Id);
-		List<BI_DIM_FIELD> list = biDimService.getColumnNameList(conn, topic.getBiz_Table_Name());
+		List<BI_DIM_FIELD> list = biDimService.getColumnNameList(topic.getBiz_Table_Name());
 		json.put("data", list);
-		BIConnection.CloseConn(conn);
 		return json.toString();
 	}
 	

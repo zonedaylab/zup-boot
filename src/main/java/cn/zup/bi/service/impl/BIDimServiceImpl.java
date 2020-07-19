@@ -8,6 +8,7 @@ import cn.zup.bi.entity.*;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.utils.BIConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -28,7 +29,9 @@ public class BIDimServiceImpl implements BIDimService {
 	private ReportFieldDao reportFieldDao;
 	@Autowired
 	private DimAttributeDao dimAttributeDao;
-	
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate_bidata;
 	/**
 	 * 获取所有的数据库表名
 	 * @author antsdot
@@ -36,10 +39,12 @@ public class BIDimServiceImpl implements BIDimService {
 	 * 
 	 * */
 	@Override
-	public List<String> getTableNameList(Connection conn) throws SQLException {
+	public List<String> getTableNameList() throws Exception {
+		Connection conn=null;
 		ResultSet rs = null;
 		List<String> tables = new ArrayList<String>();
 		try{
+			conn=jdbcTemplate_bidata.getDataSource().getConnection();
 			DatabaseMetaData metaData = conn.getMetaData();
 			String url = metaData.getURL();
 			String schema = null;
@@ -51,15 +56,10 @@ public class BIDimServiceImpl implements BIDimService {
 				tables.add(rs.getString("TABLE_NAME"));
 			}
 		}catch(Exception ex){
-			System.err.println(ex.getMessage());
+			throw new Exception(ex.getMessage());
 		}finally{
-			try {
-				rs.close();
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			rs.close();
+			conn.close();
 		}
 		return tables;
 	}
@@ -83,20 +83,33 @@ public class BIDimServiceImpl implements BIDimService {
 	 * @date 2016-10-9 14:31:21
 	 * 
 	 * */
+
+
 	@Override
-	public List<BI_DIM_FIELD> getColumnNameList(Connection conn, String tableName) throws SQLException{
-		DatabaseMetaData dbmd = conn.getMetaData();
-		ResultSet rs = dbmd.getColumns(null, "%", tableName, "%");
+	public List<BI_DIM_FIELD> getColumnNameList(String tableName) throws Exception{
+
+		Connection conn=null;
 		List<BI_DIM_FIELD> list = new ArrayList<BI_DIM_FIELD>();
-		
-		while (rs.next()) {
-			BI_DIM_FIELD biDimField = new BI_DIM_FIELD();
-			biDimField.setDim_Field_Name(rs.getString("COLUMN_NAME")); //列名
-			biDimField.setField_Decimal(rs.getString("DECIMAL_DIGITS")); //小数位数
-			biDimField.setField_Length(rs.getString("CHAR_OCTET_LENGTH")); //字段长度
-			biDimField.setField_Desc(rs.getString("REMARKS"));   //列注释
-			biDimField.setField_Type(rs.getString("TYPE_NAME"));  //字段类型
-			list.add(biDimField);
+		try {
+			conn=jdbcTemplate_bidata.getDataSource().getConnection();
+
+			DatabaseMetaData dbmd = conn.getMetaData();
+			ResultSet rs = dbmd.getColumns(null, "%", tableName, "%");
+
+			while (rs.next()) {
+				BI_DIM_FIELD biDimField = new BI_DIM_FIELD();
+				biDimField.setDim_Field_Name(rs.getString("COLUMN_NAME")); //列名
+				biDimField.setField_Decimal(rs.getString("DECIMAL_DIGITS")); //小数位数
+				biDimField.setField_Length(rs.getString("CHAR_OCTET_LENGTH")); //字段长度
+				biDimField.setField_Desc(rs.getString("REMARKS"));   //列注释
+				biDimField.setField_Type(rs.getString("TYPE_NAME"));  //字段类型
+				list.add(biDimField);
+			}
+		}catch (Exception ex){
+			throw new Exception(ex.getMessage());
+
+		}finally {
+			conn.close();
 		}
 		return list;
 	}
@@ -109,13 +122,25 @@ public class BIDimServiceImpl implements BIDimService {
 	 * 
 	 * */
 	@Override
-	public String getPrimaryKey(Connection conn, String tableName) throws SQLException{
-		DatabaseMetaData dbmd = conn.getMetaData();
-		ResultSet pk = dbmd.getPrimaryKeys(null, null, tableName);
+	public String getPrimaryKey( String tableName) throws Exception{
+
+		Connection conn=null;
 		String pks = null;
-		while (pk.next()) {
-	       System.out.println("COLUMN_NAME:"+pk.getObject(4));
-	       pks = pk.getObject(4).toString();
+		try {
+			conn = jdbcTemplate_bidata.getDataSource().getConnection();
+
+			DatabaseMetaData dbmd = conn.getMetaData();
+			ResultSet pk = dbmd.getPrimaryKeys(null, null, tableName);
+
+			while (pk.next()) {
+				System.out.println("COLUMN_NAME:" + pk.getObject(4));
+				pks = pk.getObject(4).toString();
+			}
+		}catch(Exception ex){
+			throw new Exception(ex.getMessage());
+		}
+		finally {
+			conn.close();
 		}
 		return pks;
 	}

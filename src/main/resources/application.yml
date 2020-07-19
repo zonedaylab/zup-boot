@@ -84,7 +84,7 @@ spring:
         poolPreparedStatements: true
         maxPoolPreparedStatementPerConnectionSize: 20
         filters: stat
-    bi_bizds:   #连接BI业务数据库
+    bi_data:   #连接BI业务数据库
       name: druid
       url: jdbc:mysql://localhost:3310/bi-demo?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
       username: root

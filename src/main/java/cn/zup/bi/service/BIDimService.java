@@ -14,7 +14,7 @@ public interface BIDimService {
 	 * @date 2016-10-9 14:31:21
 	 * 
 	 * */
-	List getTableNameList(Connection conn) throws SQLException ;
+	List getTableNameList() throws Exception ;
 	
 	/**
 	 * 维度分页列表
@@ -30,7 +30,7 @@ public interface BIDimService {
 	 * @date 2016-10-9 14:31:21
 	 * 
 	 * */
-	List<BI_DIM_FIELD> getColumnNameList(Connection conn, String tableName) throws SQLException;
+	List<BI_DIM_FIELD> getColumnNameList(String tableName) throws Exception;
 	
 	/**
 	 * 保存维表数据
@@ -124,7 +124,7 @@ public interface BIDimService {
 	 * @throws SQLException 
 	 * 
 	 * */
-	String getPrimaryKey(Connection conn, String tableName) throws SQLException;
+	String getPrimaryKey(String tableName) throws Exception;
 	
 	/**
 	 * 通过维表字段主键id获取维表字段信息

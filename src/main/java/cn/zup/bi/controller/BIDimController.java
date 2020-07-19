@@ -9,6 +9,7 @@ import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,14 +73,12 @@ public class BIDimController {
 	@ResponseBody
 	public String getDatabaseTableName(){
 		JSONObject json = new JSONObject();
-		Connection conn = BIConnection.OpenConn();
+
 		try {
-			json.put("data", biDimService.getTableNameList(conn));
-		} catch (SQLException e) {
+			json.put("data", biDimService.getTableNameList());
+		} catch (Exception e) {
 			json.put("data", "error");
 			e.printStackTrace();
-		}finally {
-			BIConnection.CloseConn(conn);
 		}
 		
 		return json.toString();
@@ -91,19 +90,17 @@ public class BIDimController {
 	 * @date 2016-10-9 16:10:01
 	 * @param tableName 表名称
 	 * */
+
 	@RequestMapping("/getTableData")
 	@ResponseBody
 	public String getTableData(String tableName){
 		JSONObject json = new JSONObject();
-		Connection conn = BIConnection.OpenConn();
 		try {
-			json.put("data", biDimService.getColumnNameList(conn, tableName));
-			json.put("pk", biDimService.getPrimaryKey(conn, tableName));
-		} catch (SQLException e) {
+			json.put("data", biDimService.getColumnNameList( tableName));
+			json.put("pk", biDimService.getPrimaryKey(tableName));
+		} catch (Exception e) {
 			json.put("data", "error");
 			e.printStackTrace();
-		} finally {
-			BIConnection.CloseConn(conn);
 		}
 		return json.toString();
 	}

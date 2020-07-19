@@ -2,24 +2,22 @@ package cn.zup.bi.service.impl;
 
 import cn.zup.bi.dao.BIShowEngineDao;
 import cn.zup.bi.dao.DimDao;
-import cn.zup.bi.dao.ReportFieldDao;
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.*;
-import cn.zup.bi.utils.BIBizConnection;
 import cn.zup.bi.utils.BIConfig;
-import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.json.JsonDateValueProcessor;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
+
 
 @Service("biShowEngineService")
 public class BIShowEngineServiceImpl implements BIShowEngineService {
@@ -36,7 +34,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	private ReportService biReportService;
 	@Resource
 	private BIPageService biPageService;
-
+	@Autowired
+	JdbcTemplate jdbcTemplate_bidata;
 
 	List<BIShowField> m_biDimFieldList;
 	/*
@@ -556,8 +555,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	/*
 	* map 为一条数据记录。格式 字段1：value1；字段2：value2....
 	* */
-	//@Autowired
-	//BIBizConnection biBizConnection;
+
 	private List<Map<String, Object>> getReportDataFromDB(V_ReportData reportData,BI_REPORT biReport)  throws Exception {
 
 		//1.获取报表中的字段，判断行维度，列维度，指标字段
@@ -565,53 +563,59 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		List<Object> value = new ArrayList<Object>(reportData.getValue());
 		reportData.setKey(key);
 		reportData.setValue(value);
-
-		String sql = this.produceSql(reportData, biReport);
-
-		//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
-
-		//PreparedStatement ps =biBizConnection.getDataSource().getConnection().prepareStatement(sql);//
-		PreparedStatement ps=BIConnection.OpenConn().prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		ResultSetMetaData rsmd = rs.getMetaData();
-		int colCount = rsmd.getColumnCount();//列数量
+		Connection conn=jdbcTemplate_bidata.getDataSource().getConnection();
 		List<Map<String, Object>> listDataMap = new ArrayList<Map<String, Object>>();//数据
-		//从数据库中查询出来放入map中
-		while (rs.next()) {
-			Map<String, Object> map = new HashMap<String, Object>();
+		try {
 
-			for (int i = 1; i <= colCount; i++) {
+			String sql = this.produceSql(reportData, biReport);
+			//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colCount = rsmd.getColumnCount();//列数量
+			//从数据库中查询出来放入map中
+			while (rs.next()) {
+				Map<String, Object> map = new HashMap<String, Object>();
 
-				if (reportData.getBlock_Type() == 1
-						&& (rsmd.getColumnLabel(i).toLowerCase().equals("province")
-						|| rsmd.getColumnLabel(i).toLowerCase().equals("city")
-						|| rsmd.getColumnLabel(i).toLowerCase().equals("county")))
-					map.put(rsmd.getColumnLabel(i).toLowerCase(),
-							rs.getObject(i) + "-" + rs.getInt("areaId"));
+				for (int i = 1; i <= colCount; i++) {
 
-				else {
-					Object obj = rs.getObject(i);
-					if (obj != null) {
-						if (obj instanceof Integer) {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getInt(i));
-						} else if (obj instanceof Float) {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getFloat(i));
-						} else if (obj instanceof BigDecimal) {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getBigDecimal(i).toPlainString());
-						} else if (obj instanceof Double) {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getDouble(i));
+					if (reportData.getBlock_Type() == 1
+							&& (rsmd.getColumnLabel(i).toLowerCase().equals("province")
+							|| rsmd.getColumnLabel(i).toLowerCase().equals("city")
+							|| rsmd.getColumnLabel(i).toLowerCase().equals("county")))
+						map.put(rsmd.getColumnLabel(i).toLowerCase(),
+								rs.getObject(i) + "-" + rs.getInt("areaId"));
+
+					else {
+						Object obj = rs.getObject(i);
+						if (obj != null) {
+							if (obj instanceof Integer) {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getInt(i));
+							} else if (obj instanceof Float) {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getFloat(i));
+							} else if (obj instanceof BigDecimal) {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getBigDecimal(i).toPlainString());
+							} else if (obj instanceof Double) {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getDouble(i));
+							} else {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
+							}
 						} else {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
+							if (obj instanceof Integer || obj instanceof Double)
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), 0);
+							else
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), "");
 						}
-					} else {
-						if (obj instanceof Integer || obj instanceof Double)
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), 0);
-						else
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), "");
 					}
 				}
+				listDataMap.add(map);
 			}
-			listDataMap.add(map);
+		}
+		catch (Exception ex){
+			throw new Exception(ex.getMessage());
+		}
+		finally {
+			conn.close();
 		}
 		
 		return listDataMap;
@@ -816,16 +820,46 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	 * 获取到这个报表的维表中的所有字段作为筛选条件
 	 * 
 	 * */
+
+
+
 	@Override
-	public List<String> showDimField(Integer reportId) {
-		List<String> list = new ArrayList<String>();
-		List<BI_DIM> dimList = dimDao.getDimField(reportId);
-		for (BI_DIM bi_DIM : dimList) {
-			if(bi_DIM.getBiz_Table_Name().equals("dicarea") || bi_DIM.getBiz_Table_Name().equals("v_dicarea"))
-				continue;
-			String sql = "SELECT " + bi_DIM.getText_Field() +" FROM " + bi_DIM.getBiz_Table_Name() + " GROUP BY " + bi_DIM.getText_Field()+"; &"+bi_DIM.getDim_Name();
-			list.add(sql);
+	public Map<String, Object> showDimField(Integer reportId) throws Exception {
+
+		Connection conn =null;
+		Map<String, Object> mapResult = new HashMap<String, Object>();
+		try {
+			conn = jdbcTemplate_bidata.getDataSource().getConnection();
+			List<BI_DIM> dimList = dimDao.getDimField(reportId);
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			for (BI_DIM bi_DIM : dimList) {
+				if (bi_DIM.getBiz_Table_Name().equals("dicarea") || bi_DIM.getBiz_Table_Name().equals("v_dicarea"))
+					continue;
+				String sql = "SELECT " + bi_DIM.getText_Field() + " FROM " + bi_DIM.getBiz_Table_Name() + " GROUP BY " + bi_DIM.getText_Field() + "; &" + bi_DIM.getDim_Name();
+
+				String[] sqls = sql.split("&");
+				ps = conn.prepareStatement(sqls[0]);
+				rs = ps.executeQuery();
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int count = rsmd.getColumnCount();
+				List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+				while (rs.next()) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					for (int i = 1; i <= count; i++) {
+						map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
+					}
+					listMap.add(map);
+				}
+				mapResult.put(sqls[1], listMap);
+			}
 		}
-		return list;
+		catch (Exception ex){
+			throw new Exception(ex.getMessage());
+		}
+		finally {
+			conn.close();
+		}
+		return mapResult;
 	}
 }

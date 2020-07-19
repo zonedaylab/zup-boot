@@ -6,7 +6,11 @@ import cn.zup.bi.utils.BIConnection;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -134,30 +138,10 @@ public class BIShowPageController {
 
 	@RequestMapping("/getDimData")
 	@ResponseBody
-	public JSONObject getDimData(Integer reportId) throws SQLException, ClassNotFoundException{
-		List<String> sqlList = biShowEngineService.showDimField(reportId);
+	public JSONObject getDimData(Integer reportId) throws Exception, ClassNotFoundException{
+
 		JSONObject json = new JSONObject();
-		Class.forName(BIConnection.CLASSNAME);
-		Connection conn = DriverManager.getConnection(BIConnection.URL, BIConnection.USERNAME, BIConnection.PASSWORD);
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Map<String, Object> mapResult = new HashMap<String, Object>();
-		for (String sql : sqlList) {
-			String[] sqls = sql.split("&");
-			ps = conn.prepareStatement(sqls[0]);
-			rs = ps.executeQuery();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int count = rsmd.getColumnCount();
-			List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-			while (rs.next()) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				for (int i = 1; i <= count; i++) {
-					map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
-				}
-				listMap.add(map);
-			}
-			mapResult.put(sqls[1], listMap);
-		}
+		Map<String, Object> mapResult = biShowEngineService.showDimField(reportId);
 		json.put("msg", "success");
 		json.put("data", mapResult);
 		return json;
@@ -169,14 +153,14 @@ public class BIShowPageController {
 	 * @throws SQLException 
 	 * 
 	 * */
+	@Autowired
+	JdbcTemplate jdbcTemplate_bidata;
+
 	@RequestMapping(value="/getFilterValue", method=RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getFilterValue(String filterName, Integer areaId) throws  SQLException{
 
 		List<BI_DIM> dimList = biDimService.getDimFilter(filterName);
-		Connection conn = BIConnection.OpenConn();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		String sql = "";
@@ -187,11 +171,23 @@ public class BIShowPageController {
 			String id = filterName.substring(0, filterName.lastIndexOf("_"));
 			if(dimList.size()>0) {//判断是否关联维度表 liuxf
 				sql = "SELECT " + id + "," + filterName + " from " + dimList.get(0).getBiz_Table_Name() + " GROUP BY " + id + "," + filterName;
-				ps = conn.prepareStatement(sql);
-				rs = ps.executeQuery();
-				while (rs.next()) {
-					map.put(rs.getString(filterName), rs.getInt(id));
-				}
+//				ps = conn.prepareStatement(sql);
+//				rs = ps.executeQuery();
+//				while (rs.next()) {
+//					map.put(rs.getString(filterName), rs.getInt(id));
+//				}
+				 jdbcTemplate_bidata.query(sql, new ResultSetExtractor<List>() {
+					@Override
+					public List extractData(ResultSet rs)
+							throws SQLException, DataAccessException {
+						List result = new ArrayList();
+						while(rs.next()) {
+							map.put(rs.getString(filterName), rs.getInt(id));
+							result.add(map);
+						}
+						return result;
+					}
+				 });
 			}
 		}
 		System.err.println("===>Filter SQL:"+sql);
