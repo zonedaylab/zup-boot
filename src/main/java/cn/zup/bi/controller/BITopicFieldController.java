@@ -5,7 +5,6 @@ import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.TopicFieldService;
 import cn.zup.bi.service.TopicService;
 import cn.zup.bi.service.settings.MgeidsConfig;
-import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.common.vo.CommonResult;
 import cn.zup.rbac.entity.Config;
 import cn.zup.rbac.service.ConfigurationService;

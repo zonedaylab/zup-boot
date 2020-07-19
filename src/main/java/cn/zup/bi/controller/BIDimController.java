@@ -5,11 +5,9 @@ import cn.zup.bi.entity.BI_DIM_ATTRIBUTE;
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import cn.zup.bi.service.BIDimService;
 import cn.zup.bi.service.TopicFieldService;
-import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.common.vo.CommonResult;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 @Controller
