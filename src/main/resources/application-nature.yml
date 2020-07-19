@@ -21,7 +21,7 @@ spring:
   datasource:
     zuprbac:   #bi配置库
       name: druid
-      url: jdbc:mysql://localhost:3310/pmsfund?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      url: jdbc:mysql://localhost:3307/pmsfund?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
@@ -43,7 +43,7 @@ spring:
         filters: stat
     zupwf:   #bi配置库
       name: druid
-      url: jdbc:mysql://localhost:3310/zupwf?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      url: jdbc:mysql://localhost:3307/zupwf?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
@@ -65,7 +65,7 @@ spring:
         filters: stat
     bi:   #bi配置库
       name: druid
-      url: jdbc:mysql://localhost:3310/pmsfund?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      url: jdbc:mysql://localhost:3307/pmsfund?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
@@ -86,7 +86,7 @@ spring:
         filters: stat
     bi_data:   #连接BI业务数据库
       name: druid
-      url: jdbc:mysql://localhost:3310/fund_nature?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      url: jdbc:mysql://localhost:3307/fund_nature?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
@@ -107,7 +107,7 @@ spring:
         filters: stat
     rbacmap:
       name: druid
-      url: jdbc:mysql://localhost:3310/pmsfund?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
+      url: jdbc:mysql://localhost:3307/pmsfund?useAffectedRows=TRUE&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=128&prepStmtCacheSqlLimit=256&allowMultiQueries=true
       username: root
       password: 123456
       driver-class-name: com.mysql.jdbc.Driver
