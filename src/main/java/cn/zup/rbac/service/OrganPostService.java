@@ -5,6 +5,7 @@ import cn.zup.rbac.entity.Post;
 import cn.zup.rbac.entity.UserInfo;
 import org.jeecgframework.minidao.pojo.MiniDaoPage;
 
+import java.util.HashMap;
 import java.util.List;
 /**
  * OrganPostService接口
@@ -234,5 +235,18 @@ public interface OrganPostService {
 	 * @return
 	 */
 	public List<Organ> getOrganList(Organ organ);
+	/**
+	 * 获取所有组织所有子节点 返回值Map
+	 *
+	 * @return
+	 */
+	public HashMap<Long, List<Integer>> getOrganSubNodeList(Integer organId);
+
+	/**
+	 * 获取某个组织所有子节点 返回值List
+	 *
+	 * @return
+	 */
+	public String getMySubOrganIds(int organId);
 	
 }
