@@ -1,55 +1,27 @@
-/*
-Navicat MySQL Data Transfer
+-- MySQL dump 10.16  Distrib 10.1.37-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: zupwf
+-- ------------------------------------------------------
+-- Server version	5.7.29-log
 
-Source Server         : localhost
-Source Server Version : 50724
-Source Host           : localhost:3306
-Source Database       : zupwf
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-Target Server Type    : MYSQL
-Target Server Version : 50724
-File Encoding         : 65001
+--
+-- Table structure for table `demo_sample_receive_register`
+--
 
-Date: 2019-12-19 11:25:39
-*/
-
-SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for demoprovince
--- ----------------------------
-DROP TABLE IF EXISTS `demoprovince`;
-CREATE TABLE `demoprovince` (
-  `ID` int(38) NOT NULL AUTO_INCREMENT,
-  `NAME` varchar(50) DEFAULT '',
-  `CODE` varchar(50) DEFAULT '',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of demoprovince
--- ----------------------------
-INSERT INTO `demoprovince` VALUES ('1', '北京', '11');
-INSERT INTO `demoprovince` VALUES ('2', '天津', '12');
-INSERT INTO `demoprovince` VALUES ('3', '河北', '13');
-INSERT INTO `demoprovince` VALUES ('4', '山西', '14');
-INSERT INTO `demoprovince` VALUES ('5', '内蒙', '15');
-INSERT INTO `demoprovince` VALUES ('6', '辽宁', '21');
-INSERT INTO `demoprovince` VALUES ('7', '吉林', '22');
-INSERT INTO `demoprovince` VALUES ('8', '黑龙江', '23');
-INSERT INTO `demoprovince` VALUES ('9', '上海', '31');
-INSERT INTO `demoprovince` VALUES ('10', '江苏', '32');
-INSERT INTO `demoprovince` VALUES ('11', '浙江', '33');
-INSERT INTO `demoprovince` VALUES ('12', '安徽', '34');
-INSERT INTO `demoprovince` VALUES ('13', '福建', '35');
-INSERT INTO `demoprovince` VALUES ('14', '江西', '36');
-INSERT INTO `demoprovince` VALUES ('15', '山东', '37');
-INSERT INTO `demoprovince` VALUES ('29', '11', '11');
-
--- ----------------------------
--- Table structure for demo_sample_receive_register
--- ----------------------------
 DROP TABLE IF EXISTS `demo_sample_receive_register`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `demo_sample_receive_register` (
   `SAMPLE_ID` int(10) NOT NULL AUTO_INCREMENT,
   `SAMPLE_START_TIME` datetime DEFAULT NULL,
@@ -64,15 +36,49 @@ CREATE TABLE `demo_sample_receive_register` (
   `SAMPLE_USE` varchar(255) DEFAULT '',
   PRIMARY KEY (`SAMPLE_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of demo_sample_receive_register
--- ----------------------------
+--
+-- Dumping data for table `demo_sample_receive_register`
+--
 
--- ----------------------------
--- Table structure for wf_activity
--- ----------------------------
+LOCK TABLES `demo_sample_receive_register` WRITE;
+/*!40000 ALTER TABLE `demo_sample_receive_register` DISABLE KEYS */;
+/*!40000 ALTER TABLE `demo_sample_receive_register` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `demoprovince`
+--
+
+DROP TABLE IF EXISTS `demoprovince`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `demoprovince` (
+  `ID` int(38) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(50) DEFAULT '',
+  `CODE` varchar(50) DEFAULT '',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `demoprovince`
+--
+
+LOCK TABLES `demoprovince` WRITE;
+/*!40000 ALTER TABLE `demoprovince` DISABLE KEYS */;
+INSERT INTO `demoprovince` VALUES (1,'北京','11'),(2,'天津','12'),(3,'河北','13'),(4,'山西','14'),(5,'内蒙','15'),(6,'辽宁','21'),(7,'吉林','22'),(8,'黑龙江','23'),(9,'上海','31'),(10,'江苏','32'),(11,'浙江','33'),(12,'安徽','34'),(13,'福建','35'),(14,'江西','36'),(15,'山东','37'),(29,'11','11');
+/*!40000 ALTER TABLE `demoprovince` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_activity`
+--
+
 DROP TABLE IF EXISTS `wf_activity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_activity` (
   `ACTIVITY_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '活动ID',
   `FLOW_ID` int(38) NOT NULL COMMENT '流程ID',
@@ -97,16 +103,25 @@ CREATE TABLE `wf_activity` (
   CONSTRAINT `wf_activity_ibfk_1` FOREIGN KEY (`FLOW_ID`) REFERENCES `wf_flow` (`FLOW_ID`),
   CONSTRAINT `wf_activity_ibfk_1
 ` FOREIGN KEY (`FLOW_ID`) REFERENCES `wf_flow` (`FLOW_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=548 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_activity
--- ----------------------------
+--
+-- Dumping data for table `wf_activity`
+--
 
--- ----------------------------
--- Table structure for wf_activity_popedom
--- ----------------------------
+LOCK TABLES `wf_activity` WRITE;
+/*!40000 ALTER TABLE `wf_activity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_activity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_activity_popedom`
+--
+
 DROP TABLE IF EXISTS `wf_activity_popedom`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_activity_popedom` (
   `ACTIVITY_ID` int(38) NOT NULL,
   `CONTROL_ID` int(38) NOT NULL,
@@ -119,15 +134,24 @@ CREATE TABLE `wf_activity_popedom` (
 ` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `wf_activity` (`ACTIVITY_ID`),
   CONSTRAINT `wf_activity_popedom_ibfk_2` FOREIGN KEY (`CONTROL_ID`) REFERENCES `wf_form_control` (`CONTROL_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_activity_popedom
--- ----------------------------
+--
+-- Dumping data for table `wf_activity_popedom`
+--
 
--- ----------------------------
--- Table structure for wf_config
--- ----------------------------
+LOCK TABLES `wf_activity_popedom` WRITE;
+/*!40000 ALTER TABLE `wf_activity_popedom` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_activity_popedom` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_config`
+--
+
 DROP TABLE IF EXISTS `wf_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_config` (
   `ID` int(38) NOT NULL COMMENT '配置类型ID',
   `NAME` varchar(132) DEFAULT '' COMMENT '配置类型名称',
@@ -135,82 +159,25 @@ CREATE TABLE `wf_config` (
   `SUB_NAME` varchar(32) DEFAULT '' COMMENT '配置子类型名称',
   PRIMARY KEY (`ID`,`SUB_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_config
--- ----------------------------
-INSERT INTO `wf_config` VALUES ('1', '工作状态', '1', '正在办理');
-INSERT INTO `wf_config` VALUES ('1', '工作状态', '2', '正常结束');
-INSERT INTO `wf_config` VALUES ('1', '工作状态', '3', '强制结束');
-INSERT INTO `wf_config` VALUES ('1', '工作状态', '4', '暂停');
-INSERT INTO `wf_config` VALUES ('2', '工作活动状态', '1', '正在办理');
-INSERT INTO `wf_config` VALUES ('2', '工作活动状态', '2', '正常结束');
-INSERT INTO `wf_config` VALUES ('2', '工作活动状态', '3', '驳回');
-INSERT INTO `wf_config` VALUES ('3', '工作项状态', '1', '正在办理');
-INSERT INTO `wf_config` VALUES ('3', '工作项状态', '2', '正常结束');
-INSERT INTO `wf_config` VALUES ('3', '工作项状态', '3', '强制结束');
-INSERT INTO `wf_config` VALUES ('3', '工作项状态', '4', '驳回');
-INSERT INTO `wf_config` VALUES ('3', '工作项状态', '5', '自动通过');
-INSERT INTO `wf_config` VALUES ('3', '工作项状态', '6', '暂停');
-INSERT INTO `wf_config` VALUES ('4', '流程状态', '1', '有效');
-INSERT INTO `wf_config` VALUES ('4', '流程状态', '2', '无效');
-INSERT INTO `wf_config` VALUES ('5', '活动类型', '1', '开始');
-INSERT INTO `wf_config` VALUES ('5', '活动类型', '2', '中间段');
-INSERT INTO `wf_config` VALUES ('5', '活动类型', '3', '结束');
-INSERT INTO `wf_config` VALUES ('6', '评审类型', '1', '一人通过审批可流转');
-INSERT INTO `wf_config` VALUES ('6', '评审类型', '2', '所有人通过评审才流转');
-INSERT INTO `wf_config` VALUES ('7', '分支选择模式', '1', '默认');
-INSERT INTO `wf_config` VALUES ('7', '分支选择模式', '2', '单选');
-INSERT INTO `wf_config` VALUES ('7', '分支选择模式', '3', '多选');
-INSERT INTO `wf_config` VALUES ('8', '操作者及监控者类型', '1', '用户');
-INSERT INTO `wf_config` VALUES ('8', '操作者及监控者类型', '2', '岗位');
-INSERT INTO `wf_config` VALUES ('8', '操作者及监控者类型', '3', '单位');
-INSERT INTO `wf_config` VALUES ('9', '操作者选择模式', '1', '无约束');
-INSERT INTO `wf_config` VALUES ('9', '操作者选择模式', '2', '同部门');
-INSERT INTO `wf_config` VALUES ('10', '规则类型', '1', '大于');
-INSERT INTO `wf_config` VALUES ('10', '规则类型', '2', '大于或等于');
-INSERT INTO `wf_config` VALUES ('10', '规则类型', '3', '等于');
-INSERT INTO `wf_config` VALUES ('10', '规则类型', '4', '小于');
-INSERT INTO `wf_config` VALUES ('10', '规则类型', '5', '小于或等于');
-INSERT INTO `wf_config` VALUES ('10', '规则类型', '6', '包含');
-INSERT INTO `wf_config` VALUES ('10', '规则类型', '7', '不包含');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '1', 'Label');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '2', 'TextField');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '3', 'NumberField');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '4', 'DateField');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '5', 'ComboBox');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '6', 'DropDownField');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '7', 'GridPanel');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '8', 'Button');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '9', 'CompositeField');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '10', 'FileUploadField');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '11', 'TextArea');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '12', 'FieldSet');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '13', 'TreePanel');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '14', 'SpinnerField');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '15', 'Container');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '16', 'GridView');
-INSERT INTO `wf_config` VALUES ('11', '组件类型', '17', 'TextBox');
-INSERT INTO `wf_config` VALUES ('12', '可空标志', '1', '可空');
-INSERT INTO `wf_config` VALUES ('12', '可空标志', '2', '不可空');
-INSERT INTO `wf_config` VALUES ('13', '组件含义', '1', '自定义');
-INSERT INTO `wf_config` VALUES ('13', '组件含义', '2', '删除业务数据');
-INSERT INTO `wf_config` VALUES ('13', '组件含义', '3', '添加业务数据');
-INSERT INTO `wf_config` VALUES ('14', '组件状态', '1', '可用');
-INSERT INTO `wf_config` VALUES ('14', '组件状态', '2', '只读');
-INSERT INTO `wf_config` VALUES ('14', '组件状态', '3', '隐藏');
-INSERT INTO `wf_config` VALUES ('15', '活动属性', '1', '无特殊属性');
-INSERT INTO `wf_config` VALUES ('15', '活动属性', '2', '关键属性');
-INSERT INTO `wf_config` VALUES ('15', '活动属性', '3', '批量处理');
-INSERT INTO `wf_config` VALUES ('16', '接收标志', '0', '未签收');
-INSERT INTO `wf_config` VALUES ('16', '接收标志', '1', '已签收');
-INSERT INTO `wf_config` VALUES ('17', '接收标志', '0', '无效');
-INSERT INTO `wf_config` VALUES ('17', '接收标志', '1', '有效');
+--
+-- Dumping data for table `wf_config`
+--
 
--- ----------------------------
--- Table structure for wf_flow
--- ----------------------------
+LOCK TABLES `wf_config` WRITE;
+/*!40000 ALTER TABLE `wf_config` DISABLE KEYS */;
+INSERT INTO `wf_config` VALUES (1,'工作状态',1,'正在办理'),(1,'工作状态',2,'正常结束'),(1,'工作状态',3,'强制结束'),(1,'工作状态',4,'暂停'),(2,'工作活动状态',1,'正在办理'),(2,'工作活动状态',2,'正常结束'),(2,'工作活动状态',3,'驳回'),(3,'工作项状态',1,'正在办理'),(3,'工作项状态',2,'正常结束'),(3,'工作项状态',3,'强制结束'),(3,'工作项状态',4,'驳回'),(3,'工作项状态',5,'自动通过'),(3,'工作项状态',6,'暂停'),(4,'流程状态',1,'有效'),(4,'流程状态',2,'无效'),(5,'活动类型',1,'开始'),(5,'活动类型',2,'中间段'),(5,'活动类型',3,'结束'),(6,'评审类型',1,'一人通过审批可流转'),(6,'评审类型',2,'所有人通过评审才流转'),(7,'分支选择模式',1,'默认'),(7,'分支选择模式',2,'单选'),(7,'分支选择模式',3,'多选'),(8,'操作者及监控者类型',1,'用户'),(8,'操作者及监控者类型',2,'岗位'),(8,'操作者及监控者类型',3,'单位'),(9,'操作者选择模式',1,'无约束'),(9,'操作者选择模式',2,'同部门'),(10,'规则类型',1,'大于'),(10,'规则类型',2,'大于或等于'),(10,'规则类型',3,'等于'),(10,'规则类型',4,'小于'),(10,'规则类型',5,'小于或等于'),(10,'规则类型',6,'包含'),(10,'规则类型',7,'不包含'),(11,'组件类型',1,'Label'),(11,'组件类型',2,'TextField'),(11,'组件类型',3,'NumberField'),(11,'组件类型',4,'DateField'),(11,'组件类型',5,'ComboBox'),(11,'组件类型',6,'DropDownField'),(11,'组件类型',7,'GridPanel'),(11,'组件类型',8,'Button'),(11,'组件类型',9,'CompositeField'),(11,'组件类型',10,'FileUploadField'),(11,'组件类型',11,'TextArea'),(11,'组件类型',12,'FieldSet'),(11,'组件类型',13,'TreePanel'),(11,'组件类型',14,'SpinnerField'),(11,'组件类型',15,'Container'),(11,'组件类型',16,'GridView'),(11,'组件类型',17,'TextBox'),(12,'可空标志',1,'可空'),(12,'可空标志',2,'不可空'),(13,'组件含义',1,'自定义'),(13,'组件含义',2,'删除业务数据'),(13,'组件含义',3,'添加业务数据'),(14,'组件状态',1,'可用'),(14,'组件状态',2,'只读'),(14,'组件状态',3,'隐藏'),(15,'活动属性',1,'无特殊属性'),(15,'活动属性',2,'关键属性'),(15,'活动属性',3,'批量处理'),(16,'接收标志',0,'未签收'),(16,'接收标志',1,'已签收'),(17,'接收标志',0,'无效'),(17,'接收标志',1,'有效');
+/*!40000 ALTER TABLE `wf_config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_flow`
+--
+
 DROP TABLE IF EXISTS `wf_flow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_flow` (
   `FLOW_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '流程ID',
   `FLOW_NAME` varchar(64) NOT NULL DEFAULT '' COMMENT '流程名称',
@@ -218,16 +185,25 @@ CREATE TABLE `wf_flow` (
   `FLOW_STATE` int(3) NOT NULL COMMENT '流程状态',
   `SYSTEM_ID` int(38) DEFAULT NULL,
   PRIMARY KEY (`FLOW_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=454 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_flow
--- ----------------------------
+--
+-- Dumping data for table `wf_flow`
+--
 
--- ----------------------------
--- Table structure for wf_form
--- ----------------------------
+LOCK TABLES `wf_flow` WRITE;
+/*!40000 ALTER TABLE `wf_flow` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_flow` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_form`
+--
+
 DROP TABLE IF EXISTS `wf_form`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_form` (
   `FORM_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '表单ID',
   `PARENT_FORM_ID` int(38) NOT NULL COMMENT '父级表单ID',
@@ -237,55 +213,25 @@ CREATE TABLE `wf_form` (
   `FORM_AUTO_CONTENT` blob COMMENT '表单内容',
   `FORM_DELBIZ_CONTROLLER` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`FORM_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=336 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of wf_form
--- ----------------------------
-
--- ----------------------------
--- Table structure for wf_formauto_job
--- ----------------------------
-DROP TABLE IF EXISTS `wf_formauto_job`;
-CREATE TABLE `wf_formauto_job` (
-  `JOBID` int(38) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `DATA_NAME` varchar(255) DEFAULT NULL COMMENT '表单名称',
-  `CREATE_DATE` datetime DEFAULT NULL COMMENT '创建时间',
-  `USER_ID` int(38) DEFAULT NULL COMMENT '用户ID',
-  `USER_NAME` varchar(38) DEFAULT '' COMMENT '用户姓名',
-  `FORM_ID` int(38) DEFAULT NULL COMMENT '表单ID',
-  PRIMARY KEY (`JOBID`),
-  KEY `refwf_form_id` (`FORM_ID`) USING BTREE,
-  CONSTRAINT `wf_formauto_job_ibfk_1` FOREIGN KEY (`FORM_ID`) REFERENCES `wf_form` (`FORM_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=608 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of wf_formauto_job
--- ----------------------------
-
--- ----------------------------
--- Table structure for wf_formauto_job_data
--- ----------------------------
-DROP TABLE IF EXISTS `wf_formauto_job_data`;
-CREATE TABLE `wf_formauto_job_data` (
-  `JOB_ID` int(38) NOT NULL,
-  `CONTROL_ID` int(38) NOT NULL,
-  `VALUE` varchar(256) DEFAULT '' COMMENT '数据',
-  `CONTROL_NAME` varchar(32) DEFAULT '' COMMENT '组件名称',
-  PRIMARY KEY (`JOB_ID`,`CONTROL_ID`),
-  KEY `REFWF_FORM_CONTROL` (`CONTROL_ID`) USING BTREE,
-  CONSTRAINT `wf_formauto_job_data_ibfk_1` FOREIGN KEY (`CONTROL_ID`) REFERENCES `wf_form_control` (`CONTROL_ID`),
-  CONSTRAINT `wf_formauto_job_data_ibfk_2` FOREIGN KEY (`JOB_ID`) REFERENCES `wf_formauto_job` (`JOBID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_formauto_job_data
--- ----------------------------
+--
+-- Dumping data for table `wf_form`
+--
 
--- ----------------------------
--- Table structure for wf_form_control
--- ----------------------------
+LOCK TABLES `wf_form` WRITE;
+/*!40000 ALTER TABLE `wf_form` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_form` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_form_control`
+--
+
 DROP TABLE IF EXISTS `wf_form_control`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_form_control` (
   `CONTROL_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '组件ID',
   `FORM_ID` int(38) NOT NULL COMMENT '表单ID',
@@ -301,16 +247,82 @@ CREATE TABLE `wf_form_control` (
   CONSTRAINT `wf_form_control_ibfk_1` FOREIGN KEY (`FORM_ID`) REFERENCES `wf_form` (`FORM_ID`),
   CONSTRAINT `wf_form_control_ibfk_1
 ` FOREIGN KEY (`FORM_ID`) REFERENCES `wf_form` (`FORM_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=433 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_form_control
--- ----------------------------
+--
+-- Dumping data for table `wf_form_control`
+--
 
--- ----------------------------
--- Table structure for wf_handler
--- ----------------------------
+LOCK TABLES `wf_form_control` WRITE;
+/*!40000 ALTER TABLE `wf_form_control` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_form_control` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_formauto_job`
+--
+
+DROP TABLE IF EXISTS `wf_formauto_job`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wf_formauto_job` (
+  `JOBID` int(38) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `DATA_NAME` varchar(255) DEFAULT NULL COMMENT '表单名称',
+  `CREATE_DATE` datetime DEFAULT NULL COMMENT '创建时间',
+  `USER_ID` int(38) DEFAULT NULL COMMENT '用户ID',
+  `USER_NAME` varchar(38) DEFAULT '' COMMENT '用户姓名',
+  `FORM_ID` int(38) DEFAULT NULL COMMENT '表单ID',
+  PRIMARY KEY (`JOBID`),
+  KEY `refwf_form_id` (`FORM_ID`) USING BTREE,
+  CONSTRAINT `wf_formauto_job_ibfk_1` FOREIGN KEY (`FORM_ID`) REFERENCES `wf_form` (`FORM_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wf_formauto_job`
+--
+
+LOCK TABLES `wf_formauto_job` WRITE;
+/*!40000 ALTER TABLE `wf_formauto_job` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_formauto_job` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_formauto_job_data`
+--
+
+DROP TABLE IF EXISTS `wf_formauto_job_data`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wf_formauto_job_data` (
+  `JOB_ID` int(38) NOT NULL,
+  `CONTROL_ID` int(38) NOT NULL,
+  `VALUE` varchar(256) DEFAULT '' COMMENT '数据',
+  `CONTROL_NAME` varchar(32) DEFAULT '' COMMENT '组件名称',
+  PRIMARY KEY (`JOB_ID`,`CONTROL_ID`),
+  KEY `REFWF_FORM_CONTROL` (`CONTROL_ID`) USING BTREE,
+  CONSTRAINT `wf_formauto_job_data_ibfk_1` FOREIGN KEY (`CONTROL_ID`) REFERENCES `wf_form_control` (`CONTROL_ID`),
+  CONSTRAINT `wf_formauto_job_data_ibfk_2` FOREIGN KEY (`JOB_ID`) REFERENCES `wf_formauto_job` (`JOBID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `wf_formauto_job_data`
+--
+
+LOCK TABLES `wf_formauto_job_data` WRITE;
+/*!40000 ALTER TABLE `wf_formauto_job_data` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_formauto_job_data` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_handler`
+--
+
 DROP TABLE IF EXISTS `wf_handler`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_handler` (
   `HANDLER_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '操作者ID',
   `ACTIVITY_ID` int(38) NOT NULL COMMENT '活动ID',
@@ -320,16 +332,25 @@ CREATE TABLE `wf_handler` (
   PRIMARY KEY (`HANDLER_ID`),
   KEY `refwf_activity15` (`ACTIVITY_ID`) USING BTREE,
   CONSTRAINT `wf_handler_ibfk_1` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `wf_activity` (`ACTIVITY_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3103 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_handler
--- ----------------------------
+--
+-- Dumping data for table `wf_handler`
+--
 
--- ----------------------------
--- Table structure for wf_line
--- ----------------------------
+LOCK TABLES `wf_handler` WRITE;
+/*!40000 ALTER TABLE `wf_handler` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_handler` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_line`
+--
+
 DROP TABLE IF EXISTS `wf_line`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_line` (
   `LINE_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '活动关系ID',
   `FLOW_ID` int(38) NOT NULL COMMENT '流程ID',
@@ -342,16 +363,25 @@ CREATE TABLE `wf_line` (
   PRIMARY KEY (`LINE_ID`),
   KEY `fk_wf_line_wf_wf_flow` (`FLOW_ID`) USING BTREE,
   CONSTRAINT `wf_line_ibfk_1` FOREIGN KEY (`FLOW_ID`) REFERENCES `wf_flow` (`FLOW_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1142 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_line
--- ----------------------------
+--
+-- Dumping data for table `wf_line`
+--
 
--- ----------------------------
--- Table structure for wf_monitor
--- ----------------------------
+LOCK TABLES `wf_line` WRITE;
+/*!40000 ALTER TABLE `wf_line` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_line` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_monitor`
+--
+
 DROP TABLE IF EXISTS `wf_monitor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_monitor` (
   `MONITOR_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '监控者ID',
   `FLOW_ID` int(38) NOT NULL COMMENT '流程ID',
@@ -361,15 +391,24 @@ CREATE TABLE `wf_monitor` (
   KEY `refef_flow14` (`FLOW_ID`) USING BTREE,
   CONSTRAINT `wf_monitor` FOREIGN KEY (`FLOW_ID`) REFERENCES `wf_flow` (`FLOW_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_monitor
--- ----------------------------
+--
+-- Dumping data for table `wf_monitor`
+--
 
--- ----------------------------
--- Table structure for wf_msg_set
--- ----------------------------
+LOCK TABLES `wf_monitor` WRITE;
+/*!40000 ALTER TABLE `wf_monitor` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_monitor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_msg_set`
+--
+
 DROP TABLE IF EXISTS `wf_msg_set`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_msg_set` (
   `MSG_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '通知ID',
   `ACTIVITY_ID` int(38) NOT NULL COMMENT '活动ID',
@@ -379,31 +418,49 @@ CREATE TABLE `wf_msg_set` (
   PRIMARY KEY (`MSG_ID`),
   KEY `refwf_activity39` (`ACTIVITY_ID`) USING BTREE,
   CONSTRAINT `wf_msg_set_ibfk_1` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `wf_activity` (`ACTIVITY_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_msg_set
--- ----------------------------
+--
+-- Dumping data for table `wf_msg_set`
+--
 
--- ----------------------------
--- Table structure for wf_system
--- ----------------------------
+LOCK TABLES `wf_msg_set` WRITE;
+/*!40000 ALTER TABLE `wf_msg_set` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_msg_set` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_system`
+--
+
 DROP TABLE IF EXISTS `wf_system`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_system` (
   `SYSTEM_ID` int(38) NOT NULL AUTO_INCREMENT,
   `SYSTEM_NAME` varchar(64) DEFAULT '',
   `CREATE_DATE` datetime DEFAULT NULL,
   PRIMARY KEY (`SYSTEM_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_system
--- ----------------------------
+--
+-- Dumping data for table `wf_system`
+--
 
--- ----------------------------
--- Table structure for wf_work
--- ----------------------------
+LOCK TABLES `wf_system` WRITE;
+/*!40000 ALTER TABLE `wf_system` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_system` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_work`
+--
+
 DROP TABLE IF EXISTS `wf_work`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_work` (
   `WORK_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '工作ID',
   `FLOW_ID` int(38) NOT NULL COMMENT '流程ID',
@@ -419,15 +476,24 @@ CREATE TABLE `wf_work` (
   KEY `fk_wf_work_wf_flow` (`FLOW_ID`) USING BTREE,
   CONSTRAINT `wf_work_ibfk_1` FOREIGN KEY (`FLOW_ID`) REFERENCES `wf_flow` (`FLOW_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_work
--- ----------------------------
+--
+-- Dumping data for table `wf_work`
+--
 
--- ----------------------------
--- Table structure for wf_work_activity
--- ----------------------------
+LOCK TABLES `wf_work` WRITE;
+/*!40000 ALTER TABLE `wf_work` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_work` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_work_activity`
+--
+
 DROP TABLE IF EXISTS `wf_work_activity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_work_activity` (
   `WORK_ACTIVITY_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '工作活动ID',
   `WORK_ID` int(38) NOT NULL COMMENT '工作ID',
@@ -444,15 +510,24 @@ CREATE TABLE `wf_work_activity` (
   CONSTRAINT `wf_work_activity_ibfk_1` FOREIGN KEY (`WORK_ID`) REFERENCES `wf_work` (`WORK_ID`),
   CONSTRAINT `wf_work_activity_ibfk_2` FOREIGN KEY (`ACTIVITY_ID`) REFERENCES `wf_activity` (`ACTIVITY_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_work_activity
--- ----------------------------
+--
+-- Dumping data for table `wf_work_activity`
+--
 
--- ----------------------------
--- Table structure for wf_work_item
--- ----------------------------
+LOCK TABLES `wf_work_activity` WRITE;
+/*!40000 ALTER TABLE `wf_work_activity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_work_activity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wf_work_item`
+--
+
 DROP TABLE IF EXISTS `wf_work_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wf_work_item` (
   `WORK_ITEM_ID` int(38) NOT NULL AUTO_INCREMENT COMMENT '工作项ID',
   `WORK_ACTIVITY_ID` int(38) NOT NULL COMMENT '工作活动ID',
@@ -470,7 +545,24 @@ CREATE TABLE `wf_work_item` (
   KEY `refwf_work_activity17` (`WORK_ACTIVITY_ID`) USING BTREE,
   CONSTRAINT `wf_work_item_ibfk_1` FOREIGN KEY (`WORK_ACTIVITY_ID`) REFERENCES `wf_work_activity` (`WORK_ACTIVITY_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of wf_work_item
--- ----------------------------
+--
+-- Dumping data for table `wf_work_item`
+--
+
+LOCK TABLES `wf_work_item` WRITE;
+/*!40000 ALTER TABLE `wf_work_item` DISABLE KEYS */;
+/*!40000 ALTER TABLE `wf_work_item` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-07-21 20:48:55
