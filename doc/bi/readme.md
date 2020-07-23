@@ -115,7 +115,7 @@ GROUP BY product_category_id,province_code,brand_id;
 
 
 
-##### 2.2 开发思路
+##### 2.2 钻取配置
 
 1. 行维度、列维度只取其一能够展示.ok
 
@@ -129,6 +129,18 @@ f. 钻取：钻取方式：
 1.NONE
 2.分段
 3.路径
+ 传入参数:
+ 
+	* var data={
+			bi_Page_Id: pageid,
+			screen_Index: screenIndex,
+			block_Id: 0,
+			key: keys,
+			value: values,
+			block_Type: 1,
+			drill_Name: drill_Name,
+			drill_Value: drill_Value
+		}
 
 钻取信息：
 
@@ -151,7 +163,9 @@ f. 钻取：钻取方式：
 	
 			当前的维度 字段序号
 	
-		4.---------drill_type=int DRILL_TYPE_DIFF_TOPIC=4;不同主题-----
+		4.---------drill_type=DRILL_TYPE_DIFF_TOPIC=4;不同主题-----
+		
+		4.1 配置信息
 	
 		  a.维度配置：
 	
@@ -165,46 +179,81 @@ f. 钻取：钻取方式：
 		  例如 dim_data='山东省'  filter_condition='37'
 
 
-		  b.根据配置生成前端格式数据。维度数据- 对应主题表
-	
+	    1. ---------drill_type=DRILL_TYPE_NONE=1;   NONE-------------
+		如: province维度对应的字符串： {山东省,河南省，河北省，山西省}
+
+		2.---------drill_type=int DRILL_TYPE_SEG=2; 分段--------------
+
+		3.---------drill_type=int DRILL_TYPE_PATH=3; 3.路径-----------
+
+			在维度表中dim_table中，drill_info 配置 对应不同的维度字段，例如 province-city-country,表示对应维度表中不同的维度文本信息。
+			dim_table 一般配置为  ：area (id ,province,city,country,name)
+			构建的colName 如下
+			[dim_data -  drill_name]
+
+			example:
+			[山东省 -  city] 表示当前需要从province 下转到city[drill_name], 下钻过滤语句为 '山东省'[drill_value ]
+
+			当前的维度 字段序号
+
+		4.---------drill_type= DRILL_TYPE_DIFF_TOPIC（4）;不同主题-----
+
+		  a.维度配置：
+
+		  针对维度字段，如果为不同的主题钻取，则drill_info 设置如下：
+		  drill_info :     topicTable1,filterField1  -  topicTable2,filterField2  -  topicTable3,filterField3........
+		  example:
+		  v_fund_province, parent_code   -   v_fund_city ,province_code  -  v_fund_country  ,city_code.
+
+		  点击山东省，则进行主题[topicTable2]的钻取,  filterField2表示主题的过滤字段。
+		  dim_data 是text_code ,filter_condition是id_code.
+		  例如 dim_data='山东省'  filter_condition='37'	  
+		  
+
+          
+          以下为研发人员看：         
+
+		  a.根据配置生成前端格式数据。维度数据- 对应主题表
+
 		  [dim_data - dim_name - current_topicTable_index] 分别对应维度数据，维度名字，当前主题表索引
-	
+
 		   --->exmaple  [山东省 - area_dim - 1]
-	
+
 		   dimName  topicTable
-	
-		 c.前端接收到维度配置信息
+
+		 b.前端接收到维度配置信息
 		   利用dim_data展示维度数据，
-		   getList(dim_name - current_topic_index,  dim_data) 生成连接进行钻取。
-	
-		 d.前端发送请求
-	
+		   getList(dim_name-current_topic_index,  dim_data) 生成连接进行钻取。
+
+		 c.前端发送请求
+
 		   drill_name---->   dim_name - current_topic_index
 		   					维度名称    -  当前主题表索引index；
 		   					表示要钻取的维度；主题表索引index=0表示第一个主题表；index=1表示第二个主题表
 		   drill_value----> dim_data    当前维度对应的数据值
-	
-	     e.后台接收后，构建查询语句 例如
-	     
-	 		 drill_name= 维度名称:主题表索引index； 表示要钻取的维度；主题表索引index=1表示第一个主题表；index=2表示第二个主题表
-			 drill_value= 该维度对应的值；						 
+
+         d.后台接收后，构建查询语句 例如
+
+	 		 drill_name= 维度名称:主题表索引index； 表示要钻取的维度；主题表索引index=0表示第一个主题表；index=1表示第二个主题表
+			 drill_value= 该维度对应的值；
 			 后台接收后，构建查询语句 例如
 			 drill_name="organ_code-1"
-			 drill_value="山东省"			
+			 drill_value="山东省"
 		     drill_info :     topicTable1,filterField1  -  topicTable2,filterField2-topicTable3,filterField3........
-			 NextTopicTableIndex=currentTopicTableIndex+1
+
+			 * NextTopicTableIndex=currentTopicTableIndex+1
+			 *
 			 通过dill_info ,NextTopicTableIndex获取  nextTopicTableName,nextFilterFied
 			 过滤条件  filter_condition =drill_value=山东省
 		  构建子主题查询：
 		  select * from  [nextTopicTableName] where  [nextFilterFied]=[filter_condition]
+            例如：
+              select * from  [view_city] where  [parent_provice]=[filter_condition]    
+              只需要将主题序号插入到客户端就可以了()
 	
-		例如：
-		  select * from  [view_city] where  [parent_provice]=[filter_condition]
-	
-		  只需要将主题序号插入到客户端就可以了()
 
 
 当前的工作列表：
-1. 主题设置能够设置固定字段的数据类型，进行判断是否需要对应维度表。如果维度字段为字符串，则需要的维度表id字段也为字符串，否则报错
-2. 主题的字段能够拖拽，而不是弹出框进行添加，提高用户体验
-3. 主题字段包括field_caption ,field_name ,field_caption，需要理清各自的用途
+    1. 主题设置能够设置固定字段的数据类型，进行判断是否需要对应维度表。如果维度字段为字符串，则需要的维度表id字段也为字符串，否则报错
+    2. 主题的字段能够拖拽，而不是弹出框进行添加，提高用户体验
+    3. 主题字段包括field_caption ,field_name ,field_caption，需要理清各自的用途

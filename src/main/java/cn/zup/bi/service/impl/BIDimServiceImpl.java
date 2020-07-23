@@ -137,7 +137,8 @@ public class BIDimServiceImpl implements BIDimService {
 				pks = pk.getObject(4).toString();
 			}
 		}catch(Exception ex){
-			throw new Exception(ex.getMessage());
+
+			throw new Exception("BI-getPrimaryKey（）"+ "Table:["+ tableName+"]" + ex.getMessage());
 		}
 		finally {
 			conn.close();
