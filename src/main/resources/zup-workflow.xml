@@ -28,7 +28,7 @@
 			<property name="maxActive" value="20" />
 			<!-- 连接池最小空闲 -->
 			<property name="minIdle" value="0" />
-	        <property name="maxWait" value="50"></property>  
+	        <property name="maxWait" value="5000"></property>
 	        <property name="defaultAutoCommit" value="true"></property>
 	        <property name="validationQuery" value="${spring.datasource.zupwf.validationQuery}" />
 	        <property name="removeAbandoned" value="true" /> <!-- 打开removeAbandoned功能 -->
