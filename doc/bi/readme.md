@@ -257,3 +257,6 @@ f. 钻取：钻取方式：
     1. 主题设置能够设置固定字段的数据类型，进行判断是否需要对应维度表。如果维度字段为字符串，则需要的维度表id字段也为字符串，否则报错
     2. 主题的字段能够拖拽，而不是弹出框进行添加，提高用户体验
     3. 主题字段包括field_caption ,field_name ,field_caption，需要理清各自的用途
+
+cn.zup.bi 2.3.0 从applicaton.yml文件直接读取配置信息，去掉dbconfig.properties
+再zup_wechat.xml文件添加以下数据源：
