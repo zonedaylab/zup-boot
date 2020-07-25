@@ -2,23 +2,22 @@ package cn.zup.bi.service.impl;
 
 import cn.zup.bi.dao.BIShowEngineDao;
 import cn.zup.bi.dao.DimDao;
-import cn.zup.bi.dao.ReportFieldDao;
 import cn.zup.bi.entity.*;
 import cn.zup.bi.service.*;
 import cn.zup.bi.utils.BIConfig;
-import cn.zup.bi.utils.BIConnection;
 import cn.zup.framework.json.JsonDateValueProcessor;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
+
 
 @Service("biShowEngineService")
 public class BIShowEngineServiceImpl implements BIShowEngineService {
@@ -35,7 +34,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	private ReportService biReportService;
 	@Resource
 	private BIPageService biPageService;
-
+	@Autowired
+	JdbcTemplate jdbcTemplate_bidata;
 
 	List<BIShowField> m_biDimFieldList;
 	/*
@@ -53,78 +53,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		*
 		*
 		*
-		针对不同的钻取类型（在维度表中dim_table中drill_type），不同的配置如下：
+		针对不同的钻取类型（在维度表中dim_table中drill_type），参见Readme.md.
 
-	    1. ---------drill_type=DRILL_TYPE_NONE=1;   NONE-------------
-		如: province维度对应的字符串： {山东省,河南省，河北省，山西省}
-
-		2.---------drill_type=int DRILL_TYPE_SEG=2; 分段--------------
-
-		3.---------drill_type=int DRILL_TYPE_PATH=3; 3.路径-----------
-
-			在维度表中dim_table中，drill_info 配置 对应不同的维度字段，例如 province-city-country,表示对应维度表中不同的维度文本信息。
-			dim_table 一般配置为  ：area (id ,province,city,country,name)
-			构建的colName 如下
-			[dim_data -  drill_name]
-
-			example:
-			[山东省 -  city] 表示当前需要从province 下转到city[drill_name], 下钻过滤语句为 '山东省'[drill_value ]
-
-			当前的维度 字段序号
-
-		4.---------drill_type= DRILL_TYPE_DIFF_TOPIC（4）;不同主题-----
-
-		  a.维度配置：
-
-		  针对维度字段，如果为不同的主题钻取，则drill_info 设置如下：
-		  drill_info :     topicTable1,filterField1  -  topicTable2,filterField2  -  topicTable3,filterField3........
-		  example:
-		  v_fund_province, parent_code   -   v_fund_city ,province_code  -  v_fund_country  ,city_code.
-
-		  点击山东省，则进行主题[topicTable2]的钻取,  filterField2表示主题的过滤字段。
-		  dim_data 是text_code ,filter_condition是id_code.
-		  例如 dim_data='山东省'  filter_condition='37'
-
-
-		  b.根据配置生成前端格式数据。维度数据- 对应主题表
-
-		  [dim_data - dim_name - current_topicTable_index] 分别对应维度数据，维度名字，当前主题表索引
-
-		   --->exmaple  [山东省 - area_dim - 1]
-
-		   dimName  topicTable
-
-		 c.前端接收到维度配置信息
-		   利用dim_data展示维度数据，
-		   getList(dim_name-current_topic_index,  dim_data) 生成连接进行钻取。
-
-		 d.前端发送请求
-
-		   drill_name---->   dim_name - current_topic_index
-		   					维度名称    -  当前主题表索引index；
-		   					表示要钻取的维度；主题表索引index=0表示第一个主题表；index=1表示第二个主题表
-		   drill_value----> dim_data    当前维度对应的数据值
-
-         e.后台接收后，构建查询语句 例如
-
-	 		 drill_name= 维度名称:主题表索引index； 表示要钻取的维度；主题表索引index=0表示第一个主题表；index=1表示第二个主题表
-			 drill_value= 该维度对应的值；
-			 后台接收后，构建查询语句 例如
-			 drill_name="organ_code-1"
-			 drill_value="山东省"
-		     drill_info :     topicTable1,filterField1  -  topicTable2,filterField2-topicTable3,filterField3........
-
-			 * NextTopicTableIndex=currentTopicTableIndex+1
-			 *
-			 通过dill_info ,NextTopicTableIndex获取  nextTopicTableName,nextFilterFied
-			 过滤条件  filter_condition =drill_value=山东省
-		  构建子主题查询：
-		  select * from  [nextTopicTableName] where  [nextFilterFied]=[filter_condition]
-
-		例如：
-		  select * from  [view_city] where  [parent_provice]=[filter_condition]
-
-		  只需要将主题序号插入到客户端就可以了()
 	*/
 
 	@Override
@@ -160,7 +90,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		List<Map<String, Object>> listDataMap = getReportDataFromDB(vreportData,listBIReport.get(0));//1.从数据库中获取报表数
 
 		if(listDataMap.size()==0)
-			throw new Exception("报表数据为空，请检查配置,bi_page_id="+vreportData.getBi_Page_Id()+";reportID="+reportID);
+			throw new Exception("报表查询业务数据为空，请检查配置,bi_page_id="+vreportData.getBi_Page_Id()+";reportID="+reportID);
 
 
 		List<String> measureCaptionList = new ArrayList<String>();
@@ -203,30 +133,46 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				 * ......
 				 * */
 				AddDimFieldToList(dimField, vreportData,BIColDimDatas);//列维度
-
 			}
 		}
-
 
 		//----------4.创建行维度数据集合（一个元素代表一个维度）-------------
 		for (Map<String, Object> map : listDataMap) {
 			for (int i = 0; i < BIRowDimDatas.size(); i++) {
 				List<String> listData = BIRowDimDatas.get(i).getListData();
-				String value = map.get(BIRowDimDatas.get(i).getField_Name()).toString();//
-				if (!listData.contains(value))//value表示该维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
-					listData.add(value);
+				if(map.get(BIRowDimDatas.get(i).getField_Name())!=null) {
+					String value = map.get(BIRowDimDatas.get(i).getField_Name()).toString();//
+					if (!listData.contains(value))//value表示该维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
+						listData.add(value);
+				}
+				List<String> listDataCode = BIRowDimDatas.get(i).getListDataCode();
+				if(map.get(BIRowDimDatas.get(i).getFieldNameCode())!=null) {
+					String value = map.get(BIRowDimDatas.get(i).getFieldNameCode()).toString();//
+					if (!listDataCode.contains(value))//value表示该维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
+						listDataCode.add(value);
+				}
+
+
+
 			}
 		}
 		//--------------5.创建列维度数据集合。-------------------------
 		for (Map<String, Object> map : listDataMap) {
 			for (int i = 0; i < BIColDimDatas.size(); i++) {
 				List<String> listData = BIColDimDatas.get(i).getListData();
-				String value = map.get(BIColDimDatas.get(i).getField_Name()).toString();
-				if (!listData.contains(value))//value表示某个维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
-					listData.add(value);
+				if(map.get(BIColDimDatas.get(i).getField_Name())!=null) {
+					String value = map.get(BIColDimDatas.get(i).getField_Name()).toString();
+					if (!listData.contains(value))//value表示某个维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
+						listData.add(value);
+				}
+				List<String> listDataCode = BIColDimDatas.get(i).getListDataCode();
+				if(map.get(BIColDimDatas.get(i).getFieldNameCode())!=null) {
+					String value = map.get(BIColDimDatas.get(i).getFieldNameCode()).toString();
+					if (!listDataCode.contains(value))//value表示某个维度包含的具体业务数据，例如维度为province ,则 value 为山东省，河南省，山西省......
+						listDataCode.add(value);
+				}
 			}
 		}
-
 
 		/*--------------------------------------------------------------------------------
 		3.创建度量数据
@@ -242,7 +188,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 
 				for (Map<String, Object> map : listDataMapTemp) {//获取数据
 
-					String xkey = "", xvalue = "", // 数据格式  <"2017-集体-云南省", "494">
+					String xkey = "",
+							xvalue = "", // 数据格式  <"2017-集体-云南省", "494">
 							rowKey = "", //xkey=rowK_colK; 行维度_列维度
 							colKey = "",
 							measureKey = ""; //对应的度量数据
@@ -284,7 +231,6 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		 * row1   山东 山东 山东
 		 * row2    集体 私有  国家
 		 */
-
 
 		/*
 		*	生成结果： dim1_m1表示维度dim1的成员m1。
@@ -354,10 +300,12 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 			for(int reportIndex=0;reportIndex<reportCount;reportIndex++) {
 				for (int j = 0; j < listCols.size(); j++) {
 					String keyName = "";
-
-					if (listRows.size() > 1)//如果只有一行数据，说明没有列维度
+					//此处有问题。可能就是只有一行数据.应该通过BIColDimDatas.size()>0解决  by liuxf 20200703
+					//if (listRows.size() >= 1
+					if (BIColDimDatas.size()>0)//如果只有一行数据，说明没有列维度.此处有问题。可能就是只有一行数据
 						keyName += listRows.get(i);
-					if (listCols.size() > 1) {//如果只有一列数据，说明没有行维度
+					//listCols.size() >= 1 同理
+					if ( BIRowDimDatas.size()>0) {//如果只有一列数据，说明没有行维度
 						keyName += keyName.length() > 0 ? "," + listCols.get(j) : listCols.get(j);
 					}
 					if (mapMeasureData.containsKey(keyName)) {
@@ -441,9 +389,12 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		dimData.setDrill_Type(dimField.getDrill_Type());
 		dimData.setField_Name(dimFieldName);
 		dimData.setListData(new ArrayList<String>());
+		dimData.setListDataCode(new ArrayList<String>());
+		dimData.setCurrentReportIndex(dimField.getCurrentShowReportIndex());
 
 		if(dimField.getDrill_Type()!=null) {
-			if (dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_PATH) {
+
+			if (dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_PATH) {//
 				if (reportData.getDrill_Name() != null) {
 					int lc = (reportData.getDrill_Value() + "").length() / 2;
 					dimField.setField_Name(dimField.getDrill_Info().split("-")[lc].toLowerCase());
@@ -451,7 +402,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 					dimField.setField_Name(dimField.getDrill_Info().split("-")[0].toLowerCase());
 
 				}
-			} else if (dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC) {//主题表
+			} else if (dimField.getDrill_Type() == BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC) {//主题表  不同主题的钻取
 				dimData.setCurrentReportIndex(dimData.getCurrentReportIndex() + 1);
 			}
 		}
@@ -534,6 +485,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	/*
 	* map 为一条数据记录。格式 字段1：value1；字段2：value2....
 	* */
+
 	private List<Map<String, Object>> getReportDataFromDB(V_ReportData reportData,BI_REPORT biReport)  throws Exception {
 
 		//1.获取报表中的字段，判断行维度，列维度，指标字段
@@ -541,51 +493,59 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		List<Object> value = new ArrayList<Object>(reportData.getValue());
 		reportData.setKey(key);
 		reportData.setValue(value);
-
-		String sql = this.produceSql(reportData, biReport);
-
-		//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
-		PreparedStatement ps = BIConnection.OpenConn().prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
-		ResultSetMetaData rsmd = rs.getMetaData();
-		int colCount = rsmd.getColumnCount();//列数量
+		Connection conn=jdbcTemplate_bidata.getDataSource().getConnection();
 		List<Map<String, Object>> listDataMap = new ArrayList<Map<String, Object>>();//数据
-		//从数据库中查询出来放入map中
-		while (rs.next()) {
-			Map<String, Object> map = new HashMap<String, Object>();
+		try {
 
-			for (int i = 1; i <= colCount; i++) {
+			String sql = this.produceSql(reportData, biReport);
+			//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colCount = rsmd.getColumnCount();//列数量
+			//从数据库中查询出来放入map中
+			while (rs.next()) {
+				Map<String, Object> map = new HashMap<String, Object>();
 
-				if (reportData.getBlock_Type() == 1
-						&& (rsmd.getColumnLabel(i).toLowerCase().equals("province")
-						|| rsmd.getColumnLabel(i).toLowerCase().equals("city")
-						|| rsmd.getColumnLabel(i).toLowerCase().equals("county")))
-					map.put(rsmd.getColumnLabel(i).toLowerCase(),
-							rs.getObject(i) + "-" + rs.getInt("areaId"));
+				for (int i = 1; i <= colCount; i++) {
 
-				else {
-					Object obj = rs.getObject(i);
-					if (obj != null) {
-						if (obj instanceof Integer) {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getInt(i));
-						} else if (obj instanceof Float) {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getFloat(i));
-						} else if (obj instanceof BigDecimal) {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getBigDecimal(i).toPlainString());
-						} else if (obj instanceof Double) {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getDouble(i));
+					if (reportData.getBlock_Type() == 1
+							&& (rsmd.getColumnLabel(i).toLowerCase().equals("province")
+							|| rsmd.getColumnLabel(i).toLowerCase().equals("city")
+							|| rsmd.getColumnLabel(i).toLowerCase().equals("county")))
+						map.put(rsmd.getColumnLabel(i).toLowerCase(),
+								rs.getObject(i) + "-" + rs.getInt("areaId"));
+
+					else {
+						Object obj = rs.getObject(i);
+						if (obj != null) {
+							if (obj instanceof Integer) {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getInt(i));
+							} else if (obj instanceof Float) {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getFloat(i));
+							} else if (obj instanceof BigDecimal) {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getBigDecimal(i).toPlainString());
+							} else if (obj instanceof Double) {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getDouble(i));
+							} else {
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
+							}
 						} else {
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
+							if (obj instanceof Integer || obj instanceof Double)
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), 0);
+							else
+								map.put(rsmd.getColumnLabel(i).toLowerCase(), "");
 						}
-					} else {
-						if (obj instanceof Integer || obj instanceof Double)
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), 0);
-						else
-							map.put(rsmd.getColumnLabel(i).toLowerCase(), "");
 					}
 				}
+				listDataMap.add(map);
 			}
-			listDataMap.add(map);
+		}
+		catch (Exception ex){
+			throw new Exception(ex.getMessage());
+		}
+		finally {
+			conn.close();
 		}
 		
 		return listDataMap;
@@ -610,7 +570,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		String showDimFields = ""; //需要显示的维度字段
 
 		String topicTableName=biReport.getBiz_Table_Name();  //主题表的名字
-		String topicTableNamePlaceholder="?";
+		String topicTableNamePlaceholder="'?'";
 
 		m_biDimFieldList = biDimService.getDimFieldList(reportData,biReport.getReport_Id());
 		/*================获取维度字段===============*/
@@ -626,14 +586,14 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 
 			if(drillType==null||drillType==0){//没有对应维度表，则直接获取主题表中的维度字段
 
-				showDimFields += topicTableNamePlaceholder + "." + biShowField.getField_Name() + ",";
+				showDimFields += topicTableNamePlaceholder + "." + biShowField.getField_Name() + ",";    //as getFieldNameChinese
 				continue;
 			}
 
 			switch (drillType) {//分段信息
 				case BIConfig.DRILL_TYPE.DRILL_TYPE_NONE:  //DRILL_NONE
 
-					showDimFields += biShowField.getDim_Table() + "." + biShowField.getText_Field() +" AS "+ biShowField.getField_Name()+ ",";
+					showDimFields += biShowField.getDim_Table() + "." + biShowField.getText_Field() +" AS "+ biShowField.getField_Name()+ ",";//as getFieldNameChinese
 
 					if(reportData.getKey().size() > 0){
 						for (int j = 0; j < reportData.getKey().size(); j++) {
@@ -710,11 +670,17 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC://不同主题
 
 					showDimFields += biShowField.getDim_Table() + "." + biShowField.getText_Field() +" AS "+ biShowField.getField_Name()+ ",";
+
+					showDimFields += biShowField.getDim_Table() + "." + biShowField.getId_Field() +" AS "+ biShowField.getFieldNameCode()+ ","; //根据Id进行过滤
+
+					groupby +=  biShowField.getFieldNameCode() +",";
+
 					topicTableName=biShowField.getNextTopicTableName();
 					String filterName=biShowField.getNextFilterName();
 					//形成过滤语句
-					where += " AND " + topicTableNamePlaceholder + "." + filterName
-							+ "=" + reportData.getDrill_Value();
+					if(reportData.getDrill_Value()!=null)
+						where += " AND " + topicTableNamePlaceholder + "." + filterName
+								+ "=" + reportData.getDrill_Value();
 					break;
 			}
 			if(i == 0){
@@ -723,8 +689,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 						biShowField.getDim_Table()+ "." + biShowField.getId_Field();
 			}else if(lastDimTable==null|| !lastDimTable.equals(biShowField.getDim_Table())){//不是同一个DIM数据表
 				join += "\n JOIN " + biShowField.getDim_Table() + " ON " +
-						topicTableNamePlaceholder + "." + biShowField.getField_Name() + " = " +
-						biShowField.getDim_Table()+ "." + biShowField.getId_Field();
+						topicTableNamePlaceholder + "." + biShowField.getField_Name() + " = " +  //field_name 指主题表中的字段信息
+						biShowField.getDim_Table()+ "." + biShowField.getId_Field(); //id字段信息
 			}
 			lastDimTable=biShowField.getDim_Table();
 		}
@@ -742,20 +708,20 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		for (int i = 0; i < biMeasureFieldList.size(); i++) {
 			BIShowField biMeasureField = biMeasureFieldList.get(i);
 
-			if(reportData.getIndex() == null || reportData.getIndex().equals(biMeasureField.getField_Id())){
-				if(reportData.getBlock_Type() == 1){  //图表类型：为了防止表格，表格只能有一个指标
-					if(b) continue;
-				}
-				if(biMeasureField.getAggregate_Type()==null||biMeasureField.getAggregate_Type().length()<3)
-					throw new  Exception(String.format("biMeasureField 度量值 %s 没有设置聚合字符，如count sum 等",biMeasureField.getField_Name()));
-				String AggregateType=trimComma(biMeasureField.getAggregate_Type(),"_"); //
-				showMeasureFields +=  AggregateType + "("+ topicTableNamePlaceholder + "." +
-									biMeasureField.getField_Name() +") AS "+ biMeasureField.getField_Caption() +", ";
-				if(biMeasureField.getAggregate_Type()==null){
-					throw new Exception("显示字段Aggregate_Type为空，请检查配置,语句:<!--"+showMeasureFields+"-->");
-				}
-				b = true;
+			if(reportData.getBlock_Type() == 1){  //图表类型：为了防止表格，表格只能有一个指标
+				if(b)
+					continue;
 			}
+			if(biMeasureField.getAggregate_Type()==null||biMeasureField.getAggregate_Type().length()<3)
+				throw new  Exception(String.format("biMeasureField 度量值 %s 没有设置聚合字符，如count sum 等",biMeasureField.getField_Name()));
+			String AggregateType=trimComma(biMeasureField.getAggregate_Type(),"_"); //
+			showMeasureFields +=  AggregateType + "("+ topicTableNamePlaceholder + "." +
+								biMeasureField.getField_Name() +") AS "+ biMeasureField.getField_Caption() +", ";
+			if(biMeasureField.getAggregate_Type()==null){
+				throw new Exception("显示字段Aggregate_Type为空，请检查配置,语句:<!--"+showMeasureFields+"-->");
+			}
+			b = true;
+
 			if(i == 0){
 				from += topicTableNamePlaceholder + " ";//此处需要修改
 			}
@@ -767,9 +733,8 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		//需要查询的字段，包括所有的维度和指标。
 		String showFields = showDimFields + ", " + showMeasureFields; //维度  +  指标
 
-		String sql = "select "+ showFields+ from + join + where + groupby +";";
-
-		sql=sql.replace(topicTableNamePlaceholder,topicTableName);
+		String sql = "select "+ showFields+ from + join + where + " "+ groupby +";";
+		sql=sql.replace(topicTableNamePlaceholder,"`"+topicTableName+"`");
 
 		System.err.println(sql);
 		return sql;
@@ -784,16 +749,46 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 	 * 获取到这个报表的维表中的所有字段作为筛选条件
 	 * 
 	 * */
+
+
+
 	@Override
-	public List<String> showDimField(Integer reportId) {
-		List<String> list = new ArrayList<String>();
-		List<BI_DIM> dimList = dimDao.getDimField(reportId);
-		for (BI_DIM bi_DIM : dimList) {
-			if(bi_DIM.getBiz_Table_Name().equals("dicarea") || bi_DIM.getBiz_Table_Name().equals("v_dicarea"))
-				continue;
-			String sql = "SELECT " + bi_DIM.getText_Field() +" FROM " + bi_DIM.getBiz_Table_Name() + " GROUP BY " + bi_DIM.getText_Field()+"; &"+bi_DIM.getDim_Name();
-			list.add(sql);
+	public Map<String, Object> showDimField(Integer reportId) throws Exception {
+
+		Connection conn =null;
+		Map<String, Object> mapResult = new HashMap<String, Object>();
+		try {
+			conn = jdbcTemplate_bidata.getDataSource().getConnection();
+			List<BI_DIM> dimList = dimDao.getDimField(reportId);
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			for (BI_DIM bi_DIM : dimList) {
+				if (bi_DIM.getBiz_Table_Name().equals("dicarea") || bi_DIM.getBiz_Table_Name().equals("v_dicarea"))
+					continue;
+				String sql = "SELECT " + bi_DIM.getText_Field() + " FROM " + bi_DIM.getBiz_Table_Name() + " GROUP BY " + bi_DIM.getText_Field() + "; &" + bi_DIM.getDim_Name();
+
+				String[] sqls = sql.split("&");
+				ps = conn.prepareStatement(sqls[0]);
+				rs = ps.executeQuery();
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int count = rsmd.getColumnCount();
+				List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+				while (rs.next()) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					for (int i = 1; i <= count; i++) {
+						map.put(rsmd.getColumnLabel(i).toLowerCase(), rs.getObject(i));
+					}
+					listMap.add(map);
+				}
+				mapResult.put(sqls[1], listMap);
+			}
 		}
-		return list;
+		catch (Exception ex){
+			throw new Exception(ex.getMessage());
+		}
+		finally {
+			conn.close();
+		}
+		return mapResult;
 	}
 }

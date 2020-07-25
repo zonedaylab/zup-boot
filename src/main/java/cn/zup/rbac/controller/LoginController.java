@@ -1,6 +1,7 @@
 package cn.zup.rbac.controller;
 
  
+import cn.zup.rbac.config.system_config;
 import cn.zup.rbac.entity.LoginLog;
 import cn.zup.rbac.entity.Organ;
 import cn.zup.rbac.entity.UserSession;
@@ -11,6 +12,7 @@ import cn.zup.wechat.util.GlobalConstants;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -155,6 +157,8 @@ public class LoginController {
 	 * @param request
 	 * @return
 	 */
+	@Autowired
+	system_config systemConfig;
 	@RequestMapping("/login")
 	@ResponseBody 
 	public String login(String accountname,String password,String randCode,HttpServletRequest request) {
@@ -174,8 +178,12 @@ public class LoginController {
 			UserSession userSession=userService.getUserSessionInfo(accountname,password);	
 			UserSession userNameValid=userService.getUserSessionInfo(accountname,null);			
 			HttpSession session=request.getSession();	
-			DomainSystem domainSystem=new DomainSystem();
-			if(request.getParameter("Esale")!=null && "true".equals(request.getParameter("Esale"))){
+			DomainSystem domainSystem=null;
+			if(systemConfig.getName()!=null && systemConfig.getName().length()>0){
+				domainSystem=resourceService.getDomainSystemByDomain(systemConfig.getName());
+			}
+			else
+				if(request.getParameter("Esale")!=null && "true".equals(request.getParameter("Esale"))){
 					domainSystem=resourceService.getDomainSystemByDomain("Esale");
 			}else if(request.getParameter("Sitai")!=null && "true".equals(request.getParameter("Sitai"))){
 					domainSystem=resourceService.getDomainSystemByDomain("Sitai");
@@ -186,8 +194,8 @@ public class LoginController {
 				domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
 			}
 			else{//默认济南光伏 homeController
-				//改为资金fundHome Controller
-				domainSystem=resourceService.getDomainSystemByDomain("homeController");
+				//改为资金   fundHomeController
+				domainSystem=resourceService.getDomainSystemByDomain("fundHomeController");
 			}
 			LoginLog loginLog = new LoginLog(); 
 			Date nowTime = new Date(System.currentTimeMillis()); 

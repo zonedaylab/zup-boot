@@ -542,16 +542,9 @@
 	  <repository>
 	    <id>jcny</id>
 	    <name>private maven repository</name>
-	    <url>http://maven.iesnengyuan.com/repository/jcny/</url>
+	    <url>http://192.168.18.110:8081/nexus/content/groups/public/</url>
 	    <releases><enabled>true</enabled></releases>
 	    <snapshots><enabled>false</enabled></snapshots>
-	  </repository>
-	  <repository>
-	    <id>maven-public</id>
-	    <name>cloud release repository</name>
-	    <url>http://maven.iesnengyuan.com/repository/maven-public/</url>
-	    <releases><enabled>false</enabled></releases>
-	    <snapshots><enabled>true</enabled></snapshots>
 	  </repository>
    </repositories>
 
@@ -559,11 +552,17 @@
 	<!-- 发布jar包到nexus的相应仓库中 -->
 	<distributionManagement>
 	  <!-- 发布到 快照版本的仓库，即 测试版本仓库 -->
-	  <snapshotRepository>
-	    <id>jcny</id>
-	    <url>http://maven.iesnengyuan.com/repository/jcny/</url>
-	  </snapshotRepository>
+		<repository>
+			<id>releases</id>
+			<url>http://192.168.18.110:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://192.168.18.110:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
 	</distributionManagement>
+
+
 	
     <build>
     	<finalName>zup-boot</finalName>
@@ -622,4 +621,6 @@
     </build>
 
     <packaging>jar</packaging>
+
+
 </project>
