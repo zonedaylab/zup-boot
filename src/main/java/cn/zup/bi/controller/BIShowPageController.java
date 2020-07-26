@@ -26,21 +26,12 @@ public class BIShowPageController {
 	@Resource
 	private BIPageService biPageService;
 	@Resource
-	private BIPageBlockService biPageBlockService;
-	@Resource
 	private BIShowEngineService biShowEngineService;
 	@Resource
 	private BIDimService biDimService;
 	@Resource
-	private TopicFieldService biTopicFieldService;
-	@Resource
-	private TopicService topicService;
-	@Resource
-	private ReportService biReportService;
-	@Resource
 	private BIScreenService biScreenService;
-	@Resource
-	private BIDatasourceService biDatasourceService;
+
 	
 	@RequestMapping("/{id}")
 	public ModelAndView index(@PathVariable("id") Integer id) {
