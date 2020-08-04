@@ -1,0 +1,54 @@
+Manifest-Version: 1.0
+Main-Class: 
+Class-Path: javax.persistence-2.1.0.jar spring-session-1.3.1.RELEASE.jar
+  jboss-logging-3.1.0.GA.jar spring-plugin-core-1.2.0.RELEASE.jar spring
+ -boot-test-autoconfigure-1.5.9.RELEASE.jar tomcat-embed-el-8.5.23.jar h
+ ibernate-core-4.2.0.Final.jar jackson-mrbean-1.8.4.jar classmate-1.4.0.
+ jar hibernate-ehcache-4.2.0.Final.jar spring-webmvc-4.3.13.RELEASE.jar 
+ jedis-2.9.0.jar spring-beans-4.3.13.RELEASE.jar hibernate-commons-annot
+ ations-4.0.2.Final.jar poi-scratchpad-3.9.jar snakeyaml-1.17.jar hibern
+ ate-proxool-4.2.0.Final.jar jsqlparser-2.0.jar ecj-3.12.3.jar springfox
+ -swagger2-2.9.2.jar pagehelper-5.1.11.jar spring-boot-starter-data-redi
+ s-1.5.9.RELEASE.jar spring-boot-autoconfigure-1.5.9.RELEASE.jar tomcat-
+ embed-core-8.5.23.jar springfox-core-2.9.2.jar jackson-mapper-asl-1.8.4
+ .jar commons-lang3-3.1.jar mapstruct-1.2.0.Final.jar poi-3.9.jar common
+ s-io-1.3.2.jar freemarker-2.3.23.jar org.apache.poi.xwpf.converter.core
+ -1.0.1.jar commons-collections-3.2.1.jar spring-data-keyvalue-1.2.9.REL
+ EASE.jar hibernate-jpa-2.0-api-1.0.1.Final.jar springfox-spring-web-2.9
+ .2.jar spring-boot-starter-jdbc-1.5.9.RELEASE.jar guava-20.0.jar jackso
+ n-databind-2.8.10.jar spring-data-commons-1.13.9.RELEASE.jar commons-co
+ dec-1.4.jar ezmorph-1.0.3.jar ognl-2.7.3.jar xpp3_min-1.1.4c.jar jackso
+ n-core-2.8.10.jar hibernate-validator-annotation-processor-4.2.0.Final.
+ jar springfox-schema-2.9.2.jar spring-expression-4.3.13.RELEASE.jar pin
+ yin4j-2.5.1.jar validation-api-1.0.0.GA.jar mybatis-spring-boot-starter
+ -1.3.5.jar httpcore-4.1.4.jar spring-boot-starter-web-1.5.9.RELEASE.jar
+  druid-spring-boot-starter-1.1.5.jar jackson-core-asl-1.8.4.jar jackson
+ -annotations-2.8.0.jar swagger-models-1.5.20.jar javassist-3.7.ga.jar s
+ pring-aop-4.3.13.RELEASE.jar poi-ooxml-3.9.jar commons-logging-1.1.3.ja
+ r mybatis-spring-boot-autoconfigure-1.3.5.jar c3p0-0.9.1.1.jar fastjson
+ -1.2.6.jar spring-boot-1.5.9.RELEASE.jar swagger-annotations-1.5.20.jar
+  zup-spring-jdbc-1.0.jar spring-plugin-metadata-1.2.0.RELEASE.jar proxo
+ ol-0.8.3.jar ooxml-schemas-1.1.jar httpclient-4.1.3.jar dom4j-1.6.1.jar
+  ridl-3.2.1.jar xmlpull-1.1.3.1.jar tomcat-embed-jasper-8.5.23.jar spri
+ ng-data-redis-1.8.9.RELEASE.jar minidao-1.5.1.jar spring-tx-4.3.13.RELE
+ ASE.jar commons-pool2-2.4.3.jar logback-classic-1.1.11.jar tomcat-annot
+ ations-api-8.5.23.jar spring-oxm-4.3.13.RELEASE.jar ehcache-core-2.4.3.
+ jar poi-ooxml-schemas-3.9.jar springfox-swagger-common-2.9.2.jar logbac
+ k-core-1.1.11.jar spring-web-4.3.13.RELEASE.jar ueditor-1.1.1.jar sprin
+ g-boot-starter-cache-1.5.9.RELEASE.jar jcl-over-slf4j-1.7.25.jar spring
+ fox-swagger-ui-2.9.2.jar spring-jdbc-4.3.13.RELEASE.jar json-lib-2.1-jd
+ k15.jar antlr-2.7.7.jar druid-1.1.5.jar mybatis-spring-1.3.3.jar jul-to
+ -slf4j-1.7.25.jar aspectjweaver-1.6.9.jar commons-fileupload-1.2.1.jar 
+ xmlbeans-2.3.0.jar hibernate-validator-4.2.0.Final.jar spring-context-4
+ .3.13.RELEASE.jar commons-lang-2.6.jar commons-beanutils-1.7.0.jar spri
+ ng-session-data-redis-1.3.1.RELEASE.jar byte-buddy-1.8.12.jar xstream-1
+ .4.10.jar mysql-connector-java-5.1.27.jar jboss-transaction-api_1.1_spe
+ c-1.0.0.Final.jar javassist-3.15.0-GA.jar org.apache.poi.xwpf.converter
+ .xhtml-1.0.0.jar slf4j-api-1.6.6.jar tomcat-jdbc-8.5.23.jar quartz-2.2.
+ 0.jar spring-context-support-4.3.13.RELEASE.jar springfox-spi-2.9.2.jar
+  spring-boot-starter-logging-1.5.9.RELEASE.jar log4j-1.2.16.jar log4j-o
+ ver-slf4j-1.7.25.jar spring-core-4.3.13.RELEASE.jar spring-boot-starter
+ -freemarker-1.5.9.RELEASE.jar stax-api-1.0.1.jar mybatis-3.4.6.jar tomc
+ at-juli-8.5.23.jar jstl-1.2.jar spring-boot-starter-1.5.9.RELEASE.jar s
+ pring-orm-4.3.13.RELEASE.jar
+
