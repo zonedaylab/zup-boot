@@ -520,11 +520,11 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		try {
             ResultSet rs=null;
             DatabaseMetaData meta = conn.getMetaData();
-            // 第一个参数catalog在MySQL中对应数据库名：michaeldemo
-            ResultSet rsTables = meta.getTables(null, null, biReport.getBiz_Table_Name(), new String[] {"TABLE"});
+            // 第一个参数catalog在MySQL中对应数据库名：
+            ResultSet rsTables = meta.getTables(null, null,"", new String[] {"TABLE","VIEW"});
 
             boolean isTable=rsTables.next();
-            if(false){   //存储过程
+            if(!rsTables.next()){   //存储过程
 
                 String procsql="{CALL " +biReport.getBiz_Table_Name() + "(" ; //判断是否有参数，此处
 
