@@ -518,11 +518,52 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		Connection conn=jdbcTemplate_bidata.getDataSource().getConnection();
 		List<Map<String, Object>> listDataMap = new ArrayList<Map<String, Object>>();//数据
 		try {
+            ResultSet rs=null;
+            DatabaseMetaData meta = conn.getMetaData();
+            // 第一个参数catalog在MySQL中对应数据库名：michaeldemo
+            ResultSet rsTables = meta.getTables(null, null, biReport.getBiz_Table_Name(), new String[] {"TABLE"});
 
-			String sql = this.produceSql(reportData, biReport);
-			//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
+            boolean isTable=rsTables.next();
+            if(false){   //存储过程
+
+                String procsql="{CALL " +biReport.getBiz_Table_Name() + "(" ; //判断是否有参数，此处
+
+				for (int i = 0; i < m_biDimFieldList.size(); i++) {
+					BIShowField biShowField = m_biDimFieldList.get(i);
+					//判断是否有对应的维度表 add by liuxf
+					Integer drillType = biShowField.getDrill_Type();
+					switch (drillType) {//分段信息
+
+						case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC://不同主题
+							if (reportData.getDrill_Value() != null)
+								procsql+="?";
+
+					}
+				}
+                procsql+=")}";
+                // 创建CallableStatement对象
+                CallableStatement clbStmt = conn.prepareCall(procsql);  //"{CALL proc_search_user(?,?,?,?)}");
+				for (int i = 0; i < m_biDimFieldList.size(); i++) {
+					BIShowField biShowField = m_biDimFieldList.get(i);
+					//判断是否有对应的维度表 add by liuxf
+					Integer drillType = biShowField.getDrill_Type();
+					switch (drillType) {//分段信息
+
+						case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC://不同主题
+							if (reportData.getDrill_Value() != null)
+								clbStmt.setInt(i+1, (int)reportData.getValue().get(i)); // 设置输入参数
+					}
+				}
+				// 执行调用存储过程，并获取结果集
+                rs = clbStmt.executeQuery();
+
+            }
+            else {
+                String sql = this.produceSql(reportData, biReport);
+                //修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
+                PreparedStatement ps = conn.prepareStatement(sql);
+                rs = ps.executeQuery();
+            }
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int colCount = rsmd.getColumnCount();//列数量
 			//从数据库中查询出来放入map中

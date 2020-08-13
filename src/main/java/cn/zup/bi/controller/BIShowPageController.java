@@ -161,11 +161,6 @@ public class BIShowPageController {
 			String id = filterName.substring(0, filterName.lastIndexOf("_"));
 			if(dimList.size()>0) {//判断是否关联维度表 liuxf
 				sql = "SELECT " + id + "," + filterName + " from " + dimList.get(0).getBiz_Table_Name() + " GROUP BY " + id + "," + filterName;
-//				ps = conn.prepareStatement(sql);
-//				rs = ps.executeQuery();
-//				while (rs.next()) {
-//					map.put(rs.getString(filterName), rs.getInt(id));
-//				}
 				 jdbcTemplate_bidata.query(sql, new ResultSetExtractor<List>() {
 					@Override
 					public List extractData(ResultSet rs)
