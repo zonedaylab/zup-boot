@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 离群点分析
- *
+ *  原理： https://blog.csdn.net/wangyibo0201/article/details/51705966?locationNum=2&fps=1
  * @author zouzhongfan
  * 算法：基于密度的局部离群点检测（lof算法）
  * 输入：样本集合D，正整数K（用于计算第K距离）
@@ -19,13 +19,16 @@ import java.util.List;
  *  5）对每个点的局部离群点因子进行排序，输出。
  **/
 public class OutlierNodeDetect {
-    private static int INT_K = 5;//正整数K
+    private  int INT_K = 5;//正整数K
 
     // 1.找到给定点与其他点的欧几里得距离
     // 2.对欧几里得距离进行排序，找到前5位的点，并同时记下k距离
     // 3.计算每个点的可达密度
     // 4.计算每个点的局部离群点因子
     // 5.对每个点的局部离群点因子进行排序，输出。
+    public  void setK(int K){
+        INT_K=K;
+    }
     public List<DataNode> getOutlierNode(List<DataNode> allNodes) {
 
         List<DataNode> kdAndKnList = getKDAndKN(allNodes);
@@ -135,7 +138,7 @@ public class OutlierNodeDetect {
      * 1,计算给定点NodeA与其他点NodeB的欧几里得距离，并记录在NodeB点的distance变量中。
      * 2,对所有NodeB点中的distance进行升序排序。
      * 3,找到NodeB点的前5位的欧几里得距离点，并记录到到NodeA的kNeighbor变量中。
-     * 4,找到NodeB点的第5位距离，并记录到NodeA点的kDistance变量中。
+     * 4,找到NodeB点的第5位距离，并记录到NodeA点的kDistance变量中。            
      * @param allNodes
      * @return List<Node>
      */
@@ -234,7 +237,8 @@ public class OutlierNodeDetect {
 
         ArrayList<DataNode> dpoints = new ArrayList<DataNode>();
 
-        double[] a = { 2, 3 };
+        //数据从数据库里获取
+        double[] a = { 2, 3 };//  2 ,3 分别表示维度，可以根据需要进行扩展 。例如 矿山规模 种类  面积 等，考虑要做归一化。单位可能相差太大。
         double[] b = { 2, 4 };
         double[] c = { 1, 4 };
         double[] d = { 1, 3 };
@@ -249,7 +253,7 @@ public class OutlierNodeDetect {
 
         double[] l = { 100, 2 };// 孤立点
 
-        double[] m = { 8, 20 };
+        double[] m = { 8, 200 };
         double[] n = { 8, 19 };
         double[] o = { 7, 18 };
         double[] p = { 7, 17 };
@@ -278,6 +282,7 @@ public class OutlierNodeDetect {
 
         OutlierNodeDetect lof = new OutlierNodeDetect();
 
+        //lof.setK(15);
         List<DataNode> nodeList = lof.getOutlierNode(dpoints);
 
         for (DataNode node : nodeList) {
