@@ -328,7 +328,9 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				}
 			}
 
-			if(rowDataCount>0) {//本行数据有效
+			//此处用于将无效的数据行去掉 liuxf
+			//if(rowDataCount>0)
+			{//本行数据有效
 				rowDatas=trimComma(rowDatas,",");
 				List<String> rowValueList = new ArrayList<String>();
 				rowValueList.addAll(Arrays.asList(rowDatas.split(",")));
