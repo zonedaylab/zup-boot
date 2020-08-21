@@ -512,8 +512,8 @@
 
 	  <dependency>
 		  <groupId>org.jeecgframework</groupId>
-		  <artifactId>minidao-spring-boot-starter</artifactId>
-		  <version>1.6.7.RELEASE</version>
+		  <artifactId>minidao</artifactId>
+		  <version>1.5.1</version>
 	  </dependency>
 	<dependency>
 		<groupId>com.baidu</groupId>
