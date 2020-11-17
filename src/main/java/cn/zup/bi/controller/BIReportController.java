@@ -1,6 +1,7 @@
 package cn.zup.bi.controller;
 
 import cn.zup.bi.entity.BI_REPORT;
+import cn.zup.bi.entity.BI_REPORT_FIELD;
 import cn.zup.bi.entity.BI_TOPIC_FIELD;
 import cn.zup.bi.entity.BI_TOPIC_FIELD_VIEW;
 import cn.zup.bi.service.ReportFieldService;
@@ -19,9 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author gavin
@@ -35,7 +34,7 @@ public class BIReportController {
 	private ReportService reportService;
 	@Resource
 	private ReportFieldService reportFieldService;
-	
+
 	/**
 	 * 返回首页
 	 * @author 谢炎
@@ -43,15 +42,15 @@ public class BIReportController {
 	@RequestMapping("")
 	public ModelAndView index(HttpServletRequest request){
 		//需要优化pageId为空
-				String pageId = request.getParameter("pageId");
-				ModelAndView mv = new ModelAndView("bi/biReportManage");
-				mv.addObject("pageId", pageId);
-				return mv;
-	    //return new ModelAndView("bi/biReportManage");
+		String pageId = request.getParameter("pageId");
+		ModelAndView mv = new ModelAndView("bi/biReportManage");
+		mv.addObject("pageId", pageId);
+		return mv;
+		//return new ModelAndView("bi/biReportManage");
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * 获取主题字段数据
 	 * @author 谢炎
 	 * */
@@ -69,7 +68,7 @@ public class BIReportController {
 		json.put("data", viewList);
 		return json.toString();
 	}
-	
+
 	/**
 	 * 保存报表
 	 * @author 谢炎
@@ -87,7 +86,7 @@ public class BIReportController {
 		}
 		return json.toString();
 	}
-	
+
 	/**
 	 * 更新报表
 	 * @author 谢炎
@@ -104,7 +103,50 @@ public class BIReportController {
 		}
 		return json.toString();
 	}
-	
+
+	/**
+	 * 获取报表列表
+	 * @author 段延玉  郑晖改
+	 * */
+	@RequestMapping("/getTableName")
+	@ResponseBody
+	public String getTableName(BI_REPORT report){
+		List<BI_REPORT> biReports = reportService.getReportPagingList(report);
+
+		Map<String,List<BI_REPORT_FIELD>> maps = new HashMap<>();
+
+		Map<String,Map<String,String>> mapMap = new HashMap<>();
+
+		biReports.stream().forEach(br -> {
+
+			BI_REPORT_FIELD reportField = new BI_REPORT_FIELD();
+			reportField.setReport_Id(br.getReport_Id());
+
+			List<BI_REPORT_FIELD> biReportFields = reportFieldService.getReportFieldList(reportField, 0, 0);
+			Map<String,String> m = new HashMap<>();
+
+			biReportFields.stream().forEach(brf->{
+				m.put(brf.getField_Name(),brf.getField_Name());
+			});
+
+			//用于前台过滤比较
+			mapMap.put(br.getReport_Id()+"",m);
+
+			//每一个key都是Report_Id
+			maps.put(br.getReport_Id()+"",biReportFields);
+
+		});
+
+
+		JSONObject json = new JSONObject();
+		json.put("biReportLists", biReports);
+		json.put("biReportFieldMaps", maps);
+		json.put("mapMap", mapMap);
+
+		return json.toString();
+	}
+
+
 	/**
 	 * 删除报表
 	 * @author 谢炎
@@ -128,7 +170,7 @@ public class BIReportController {
 		}
 		return json.toString();
 	}
-	
+
 	/**
 	 * 获取报表信息
 	 * @author 谢炎
@@ -141,7 +183,7 @@ public class BIReportController {
 		json.put("data", biReport);
 		return json.toString();
 	}
-	
+
 	/**
 	 * 获取报表列表
 	 * @author 谢炎
@@ -152,7 +194,7 @@ public class BIReportController {
 		List<BI_REPORT> list = reportService.getReportPagingList(report);
 		return CommonResult.successPage(list, page, rows);
 	}
-	
+
 	/**
 	 * 根据页面id和屏幕索引查询报表列表
 	 * @author 谢炎
