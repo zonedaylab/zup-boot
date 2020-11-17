@@ -23,13 +23,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   		<!-- datables开始 -->
 		<div class="table-header">表单配置</div>
 		<div class="row">
-			<div class="col-md-6" style="margin-left:20px;height:30px; margin-bottom:10px; margin-top:5px;">
+			<div class="col-md-8" style="margin-left:20px;height:30px; margin-bottom:10px; margin-top:5px;">
 				<button class="btn btn-primary btn-sm" id="btnAdd">添加</button>
 				<button class="btn btn-primary btn-sm" id="btnEdit">编辑</button>
 				<button class="btn btn-primary btn-sm" id="btnDelete">删除</button>
 				<button class="btn btn-primary btn-sm" id="btnScreenSetting">布局设置</button>
 				<button class="btn btn-primary btn-sm" id="btnReportSetting">元素设置</button>
 				<button class="btn btn-primary btn-sm" id="btnPreview">报表预览</button>
+				<button class="btn btn-primary btn-sm" id="Echarts">报表展示</button>
+				<button class="btn btn-primary btn-sm" id="createURL">生成第三方URL</button>
+
 			</div>
 			<div class="col-md-7"></div>
 		</div>
@@ -103,6 +106,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</div> 
 	</div>
+<%--	生成第三方URL的弹出框--%>
+	<div id="thisURL" class="hide">
+		<div class="container">
+			<div>
+				<input id="this_url" type="text" class="form-control">
+			</div>
+		</div>
+	</div>
+
   	
   	<!--  import javascript	-->
     <jsp:include page="../include/mainFooter.jsp"></jsp:include>
@@ -356,6 +368,62 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					window.open("/Bi/BIPageShow?pageId="+Page_Id);
 				}
 			});
+			//报表展示按钮
+			$("#Echarts").on("click", function(){
+				var Page_Id = 0;
+				if($("#bi_Page_Id:checked").length != 1) {
+					parent.parent.bootbox.alert("只能选择一个表单查看报表", function(){});
+					return;
+				}else{
+					Page_Id = $("#bi_Page_Id:checked").val();
+					window.open("/rest/bi/biEchartsController?pageId="+Page_Id);
+				}
+			});
+			// 生成第三方URL展示按钮
+			$("#createURL").on("click", function(){
+				//
+				var Page_Id = 0;
+				if($("#bi_Page_Id:checked").length != 1) {
+					parent.parent.bootbox.alert("只能选择一个表单查看报表", function(){});
+					return;
+				}else{
+					Page_Id = $("#bi_Page_Id:checked").val();
+					var host = window.location.host;
+					var port = window.location.port;
+					$("#this_url").val(host + "/Bi/BIPageShow?pageId="+Page_Id);
+					//window.open("/rest/bi/biEchartsController?pageId="+Page_Id);
+				}
+				var dialog = $( "#thisURL" ).removeClass('hide').dialog({
+					modal: true,
+					width:375,
+					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='icon-ok'></i>生成第三方URL</h4></div>",
+					title_html: true,
+					buttons: [
+						{
+							text: "取消",
+							"class" : "btn btn-xs",
+							click: function() {
+								$( this ).dialog( "close" );
+							}
+						},
+						{
+							text:"复制",
+							"class" : "btn btn-primary btn-xs",
+							click : function(){
+								//将数据复制到剪贴板
+								var input = document.querySelector('#this_url');
+								input.select();
+								if (document.execCommand('copy')) {
+									document.execCommand('copy');
+									parent.parent.bootbox.alert("复制成功", function(){});
+								}else{
+									parent.parent.bootbox.alert("复制失败，请关闭重试", function(){});
+								}
+							}
+						}
+					]
+				});
+			});
 			//选择页面类型
 	    	function loadPageType(){
 	    		$.ajax({
@@ -505,7 +573,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					width:325,
 					title: "<div class='widget-header widget-header-small'><h4 class='smaller'><i class='icon-ok'></i>报表页面设置</h4></div>",
 					title_html: true,
-					buttons: [ 
+
+					buttons: [
 						{
 							text: "取消",
 							"class" : "btn btn-xs",
