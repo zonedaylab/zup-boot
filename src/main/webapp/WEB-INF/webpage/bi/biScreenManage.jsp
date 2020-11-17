@@ -788,7 +788,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</script>
 	<script src="jquery/jquery-1.10.2.js"></script>
 	<%--<script src="D:\Maven\jquery.js"></script>--%>
-<%--	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>--%>
+    <%--	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>--%>
 	<script>
 		/*学习拖拽，主要就是学习拖拽事件*/
 		var obj = null;//当前被拖拽的地元素
