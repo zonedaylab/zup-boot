@@ -301,7 +301,7 @@
   <component name="MavenRunner">
     <option name="jreName" value="1.8" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-10" />
     <option name="width" value="980" />
     <option name="height" value="1040" />
@@ -654,7 +654,7 @@
       <workItem from="1602639843459" duration="381000" />
       <workItem from="1603072953996" duration="934000" />
       <workItem from="1605525616720" duration="10373000" />
-      <workItem from="1605574748626" duration="2871000" />
+      <workItem from="1605574748626" duration="3553000" />
     </task>
     <task id="LOCAL-00001" summary="2020/11/16 deBug提交">
       <created>1605525919466</created>
@@ -709,7 +709,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="121766000" />
+    <option name="totallyTimeSpent" value="122448000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -721,7 +721,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <layout>
       <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="1" />
@@ -734,7 +734,7 @@
       <window_info content_ui="combo" id="Project" order="8" visible="true" weight="0.24463807" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49932975" visible="true" weight="0.5498534" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49932975" visible="true" weight="0.47947213" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.8797654" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
