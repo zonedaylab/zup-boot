@@ -177,39 +177,7 @@ f. 钻取：钻取方式：
 		  点击山东省，则进行主题[topicTable2]的钻取,  filterField2表示主题的过滤字段。
 		  dim_data 是text_code ,filter_condition是id_code.
 		  例如 dim_data='山东省'  filter_condition='37'
-
-
-	    1. ---------drill_type=DRILL_TYPE_NONE=1;   NONE-------------
-		如: province维度对应的字符串： {山东省,河南省，河北省，山西省}
-
-		2.---------drill_type=int DRILL_TYPE_SEG=2; 分段--------------
-
-		3.---------drill_type=int DRILL_TYPE_PATH=3; 3.路径-----------
-
-			在维度表中dim_table中，drill_info 配置 对应不同的维度字段，例如 province-city-country,表示对应维度表中不同的维度文本信息。
-			dim_table 一般配置为  ：area (id ,province,city,country,name)
-			构建的colName 如下
-			[dim_data -  drill_name]
-
-			example:
-			[山东省 -  city] 表示当前需要从province 下转到city[drill_name], 下钻过滤语句为 '山东省'[drill_value ]
-
-			当前的维度 字段序号
-
-		4.---------drill_type= DRILL_TYPE_DIFF_TOPIC（4）;不同主题-----
-
-		  a.维度配置：
-
-		  针对维度字段，如果为不同的主题钻取，则drill_info 设置如下：
-		  drill_info :     topicTable1,filterField1  -  topicTable2,filterField2  -  topicTable3,filterField3........
-		  example:
-		  v_fund_province, parent_code   -   v_fund_city ,province_code  -  v_fund_country  ,city_code.
-
-		  点击山东省，则进行主题[topicTable2]的钻取,  filterField2表示主题的过滤字段。
-		  dim_data 是text_code ,filter_condition是id_code.
-		  例如 dim_data='山东省'  filter_condition='37'	  
 		  
-
           
           以下为研发人员看：         
 

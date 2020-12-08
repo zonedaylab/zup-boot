@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.*;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
@@ -176,8 +177,13 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 
 		/*--------------------------------------------------------------------------------
 		3.创建度量数据
-		*/
-		//数据格式： 列维 行维    数据格式  <"2017,集体,云南省", "494;492">
+		前提：一个页面包含多个报表，每个报表的维度完全一样。
+
+		列维 行维    数据格式
+		<"2017,集体,云南省", "report1-value;report2-value;report3-value">
+		<"2017,集体,云南省", "494;492">
+
+		 */
 		Map<String, String[]> mapMeasureData = new HashMap<String, String[]>();
 		for (int reportIndex=0;reportIndex<listBIReport.size();reportIndex++) {
 
@@ -217,7 +223,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 						measures=new String[listBIReport.size()];
 						Arrays.fill(measures,"");
 						measures[reportIndex]=xvalue;
-						mapMeasureData.put(xkey,measures);  // 数据格式  <"2017-集体-云南省", "494">
+						mapMeasureData.put(xkey,measures);  // 数据格式  <"2017-集体-云南省", "494;495;456">
 					}
 
 				}
@@ -266,7 +272,7 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 
 			if (i != BIRowDimDatas.size() - 1)
 				Collections.sort(listRowCell);
-			listTableHeader.add(listRowCell);
+			listTableHeader.add(listRowCell); 		//一行代表一个维度
 		}
 
 
@@ -322,18 +328,24 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 				}
 			}
 
-			if(rowDataCount>0) {//本行数据有效
+			//此处用于将无效的数据行去掉 liuxf
+			//if(rowDataCount>0)
+			{//本行数据有效
 				rowDatas=trimComma(rowDatas,",");
 				List<String> rowValueList = new ArrayList<String>();
 				rowValueList.addAll(Arrays.asList(rowDatas.split(",")));
 				listTableData.add(rowValueList);
 			}
 		}
+
 		//根据报表数量扩展行维度的列数
+		List<List<String>> listTableHeaderBak = deepCopy(listTableHeader);
 		for (int i=1;i<reportCount;i++){
 			for(int j = 0; j< listTableHeader.size(); j++)
-				listTableHeader.get(j).addAll(listTableHeader.get(j));
+				listTableHeaderBak.get(j).addAll(listTableHeader.get(j));
 		}
+		listTableHeader=listTableHeaderBak;
+
 		List<String>listTableHeaderTitle=new ArrayList<String>();
 		for (int i=0;i<reportCount;i++){
 			for(int j=0;j<allColsCount;j++){
@@ -376,6 +388,18 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		List<Map<String, Object>> listData = new ArrayList<Map<String, Object>>();
 		listData.add(resultMap);
 		return  listData;
+	}
+
+	//深度复制函数
+	public static <T> List<T> deepCopy(List<T> src) throws IOException, ClassNotFoundException, IOException {
+		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+		ObjectOutputStream out = new ObjectOutputStream(byteOut);
+		out.writeObject(src);
+		ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+		ObjectInputStream in = new ObjectInputStream(byteIn);
+		@SuppressWarnings("unchecked")
+		List<T> dest = (List<T>) in.readObject();
+		return dest;
 	}
 	/*
 	添加维度到列表
@@ -496,11 +520,52 @@ public class BIShowEngineServiceImpl implements BIShowEngineService {
 		Connection conn=jdbcTemplate_bidata.getDataSource().getConnection();
 		List<Map<String, Object>> listDataMap = new ArrayList<Map<String, Object>>();//数据
 		try {
+            ResultSet rs=null;
+            DatabaseMetaData meta = conn.getMetaData();
+            // 第一个参数catalog在MySQL中对应数据库名：
+            ResultSet rsTables = meta.getTables(null, null,"", new String[] {"TABLE","VIEW"});
 
-			String sql = this.produceSql(reportData, biReport);
-			//修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
+            boolean isTable=rsTables.next();
+            if(!rsTables.next()){   //存储过程
+
+                String procsql="{CALL " +biReport.getBiz_Table_Name() + "(" ; //判断是否有参数，此处
+
+				for (int i = 0; i < m_biDimFieldList.size(); i++) {
+					BIShowField biShowField = m_biDimFieldList.get(i);
+					//判断是否有对应的维度表 add by liuxf
+					Integer drillType = biShowField.getDrill_Type();
+					switch (drillType) {//分段信息
+
+						case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC://不同主题
+							if (reportData.getDrill_Value() != null)
+								procsql+="?";
+
+					}
+				}
+                procsql+=")}";
+                // 创建CallableStatement对象
+                CallableStatement clbStmt = conn.prepareCall(procsql);  //"{CALL proc_search_user(?,?,?,?)}");
+				for (int i = 0; i < m_biDimFieldList.size(); i++) {
+					BIShowField biShowField = m_biDimFieldList.get(i);
+					//判断是否有对应的维度表 add by liuxf
+					Integer drillType = biShowField.getDrill_Type();
+					switch (drillType) {//分段信息
+
+						case BIConfig.DRILL_TYPE.DRILL_TYPE_DIFF_TOPIC://不同主题
+							if (reportData.getDrill_Value() != null)
+								clbStmt.setInt(i+1, (int)reportData.getValue().get(i)); // 设置输入参数
+					}
+				}
+				// 执行调用存储过程，并获取结果集
+                rs = clbStmt.executeQuery();
+
+            }
+            else {
+                String sql = this.produceSql(reportData, biReport);
+                //修改，直接获取dbproperties的数据源，不在使用数据库中配置数据表信息。
+                PreparedStatement ps = conn.prepareStatement(sql);
+                rs = ps.executeQuery();
+            }
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int colCount = rsmd.getColumnCount();//列数量
 			//从数据库中查询出来放入map中
